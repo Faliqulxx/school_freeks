@@ -142,12 +142,14 @@ Secara bawaan (*out-of-the-box*), form PPDB dan kontak berjalan dalam mode **dem
 | **`supabase`** | ✅ Ya, 100% Statis | Tidak ada (Managed PostgreSQL) | Disimpan langsung ke PostgreSQL Supabase menggunakan API Key publik yang diamankan dengan *Row Level Security* (RLS). |
 | **`mysql`** | ⚠️ Memerlukan Endpoint API Serverless | Server API / Cloudflare Worker / VPS | Dikirim via HTTP API proxy ke database MySQL/MariaDB sekolah. |
 
-Panduan konfigurasi mendalam untuk masing-masing opsi dapat dilihat di:
+Panduan teknis dan konfigurasi mendalam dapat dilihat di:
+- [Panduan Struktur Folder & Arsitektur Kode](docs/project-structure.md)
 - [Panduan Setup Backend (Webhook, Supabase, MySQL)](docs/backend-setup.md)
 - [Deploy ke Vercel](docs/deploy-vercel.md)
 - [Deploy ke Netlify](docs/deploy-netlify.md)
 - [Deploy ke Cloudflare Pages](docs/deploy-cloudflare-pages.md)
 - [Deploy ke GitHub Pages](docs/deploy-github-pages.md)
+- [Panduan Keamanan & Privasi Data PPDB](docs/privacy-and-security.md)
 
 ---
 

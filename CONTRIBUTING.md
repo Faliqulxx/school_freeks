@@ -20,6 +20,9 @@ npm run dev
 ```
 Buka `http://localhost:4321` di browser Anda.
 
+> [!TIP]
+> Sebelum mulai memodifikasi kode, baca terlebih dahulu [Panduan Struktur Folder & Arsitektur Proyek](docs/project-structure.md) untuk memahami peta peran tiap berkas dan komponen.
+
 ### 3. Membuat Branch Baru
 Gunakan nama branch yang deskriptif:
 ```bash
