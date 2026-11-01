@@ -502,6 +502,50 @@ const { school } = siteData;
         </p>
       </div>
 
+      <!-- Model 3D Asset Box -->
+      <div class="card logo-card model-3d-card">
+        <div class="card-header-sm">
+          <Icon name="box" size={18} />
+          <h4>Model 3D Logo (.GLB)</h4>
+        </div>
+        <div class="glb-preview-stage">
+          <div class="glb-viewer-container">
+            <model-viewer
+              id="admin-glb-preview"
+              src="/assets/3d/freeks.glb"
+              poster="/assets/logo-freeks.webp"
+              alt="Model 3D Logo Sekolah"
+              camera-controls
+              auto-rotate
+              rotation-per-second="18deg"
+              shadow-intensity="0.8"
+              exposure="1.15"
+              interaction-prompt="none"
+              class="admin-model-viewer"
+            ></model-viewer>
+          </div>
+          <div class="logo-meta">
+            <span class="file-badge" id="glb-badge-status">Model 3D Standar Aktif</span>
+            <span class="file-path" id="glb-path-text">/assets/3d/freeks.glb</span>
+            <span class="file-size-info" id="glb-size-text">Ukuran: ~414 KB</span>
+          </div>
+        </div>
+        <div class="logo-upload-controls">
+          <label for="glb-file-input" class="btn btn-primary btn-sm btn-upload-logo">
+            <Icon name="upload" size={15} />
+            <span>Unggah File .GLB</span>
+          </label>
+          <input type="file" id="glb-file-input" accept=".glb, model/gltf-binary" style="display: none;" />
+          <button type="button" id="btn-reset-glb" class="btn btn-secondary btn-sm" title="Kembalikan model 3D default">
+            <Icon name="rotate-ccw" size={14} />
+            <span>Reset Default</span>
+          </button>
+        </div>
+        <p class="logo-help-text">
+          Dukungan format: <strong>.GLB (Binary glTF 3D)</strong>. Model 3D baru akan disimpan dan otomatis tampil berputar interaktif di halaman Beranda website.
+        </p>
+      </div>
+
       <!-- Live Preview Simulator -->
       <div class="card preview-card">
         <div class="card-header-sm">
@@ -853,6 +897,40 @@ const { school } = siteData;
     font-size: 11px;
     color: var(--admin-ink-500);
     line-height: 1.4;
+  }
+
+  /* Model 3D Card & Viewer Styles */
+  .glb-preview-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+    background-color: var(--admin-green-50);
+    border: 1px dashed var(--admin-green-500);
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+
+  .glb-viewer-container {
+    width: 100%;
+    height: 180px;
+    background: radial-gradient(circle, rgba(27, 122, 47, 0.08) 0%, rgba(27, 122, 47, 0.02) 100%);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .admin-model-viewer {
+    width: 100%;
+    height: 100%;
+    --poster-color: transparent;
+  }
+
+  .file-size-info {
+    font-size: 11px;
+    color: var(--admin-ink-500);
   }
 
   .preview-hint {
@@ -1538,6 +1616,142 @@ const { school } = siteData;
       window.confirmDelete(msg, doReset, 'Konfirmasi Reset Logo');
     } else if (confirm(msg)) {
       doReset();
+    }
+  });
+
+  // ==========================================
+  // 3D MODEL (.GLB) IndexedDB Management
+  // ==========================================
+  const glbFileInput = document.getElementById('glb-file-input') as HTMLInputElement | null;
+  const btnResetGlb = document.getElementById('btn-reset-glb');
+  const adminGlbPreview = document.getElementById('admin-glb-preview') as any;
+  const glbBadgeStatus = document.getElementById('glb-badge-status');
+  const glbPathText = document.getElementById('glb-path-text');
+  const glbSizeText = document.getElementById('glb-size-text');
+
+  function open3DDB(): Promise<IDBDatabase> {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open('freeks_3d_db', 1);
+      req.onupgradeneeded = (e: any) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains('models')) {
+          db.createObjectStore('models', { keyPath: 'id' });
+        }
+      };
+      req.onsuccess = (e: any) => resolve(e.target.result);
+      req.onerror = (e: any) => reject(e.target.error);
+    });
+  }
+
+  async function loadInitial3DModel() {
+    try {
+      const db = await open3DDB();
+      const tx = db.transaction('models', 'readonly');
+      const store = tx.objectStore('models');
+      const req = store.get('active_glb');
+      req.onsuccess = () => {
+        if (req.result && req.result.data) {
+          const blobUrl = URL.createObjectURL(req.result.data);
+          if (adminGlbPreview) adminGlbPreview.src = blobUrl;
+          if (glbBadgeStatus) {
+            glbBadgeStatus.textContent = 'Model Kustom Aktif';
+            glbBadgeStatus.style.backgroundColor = '#D97706';
+          }
+          if (glbPathText) glbPathText.textContent = req.result.filename || 'model_kustom.glb';
+          if (glbSizeText) glbSizeText.textContent = 'Ukuran: ' + (req.result.size ? (req.result.size / 1024).toFixed(1) + ' KB' : 'Tersimpan');
+        }
+      };
+    } catch (e) {}
+  }
+
+  loadInitial3DModel();
+
+  glbFileInput?.addEventListener('change', async (e) => {
+    const target = e.target as HTMLInputElement;
+    const file = target.files?.[0];
+    if (!file) return;
+
+    if (!file.name.toLowerCase().endsWith('.glb')) {
+      alert('Mohon unggah file 3D dengan format .glb');
+      target.value = '';
+      return;
+    }
+
+    if (file.size > 20 * 1024 * 1024) {
+      alert('Ukuran file .glb maksimal 20 MB.');
+      target.value = '';
+      return;
+    }
+
+    try {
+      const db = await open3DDB();
+      const tx = db.transaction('models', 'readwrite');
+      const store = tx.objectStore('models');
+      store.put({
+        id: 'active_glb',
+        data: file,
+        filename: file.name,
+        size: file.size,
+        updatedAt: Date.now()
+      });
+
+      tx.oncomplete = () => {
+        const blobUrl = URL.createObjectURL(file);
+        if (adminGlbPreview) adminGlbPreview.src = blobUrl;
+        if (glbBadgeStatus) {
+          glbBadgeStatus.textContent = 'Model Kustom Aktif';
+          glbBadgeStatus.style.backgroundColor = '#D97706';
+        }
+        if (glbPathText) glbPathText.textContent = file.name;
+        if (glbSizeText) glbSizeText.textContent = 'Ukuran: ' + (file.size / 1024).toFixed(1) + ' KB';
+
+        if (toast) {
+          toast.hidden = false;
+          const toastP = toast.querySelector('p');
+          if (toastP) toastP.textContent = 'Model 3D (.GLB) berhasil diperbarui dan langsung aktif di halaman Beranda!';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      };
+    } catch (err: any) {
+      alert('Gagal menyimpan file 3D ke penyimpanan browser: ' + (err?.message || err));
+    }
+  });
+
+  btnResetGlb?.addEventListener('click', async () => {
+    const resetMsg = 'Apakah Anda yakin ingin mengembalikan model 3D ke model standar bawaan sekolah (/assets/3d/freeks.glb)?';
+    const doResetGlb = async () => {
+      try {
+        const db = await open3DDB();
+        const tx = db.transaction('models', 'readwrite');
+        const store = tx.objectStore('models');
+        store.delete('active_glb');
+
+        tx.oncomplete = () => {
+          if (glbFileInput) glbFileInput.value = '';
+          if (adminGlbPreview) adminGlbPreview.src = '/assets/3d/freeks.glb';
+          if (glbBadgeStatus) {
+            glbBadgeStatus.textContent = 'Model 3D Standar Aktif';
+            glbBadgeStatus.style.backgroundColor = 'var(--admin-green-700)';
+          }
+          if (glbPathText) glbPathText.textContent = '/assets/3d/freeks.glb';
+          if (glbSizeText) glbSizeText.textContent = 'Ukuran: ~414 KB';
+
+          if (toast) {
+            toast.hidden = false;
+            const toastP = toast.querySelector('p');
+            if (toastP) toastP.textContent = 'Model 3D berhasil dikembalikan ke standar bawaan sekolah.';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        };
+      } catch (err: any) {
+        alert('Gagal mereset model 3D: ' + (err?.message || err));
+      }
+    };
+
+    if (typeof window.confirmDelete === 'function') {
+      window.confirmDelete(resetMsg, doResetGlb, 'Konfirmasi Reset Model 3D');
+    } else if (confirm(resetMsg)) {
+      doResetGlb();
     }
   });
 

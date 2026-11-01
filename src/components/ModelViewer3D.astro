@@ -54,6 +54,37 @@ const {
   </model-viewer>
 </div>
 
+<!-- Load Custom 3D Model from IndexedDB if uploaded via Admin Panel -->
+<script is:inline>
+  (function() {
+    try {
+      var req = indexedDB.open('freeks_3d_db', 1);
+      req.onupgradeneeded = function(e) {
+        var db = e.target.result;
+        if (!db.objectStoreNames.contains('models')) {
+          db.createObjectStore('models', { keyPath: 'id' });
+        }
+      };
+      req.onsuccess = function(e) {
+        var db = e.target.result;
+        var tx = db.transaction('models', 'readonly');
+        var store = tx.objectStore('models');
+        var getReq = store.get('active_glb');
+        getReq.onsuccess = function() {
+          if (getReq.result && getReq.result.data) {
+            var blob = getReq.result.data;
+            var url = URL.createObjectURL(blob);
+            var mv = document.getElementById('freeks-3d-model');
+            if (mv) {
+              mv.src = url;
+            }
+          }
+        };
+      };
+    } catch(e) {}
+  })();
+</script>
+
 <style>
   .model-viewer-wrapper {
     position: relative;
