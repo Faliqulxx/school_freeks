@@ -33,6 +33,19 @@ const menuItems = [
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <script is:inline>
+    // Immediate Client Auth Guard to prevent unauthorized access
+    (function() {
+      var isAuth = sessionStorage.getItem('freeks_admin_auth') === 'authenticated' || 
+                   localStorage.getItem('freeks_admin_auth') === 'authenticated';
+      if (!isAuth) {
+        var currentUrl = encodeURIComponent(window.location.pathname + window.location.search);
+        window.location.replace('/admin/login?redirect=' + currentUrl);
+      }
+    })();
+  </script>
+
   <style is:global>
     :root {
       --admin-green-900: #0B3B16;
@@ -458,6 +471,10 @@ const menuItems = [
         <Icon name="external-link" size={16} />
         <span>Buka Web Publik</span>
       </a>
+      <button type="button" id="btn-sidebar-logout" class="btn-sidebar-logout" title="Keluar dari Panel Admin">
+        <Icon name="log-out" size={16} />
+        <span>Keluar (Logout)</span>
+      </button>
       <div class="admin-version">FREEKS.id Admin v1.0</div>
     </div>
   </aside>
@@ -488,6 +505,9 @@ const menuItems = [
             <span class="user-name">Administrator</span>
             <span class="user-role">Super Admin</span>
           </div>
+          <button type="button" id="btn-topbar-logout" class="btn-logout-icon" title="Keluar dari Panel Admin" aria-label="Keluar">
+            <Icon name="log-out" size={16} />
+          </button>
         </div>
       </div>
     </header>
@@ -782,6 +802,51 @@ const menuItems = [
       color: var(--admin-ink-500);
     }
 
+    .btn-logout-icon {
+      background: none;
+      border: 1px solid var(--admin-ink-300);
+      color: #DC2626;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+
+    .btn-logout-icon:hover {
+      background: #FEE2E2;
+      border-color: #FCA5A5;
+      transform: translateY(-1px);
+    }
+
+    .btn-sidebar-logout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 12px;
+      background-color: #FEF2F2;
+      border: 1px solid #FECACA;
+      border-radius: 6px;
+      color: #991B1B;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      width: 100%;
+    }
+
+    .btn-sidebar-logout:hover {
+      background-color: #FEE2E2;
+      border-color: #F87171;
+      color: #7F1D1D;
+    }
+
     .admin-page-content {
       padding: 24px clamp(16px, 3vw, 36px);
       flex: 1;
@@ -808,6 +873,20 @@ const menuItems = [
   </style>
 
   <script>
+    // Handle Admin Logout
+    function handleAdminLogout() {
+      if (confirm('Apakah Anda yakin ingin keluar dari Panel CMS Admin?')) {
+        sessionStorage.removeItem('freeks_admin_auth');
+        sessionStorage.removeItem('freeks_admin_user');
+        localStorage.removeItem('freeks_admin_auth');
+        localStorage.removeItem('freeks_admin_user');
+        window.location.href = '/admin/login';
+      }
+    }
+
+    document.getElementById('btn-topbar-logout')?.addEventListener('click', handleAdminLogout);
+    document.getElementById('btn-sidebar-logout')?.addEventListener('click', handleAdminLogout);
+
     const toggleBtn = document.getElementById('sidebar-toggle');
     const sidebar = document.getElementById('admin-sidebar');
 

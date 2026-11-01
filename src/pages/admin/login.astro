@@ -1,0 +1,500 @@
+---
+import siteData from '../../data/siteData.json';
+import Icon from '../../components/Icon.astro';
+
+const { school } = siteData;
+---
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login CMS Admin — {school.shortName}</title>
+  <link rel="icon" type="image/webp" href="/assets/logo-ypi.webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet" />
+
+  <script is:inline>
+    // If already logged in, redirect straight to dashboard
+    (function() {
+      var isAuth = sessionStorage.getItem('freeks_admin_auth') === 'authenticated' || 
+                   localStorage.getItem('freeks_admin_auth') === 'authenticated';
+      if (isAuth) {
+        var params = new URLSearchParams(window.location.search);
+        var redirect = params.get('redirect') || '/admin';
+        window.location.replace(redirect);
+      }
+    })();
+  </script>
+
+  <style>
+    :root {
+      --green-900: #0B3B16;
+      --green-800: #0F4D1C;
+      --green-700: #1B7A2F;
+      --green-500: #3DA352;
+      --green-100: #E6F3E6;
+      --green-50:  #F4F9F2;
+      --yellow-500: #F5D90A;
+      --ink-900: #1F2933;
+      --ink-700: #3E4C59;
+      --ink-500: #616E7C;
+      --ink-300: #CBD2D9;
+      --ink-100: #F5F7FA;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #08240E;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(27, 122, 47, 0.4) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(245, 217, 10, 0.15) 0%, transparent 40%),
+        url('/assets/hero-pattern-tile.webp');
+      background-repeat: repeat;
+      background-size: auto, auto, 60px 60px;
+      color: var(--ink-900);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 16px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 440px;
+      animation: fadeInScale 0.3s ease-out;
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .login-card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      box-shadow: 
+        0 20px 40px -15px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+      padding: 36px 32px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .brand-logo-wrap {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 16px;
+      border-radius: 18px;
+      background: var(--green-50);
+      border: 1.5px solid var(--green-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(27, 122, 47, 0.08);
+    }
+
+    .brand-logo-img {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+    }
+
+    .login-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--green-900);
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+
+    .login-subtitle {
+      font-size: 0.875rem;
+      color: var(--ink-500);
+      line-height: 1.45;
+    }
+
+    /* Error Alert */
+    .alert-error {
+      background-color: #FEF2F2;
+      border: 1px solid #FCA5A5;
+      color: #991B1B;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    .alert-icon {
+      color: #DC2626;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.825rem;
+      font-weight: 600;
+      color: var(--ink-700);
+      margin-bottom: 7px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      color: var(--ink-500);
+      pointer-events: none;
+    }
+
+    .form-input {
+      width: 100%;
+      height: 48px;
+      padding-left: 42px;
+      padding-right: 44px;
+      border: 1.5px solid var(--ink-300);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      color: var(--ink-900);
+      background-color: #FFFFFF;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--green-700);
+      box-shadow: 0 0 0 3px rgba(27, 122, 47, 0.15);
+    }
+
+    .toggle-pwd-btn {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: var(--ink-500);
+      cursor: pointer;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      transition: color 0.15s ease;
+    }
+
+    .toggle-pwd-btn:hover {
+      color: var(--green-900);
+    }
+
+    .form-options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      font-size: 0.825rem;
+    }
+
+    .remember-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      color: var(--ink-700);
+      user-select: none;
+    }
+
+    .remember-label input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--green-700);
+      cursor: pointer;
+    }
+
+    .btn-submit {
+      width: 100%;
+      height: 50px;
+      background-color: var(--green-700);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(27, 122, 47, 0.25);
+    }
+
+    .btn-submit:hover {
+      background-color: var(--green-800);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(27, 122, 47, 0.35);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    .btn-submit.loading {
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    /* Hint Badge */
+    .credential-hint {
+      margin-top: 24px;
+      padding: 12px 14px;
+      background-color: var(--green-50);
+      border: 1px dashed var(--green-500);
+      border-radius: 10px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--green-900);
+    }
+
+    .credential-hint code {
+      font-family: monospace;
+      font-weight: 700;
+      background: rgba(27, 122, 47, 0.12);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--green-900);
+    }
+
+    /* Back Link */
+    .back-home-wrap {
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    .back-home-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .back-home-link:hover {
+      color: var(--yellow-500);
+      text-decoration: underline;
+    }
+
+    /* Shake Animation for Failed Login */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    .shake {
+      animation: shake 0.35s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container" id="login-container">
+    <div class="login-card" id="login-card">
+      <div class="login-header">
+        <div class="brand-logo-wrap">
+          <img src="/assets/logo-ypi.webp" alt="Logo {school.shortName}" class="brand-logo-img" />
+        </div>
+        <h1 class="login-title">Panel CMS Admin</h1>
+        <p class="login-subtitle">Masukkan kredensial pengelola untuk mengakses dashboard {school.name}.</p>
+      </div>
+
+      <!-- Error Alert Box -->
+      <div id="error-alert" class="alert-error" style="display: none;" role="alert">
+        <Icon name="alert-circle" size={18} class="alert-icon" />
+        <span id="error-message">Username atau password yang Anda masukkan salah.</span>
+      </div>
+
+      <!-- Login Form -->
+      <form id="admin-login-form" autocomplete="on">
+        <div class="form-group">
+          <label for="username" class="form-label">Username Admin</label>
+          <div class="input-wrapper">
+            <Icon name="user" size={18} class="input-icon" />
+            <input
+              type="text"
+              id="username"
+              name="username"
+              class="form-input"
+              placeholder="Masukkan username"
+              required
+              autofocus
+              autocomplete="username"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <div class="input-wrapper">
+            <Icon name="lock" size={18} class="input-icon" />
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-input"
+              placeholder="Masukkan password"
+              required
+              autocomplete="current-password"
+            />
+            <button type="button" id="toggle-pwd" class="toggle-pwd-btn" aria-label="Lihat password" tabindex="-1">
+              <Icon name="eye" size={18} id="icon-eye-open" />
+              <Icon name="eye-off" size={18} id="icon-eye-closed" style="display: none;" />
+            </button>
+          </div>
+        </div>
+
+        <div class="form-options">
+          <label class="remember-label">
+            <input type="checkbox" id="remember-me" />
+            <span>Ingat saya di perangkat ini</span>
+          </label>
+        </div>
+
+        <button type="submit" id="btn-login-submit" class="btn-submit">
+          <span>Masuk ke Dashboard</span>
+          <Icon name="arrow-right" size={18} />
+        </button>
+
+        <div class="credential-hint">
+          <span>Kredensial Default:</span><br />
+          Username: <code>admin</code> &nbsp;|&nbsp; Password: <code>123admin</code>
+        </div>
+      </form>
+    </div>
+
+    <div class="back-home-wrap">
+      <a href="/" class="back-home-link">
+        <Icon name="arrow-left" size={16} />
+        <span>Kembali ke Beranda Website</span>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('admin-login-form') as HTMLFormElement;
+    const usernameInput = document.getElementById('username') as HTMLInputElement;
+    const passwordInput = document.getElementById('password') as HTMLInputElement;
+    const rememberCheckbox = document.getElementById('remember-me') as HTMLInputElement;
+    const errorAlert = document.getElementById('error-alert') as HTMLDivElement;
+    const errorMessage = document.getElementById('error-message') as HTMLSpanElement;
+    const loginCard = document.getElementById('login-card') as HTMLDivElement;
+    const submitBtn = document.getElementById('btn-login-submit') as HTMLButtonElement;
+
+    // Show / Hide password toggle
+    const togglePwd = document.getElementById('toggle-pwd');
+    const iconEyeOpen = document.getElementById('icon-eye-open');
+    const iconEyeClosed = document.getElementById('icon-eye-closed');
+
+    togglePwd?.addEventListener('click', () => {
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        if (iconEyeOpen) iconEyeOpen.style.display = 'none';
+        if (iconEyeClosed) iconEyeClosed.style.display = 'block';
+      } else {
+        passwordInput.type = 'password';
+        if (iconEyeOpen) iconEyeOpen.style.display = 'block';
+        if (iconEyeClosed) iconEyeClosed.style.display = 'none';
+      }
+      passwordInput.focus();
+    });
+
+    // Handle Form Submit
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const u = usernameInput.value.trim();
+      const p = passwordInput.value;
+
+      // Verification logic: user: admin, pw: 123admin
+      if (u === 'admin' && p === '123admin') {
+        submitBtn.classList.add('loading');
+        submitBtn.innerHTML = '<span>Memverifikasi...</span>';
+        if (errorAlert) errorAlert.style.display = 'none';
+
+        // Set authenticated state
+        sessionStorage.setItem('freeks_admin_auth', 'authenticated');
+        sessionStorage.setItem('freeks_admin_user', 'Administrator');
+
+        if (rememberCheckbox?.checked) {
+          localStorage.setItem('freeks_admin_auth', 'authenticated');
+          localStorage.setItem('freeks_admin_user', 'Administrator');
+        } else {
+          localStorage.removeItem('freeks_admin_auth');
+        }
+
+        // Get redirect parameter if exists
+        const params = new URLSearchParams(window.location.search);
+        const redirect = params.get('redirect') || '/admin';
+
+        setTimeout(() => {
+          window.location.href = redirect;
+        }, 400);
+      } else {
+        // Show error and trigger shake animation
+        if (errorAlert) {
+          errorAlert.style.display = 'flex';
+          if (u !== 'admin' && p !== '123admin') {
+            errorMessage.textContent = 'Username dan password salah. Silakan periksa kembali.';
+          } else if (u !== 'admin') {
+            errorMessage.textContent = 'Username tidak terdaftar sebagai administrator.';
+          } else {
+            errorMessage.textContent = 'Password yang Anda masukkan salah.';
+          }
+        }
+
+        loginCard?.classList.remove('shake');
+        void loginCard?.offsetWidth; // Trigger reflow
+        loginCard?.classList.add('shake');
+        passwordInput.value = '';
+        passwordInput.focus();
+      }
+    });
+  </script>
+</body>
+</html>

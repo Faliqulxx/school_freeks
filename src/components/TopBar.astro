@@ -33,6 +33,11 @@ const { school } = siteData;
       <a href={school.socials.facebookUrl} target="_blank" rel="noopener noreferrer" aria-label="Facebook FREEKS.id School" class="social-link">
         <Icon name="facebook" size={14} />
       </a>
+      <span class="topbar-divider">|</span>
+      <a href="/admin/login" class="topbar-admin-btn" title="Login ke Panel Admin">
+        <Icon name="lock" size={12} />
+        <span>Login Admin</span>
+      </a>
     </div>
   </div>
 </div>
@@ -104,6 +109,30 @@ const { school } = siteData;
   .social-link:hover {
     color: var(--yellow-500);
     background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .topbar-divider {
+    color: rgba(255, 255, 255, 0.25);
+    margin: 0 4px;
+    font-size: 11px;
+  }
+
+  .topbar-admin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    background-color: rgba(255, 255, 255, 0.08);
+    transition: all var(--dur-fast) var(--ease);
+  }
+
+  .topbar-admin-btn:hover {
+    color: #FFFFFF;
+    background-color: rgba(245, 217, 10, 0.25);
   }
 </style>
 
