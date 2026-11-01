@@ -30,7 +30,7 @@ const initialStructure = [
       <div class="module-tag">MODUL 3 DARI 8</div>
       <h1>Manajemen Profil Kampus</h1>
       <p class="page-subtitle">
-        Kelola linimasa sejarah, visi misi tujuan, naskah sambutan pimpinan, hierarki struktur organisasi, profil yayasan YPI, dan fasilitas sarana prasarana.
+        Kelola linimasa sejarah, visi misi tujuan, naskah sambutan pimpinan, hierarki struktur organisasi, profil FREEKS Foundation, dan fasilitas sarana prasarana.
       </p>
     </div>
 
@@ -82,7 +82,7 @@ const initialStructure = [
     </button>
     <button type="button" class="tab-btn" data-tab="tab-yayasan" role="tab" aria-selected="false">
       <Icon name="landmark" size={16} />
-      <span>5. Yayasan YPI</span>
+      <span>5. FREEKS Foundation</span>
     </button>
     <button type="button" class="tab-btn" data-tab="tab-fasilitas" role="tab" aria-selected="false">
       <Icon name="box" size={16} />
@@ -127,7 +127,7 @@ const initialStructure = [
                 <div class="asset-preview-row">
                   <img
                     id="img-prev-sejarah"
-                    src="/assets/gedung-mts-islamiyah.webp"
+                    src="/assets/gedung-freeks.webp"
                     alt="Foto Gedung Sejarah"
                     class="asset-thumb-wide"
                   />
@@ -136,7 +136,7 @@ const initialStructure = [
                       type="text"
                       id="input-sejarah-img"
                       name="sejarahImg"
-                      value="/assets/gedung-mts-islamiyah.webp"
+                      value="/assets/gedung-freeks.webp"
                       required
                       class="form-control"
                     />
@@ -535,7 +535,7 @@ const initialStructure = [
         </div>
 
         <!-- ========================================== -->
-        <!-- SUB-MODUL 5: PROFIL YAYASAN YPI -->
+        <!-- SUB-MODUL 5: PROFIL FREEKS FOUNDATION -->
         <!-- ========================================== -->
         <div class="tab-panel" id="tab-yayasan">
           <div class="form-card card">
@@ -577,7 +577,7 @@ const initialStructure = [
                   <Icon name="award" size={20} />
                 </div>
                 <div>
-                  <h3>Makna & Simbol Lambang YPI (CRUD)</h3>
+                  <h3>Makna & Simbol Lambang FREEKS (CRUD)</h3>
                   <p class="card-desc">Arti filosofis di balik logo 3D yayasan.</p>
                 </div>
               </div>
@@ -606,7 +606,7 @@ const initialStructure = [
             </div>
           </div>
 
-          <!-- Unit Pendidikan Naungan YPI -->
+          <!-- Ekosistem Pendidikan & Lab FREEKS -->
           <div class="form-card card">
             <div class="card-header justify-between">
               <div class="header-icon-title">
@@ -614,8 +614,8 @@ const initialStructure = [
                   <Icon name="book-open" size={20} />
                 </div>
                 <div>
-                  <h3>Unit Pendidikan Naungan YPI (CRUD)</h3>
-                  <p class="card-desc">Lembaga pendidikan mulai dari RA/TK hingga MA/SMA.</p>
+                  <h3>Ekosistem Pendidikan & Lab FREEKS (CRUD)</h3>
+                  <p class="card-desc">Lembaga dan divisi pendidikan di bawah ekosistem FREEKS.</p>
                 </div>
               </div>
               <button type="button" id="btn-add-unit" class="btn btn-primary btn-sm">
@@ -759,7 +759,7 @@ const initialStructure = [
           <!-- Preview 1: Sejarah -->
           <div id="sim-prof-sejarah" class="sim-prof-view active">
             <div class="sim-sejarah-box">
-              <img id="sim-sejarah-preview-img" src="/assets/gedung-mts-islamiyah.webp" alt="Gedung" class="sim-sejarah-img" />
+              <img id="sim-sejarah-preview-img" src="/assets/gedung-freeks.webp" alt="Gedung" class="sim-sejarah-img" />
               <div class="sim-sejarah-lead" id="sim-sejarah-lead-text">
                 FREEKS.id School berawal dari kepedulian tokoh masyarakat dan ulama...
               </div>
@@ -1860,7 +1860,7 @@ const initialStructure = [
       { id: "fasilitas-2", name: "Maker Space & Robotics Arena", description: "Laboratorium rekayasa perangkat keras yang dilengkapi 3D printer, soldering station, mikrokontroler (Arduino/Raspberry Pi), dan lintasan uji robotika otonom.", image: { src: "/assets/berita-prestasi-sains.webp", alt: "Maker Space dan Arena Uji Robotika Siswa" } },
       { id: "fasilitas-3", name: "Digital Media & 3D Creative Studio", description: "Studio multimedia berkemampuan rendering tinggi untuk produksi karya animasi, pemodelan 3D, motion graphic, game development, dan podcast siswa.", image: { src: "/assets/kegiatan-madrasah-2.webp", alt: "Studio Media Kreatif dan Lab 3D FREEKS.id School" } },
       { id: "fasilitas-4", name: "VR/AR & Applied AI Laboratory", description: "Fasilitas headset virtual reality imersif dan workstation pengolahan model kecerdasan buatan untuk simulasi sains dan riset visual interaktif.", image: { src: "/assets/program-unggulan-tahfidz.webp", alt: "Lab Riset Sains dan Teknologi Interaktif" } },
-      { id: "fasilitas-5", name: "Innovation Hub & Amphitheater", description: "Auditorium modern dan amfiteater terbuka untuk pitching proyek siswa, pameran karya teknologi (Showcase Day), serta seminar pembicara industri tamu.", image: { src: "/assets/gedung-mts-islamiyah.webp", alt: "Gedung Utama FREEKS Campus dan Area Hub" } },
+      { id: "fasilitas-5", name: "Innovation Hub & Amphitheater", description: "Auditorium modern dan amfiteater terbuka untuk pitching proyek siswa, pameran karya teknologi (Showcase Day), serta seminar pembicara industri tamu.", image: { src: "/assets/gedung-freeks.webp", alt: "Gedung Utama FREEKS Campus dan Area Hub" } },
       { id: "fasilitas-6", name: "Co-Working Commons & Green Lounge", description: "Area kolaborasi santai luar ruangan dan kafe sehat ramah lingkungan untuk berdiskusi, brainstorming santai, dan relaksasi antar sesi belajar.", image: { src: "/assets/hero-siswa-berjalan.webp", alt: "Koridor dan area lingkungan hijau Sekolah" } }
     ];
 
@@ -2260,9 +2260,9 @@ const initialStructure = [
         document.getElementById('modal-fac-title').textContent = 'Tambah Fasilitas Baru';
         document.getElementById('input-fac-id').value = 'fasilitas-' + Date.now();
         document.getElementById('input-fac-name').value = '';
-        document.getElementById('input-fac-img').value = '/assets/gedung-mts-islamiyah.webp';
+        document.getElementById('input-fac-img').value = '/assets/gedung-freeks.webp';
         const prevFacImg = document.getElementById('img-prev-fac');
-        if (prevFacImg) prevFacImg.src = '/assets/gedung-mts-islamiyah.webp';
+        if (prevFacImg) prevFacImg.src = '/assets/gedung-freeks.webp';
         document.getElementById('input-fac-desc').value = '';
         modalFac.style.display = 'block';
         modalFac.scrollIntoView({ behavior: 'smooth' });

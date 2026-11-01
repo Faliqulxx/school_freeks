@@ -480,10 +480,10 @@ const { school } = siteData;
           <h4>Logo Resmi Sekolah</h4>
         </div>
         <div class="logo-preview-stage">
-          <img src="/assets/logo-ypi.webp" alt="Logo FREEKS.id School" width="90" height="82" class="preview-logo-img" id="admin-logo-preview" />
+          <img src="/assets/logo-freeks.webp" alt="Logo FREEKS.id School" width="90" height="82" class="preview-logo-img" id="admin-logo-preview" />
           <div class="logo-meta">
             <span class="file-badge" id="logo-badge-status">Logo Standar Aktif</span>
-            <span class="file-path" id="logo-path-text">/assets/logo-ypi.webp</span>
+            <span class="file-path" id="logo-path-text">/assets/logo-freeks.webp</span>
           </div>
         </div>
         <div class="logo-upload-controls">
@@ -514,7 +514,7 @@ const { school } = siteData;
         <div class="sim-box">
           <div class="sim-label">Simulasi Header & Brand</div>
           <div class="sim-header">
-            <img src="/assets/logo-ypi.webp" width="36" height="32" alt="Logo" style="object-fit: contain;" />
+            <img src="/assets/logo-freeks.webp" width="36" height="32" alt="Logo" style="object-fit: contain;" />
             <div>
               <div id="sim-brand-title" class="sim-title">{school.name}</div>
               <div id="sim-brand-sub" class="sim-sub">{school.foundation}</div>
@@ -1466,7 +1466,7 @@ const { school } = siteData;
       if (isCustom) {
         logoPathText.textContent = fileName || 'Tersimpan di Browser (DataURL)';
       } else {
-        logoPathText.textContent = '/assets/logo-ypi.webp';
+        logoPathText.textContent = '/assets/logo-freeks.webp';
       }
     }
   }
@@ -1523,7 +1523,7 @@ const { school } = siteData;
         localStorage.removeItem('freeks_custom_logo');
         localStorage.removeItem('freeks_custom_logo_name');
         if (logoFileInput) logoFileInput.value = '';
-        updatePageLogos('/assets/logo-ypi.webp', false);
+        updatePageLogos('/assets/logo-freeks.webp', false);
 
         if (toast) {
           toast.hidden = false;
