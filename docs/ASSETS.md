@@ -54,3 +54,4 @@ Dokumen ini mencatat seluruh aset media, gambar, dan ikon yang digunakan di dala
 
 ## 6. Ikon Antarmuka (UI Icons)
 Seluruh ikon tombol antarmuka (panah, user, kalender, buku, telepon, map, pencarian, menu hamburger) menggunakan pustaka **Lucide Icons** (`lucide` v1.62.0) yang berlisensi **ISC / MIT License**.
+
