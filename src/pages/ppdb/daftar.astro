@@ -1142,6 +1142,8 @@ const breadcrumbItems = [
 </style>
 
 <script>
+  import { getBackendProvider } from '../../lib/backend';
+
   // PPDB Multi-Step Wizard & Autosave Controller
   const STORAGE_KEY = 'mts_ppdb_draft_v1';
   let currentStep = 1;
@@ -1374,7 +1376,7 @@ const breadcrumbItems = [
   });
 
   // 6. Submit Final Form -> Show Success Screen (PRD 8.6.1)
-  form?.addEventListener('submit', (e) => {
+  form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!validateStep(4)) return;
 
@@ -1385,6 +1387,31 @@ const breadcrumbItems = [
     const studentNisn = (document.getElementById('siswa-nisn') as HTMLInputElement)?.value || '';
     const schoolFrom = (document.getElementById('sekolah-asal') as HTMLInputElement)?.value || '';
     const ortuWa = (document.getElementById('ortu-wa') as HTMLInputElement)?.value || '';
+    const studentGender = (document.getElementById('siswa-gender') as HTMLSelectElement)?.value || '';
+    const birthPlace = (document.getElementById('siswa-tempat-lahir') as HTMLInputElement)?.value || '';
+    const birthDate = (document.getElementById('siswa-tanggal-lahir') as HTMLInputElement)?.value || '';
+    const studentAddress = (document.getElementById('siswa-alamat') as HTMLTextAreaElement)?.value || '';
+    const parentName = (document.getElementById('ortu-ayah') as HTMLInputElement)?.value || (document.getElementById('ortu-ibu') as HTMLInputElement)?.value || 'Orang Tua / Wali';
+
+    // Submit to configured backend (Adapter Pattern: none / webhook / supabase / mysql)
+    try {
+      const backend = getBackendProvider();
+      await backend.submitRegistration({
+        registration_no: regNumber,
+        full_name: studentName,
+        gender: studentGender,
+        nisn: studentNisn,
+        birth_place: birthPlace,
+        birth_date: birthDate,
+        parent_name: parentName,
+        phone: ortuWa,
+        address: studentAddress,
+        previous_school: schoolFrom,
+        status: 'pending'
+      });
+    } catch (backendErr) {
+      console.warn('Backend sync note:', backendErr);
+    }
 
     // Populate Success Screen
     const regNumEl = document.getElementById('success-reg-num');
