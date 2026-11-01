@@ -289,7 +289,7 @@ const { events } = kalenderData;
               </div>
               <div>
                 <h3 id="modal-prog-title">Tambah / Edit Program Unggulan</h3>
-                <p class="card-desc">Atur nama program, pembina (FREEKS.ID), jadwal rutin, dan foto dokumentasi.</p>
+                <p class="card-desc">Atur nama program, pembina (Sekolah Contoh), jadwal rutin, dan foto dokumentasi.</p>
               </div>
             </div>
             <div class="form-grid">
@@ -300,7 +300,7 @@ const { events } = kalenderData;
               </div>
               <div class="form-group">
                 <label for="input-prog-mentor">Pembina / Mentor <span class="req">*</span></label>
-                <input type="text" id="input-prog-mentor" value="FREEKS.ID" class="form-control" />
+                <input type="text" id="input-prog-mentor" value="Sekolah Contoh" class="form-control" />
               </div>
               <div class="form-group col-span-2">
                 <label for="input-prog-schedule">Jadwal Pelaksanaan <span class="req">*</span></label>
@@ -520,18 +520,18 @@ const { events } = kalenderData;
               </div>
               <div>
                 <h3 id="modal-tc-title">Tambah / Edit Guru & Tendik</h3>
-                <p class="card-desc">Pastikan nama lengkap bergelar dan nama panggilan FREEKS.ID sesuai panduan branding.</p>
+                <p class="card-desc">Pastikan nama lengkap bergelar dan nama panggilan Sekolah Contoh sesuai panduan branding.</p>
               </div>
             </div>
             <div class="form-grid">
               <input type="hidden" id="input-tc-id" value="" />
               <div class="form-group">
                 <label for="input-tc-name">Nama Panggilan / Brand <span class="req">*</span></label>
-                <input type="text" id="input-tc-name" value="FREEKS.ID" class="form-control" />
+                <input type="text" id="input-tc-name" value="Sekolah Contoh" class="form-control" />
               </div>
               <div class="form-group">
                 <label for="input-tc-fullname">Nama Lengkap + Gelar Resmi <span class="req">*</span></label>
-                <input type="text" id="input-tc-fullname" placeholder="Contoh: FREEKS.ID, S.Pd.I., M.Pd." class="form-control" />
+                <input type="text" id="input-tc-fullname" placeholder="Contoh: Sekolah Contoh, S.Pd.I., M.Pd." class="form-control" />
               </div>
               <div class="form-group">
                 <label for="input-tc-category">Kategori Departemen <span class="req">*</span></label>
@@ -1832,7 +1832,7 @@ const { events } = kalenderData;
 
 <script is:inline>
   function initAkademik() {
-    // Initial states (FREEKS.id Modern Tech School)
+    // Initial states (Sekolah Contoh Modern Tech School)
     let subjectState = [
       { code: "CMP", name: "Informatika & Computational Thinking", hours: 4, group: "Kelompok A (Akademik & Fondasi Sains-Teknologi)", description: "Logika algoritma, dasar pemrograman Python/JS, struktur data, dan keamanan siber dasar." },
       { code: "AIX", name: "Applied AI & Digital Literacy", hours: 3, group: "Kelompok A (Akademik & Fondasi Sains-Teknologi)", description: "Pemahaman cara kerja kecerdasan buatan, prompt engineering terarah, dan etika kecerdasan buatan." },
@@ -1847,28 +1847,28 @@ const { events } = kalenderData;
     ];
 
     let programsState = [
-      { id: "coding-ai", title: "AI, Coding & Software Engineering", summary: "Pembelajaran pemrograman intensif dan penerapan kecerdasan buatan terapan sejak dini.", schedule: "Kelas VII–IX, Senin & Rabu 13.30–15.00 WIB", mentor: "FREEKS.ID", description: "Membekali siswa dengan logika computational thinking, algoritma modern (Python, JavaScript), pembuatan web/aplikasi, hingga implementasi dasar Machine Learning untuk problem solving.", image: { src: "/assets/hero-siswa-belajar.webp", alt: "Sesi coding dan rekayasa perangkat lunak siswa FREEKS.id School" } },
-      { id: "robotics-iot", title: "Robotics & Smart IoT Systems", summary: "Praktikum rancang bangun robotika otonom dan otomasi cerdas di Maker Space.", schedule: "Selasa & Kamis 14.00–16.00 WIB", mentor: "FREEKS.ID", description: "Eksplorasi perakitan mikrokontroler, pemrograman sensor, sistem otomasi rumah pintar (smart home), dan persiapan tim kompetisi robotika tingkat nasional maupun internasional.", image: { src: "/assets/berita-prestasi-sains.webp", alt: "Rancang bangun sistem robotika dan IoT siswa" } },
-      { id: "creative-3d", title: "3D Modeling, Game Dev & Creative Media", summary: "Produksi aset digital 3D, animasi interaktif, dan pengembangan game indie edukasi.", schedule: "Jumat 13.30–15.30 WIB & Sabtu 09.00–11.00 WIB", mentor: "FREEKS.ID", description: "Pelatihan visual modern menggunakan software industri untuk pemodelan 3D, rigging, rendering, pembuatan game indie (Godot/Unity), serta desain UI/UX interaktif.", image: { src: "/assets/kegiatan-sekolah-2.webp", alt: "Sesi desain 3D dan kreasi multimedia digital" } },
-      { id: "global-speaking", title: "Global Language & Leadership Pitching", summary: "Imersi Bahasa Inggris aktif, debat kritis, dan keterampilan pitching presentasi profesional.", schedule: "Setiap hari 07.45–08.15 WIB & Klub Debat Mingguan", mentor: "FREEKS.ID", description: "Melatih kepercayaan diri siswa menyampaikan ide inovatif dalam bahasa internasional, teknik bernegosiasi, public speaking profesional, serta etika komunikasi global.", image: { src: "/assets/kegiatan-sekolah-2.webp", alt: "Kelas komunikasi global dan presentasi pitching siswa" } },
-      { id: "innovation-project", title: "Social Enterprise & Capstone Project", summary: "Inkubasi ide solusi sosial nyata yang dipamerkan di Annual Demo Day.", schedule: "Proyek terpadu akhir semester", mentor: "FREEKS.ID", description: "Siswa bekerja dalam tim lintas keahlian untuk mengidentifikasi persoalan lingkungan atau sosial, merancang purwarupa produk teknologi, dan mempresentasikannya di hadapan mentor industri.", image: { src: "/assets/kegiatan-sekolah-1.webp", alt: "Kolaborasi proyek capstone dan inovasi terapan siswa" } }
+      { id: "coding-ai", title: "AI, Coding & Software Engineering", summary: "Pembelajaran pemrograman intensif dan penerapan kecerdasan buatan terapan sejak dini.", schedule: "Kelas VII–IX, Senin & Rabu 13.30–15.00 WIB", mentor: "Sekolah Contoh", description: "Membekali siswa dengan logika computational thinking, algoritma modern (Python, JavaScript), pembuatan web/aplikasi, hingga implementasi dasar Machine Learning untuk problem solving.", image: { src: "/assets/hero-siswa-belajar.webp", alt: "Sesi coding dan rekayasa perangkat lunak siswa Sekolah Contoh Indonesia" } },
+      { id: "robotics-iot", title: "Robotics & Smart IoT Systems", summary: "Praktikum rancang bangun robotika otonom dan otomasi cerdas di Maker Space.", schedule: "Selasa & Kamis 14.00–16.00 WIB", mentor: "Sekolah Contoh", description: "Eksplorasi perakitan mikrokontroler, pemrograman sensor, sistem otomasi rumah pintar (smart home), dan persiapan tim kompetisi robotika tingkat nasional maupun internasional.", image: { src: "/assets/berita-prestasi-sains.webp", alt: "Rancang bangun sistem robotika dan IoT siswa" } },
+      { id: "creative-3d", title: "3D Modeling, Game Dev & Creative Media", summary: "Produksi aset digital 3D, animasi interaktif, dan pengembangan game indie edukasi.", schedule: "Jumat 13.30–15.30 WIB & Sabtu 09.00–11.00 WIB", mentor: "Sekolah Contoh", description: "Pelatihan visual modern menggunakan software industri untuk pemodelan 3D, rigging, rendering, pembuatan game indie (Godot/Unity), serta desain UI/UX interaktif.", image: { src: "/assets/kegiatan-sekolah-2.webp", alt: "Sesi desain 3D dan kreasi multimedia digital" } },
+      { id: "global-speaking", title: "Global Language & Leadership Pitching", summary: "Imersi Bahasa Inggris aktif, debat kritis, dan keterampilan pitching presentasi profesional.", schedule: "Setiap hari 07.45–08.15 WIB & Klub Debat Mingguan", mentor: "Sekolah Contoh", description: "Melatih kepercayaan diri siswa menyampaikan ide inovatif dalam bahasa internasional, teknik bernegosiasi, public speaking profesional, serta etika komunikasi global.", image: { src: "/assets/kegiatan-sekolah-2.webp", alt: "Kelas komunikasi global dan presentasi pitching siswa" } },
+      { id: "innovation-project", title: "Social Enterprise & Capstone Project", summary: "Inkubasi ide solusi sosial nyata yang dipamerkan di Annual Demo Day.", schedule: "Proyek terpadu akhir semester", mentor: "Sekolah Contoh", description: "Siswa bekerja dalam tim lintas keahlian untuk mengidentifikasi persoalan lingkungan atau sosial, merancang purwarupa produk teknologi, dan mempresentasikannya di hadapan mentor industri.", image: { src: "/assets/kegiatan-sekolah-1.webp", alt: "Kolaborasi proyek capstone dan inovasi terapan siswa" } }
     ];
 
     let achievementsState = [
-      { id: "prestasi-2026-1", year: 2026, level: "Nasional", title: "Juara 1 National Youth Robotics Championship", student: "Tim Robotika FREEKS (Kelas VIII)", organizer: "Indonesian Robotics & Automation Association", image: { src: "/assets/berita-prestasi-sains.webp", alt: "Piala dan piagam Juara 1 Robotika Nasional FREEKS.id School" } },
-      { id: "prestasi-2026-2", year: 2026, level: "Provinsi", title: "Best Creative Design & 3D Interactive Award", student: "Nabila Rahma (Kelas VIII)", organizer: "Jawa Timur Creative Tech Festival", image: { src: "/assets/program-unggulan-tahfidz.webp", alt: "Penghargaan Best 3D Interactive Design FREEKS.id School" } },
-      { id: "prestasi-2026-3", year: 2026, level: "Nasional", title: "Top 5 Youth AI & Coding Hackathon", student: "Tim Inovator FREEKS.id", organizer: "National Youth Tech Hub", image: { src: "/assets/kegiatan-sekolah-1.webp", alt: "Dokumentasi kejuaraan tim hackathon FREEKS.id School" } },
+      { id: "prestasi-2026-1", year: 2026, level: "Nasional", title: "Juara 1 National Youth Robotics Championship", student: "Tim Robotika FREEKS (Kelas VIII)", organizer: "Indonesian Robotics & Automation Association", image: { src: "/assets/berita-prestasi-sains.webp", alt: "Piala dan piagam Juara 1 Robotika Nasional Sekolah Contoh Indonesia" } },
+      { id: "prestasi-2026-2", year: 2026, level: "Provinsi", title: "Best Creative Design & 3D Interactive Award", student: "Nabila Rahma (Kelas VIII)", organizer: "Jawa Timur Creative Tech Festival", image: { src: "/assets/program-unggulan-tahfidz.webp", alt: "Penghargaan Best 3D Interactive Design Sekolah Contoh Indonesia" } },
+      { id: "prestasi-2026-3", year: 2026, level: "Nasional", title: "Top 5 Youth AI & Coding Hackathon", student: "Tim Inovator Sekolah Contoh", organizer: "National Youth Tech Hub", image: { src: "/assets/kegiatan-sekolah-1.webp", alt: "Dokumentasi kejuaraan tim hackathon Sekolah Contoh Indonesia" } },
       { id: "prestasi-2025-1", year: 2025, level: "Provinsi", title: "Juara 1 Inovasi Teknologi Tepat Guna Remaja", student: "Tim Maker Space FREEKS", organizer: "Dinas Pendidikan & Riset Teknologi", image: { src: "/assets/berita-prestasi-sains.webp", alt: "Tim Maker Space FREEKS pada kompetisi inovasi" } },
       { id: "prestasi-2025-2", year: 2025, level: "Regional", title: "Juara 1 English Debate & Public Pitching", student: "Aisyah Zahra (Kelas VIII)", organizer: "Regional Young Leaders Forum", image: { src: "/assets/kegiatan-sekolah-2.webp", alt: "Kejuaraan English Debate dan Public Pitching siswa" } }
     ];
 
     let teachersState = [
-      { id: "freeks-kepala", name: "FREEKS.ID", fullName: "FREEKS.ID, M.Sc., M.Ed.", birthPlaceDate: "Gresik, 14 Mei 1988", role: "Head of School / Principal", position: "Head of School / Principal", subject: "Tech Leadership & Education Management", category: "Pimpinan", photo: { src: "/assets/guru-freeks.webp", alt: "Foto FREEKS.ID - Head of School" } },
-      { id: "freeks-kurikulum", name: "FREEKS.ID", fullName: "FREEKS.ID, S.Kom., M.T.", birthPlaceDate: "Gresik, 20 Oktober 1991", role: "VP Curriculum & Innovation", position: "Wakil Kepala Sekolah Bidang Kurikulum & Inovasi", subject: "Informatika & Logika Komputasi", category: "Kurikulum", photo: { src: "/assets/guru-freeks.webp", alt: "Foto FREEKS.ID - VP Curriculum & Innovation" } },
-      { id: "freeks-kesiswaan", name: "FREEKS.ID", fullName: "FREEKS.ID, S.Pd., M.A.", birthPlaceDate: "Gresik, 05 Juli 1990", role: "VP Student Affairs", position: "Wakil Kepala Sekolah Bidang Kesiswaan & Komunitas", subject: "Leadership & Character Mindset", category: "Kesiswaan", photo: { src: "/assets/guru-freeks.webp", alt: "Foto FREEKS.ID - VP Student Affairs" } },
-      { id: "freeks-ipa", name: "FREEKS.ID", fullName: "FREEKS.ID, S.Si.", birthPlaceDate: "Gresik, 18 September 1993", role: "Lead Science Mentor", position: "Mentor Riset Sains & Maker Space", subject: "Sains Terapan & Rekayasa Hardware", category: "Mata Pelajaran", photo: { src: "/assets/guru-freeks.webp", alt: "Foto FREEKS.ID - Mentor Riset Sains" } },
-      { id: "freeks-inggris", name: "FREEKS.ID", fullName: "FREEKS.ID, B.A. (Hons)", birthPlaceDate: "Gresik, 12 Desember 1992", role: "Global Language Mentor", position: "Mentor Bahasa Inggris & Public Pitching", subject: "English for Global Communication", category: "Mata Pelajaran", photo: { src: "/assets/guru-freeks.webp", alt: "Foto FREEKS.ID - Mentor Bahasa Inggris" } },
-      { id: "freeks-creative", name: "FREEKS.ID", fullName: "FREEKS.ID, S.Ds.", birthPlaceDate: "Gresik, 03 Maret 1989", role: "Creative & 3D Lead", position: "Mentor Studio 3D, Animasi & UI/UX", subject: "Desain Interaktif & Game Development", category: "Mata Pelajaran", photo: { src: "/assets/guru-freeks.webp", alt: "Foto FREEKS.ID - Mentor Studio 3D & Desain" } }
+      { id: "freeks-kepala", name: "Sekolah Contoh", fullName: "Sekolah Contoh, M.Sc., M.Ed.", birthPlaceDate: "Gresik, 14 Mei 1988", role: "Head of School / Principal", position: "Head of School / Principal", subject: "Tech Leadership & Education Management", category: "Pimpinan", photo: { src: "/assets/guru-freeks.webp", alt: "Foto Sekolah Contoh - Head of School" } },
+      { id: "freeks-kurikulum", name: "Sekolah Contoh", fullName: "Sekolah Contoh, S.Kom., M.T.", birthPlaceDate: "Gresik, 20 Oktober 1991", role: "VP Curriculum & Innovation", position: "Wakil Kepala Sekolah Bidang Kurikulum & Inovasi", subject: "Informatika & Logika Komputasi", category: "Kurikulum", photo: { src: "/assets/guru-freeks.webp", alt: "Foto Sekolah Contoh - VP Curriculum & Innovation" } },
+      { id: "freeks-kesiswaan", name: "Sekolah Contoh", fullName: "Sekolah Contoh, S.Pd., M.A.", birthPlaceDate: "Gresik, 05 Juli 1990", role: "VP Student Affairs", position: "Wakil Kepala Sekolah Bidang Kesiswaan & Komunitas", subject: "Leadership & Character Mindset", category: "Kesiswaan", photo: { src: "/assets/guru-freeks.webp", alt: "Foto Sekolah Contoh - VP Student Affairs" } },
+      { id: "freeks-ipa", name: "Sekolah Contoh", fullName: "Sekolah Contoh, S.Si.", birthPlaceDate: "Gresik, 18 September 1993", role: "Lead Science Mentor", position: "Mentor Riset Sains & Maker Space", subject: "Sains Terapan & Rekayasa Hardware", category: "Mata Pelajaran", photo: { src: "/assets/guru-freeks.webp", alt: "Foto Sekolah Contoh - Mentor Riset Sains" } },
+      { id: "freeks-inggris", name: "Sekolah Contoh", fullName: "Sekolah Contoh, B.A. (Hons)", birthPlaceDate: "Gresik, 12 Desember 1992", role: "Global Language Mentor", position: "Mentor Bahasa Inggris & Public Pitching", subject: "English for Global Communication", category: "Mata Pelajaran", photo: { src: "/assets/guru-freeks.webp", alt: "Foto Sekolah Contoh - Mentor Bahasa Inggris" } },
+      { id: "freeks-creative", name: "Sekolah Contoh", fullName: "Sekolah Contoh, S.Ds.", birthPlaceDate: "Gresik, 03 Maret 1989", role: "Creative & 3D Lead", position: "Mentor Studio 3D, Animasi & UI/UX", subject: "Desain Interaktif & Game Development", category: "Mata Pelajaran", photo: { src: "/assets/guru-freeks.webp", alt: "Foto Sekolah Contoh - Mentor Studio 3D & Desain" } }
     ];
 
     let eventsState = [
@@ -2199,7 +2199,7 @@ const { events } = kalenderData;
         document.getElementById('modal-prog-title').textContent = 'Tambah Program Unggulan Baru';
         document.getElementById('input-prog-id').value = 'prog-' + Date.now();
         document.getElementById('input-prog-title-val').value = '';
-        document.getElementById('input-prog-mentor').value = 'FREEKS.ID';
+        document.getElementById('input-prog-mentor').value = 'Sekolah Contoh';
         document.getElementById('input-prog-schedule').value = '';
         document.getElementById('input-prog-summary').value = '';
         document.getElementById('input-prog-desc').value = '';
@@ -2455,8 +2455,8 @@ const { events } = kalenderData;
         editingTcIdx = -1;
         document.getElementById('modal-tc-title').textContent = 'Tambah Guru / Tendik Baru';
         document.getElementById('input-tc-id').value = 'tc-' + Date.now();
-        document.getElementById('input-tc-name').value = 'FREEKS.ID';
-        document.getElementById('input-tc-fullname').value = 'FREEKS.ID, S.Pd.';
+        document.getElementById('input-tc-name').value = 'Sekolah Contoh';
+        document.getElementById('input-tc-fullname').value = 'Sekolah Contoh, S.Pd.';
         document.getElementById('input-tc-category').value = 'Mata Pelajaran';
         document.getElementById('input-tc-role').value = 'Guru Mata Pelajaran';
         document.getElementById('input-tc-subject').value = '';

@@ -50,10 +50,10 @@
         "note": "Akses fasilitas Maker Space, Cloud Lab, 3D Printer; dapat diangsur"
       },
       {
-        "component": "Starter Pack & Apparel Resmi FREEKS",
+        "component": "Starter Pack & Apparel Resmi Sekolah Contoh",
         "amount": "Rp1.100.000",
         "numeric": 1100000,
-        "note": "Termasuk 2 stel smart polo/uniform, hoodie identitas FREEKS, kaos olahraga, dan ID lanyard smart card"
+        "note": "Termasuk 2 stel smart polo/uniform, hoodie identitas Sekolah Contoh, kaos olahraga, dan ID lanyard smart card"
       },
       {
         "component": "Modul Digital, E-Book & Software License",
@@ -69,7 +69,7 @@
       }
     ],
     "totalInitial": "Rp4.400.000",
-    "totalInitialNote": "Total biaya awal masuk FREEKS.id School (di luar SPP bulanan).",
+    "totalInitialNote": "Total biaya awal masuk Sekolah Contoh Indonesia (di luar SPP bulanan).",
     "concession": "Tersedia program Beasiswa Inovasi Digital (potongan hingga 100%) untuk talenta berprestasi di bidang sains, olimpiade, coding/robotika, serta kuota beasiswa afirmasi."
   },
   "steps": [
@@ -105,7 +105,7 @@
     },
     {
       "q": "Apakah siswa harus sudah bisa coding sebelum mendaftar?",
-      "a": "Tidak harus! FREEKS.id School mendesain kurikulum mulai dari fondasi paling dasar. Yang kami cari adalah rasa ingin tahu (*curiosity*), semangat belajar, dan kemauan bereksplorasi."
+      "a": "Tidak harus! Sekolah Contoh Indonesia mendesain kurikulum mulai dari fondasi paling dasar. Yang kami cari adalah rasa ingin tahu (*curiosity*), semangat belajar, dan kemauan bereksplorasi."
     },
     {
       "q": "Berapa kapasitas kuota penerimaan siswa baru?",
@@ -117,7 +117,7 @@
     },
     {
       "q": "Apakah menerima siswa dari luar kota/daerah?",
-      "a": "Sangat terbuka. Kami menyambut siswa berbakat dari seluruh Indonesia yang siap berkembang bersama ekosistem teknologi FREEKS."
+      "a": "Sangat terbuka. Kami menyambut siswa berbakat dari seluruh Indonesia yang siap berkembang bersama ekosistem teknologi Sekolah Contoh."
     },
     {
       "q": "Bagaimana jika ada dokumen yang belum lengkap?",
@@ -125,7 +125,7 @@
     },
     {
       "q": "Ke mana saya bisa berkonsultasi seputar pendaftaran?",
-      "a": "Silakan menghubungi Admission Hotline FREEKS via WhatsApp di 0812-8888-3733 pada jam operasional sekolah."
+      "a": "Silakan menghubungi Admission Hotline Sekolah Contoh via WhatsApp di 0812-3456-7890 pada jam operasional sekolah."
     }
   ]
 }

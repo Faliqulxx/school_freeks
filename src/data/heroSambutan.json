@@ -1,35 +1,35 @@
 {
   "dummy": false,
   "hero": {
-    "title": "FREEKS.id School",
-    "subtitle": "Pendidikan modern masa depan berbasis teknologi, kreativitas, dan inovasi terapan di bawah naungan FREEKS Foundation.",
-    "ctaText": "Daftar Admission",
+    "title": "Sekolah Contoh Indonesia",
+    "subtitle": "Pendidikan masa depan berkarakter unggul yang memadukan keunggulan akademik, teknologi modern, dan integritas kepribadian.",
+    "ctaText": "Daftar PPDB Online",
     "ctaUrl": "/ppdb",
     "secondaryText": "Eksplorasi Sekolah",
     "secondaryUrl": "/profil/visi-misi",
     "image": {
       "src": "/assets/gedung-freeks.webp",
-      "alt": "Gedung Sekolah FREEKS.id School",
+      "alt": "Gedung Sekolah Contoh Indonesia",
       "width": 1200,
       "height": 900
     }
   },
   "sambutan": {
-    "name": "FREEKS.ID",
-    "role": "Head of School / Principal",
+    "name": "Drs. H. Ahmad Pratama, M.Pd.",
+    "role": "Kepala Sekolah",
     "photo": {
       "src": "/assets/guru-freeks.webp",
-      "alt": "Foto FREEKS.ID - Head of School",
+      "alt": "Foto Kepala Sekolah",
       "width": 765,
       "height": 1024
     },
-    "arabicGreeting": "Salam Inovasi & Masa Depan,",
-    "shortQuote": "Selamat datang di FREEKS.id School. Kami percaya setiap anak memiliki potensi luar biasa ketika rasa ingin tahu dipadukan dengan penguasaan teknologi mutakhir dan integritas karakter. Kami merancang ekosistem belajar yang tidak hanya mendidik untuk hari ini, tetapi mempersiapkan inovator yang berani menciptakan masa depan.",
+    "arabicGreeting": "Assalamu’alaikum Warahmatullahi Wabarakatuh,",
+    "shortQuote": "Selamat datang di portal resmi Sekolah Contoh Indonesia. Kami berkomitmen merancang lingkungan belajar yang inspiratif, inklusif, dan adaptif untuk membina generasi berprestasi, berakhlak mulia, dan siap berkontribusi bagi masyarakat.",
     "fullText": [
-      "Salam inovasi dan salam sejahtera bagi kita semua.",
-      "Kehadiran portal digital resmi FREEKS.id School ini adalah gerbang interaktif untuk mengenalkan ekosistem belajar kami kepada siswa, wali murid, dan mitra industri. Kami berkomitmen menyelenggarakan pendidikan modern yang relevan dengan perkembangan kecerdasan buatan, komputasi global, serta industri kreatif.",
-      "Di FREEKS.id School, pembelajaran tidak sebatas teks dan teori, melainkan diwujudkan melalui eksperimen nyata di laboratorium modern, pembuatan proyek teknologi, serta pengasahan empati sosial. Kami mengajak Anda bergabung bersama keluarga besar FREEKS untuk mewujudkan masa depan gemilang.",
-      "Terima kasih atas kepercayaan dan antusiasme Anda."
+      "Puji syukur ke hadirat Tuhan Yang Maha Esa atas hadirnya media informasi resmi Sekolah Contoh Indonesia.",
+      "Website ini kami kembangkan sebagai sarana transparansi, literasi digital, dan jembatan komunikasi interaktif antara pihak sekolah, para orang tua peserta didik, serta masyarakat luas.",
+      "Dengan memadukan kurikulum nasional dan pengayaan kompetensi masa depan, kami berikhtiar mendampingi setiap siswa berkembang sesuai bakat dan minat terbaiknya. Terima kasih atas kepercayaan yang diberikan kepada institusi kami.",
+      "Wassalamu’alaikum Warahmatullahi Wabarakatuh."
     ]
   }
 }

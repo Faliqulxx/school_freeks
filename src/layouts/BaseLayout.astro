@@ -18,16 +18,16 @@ interface Props {
 }
 
 const {
-  title = "FREEKS.id School – Empowering Future Thinkers, Creators & Innovators",
-  description = "Website resmi FREEKS.id School di bawah naungan FREEKS Foundation. Informasi admission/PPDB 2027/2028, kurikulum teknologi modern, lab riset, dan profil sekolah.",
+  title = "Sekolah Contoh Indonesia – Empowering Future Thinkers, Creators & Innovators",
+  description = "Website resmi Sekolah Contoh Indonesia di bawah naungan Yayasan Pendidikan Teladan Nusantara. Informasi admission/PPDB 2027/2028, kurikulum teknologi modern, lab riset, dan profil sekolah.",
   image = "/assets/dummy/hero-sekolah.svg",
   type = "website",
   publishedTime
 } = Astro.props;
 
 const { school } = siteData;
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site || 'https://freeks.id').href;
-const ogImageUrl = new URL(image, Astro.site || 'https://freeks.id').href;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site || 'https://sekolahcontoh.sch.id').href;
+const ogImageUrl = new URL(image, Astro.site || 'https://sekolahcontoh.sch.id').href;
 const isPpdbOpen = ppdbData.statusType === 'open';
 
 // Schema.org EducationalOrganization
@@ -36,8 +36,8 @@ const schemaOrganization = {
   "@type": "EducationalOrganization",
   "name": school.name,
   "alternateName": school.shortName,
-  "url": "https://freeks.id/",
-  "logo": "https://freeks.id/assets/logo-freeks.webp",
+  "url": "https://sekolahcontoh.sch.id/",
+  "logo": "https://sekolahcontoh.sch.id/assets/logo-freeks.webp",
   "description": description,
   "address": {
     "@type": "PostalAddress",

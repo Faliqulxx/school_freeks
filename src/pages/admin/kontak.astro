@@ -14,7 +14,7 @@ const initialMessages = [
     subject: "Informasi PPDB",
     date: "2026-10-27 14:32",
     status: "Belum Dibaca",
-    message: "Halo tim Admission FREEKS.id School. Mohon informasi apakah pendaftaran Early Bird Wave masih tersedia kuota beasiswa inovasi talenta robotika? Dan format portofolio proyek apa saja yang bisa kami sertakan saat asesmen?"
+    message: "Halo tim Admission Sekolah Contoh Indonesia. Mohon informasi apakah pendaftaran Early Bird Wave masih tersedia kuota beasiswa inovasi talenta robotika? Dan format portofolio proyek apa saja yang bisa kami sertakan saat asesmen?"
   },
   {
     id: "MSG-2026-002",
@@ -24,7 +24,7 @@ const initialMessages = [
     subject: "Administrasi & SPP",
     date: "2026-10-26 09:15",
     status: "Sudah Dibalas",
-    message: "Selamat pagi tata usaha FREEKS.id School. Saya ingin mengonfirmasi penerbitan invoice dan kuitansi pelunasan paket starter pack & modul teknologi anak saya kelas VII-A untuk keperluan administrasi kantor. Terima kasih."
+    message: "Selamat pagi tata usaha Sekolah Contoh Indonesia. Saya ingin mengonfirmasi penerbitan invoice dan kuitansi pelunasan paket starter pack & modul teknologi anak saya kelas VII-A untuk keperluan administrasi kantor. Terima kasih."
   },
   {
     id: "MSG-2026-003",
@@ -39,7 +39,7 @@ const initialMessages = [
   {
     id: "MSG-2026-004",
     name: "Ibu Rina Setyawati",
-    contact: "082299887766",
+    contact: "0812-9876-5432",
     isWhatsApp: true,
     subject: "Saran & Pengaduan",
     date: "2026-10-23 11:20",
@@ -54,7 +54,7 @@ const initialMessages = [
     subject: "Lainnya",
     date: "2026-10-20 19:05",
     status: "Sudah Dibalas",
-    message: "Saya alumni FREEKS.id School angkatan 2024 bermaksud memohon surat rekomendasi akademik dan transkrip portofolio proyek untuk pendaftaran beasiswa teknologi. Apakah bisa diproses dalam 2 hari kerja?"
+    message: "Saya alumni Sekolah Contoh Indonesia angkatan 2024 bermaksud memohon surat rekomendasi akademik dan transkrip portofolio proyek untuk pendaftaran beasiswa teknologi. Apakah bisa diproses dalam 2 hari kerja?"
   }
 ];
 ---
@@ -729,7 +729,7 @@ const initialMessages = [
         subject: "Informasi PPDB",
         date: "2026-10-27 14:32",
         status: "Belum Dibaca",
-        message: "Halo tim Admission FREEKS.id School. Mohon informasi apakah pendaftaran Early Bird Wave masih tersedia kuota beasiswa inovasi talenta robotika? Dan format portofolio proyek apa saja yang bisa kami sertakan saat asesmen?"
+        message: "Halo tim Admission Sekolah Contoh Indonesia. Mohon informasi apakah pendaftaran Early Bird Wave masih tersedia kuota beasiswa inovasi talenta robotika? Dan format portofolio proyek apa saja yang bisa kami sertakan saat asesmen?"
       },
       {
         id: "MSG-2026-002",
@@ -739,7 +739,7 @@ const initialMessages = [
         subject: "Administrasi & SPP",
         date: "2026-10-26 09:15",
         status: "Sudah Dibalas",
-        message: "Selamat pagi tata usaha FREEKS.id School. Saya ingin mengonfirmasi penerbitan invoice dan kuitansi pelunasan paket starter pack & modul teknologi anak saya kelas VII-A untuk keperluan administrasi kantor. Terima kasih."
+        message: "Selamat pagi tata usaha Sekolah Contoh Indonesia. Saya ingin mengonfirmasi penerbitan invoice dan kuitansi pelunasan paket starter pack & modul teknologi anak saya kelas VII-A untuk keperluan administrasi kantor. Terima kasih."
       },
       {
         id: "MSG-2026-003",
@@ -754,7 +754,7 @@ const initialMessages = [
       {
         id: "MSG-2026-004",
         name: "Ibu Rina Setyawati",
-        contact: "082299887766",
+        contact: "0812-9876-5432",
         isWhatsApp: true,
         subject: "Saran & Pengaduan",
         date: "2026-10-23 11:20",
@@ -769,7 +769,7 @@ const initialMessages = [
         subject: "Lainnya",
         date: "2026-10-20 19:05",
         status: "Sudah Dibalas",
-        message: "Saya alumni FREEKS.id School angkatan 2024 bermaksud memohon surat rekomendasi akademik dan transkrip portofolio proyek untuk pendaftaran beasiswa teknologi. Apakah bisa diproses dalam 2 hari kerja?"
+        message: "Saya alumni Sekolah Contoh Indonesia angkatan 2024 bermaksud memohon surat rekomendasi akademik dan transkrip portofolio proyek untuk pendaftaran beasiswa teknologi. Apakah bisa diproses dalam 2 hari kerja?"
       }
     ];
 
@@ -830,7 +830,7 @@ const initialMessages = [
         if (m.isWhatsApp || m.contact.startsWith('08') || m.contact.startsWith('+62')) {
           btnWA.style.display = 'inline-flex';
           const cleanPhone = m.contact.replace(/^0/, '62').replace(/[^0-9]/g, '');
-          const replyText = `Halo ${m.name}. Terima kasih telah menghubungi FREEKS.id School perihal "${m.subject}". Berikut informasi yang dapat kami sampaikan: `;
+          const replyText = `Halo ${m.name}. Terima kasih telah menghubungi Sekolah Contoh Indonesia perihal "${m.subject}". Berikut informasi yang dapat kami sampaikan: `;
           btnWA.href = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(replyText)}`;
         } else {
           btnWA.style.display = 'none';
@@ -842,7 +842,7 @@ const initialMessages = [
       if (btnMail) {
         if (m.contact.includes('@')) {
           btnMail.style.display = 'inline-flex';
-          btnMail.href = `mailto:${m.contact}?subject=Tanggapan%20FREEKS.id%20School:%20${encodeURIComponent(m.subject)}`;
+          btnMail.href = `mailto:${m.contact}?subject=Tanggapan%20Sekolah Contoh%20School:%20${encodeURIComponent(m.subject)}`;
         } else {
           btnMail.style.display = 'none';
         }

@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://freeks.id/sitemap.xml
+Sitemap: https://sekolahcontoh.sch.id/sitemap.xml
 

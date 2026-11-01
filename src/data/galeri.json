@@ -8,7 +8,7 @@
       "photoCount": 24,
       "cover": {
         "src": "/assets/kegiatan-sekolah-1.webp",
-        "alt": "Pameran prototipe karya teknologi siswa FREEKS.id School",
+        "alt": "Pameran prototipe karya teknologi siswa Sekolah Contoh Indonesia",
         "width": 1200,
         "height": 800,
         "ratio": "3:2"
@@ -41,7 +41,7 @@
       "photoCount": 12,
       "cover": {
         "src": "/assets/kegiatan-sekolah-2.webp",
-        "alt": "Tim Robotika & Sains FREEKS.id School",
+        "alt": "Tim Robotika & Sains Sekolah Contoh Indonesia",
         "width": 1200,
         "height": 800,
         "ratio": "3:2"
@@ -83,7 +83,7 @@
         {
           "id": "po-1",
           "src": "/assets/kegiatan-sekolah-1.webp",
-          "alt": "Ikrar komitmen kepemimpinan dewan siswa FREEKS",
+          "alt": "Ikrar komitmen kepemimpinan dewan siswa Sekolah Contoh",
           "caption": "Pengurus Student Council terpilih mengucapkan komitmen integritas dan kolaborasi kesiswaan.",
           "width": 1200,
           "height": 800,
@@ -102,12 +102,12 @@
     },
     {
       "id": "code-for-impact-2026",
-      "title": "Aksi Sosial: FREEKS Code for Impact",
+      "title": "Aksi Sosial: Sekolah Contoh Code for Impact",
       "date": "2026-09-29",
       "photoCount": 9,
       "cover": {
         "src": "/assets/kegiatan-sekolah-2.webp",
-        "alt": "Siswa FREEKS berbagi pelatihan literasi digital",
+        "alt": "Siswa Sekolah Contoh berbagi pelatihan literasi digital",
         "width": 1200,
         "height": 800,
         "ratio": "3:2"
@@ -126,7 +126,7 @@
           "id": "jb-2",
           "src": "/assets/kegiatan-sekolah-1.webp",
           "alt": "Foto bersama peserta workshop edukasi",
-          "caption": "Kolaborasi hangat siswa dan mentor FREEKS dalam aksi sosial berbagi ilmu pengetahuan.",
+          "caption": "Kolaborasi hangat siswa dan mentor Sekolah Contoh dalam aksi sosial berbagi ilmu pengetahuan.",
           "width": 1200,
           "height": 800,
           "ratio": "3:2"
@@ -137,7 +137,7 @@
   "videos": [
     {
       "id": "vid-1",
-      "title": "Official Campus Tour & Ekosistem FREEKS.id School",
+      "title": "Official Campus Tour & Ekosistem Sekolah Contoh Indonesia",
       "date": "2026-08-15",
       "duration": "03:45",
       "youtubeId": "dQw4w9WgXcQ",

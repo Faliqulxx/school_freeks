@@ -163,7 +163,7 @@ const { downloads } = unduhanData;
               </div>
               <div class="form-group">
                 <label for="input-art-author">Penulis / Sumber <span class="req">*</span></label>
-                <input type="text" id="input-art-author" value="Humas FREEKS.id School" class="form-control" />
+                <input type="text" id="input-art-author" value="Humas Sekolah Contoh Indonesia" class="form-control" />
               </div>
               <div class="form-group col-span-2">
                 <label for="input-art-img">Thumbnail Gambar Berita (WebP) <span class="req">*</span></label>
@@ -1538,16 +1538,16 @@ const { downloads } = unduhanData;
 
 <script is:inline>
   function initInformasi() {
-    // Initial states for FREEKS.id School
+    // Initial states for Sekolah Contoh Indonesia
     let articlesState = [
       {
         slug: "showcase-day-karya-teknologi-2026",
         date: "2026-10-22",
         category: "Kegiatan",
-        title: "Annual Showcase Day 2026: Siswa FREEKS.id Pamerkan 24 Prototipe IoT & Game Edukasi",
+        title: "Annual Showcase Day 2026: Siswa Sekolah Contoh Pamerkan 24 Prototipe IoT & Game Edukasi",
         excerpt: "Seluruh siswa menampilkan karya capstone inovatif di hadapan mentor industri dan para wali murid.",
-        author: "Tim Media FREEKS.id",
-        image: { src: "/assets/kegiatan-sekolah-1.webp", alt: "Showcase Day FREEKS.id School", width: 1200, height: 800 }
+        author: "Tim Media Sekolah Contoh",
+        image: { src: "/assets/kegiatan-sekolah-1.webp", alt: "Showcase Day Sekolah Contoh Indonesia", width: 1200, height: 800 }
       },
       {
         slug: "tim-robotika-freeks-juara-1-nasional",
@@ -1634,7 +1634,7 @@ const { downloads } = unduhanData;
       },
       {
         id: "unduh-brosur-ppdb",
-        title: "Buku Prospektus & Brosur Resmi FREEKS.id School",
+        title: "Buku Prospektus & Brosur Resmi Sekolah Contoh Indonesia",
         category: "Admission",
         format: "PDF",
         size: "1,8 MB",
@@ -1815,7 +1815,7 @@ const { downloads } = unduhanData;
         document.getElementById('input-art-slug').value = 'berita-' + Date.now();
         document.getElementById('input-art-cat').value = 'Kegiatan';
         document.getElementById('input-art-date').value = new Date().toISOString().split('T')[0];
-        document.getElementById('input-art-author').value = 'Humas FREEKS.id School';
+        document.getElementById('input-art-author').value = 'Humas Sekolah Contoh Indonesia';
         document.getElementById('input-art-img').value = '/assets/berita-kegiatan-osis.webp';
         const prevArtImg = document.getElementById('img-prev-art');
         if (prevArtImg) prevArtImg.src = '/assets/berita-kegiatan-osis.webp';

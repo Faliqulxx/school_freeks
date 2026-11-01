@@ -118,7 +118,7 @@ const { school } = siteData;
                   required
                   class="form-control"
                 >{hero.subtitle}</textarea>
-                <span class="form-help">Pengantar filosofi belajar di bawah naungan FREEKS Foundation.</span>
+                <span class="form-help">Pengantar filosofi belajar di bawah naungan Yayasan Pendidikan Teladan Nusantara.</span>
               </div>
 
               <div class="form-group">
@@ -210,7 +210,7 @@ const { school } = siteData;
                       </label>
                       <span class="upload-file-status"></span>
                     </div>
-                    <span class="form-help">Foto latar gedung bertingkat FREEKS.id School dengan pola islami transparan.</span>
+                    <span class="form-help">Foto latar gedung bertingkat Sekolah Contoh Indonesia dengan pola islami transparan.</span>
                   </div>
                 </div>
               </div>
@@ -377,7 +377,7 @@ const { school } = siteData;
                   type="text"
                   id="input-banner-title"
                   name="bannerTitle"
-                  value="Pendaftaran Siswa Baru FREEKS.id School Telah Dibuka"
+                  value="Pendaftaran Siswa Baru Sekolah Contoh Indonesia Telah Dibuka"
                   required
                   class="form-control"
                 />
@@ -562,7 +562,7 @@ const { school } = siteData;
                 </div>
                 <div>
                   <h3>Testimoni Wali Murid & Alumni</h3>
-                  <p class="card-desc">Kelola apresiasi, kesan, dan pengalaman nyata dari wali murid dan alumni FREEKS.id School.</p>
+                  <p class="card-desc">Kelola apresiasi, kesan, dan pengalaman nyata dari wali murid dan alumni Sekolah Contoh Indonesia.</p>
                 </div>
               </div>
               <button type="button" id="btn-add-testimoni" class="btn btn-primary btn-sm">
@@ -656,7 +656,7 @@ const { school } = siteData;
                 <textarea
                   id="input-testi-quote"
                   rows="3"
-                  placeholder="Tuliskan pengalaman positif dan kesan bersekolah di FREEKS.id School..."
+                  placeholder="Tuliskan pengalaman positif dan kesan bersekolah di Sekolah Contoh Indonesia..."
                   class="form-control"
                 ></textarea>
               </div>
@@ -1610,7 +1610,7 @@ const { school } = siteData;
         name: "Ibu Sri Wahyuni",
         role: "Wali Murid Grade 8",
         initials: "SW",
-        quote: "Anak saya yang awalnya pemalu kini sangat percaya diri melakukan pitching presentasi dan antusias merakit proyek coding di rumah. Perkembangan karakter dan logikanya luar biasa di FREEKS.id School."
+        quote: "Anak saya yang awalnya pemalu kini sangat percaya diri melakukan pitching presentasi dan antusias merakit proyek coding di rumah. Perkembangan karakter dan logikanya luar biasa di Sekolah Contoh Indonesia."
       },
       {
         id: "testi-2",
@@ -1624,7 +1624,7 @@ const { school } = siteData;
         name: "Rafi Pratama",
         role: "Alumni Angkatan 2024",
         initials: "RP",
-        quote: "Pengalaman di Maker Space FREEKS.id School dan bimbingan mentor 3D design membuat portofolio saya diakui saat kompetisi teknologi. Fondasi computational thinking di sini sangat bernilai."
+        quote: "Pengalaman di Maker Space Sekolah Contoh Indonesia dan bimbingan mentor 3D design membuat portofolio saya diakui saat kompetisi teknologi. Fondasi computational thinking di sini sangat bernilai."
       }
     ];
 
@@ -1641,7 +1641,7 @@ const { school } = siteData;
         }
         if (parsed.hero) {
           if (parsed.hero.title && parsed.hero.title.includes('MTs Islamiyah')) {
-            parsed.hero.title = 'FREEKS.id School';
+            parsed.hero.title = 'Sekolah Contoh Indonesia';
             parsed.hero.subtitle = 'Membentuk Generasi Inovator & Digital Leader Berakhlak Mulia';
           }
           if (document.getElementById('input-hero-title')) document.getElementById('input-hero-title').value = parsed.hero.title || '';
@@ -1958,15 +1958,15 @@ const { school } = siteData;
           secondaryUrl: document.getElementById('input-hero-sec-url')?.value || '',
           image: {
             src: document.getElementById('input-hero-bg-src')?.value || '/assets/gedung-freeks.webp',
-            alt: "Gedung FREEKS.id School"
+            alt: "Gedung Sekolah Contoh Indonesia"
           }
         },
         sambutan: {
-          name: document.getElementById('input-sambutan-name')?.value || 'FREEKS.ID',
+          name: document.getElementById('input-sambutan-name')?.value || 'Sekolah Contoh',
           role: document.getElementById('input-sambutan-role')?.value || 'Head of School / Principal',
           photo: {
             src: document.getElementById('input-sambutan-photo')?.value || '/assets/guru-freeks.webp',
-            alt: `Foto ${document.getElementById('input-sambutan-name')?.value || 'FREEKS.ID'} - Head of School / Principal`
+            alt: `Foto ${document.getElementById('input-sambutan-name')?.value || 'Sekolah Contoh'} - Head of School / Principal`
           },
           arabicGreeting: document.getElementById('input-sambutan-arabic')?.value || '',
           shortQuote: document.getElementById('input-sambutan-quote')?.value || ''

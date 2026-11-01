@@ -4,17 +4,17 @@
     {
       "year": "2019",
       "title": "Awal Inisiasi & Digital Sandbox",
-      "description": "Berawal dari inisiatif komunitas inkubator teknologi dan lab kreatif independen anak muda bernama FREEKS Studio, yang menguji coba program eksplorasi coding, desain digital, dan robotika interaktif bagi remaja."
+      "description": "Berawal dari inisiatif komunitas inkubator teknologi dan lab kreatif independen anak muda bernama Sekolah Contoh Studio, yang menguji coba program eksplorasi coding, desain digital, dan robotika interaktif bagi remaja."
     },
     {
       "year": "2021",
-      "title": "Pendirian FREEKS Foundation & Izin Sekolah",
-      "description": "Resmi berbadan hukum di bawah Yayasan Inovasi Kreasi Digital (FREEKS Foundation) dan memperoleh legalitas penyelenggaraan institusi pendidikan modern berbasis kurikulum integratif dan computational thinking."
+      "title": "Pendirian Yayasan Pendidikan Teladan Nusantara & Izin Sekolah",
+      "description": "Resmi berbadan hukum di bawah Yayasan Inovasi Kreasi Digital (Yayasan Pendidikan Teladan Nusantara) dan memperoleh legalitas penyelenggaraan institusi pendidikan modern berbasis kurikulum integratif dan computational thinking."
     },
     {
       "year": "2023",
       "title": "Pembangunan Sekolah Cerdas & Tech Hub",
-      "description": "Peresmian gedung sekolah modern ramah lingkungan (FREEKS Campus) lengkap dengan fasilitas Smart Classroom, Maker Space, VR/AR Studio, serta arena kompetisi robotika."
+      "description": "Peresmian gedung sekolah modern ramah lingkungan (Sekolah Contoh Campus) lengkap dengan fasilitas Smart Classroom, Maker Space, VR/AR Studio, serta arena kompetisi robotika."
     },
     {
       "year": "2024",
@@ -42,10 +42,10 @@
     "Menjadi rujukan modern tech school dengan tata kelola sekolah digital mandiri yang transparan, adaptif, dan berwawasan lingkungan."
   ],
   "foundation": {
-    "name": "Yayasan Inovasi Kreasi Digital (FREEKS Foundation)",
+    "name": "Yayasan Inovasi Kreasi Digital (Yayasan Pendidikan Teladan Nusantara)",
     "established": "2019",
-    "leader": "Dewan Pembina FREEKS Foundation",
-    "description": "Yayasan Inovasi Kreasi Digital (FREEKS Foundation) adalah lembaga nirlaba yang berdedikasi memajukan ekosistem pendidikan teknologi, riset kreatif, dan pengembangan potensi generasi muda Indonesia agar adaptif terhadap dinamika era kecerdasan buatan.",
+    "leader": "Dewan Pembina Yayasan Pendidikan Teladan Nusantara",
+    "description": "Yayasan Inovasi Kreasi Digital (Yayasan Pendidikan Teladan Nusantara) adalah lembaga nirlaba yang berdedikasi memajukan ekosistem pendidikan teknologi, riset kreatif, dan pengembangan potensi generasi muda Indonesia agar adaptif terhadap dinamika era kecerdasan buatan.",
     "logoMeaning": [
       {
         "element": "Prisma & Sudut Geometris 3D",
@@ -70,19 +70,19 @@
     ],
     "units": [
       {
-        "name": "FREEKS Junior Studio",
+        "name": "Sekolah Contoh Junior Studio",
         "desc": "Program Eksplorasi Kreatif & Logika Digital Usia Dini"
       },
       {
-        "name": "FREEKS.id School",
+        "name": "Sekolah Contoh Indonesia",
         "desc": "Sekolah Menengah Modern Tech & Creative Academy"
       },
       {
-        "name": "FREEKS Innovation Labs",
+        "name": "Sekolah Contoh Innovation Labs",
         "desc": "Inkubator Riset Siswa, AI, dan Robotika Terapan"
       },
       {
-        "name": "FREEKS Community Outreach",
+        "name": "Sekolah Contoh Community Outreach",
         "desc": "Program Beasiswa & Literasi Digital Masyarakat"
       }
     ]
@@ -94,7 +94,7 @@
       "description": "Ruang belajar interaktif ber-AC yang dilengkapi Smart Board digital, modul meja fleksibel untuk diskusi kelompok, dan jaringan gigabit fiber-optic super cepat.",
       "image": {
         "src": "/assets/hero-siswa-belajar.webp",
-        "alt": "Ruang Cyber Smart Classroom FREEKS.id School",
+        "alt": "Ruang Cyber Smart Classroom Sekolah Contoh Indonesia",
         "width": 1200,
         "height": 800
       }
@@ -116,7 +116,7 @@
       "description": "Studio multimedia berkemampuan rendering tinggi untuk produksi karya animasi, pemodelan 3D, motion graphic, game development, dan podcast siswa.",
       "image": {
         "src": "/assets/kegiatan-sekolah-2.webp",
-        "alt": "Studio Media Kreatif dan Lab 3D FREEKS.id School",
+        "alt": "Studio Media Kreatif dan Lab 3D Sekolah Contoh Indonesia",
         "width": 1200,
         "height": 800
       }
@@ -138,7 +138,7 @@
       "description": "Auditorium modern dan amfiteater terbuka untuk pitching proyek siswa, pameran karya teknologi (Showcase Day), serta seminar pembicara industri tamu.",
       "image": {
         "src": "/assets/gedung-freeks.webp",
-        "alt": "Gedung Utama FREEKS Campus dan Area Hub",
+        "alt": "Gedung Utama Sekolah Contoh Campus dan Area Hub",
         "width": 1200,
         "height": 800
       }
@@ -149,7 +149,7 @@
       "description": "Area kolaborasi santai luar ruangan dan kafe sehat ramah lingkungan untuk berdiskusi, *brainstorming* santai, dan relaksasi antar sesi belajar.",
       "image": {
         "src": "/assets/hero-siswa-berjalan.webp",
-        "alt": "Area terbuka hijau dan student lounge FREEKS Campus",
+        "alt": "Area terbuka hijau dan student lounge Sekolah Contoh Campus",
         "width": 1200,
         "height": 800
       }

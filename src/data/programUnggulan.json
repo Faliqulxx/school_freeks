@@ -6,11 +6,11 @@
       "title": "AI, Coding & Software Engineering",
       "summary": "Pembelajaran pemrograman intensif dan penerapan kecerdasan buatan terapan sejak dini.",
       "schedule": "Kelas VII–IX, Senin & Rabu 13.30–15.00 WIB",
-      "mentor": "FREEKS.ID",
+      "mentor": "Sekolah Contoh",
       "description": "Membekali siswa dengan logika computational thinking, algoritma modern (Python, JavaScript), pembuatan web/aplikasi, hingga implementasi dasar Machine Learning untuk problem solving.",
       "image": {
         "src": "/assets/hero-siswa-belajar.webp",
-        "alt": "Sesi coding dan rekayasa perangkat lunak siswa FREEKS.id School",
+        "alt": "Sesi coding dan rekayasa perangkat lunak siswa Sekolah Contoh Indonesia",
         "width": 1200,
         "height": 800
       }
@@ -20,7 +20,7 @@
       "title": "Robotics & Smart IoT Systems",
       "summary": "Praktikum rancang bangun robotika otonom dan otomasi cerdas di Maker Space.",
       "schedule": "Selasa & Kamis 14.00–16.00 WIB",
-      "mentor": "FREEKS.ID",
+      "mentor": "Sekolah Contoh",
       "description": "Eksplorasi perakitan mikrokontroler, pemrograman sensor, sistem otomasi rumah pintar (smart home), dan persiapan tim kompetisi robotika tingkat nasional maupun internasional.",
       "image": {
         "src": "/assets/berita-prestasi-sains.webp",
@@ -34,7 +34,7 @@
       "title": "3D Modeling, Game Dev & Creative Media",
       "summary": "Produksi aset digital 3D, animasi interaktif, dan pengembangan game indie edukasi.",
       "schedule": "Jumat 13.30–15.30 WIB & Sabtu 09.00–11.00 WIB",
-      "mentor": "FREEKS.ID",
+      "mentor": "Sekolah Contoh",
       "description": "Pelatihan visual modern menggunakan software industri untuk pemodelan 3D, rigging, rendering, pembuatan game indie (Godot/Unity), serta desain UI/UX interaktif.",
       "image": {
         "src": "/assets/kegiatan-sekolah-2.webp",
@@ -48,7 +48,7 @@
       "title": "Global Language & Leadership Pitching",
       "summary": "Imersi Bahasa Inggris aktif, debat kritis, dan keterampilan pitching presentasi profesional.",
       "schedule": "Setiap hari 07.45–08.15 WIB & Klub Debat Mingguan",
-      "mentor": "FREEKS.ID",
+      "mentor": "Sekolah Contoh",
       "description": "Melatih kepercayaan diri siswa menyampaikan ide inovatif dalam bahasa internasional, teknik bernegosiasi, public speaking profesional, serta etika komunikasi global.",
       "image": {
         "src": "/assets/kegiatan-sekolah-2.webp",
@@ -62,7 +62,7 @@
       "title": "Social Enterprise & Capstone Project",
       "summary": "Inkubasi ide solusi sosial nyata yang dipamerkan di Annual Demo Day.",
       "schedule": "Proyek terpadu akhir semester",
-      "mentor": "FREEKS.ID",
+      "mentor": "Sekolah Contoh",
       "description": "Siswa bekerja dalam tim lintas keahlian untuk mengidentifikasi persoalan lingkungan atau sosial, merancang purwarupa produk teknologi, dan mempresentasikannya di hadapan mentor industri.",
       "image": {
         "src": "/assets/kegiatan-sekolah-1.webp",

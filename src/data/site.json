@@ -1,0 +1,41 @@
+{
+  "theme": {
+    "preset": "emerald",
+    "primary": "#1B7A2F",
+    "primaryDark": "#0B3B16",
+    "primaryMid": "#0F4D1C",
+    "primaryLight": "#3DA352",
+    "primaryBorder": "#CDE8B5",
+    "primarySoft": "#F1F8EA"
+  },
+  "school": {
+    "name": "Sekolah Contoh Indonesia",
+    "shortName": "Sekolah Contoh",
+    "foundation": "Yayasan Pendidikan Teladan Nusantara",
+    "slogan": "Membentuk Generasi Cerdas, Berkarakter, dan Berdaya Saing Global",
+    "npsn": "12345678",
+    "accreditation": "A (Unggul)",
+    "address": "Jl. Pendidikan Teladan No. 123, Kel. Harapan Baru, Kec. Edukasi, Kota Contoh 12345",
+    "mapsUrl": "https://maps.google.com/?q=Monas+Jakarta",
+    "coordinates": {
+      "lat": -6.175392,
+      "lng": 106.827153
+    },
+    "phone": "0812-3456-7890",
+    "whatsapp": "0812-3456-7890",
+    "whatsappRaw": "6281234567890",
+    "whatsappMessage": "Halo Tim Admission Sekolah Contoh, saya ingin mendapatkan informasi lebih lanjut seputar pendaftaran siswa baru.",
+    "email": "info@sekolahcontoh.sch.id",
+    "officeHours": "Senin - Jumat 07:30 - 16:00 WIB, Sabtu 08:00 - 12:00 WIB",
+    "socials": {
+      "instagram": "@sekolahcontoh",
+      "instagramUrl": "https://instagram.com",
+      "youtube": "Sekolah Contoh Official",
+      "youtubeUrl": "https://youtube.com",
+      "facebook": "Sekolah Contoh Indonesia",
+      "facebookUrl": "https://facebook.com"
+    },
+    "logo": "/assets/logo-sekolah.webp",
+    "logo3d": "/assets/3d/freeks.glb"
+  }
+}

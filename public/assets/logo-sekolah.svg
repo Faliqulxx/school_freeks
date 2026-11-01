@@ -1,0 +1,40 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="gradPrimary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F4D1C" />
+      <stop offset="100%" stop-color="#1B7A2F" />
+    </linearGradient>
+    <linearGradient id="gradGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#FBBF24" />
+    </linearGradient>
+  </defs>
+
+  <!-- Outer Ring -->
+  <circle cx="256" cy="256" r="240" fill="url(#gradPrimary)" stroke="url(#gradGold)" stroke-width="12" />
+  <circle cx="256" cy="256" r="216" fill="none" stroke="#FAFBF5" stroke-width="3" stroke-dasharray="6 6" />
+  <circle cx="256" cy="256" r="196" fill="#0B3B16" />
+
+  <!-- Center Circle Shield -->
+  <circle cx="256" cy="256" r="160" fill="url(#gradPrimary)" stroke="url(#gradGold)" stroke-width="6" />
+
+  <!-- Open Book Emblem -->
+  <path d="M176 270 Q256 250 256 320 Q256 250 336 270 L330 335 Q256 315 256 345 Q256 315 182 335 Z" fill="#FFFFFF" stroke="#0B3B16" stroke-width="4" />
+  <line x1="256" y1="265" x2="256" y2="345" stroke="#0B3B16" stroke-width="4" />
+
+  <!-- Graduation Cap / Torch Star -->
+  <polygon points="256,150 310,180 256,210 202,180" fill="url(#gradGold)" stroke="#FFFFFF" stroke-width="3" />
+  <rect x="235" y="210" width="42" height="18" rx="4" fill="url(#gradGold)" />
+  <path d="M310 180 L310 230" stroke="url(#gradGold)" stroke-width="4" />
+  <circle cx="310" cy="235" r="5" fill="url(#gradGold)" />
+
+  <!-- Stars -->
+  <polygon points="256,120 262,136 278,136 265,146 270,162 256,152 242,162 247,146 234,136 250,136" fill="#FFFFFF" />
+
+  <!-- Text Top -->
+  <text x="256" y="88" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="24" font-weight="800" fill="#FFFFFF" text-anchor="middle" letter-spacing="4">SEKOLAH CONTOH</text>
+
+  <!-- Text Bottom -->
+  <text x="256" y="450" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="20" font-weight="700" fill="url(#gradGold)" text-anchor="middle" letter-spacing="3">TEMPLATE RESMI</text>
+</svg>

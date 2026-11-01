@@ -1,7 +1,7 @@
 {
   "dummy": false,
-  "system": "Kurikulum Merdeka & FREEKS Tech & Innovation Framework",
-  "description": "FREEKS.id School mengintegrasikan Kurikulum Merdeka Nasional dengan kurikulum terapan FREEKS Tech & Innovation. Pembelajaran dirancang berpusat pada eksplorasi siswa (student-centered & project-based), memadukan fondasi akademik kuat dengan penguasaan computational thinking, etika teknologi, dan kreativitas masa depan.",
+  "system": "Kurikulum Merdeka & Sekolah Contoh Tech & Innovation Framework",
+  "description": "Sekolah Contoh Indonesia mengintegrasikan Kurikulum Merdeka Nasional dengan kurikulum terapan Sekolah Contoh Tech & Innovation. Pembelajaran dirancang berpusat pada eksplorasi siswa (student-centered & project-based), memadukan fondasi akademik kuat dengan penguasaan computational thinking, etika teknologi, dan kreativitas masa depan.",
   "subjectGroups": [
     {
       "group": "Kelompok A (Akademik & Fondasi Sains-Teknologi)",

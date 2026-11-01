@@ -6,7 +6,7 @@
       "name": "Robotics & Drone Piloting",
       "category": "Teknologi & Rekayasa",
       "schedule": "Rabu 15.30 WIB",
-      "mentor": "FREEKS Tech Mentor",
+      "mentor": "Sekolah Contoh Tech Mentor",
       "description": "Perakitan robot kompetisi (line follower, sumo bot), navigasi drone mikrokontroler, dan eksperimen otomasi sensor cerdas.",
       "image": {
         "src": "/assets/dummy/ekskul-kir.svg",
@@ -20,7 +20,7 @@
       "name": "Cyber & Coding Guild",
       "category": "Komputasi",
       "schedule": "Kamis 15.30 WIB",
-      "mentor": "FREEKS Tech Mentor",
+      "mentor": "Sekolah Contoh Tech Mentor",
       "description": "Komunitas belajar logika pemrograman web modern, problem solving algoritma, dan dasar keamanan sistem siber (ethical hacking).",
       "image": {
         "src": "/assets/dummy/ekskul-kir.svg",
@@ -34,7 +34,7 @@
       "name": "3D Art & Game Design",
       "category": "Desain Kreatif",
       "schedule": "Selasa 15.30 WIB",
-      "mentor": "FREEKS Creative Mentor",
+      "mentor": "Sekolah Contoh Creative Mentor",
       "description": "Eksplorasi pemodelan 3D, animasi karakter, perancangan mekanik game indie, serta pembuatan aset interaktif visual.",
       "image": {
         "src": "/assets/dummy/ekskul-tilawah.svg",
@@ -48,7 +48,7 @@
       "name": "Digital Journalism & Broadcast Podcast",
       "category": "Media & Komunikasi",
       "schedule": "Senin 15.30 WIB",
-      "mentor": "FREEKS Media Mentor",
+      "mentor": "Sekolah Contoh Media Mentor",
       "description": "Pelatihan produksi audio visual, teknik rekaman podcast, penulisan artikel sains populer, dan kurasi konten media sosial.",
       "image": {
         "src": "/assets/dummy/ekskul-hadrah.svg",
@@ -62,7 +62,7 @@
       "name": "Global Speech & Debate Club",
       "category": "Bahasa & Diplomasi",
       "schedule": "Sabtu 09.00 WIB",
-      "mentor": "FREEKS Global Mentor",
+      "mentor": "Sekolah Contoh Global Mentor",
       "description": "Mengasah wawasan global, teknik berargumentasi kritis, simulasi sidang Model United Nations (MUN), dan public speaking bahasa Inggris.",
       "image": {
         "src": "/assets/dummy/ekskul-english.svg",
@@ -76,7 +76,7 @@
       "name": "Futsal & Athletics Club",
       "category": "Olahraga & Kebugaran",
       "schedule": "Jumat 15.30 WIB",
-      "mentor": "FREEKS Coach",
+      "mentor": "Sekolah Contoh Coach",
       "description": "Pengembangan stamina fisik, kerja sama tim, taktik permainan bola, dan persiapan mengikuti kejuaraan olahraga antarpelajar.",
       "image": {
         "src": "/assets/dummy/ekskul-futsal.svg",

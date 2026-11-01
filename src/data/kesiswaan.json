@@ -1,11 +1,11 @@
 {
   "dummy": false,
   "rules": {
-    "title": "Pedoman Tata Tertib & Etika Siswa FREEKS.id School",
+    "title": "Pedoman Tata Tertib & Etika Siswa Sekolah Contoh Indonesia",
     "updated": "Juli 2026",
     "chapters": [
       {
-        "chapter": "BAB I: Hak Siswa FREEKS",
+        "chapter": "BAB I: Hak Siswa Sekolah Contoh",
         "items": [
           "1. Mendapatkan akses penuh ke bimbingan pengajaran, modul teknologi, dan workshop pembelajaran interaktif.",
           "2. Menggunakan sarana prasarana modern (Maker Space, 3D Studio, Smart Classroom, Lab AI, Library Hub) secara bertanggung jawab.",
@@ -18,7 +18,7 @@
         "chapter": "BAB II: Kewajiban & Integritas Belajar",
         "items": [
           "1. Hadir di sekolah tepat waktu paling lambat pukul 07.45 WIB sebelum morning briefing dan sharing session.",
-          "2. Mengenakan atribut identitas resmi FREEKS (Smart Casual Uniform / FREEKS Tech Hoodie / Kaos Olahraga) sesuai jadwal.",
+          "2. Mengenakan atribut identitas resmi Sekolah Contoh (Smart Casual Uniform / Sekolah Contoh Tech Hoodie / Kaos Olahraga) sesuai jadwal.",
           "3. Menjunjung tinggi kejujuran akademik, tidak melakukan plagiarisme dalam tugas atau manipulasi kode/karya.",
           "4. Menggunakan perangkat teknologi dan jaringan internet sekolah secara bijak untuk keperluan riset dan edukasi produktif.",
           "5. Menjaga kebersihan area Maker Space, lab, dan fasilitas komunal dengan memilah sampah daur ulang dan merapikan alat kerja.",
@@ -85,14 +85,14 @@
         "name": "Rafi Pratama",
         "year": "Alumni 2024",
         "current": "Juara Nasional Kompetisi Robotika Remaja",
-        "testimony": "Pembelajaran hands-on di Maker Space FREEKS.id School membuat saya terbiasa bereksperimen dengan coding dan sirkuit. Mental problem solving saya terbentuk sejak di sini."
+        "testimony": "Pembelajaran hands-on di Maker Space Sekolah Contoh Indonesia membuat saya terbiasa bereksperimen dengan coding dan sirkuit. Mental problem solving saya terbentuk sejak di sini."
       },
       {
         "id": "alumni-2",
         "name": "Nurul Hidayati",
         "year": "Alumni 2022",
         "current": "Founder Startup Edukasi & Tech Fellow",
-        "testimony": "Kultur kolaborasi dan dorongan untuk berani pitching ide di hadapan umum adalah bekal paling berharga yang saya dapatkan selama belajar di FREEKS."
+        "testimony": "Kultur kolaborasi dan dorongan untuk berani pitching ide di hadapan umum adalah bekal paling berharga yang saya dapatkan selama belajar di Sekolah Contoh."
       },
       {
         "id": "alumni-3",
