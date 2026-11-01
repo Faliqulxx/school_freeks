@@ -90,9 +90,9 @@ const remainingArticles = articles.slice(1);
           <a href={`/informasi/berita/${featuredArticle.slug}`}>{featuredArticle.title}</a>
         </h2>
         <p class="featured-excerpt">{featuredArticle.excerpt}</p>
-        <span class="btn btn-secondary btn-sm" style="width: fit-content; margin-top: auto;">
+        <a href={`/informasi/berita/${featuredArticle.slug}`} class="btn btn-secondary btn-sm" style="width: fit-content; margin-top: auto;">
           Baca Artikel Lengkap &rarr;
-        </span>
+        </a>
       </div>
     </article>
 
@@ -125,7 +125,7 @@ const remainingArticles = articles.slice(1);
               <a href={`/informasi/berita/${item.slug}`}>{item.title}</a>
             </h3>
             <p class="card-excerpt">{item.excerpt}</p>
-            <span class="btn-link regular-more-link">Baca Selengkapnya &rarr;</span>
+            <a href={`/informasi/berita/${item.slug}`} class="btn-link regular-more-link">Baca Selengkapnya &rarr;</a>
           </div>
         </article>
       ))}

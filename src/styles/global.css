@@ -570,12 +570,27 @@ button, input, select, textarea {
   color: var(--ink-900);
 }
 
-/* Clickable card overlay */
-.card-clickable::after {
+/* Clickable card: stretched link covers the entire card area */
+.card-clickable {
+  position: relative;
+  cursor: pointer;
+}
+
+.card-clickable .card-title a::after,
+.card-clickable .featured-title a::after,
+.card-clickable .regular-title a::after,
+.card-clickable a.stretched-link::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
+}
+
+.card-clickable a:not(.stretched-link):not([class*="title"] a),
+.card-clickable button,
+.card-clickable .chip {
+  position: relative;
+  z-index: 2;
 }
 
 /* ==========================================================================

@@ -411,7 +411,7 @@ function formatNewsDate(dateStr: string, short = false) {
               <a href={`/informasi/berita/${latestNews[0].slug}`}>{latestNews[0].title}</a>
             </h3>
             <p class="card-excerpt">{latestNews[0].excerpt}</p>
-            <span class="btn-link">Baca Selengkapnya &rarr;</span>
+            <a href={`/informasi/berita/${latestNews[0].slug}`} class="btn-link">Baca Selengkapnya &rarr;</a>
           </div>
         </article>
 
