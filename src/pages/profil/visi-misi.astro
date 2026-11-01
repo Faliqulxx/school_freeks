@@ -19,7 +19,7 @@ const { vision, missions, goals } = profilData;
       <h2 class="sub-heading">Visi Sekolah</h2>
       <div class="section-divider"></div>
       <blockquote class="vision-quote-box">
-        <p class="vision-text">
+        <p class="vision-text" id="public-vision-text">
           "{vision}"
         </p>
       </blockquote>
@@ -31,7 +31,7 @@ const { vision, missions, goals } = profilData;
       <div class="section-divider"></div>
       <p class="section-desc">Langkah-langkah strategis untuk mewujudkan visi sekolah secara terukur dan berkelanjutan:</p>
       
-      <ol class="numbered-list-clean">
+      <ol class="numbered-list-clean" id="public-missions-list">
         {missions.map((m, idx) => (
           <li class="numbered-item">
             <span class="number-badge">{idx + 1}</span>
@@ -49,7 +49,7 @@ const { vision, missions, goals } = profilData;
       <div class="section-divider"></div>
       <p class="section-desc">Capaian kompetensi utama yang ditargetkan bagi setiap siswa lulusan Sekolah Contoh Indonesia:</p>
 
-      <ol class="numbered-list-clean">
+      <ol class="numbered-list-clean" id="public-goals-list">
         {goals.map((g, idx) => (
           <li class="numbered-item">
             <span class="number-badge goal-badge">{idx + 1}</span>
@@ -191,3 +191,40 @@ const { vision, missions, goals } = profilData;
   }
 </style>
 
+
+<script is:inline>
+  try {
+    const raw = localStorage.getItem('mts_cms_profil_data');
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (data.vision) {
+        const vEl = document.getElementById('public-vision-text');
+        if (vEl) vEl.textContent = '"' + data.vision + '"';
+      }
+      if (data.missions && Array.isArray(data.missions) && data.missions.length > 0) {
+        const mEl = document.getElementById('public-missions-list');
+        if (mEl) {
+          mEl.innerHTML = data.missions.map((m, idx) => `
+            <li class="numbered-item">
+              <span class="number-badge">${idx + 1}</span>
+              <div class="item-content"><p>${m}</p></div>
+            </li>
+          `).join('');
+        }
+      }
+      if (data.goals && Array.isArray(data.goals) && data.goals.length > 0) {
+        const gEl = document.getElementById('public-goals-list');
+        if (gEl) {
+          gEl.innerHTML = data.goals.map((g, idx) => `
+            <li class="numbered-item">
+              <span class="number-badge goal-badge">${idx + 1}</span>
+              <div class="item-content"><p>${g}</p></div>
+            </li>
+          `).join('');
+        }
+      }
+    }
+  } catch (e) {
+    console.debug('Profil preview sync skipped:', e);
+  }
+</script>
