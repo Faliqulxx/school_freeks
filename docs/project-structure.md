@@ -149,3 +149,4 @@ npm run build
 npm run preview
 ```
 Jika kedua perintah di atas berjalan mulus tanpa error, kode Anda aman untuk di-commit dan di-push ke server produksi!
+

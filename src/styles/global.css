@@ -448,10 +448,16 @@ button, input, select, textarea {
   font-size: var(--text-xs);
 }
 
+.btn-group-responsive {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+
 /* Full width on xs */
 @media (max-width: 479px) {
   .btn-group-responsive {
-    display: flex;
     flex-direction: column;
     width: 100%;
     gap: 12px;
