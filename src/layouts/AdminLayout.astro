@@ -73,6 +73,14 @@ const menuItems = [
       padding: 0;
     }
 
+    /* Enforce hidden attribute for all admin elements & toasts */
+    [hidden],
+    [hidden="true"],
+    .toast-notification[hidden],
+    #save-toast[hidden] {
+      display: none !important;
+    }
+
     body {
       font-family: 'Inter', system-ui, sans-serif;
       background-color: var(--admin-bg-body);
