@@ -5,7 +5,7 @@ export const mysqlProvider: BackendProvider = {
   name: 'mysql',
 
   async submitRegistration(payload: RegistrationPayload): Promise<BackendResult> {
-    const apiEndpoint = (import.meta.env?.PUBLIC_MYSQL_API_ENDPOINT || '') as string;
+    const apiEndpoint = ((import.meta.env && import.meta.env.PUBLIC_MYSQL_API_ENDPOINT) || '') as string;
 
     // Local safety copy
     await noneProvider.submitRegistration(payload);
@@ -54,7 +54,7 @@ export const mysqlProvider: BackendProvider = {
   },
 
   async submitContactMessage(payload: ContactMessagePayload): Promise<BackendResult> {
-    const apiEndpoint = (import.meta.env?.PUBLIC_MYSQL_API_ENDPOINT || '') as string;
+    const apiEndpoint = ((import.meta.env && import.meta.env.PUBLIC_MYSQL_API_ENDPOINT) || '') as string;
 
     // Local safety copy
     await noneProvider.submitContactMessage(payload);

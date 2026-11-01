@@ -1,8 +1,20 @@
 {
-  "name": "freeks-school",
+  "name": "freeks-school-template",
   "version": "1.0.0",
-  "description": "Website Resmi FREEKS.id School - Modern Tech & Creative Academy",
+  "description": "Modern, high-performance, and mobile-first school website template built with Astro v5 (SSG). Featuring multi-step online admissions (PPDB), client-side content administration panel, and pluggable backend adapters.",
+  "author": "Faliqul Ishbah",
+  "license": "MIT",
   "type": "module",
+  "keywords": [
+    "astro",
+    "astro-template",
+    "school-website",
+    "website-sekolah",
+    "ppdb-online",
+    "jamstack",
+    "ssg",
+    "open-source"
+  ],
   "scripts": {
     "dev": "astro dev --host",
     "build": "astro build",

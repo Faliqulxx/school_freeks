@@ -29,6 +29,7 @@ const { school } = siteData;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site || 'https://sekolahcontoh.sch.id').href;
 const ogImageUrl = new URL(image, Astro.site || 'https://sekolahcontoh.sch.id').href;
 const isPpdbOpen = ppdbData.statusType === 'open';
+const isDemoMode = import.meta.env.PUBLIC_DEMO_MODE === 'true';
 
 // Schema.org EducationalOrganization
 const schemaOrganization = {
@@ -37,7 +38,7 @@ const schemaOrganization = {
   "name": school.name,
   "alternateName": school.shortName,
   "url": "https://sekolahcontoh.sch.id/",
-  "logo": "https://sekolahcontoh.sch.id/assets/logo-freeks.webp",
+  "logo": new URL(school.logo, Astro.site || 'https://sekolahcontoh.sch.id').href,
   "description": description,
   "address": {
     "@type": "PostalAddress",
@@ -74,6 +75,7 @@ const schemaOrganization = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
+    {isDemoMode && <meta name="robots" content="noindex, nofollow" />}
 
     <!-- Open Graph / WhatsApp sharing -->
     <meta property="og:type" content={type} />
@@ -93,8 +95,8 @@ const schemaOrganization = {
     <meta name="twitter:image" content={ogImageUrl} />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/webp" href="/assets/logo-freeks.webp" />
-    <link rel="apple-touch-icon" href="/assets/logo-freeks.webp" />
+    <link rel="icon" type="image/webp" href={school.logo} />
+    <link rel="apple-touch-icon" href={school.logo} />
 
     <!-- Preconnect & Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

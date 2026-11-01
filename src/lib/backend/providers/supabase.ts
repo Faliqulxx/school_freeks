@@ -5,8 +5,8 @@ export const supabaseProvider: BackendProvider = {
   name: 'supabase',
 
   async submitRegistration(payload: RegistrationPayload): Promise<BackendResult> {
-    const supabaseUrl = (import.meta.env?.PUBLIC_SUPABASE_URL || '').replace(/\/$/, '');
-    const supabaseAnonKey = import.meta.env?.PUBLIC_SUPABASE_ANON_KEY || '';
+    const supabaseUrl = ((import.meta.env && import.meta.env.PUBLIC_SUPABASE_URL) || '').replace(/\/$/, '');
+    const supabaseAnonKey = (import.meta.env && import.meta.env.PUBLIC_SUPABASE_ANON_KEY) || '';
 
     // Local safety copy
     await noneProvider.submitRegistration(payload);
@@ -68,8 +68,8 @@ export const supabaseProvider: BackendProvider = {
   },
 
   async submitContactMessage(payload: ContactMessagePayload): Promise<BackendResult> {
-    const supabaseUrl = (import.meta.env?.PUBLIC_SUPABASE_URL || '').replace(/\/$/, '');
-    const supabaseAnonKey = import.meta.env?.PUBLIC_SUPABASE_ANON_KEY || '';
+    const supabaseUrl = ((import.meta.env && import.meta.env.PUBLIC_SUPABASE_URL) || '').replace(/\/$/, '');
+    const supabaseAnonKey = (import.meta.env && import.meta.env.PUBLIC_SUPABASE_ANON_KEY) || '';
 
     // Local safety copy
     await noneProvider.submitContactMessage(payload);

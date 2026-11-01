@@ -5,7 +5,7 @@ export const webhookProvider: BackendProvider = {
   name: 'webhook',
 
   async submitRegistration(payload: RegistrationPayload): Promise<BackendResult> {
-    const webhookUrl = (import.meta.env?.PUBLIC_WEBHOOK_PPDB_URL || import.meta.env?.PUBLIC_WEBHOOK_URL || '') as string;
+    const webhookUrl = ((import.meta.env && (import.meta.env.PUBLIC_WEBHOOK_PPDB_URL || import.meta.env.PUBLIC_WEBHOOK_URL)) || '') as string;
 
     // Always keep a local copy as safety fallback
     await noneProvider.submitRegistration(payload);
@@ -54,7 +54,7 @@ export const webhookProvider: BackendProvider = {
   },
 
   async submitContactMessage(payload: ContactMessagePayload): Promise<BackendResult> {
-    const webhookUrl = (import.meta.env?.PUBLIC_WEBHOOK_CONTACT_URL || import.meta.env?.PUBLIC_WEBHOOK_URL || '') as string;
+    const webhookUrl = ((import.meta.env && (import.meta.env.PUBLIC_WEBHOOK_CONTACT_URL || import.meta.env.PUBLIC_WEBHOOK_URL)) || '') as string;
 
     // Always keep a local copy as safety fallback
     await noneProvider.submitContactMessage(payload);
