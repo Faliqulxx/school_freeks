@@ -1,0 +1,2683 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import Icon from '../../components/Icon.astro';
+import kurikulumData from '../../data/kurikulum.json';
+import programUnggulanData from '../../data/programUnggulan.json';
+import prestasiData from '../../data/prestasi.json';
+import guruData from '../../data/guru.json';
+import kalenderData from '../../data/kalender.json';
+
+const { system, description: kurikulumDesc, subjectGroups, p5pra } = kurikulumData;
+const { programs } = programUnggulanData;
+const { achievements } = prestasiData;
+const { teachers } = guruData;
+const { events } = kalenderData;
+---
+
+<AdminLayout title="Manajemen Akademik & Guru (Modul 4)" activeMenu="akademik">
+  <div class="page-header-wrap">
+    <div>
+      <div class="module-tag">MODUL 4 DARI 8</div>
+      <h1>Manajemen Akademik & Dewan Guru</h1>
+      <p class="page-subtitle">
+        Kelola struktur mata pelajaran, kurikulum terpadu, program unggulan Sekolah, direktori dewan guru & tendik, arsip prestasi siswa, dan agenda kalender akademik.
+      </p>
+    </div>
+
+    <div class="header-action-group">
+      <a href="/akademik/kurikulum" target="_blank" class="btn btn-secondary">
+        <Icon name="external-link" size={16} />
+        <span>Buka Web Publik</span>
+      </a>
+      <button type="button" id="btn-export-akademik-json" class="btn btn-secondary">
+        <Icon name="download" size={16} />
+        <span>Unduh JSON</span>
+      </button>
+      <button type="button" id="btn-save-akademik" class="btn btn-primary">
+        <Icon name="check" size={18} />
+        <span>Simpan Perubahan</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="save-toast" class="toast-notification" role="alert" aria-live="polite" hidden>
+    <Icon name="check-circle" size={20} class="toast-icon" />
+    <div class="toast-body">
+      <strong>Perubahan Akademik Berhasil Disimpan!</strong>
+      <p>Data kurikulum, program, prestasi, guru, dan kalender telah tersimpan secara lokal di browser Anda.</p>
+    </div>
+    <button type="button" id="toast-close" class="toast-close-btn" aria-label="Tutup notifikasi">
+      <Icon name="x" size={16} />
+    </button>
+  </div>
+
+  <!-- Sub-Modul Tab Navigation -->
+  <div class="section-tabs-bar" role="tablist">
+    <button type="button" class="tab-btn active" data-tab="tab-kurikulum" role="tab" aria-selected="true">
+      <Icon name="book-open" size={16} />
+      <span>1. Kurikulum & Mapel</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-program" role="tab" aria-selected="false">
+      <Icon name="award" size={16} />
+      <span>2. Program Unggulan</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-prestasi" role="tab" aria-selected="false">
+      <Icon name="medal" size={16} />
+      <span>3. Prestasi Siswa</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-guru" role="tab" aria-selected="false">
+      <Icon name="users" size={16} />
+      <span>4. Dewan Guru & Tendik</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-kalender" role="tab" aria-selected="false">
+      <Icon name="calendar" size={16} />
+      <span>5. Kalender Akademik</span>
+    </button>
+  </div>
+
+  <div class="akademik-layout-grid">
+    <!-- Left Column: Forms -->
+    <div class="form-container">
+      <form id="akademik-form" onsubmit="return false;">
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 1: KURIKULUM & MAPEL -->
+        <!-- ========================================== -->
+        <div class="tab-panel active" id="tab-kurikulum">
+          <div class="form-card card">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="book-open" size={20} />
+              </div>
+              <div>
+                <h3>Sistem & Kerangka Kurikulum</h3>
+                <p class="card-desc">Integrasi Kurikulum Merdeka Kemendikbud dan Kurikulum Keagamaan Kemenag RI.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group col-span-2">
+                <label for="input-kurikulum-system">Nama Sistem Kurikulum <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-kurikulum-system"
+                  value={system}
+                  required
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group col-span-2">
+                <label for="input-kurikulum-desc">Deskripsi Integrasi Pembelajaran <span class="req">*</span></label>
+                <textarea
+                  id="input-kurikulum-desc"
+                  rows="3"
+                  required
+                  class="form-control"
+                >{kurikulumDesc}</textarea>
+              </div>
+
+              <div class="form-group col-span-2">
+                <label for="input-p5pra-title">Judul Projek Kokurikuler (P5-PPRA)</label>
+                <input
+                  type="text"
+                  id="input-p5pra-title"
+                  value={p5pra.title}
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group col-span-2">
+                <label for="input-p5pra-desc">Deskripsi Fokus Tema P5-PPRA</label>
+                <textarea
+                  id="input-p5pra-desc"
+                  rows="2"
+                  class="form-control"
+                >{p5pra.description}</textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- CRUD Daftar Mata Pelajaran -->
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="layers" size={20} />
+                </div>
+                <div>
+                  <h3>Struktur Mata Pelajaran (CRUD)</h3>
+                  <p class="card-desc">Kelompok A (Umum & Kemenag) dan Kelompok B (Mulok & Keterampilan).</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-subject" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Mapel</span>
+              </button>
+            </div>
+
+            <!-- Subject list rendered dynamically -->
+            <div class="subject-admin-list" id="subject-list-container">
+              {subjectGroups.flatMap(g => g.subjects.map(s => ({ ...s, group: g.group }))).map((sub, idx) => (
+                <div class="subject-admin-item" data-idx={idx}>
+                  <div class="sub-code-tag">{sub.code}</div>
+                  <div class="sub-info-col">
+                    <strong>{sub.name}</strong>
+                    <span class="sub-group-label">{sub.group}</span>
+                    <p class="sub-desc-text">{sub.description}</p>
+                  </div>
+                  <div class="sub-hours-badge">{sub.hours} JP</div>
+                  <div class="sub-actions">
+                    <button type="button" class="btn-action-edit btn-edit-sub-item" data-idx={idx} title="Edit Mapel">
+                      <Icon name="edit" size={14} />
+                      <span>Edit</span>
+                    </button>
+                    <button type="button" class="btn-action-delete btn-delete-sub-item" data-idx={idx} title="Hapus Mapel">
+                      <Icon name="trash-2" size={14} />
+                      <span>Hapus</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Modal Edit Mapel -->
+          <div class="form-card card" id="modal-subject" style="display: none; border-color: var(--admin-green-500); background-color: var(--admin-green-50);">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="edit" size={20} />
+              </div>
+              <div>
+                <h3 id="modal-sub-title">Tambah / Edit Mata Pelajaran</h3>
+                <p class="card-desc">Lengkapi kode mapel, nama pelajaran, alokasi jam pelajaran, dan uraian materi.</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="input-sub-code">Kode Mapel (3-4 Huruf) <span class="req">*</span></label>
+                <input type="text" id="input-sub-code" placeholder="Contoh: IPA / MAT" class="form-control" style="text-transform: uppercase;" />
+              </div>
+              <div class="form-group">
+                <label for="input-sub-name">Nama Mata Pelajaran <span class="req">*</span></label>
+                <input type="text" id="input-sub-name" placeholder="Contoh: Ilmu Pengetahuan Alam" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-sub-group">Kelompok Kurikulum <span class="req">*</span></label>
+                <select id="input-sub-group" class="form-control">
+                  <option value="Kelompok A (Umum & Keagamaan Kemenag)">Kelompok A (Umum & Keagamaan Kemenag)</option>
+                  <option value="Kelompok B (Keterampilan & Muatan Lokal)">Kelompok B (Keterampilan & Muatan Lokal)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="input-sub-hours">Alokasi Jam Pelajaran (JP) <span class="req">*</span></label>
+                <input type="number" id="input-sub-hours" min="1" max="10" placeholder="Contoh: 4" class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-sub-desc">Uraian Ringkas Materi <span class="req">*</span></label>
+                <input type="text" id="input-sub-desc" placeholder="Capaian pembelajaran dan topik pokok..." class="form-control" />
+              </div>
+              <div class="col-span-2 form-actions-row">
+                <button type="button" id="btn-cancel-sub" class="btn btn-secondary">Batal</button>
+                <button type="button" id="btn-save-sub-item" class="btn btn-primary">Simpan Mapel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 2: PROGRAM UNGGULAN -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-program">
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="award" size={20} />
+                </div>
+                <div>
+                  <h3>Program Unggulan Sekolah (CRUD)</h3>
+                  <p class="card-desc">Program unggulan pembentuk karakter, tahfidz, bahasa asing, sains terapan, dan literasi.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-program" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Program</span>
+              </button>
+            </div>
+
+            <div class="programs-admin-list" id="program-list-container">
+              {programs.map((p, idx) => (
+                <div class="program-admin-card" data-idx={idx}>
+                  <div class="prog-thumb-wrap">
+                    <img src={p.image.src} alt={p.title} class="prog-admin-thumb" onerror="this.src='/assets/hero-siswa-belajar.webp'" />
+                  </div>
+                  <div class="prog-admin-content">
+                    <div class="prog-admin-header-row">
+                      <h4>{p.title}</h4>
+                      <span class="prog-admin-mentor">Pembina: {p.mentor}</span>
+                    </div>
+                    <p class="prog-admin-summary">{p.summary}</p>
+                    <div class="prog-admin-meta">
+                      <span class="prog-meta-badge">
+                        <Icon name="clock" size={13} />
+                        <span>{p.schedule}</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="prog-item-actions">
+                    <button type="button" class="btn-action-edit btn-edit-p" data-idx={idx} title="Edit Program">
+                      <Icon name="edit" size={14} />
+                      <span>Edit</span>
+                    </button>
+                    <button type="button" class="btn-action-delete btn-delete-p" data-idx={idx} title="Hapus Program">
+                      <Icon name="trash-2" size={14} />
+                      <span>Hapus</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Modal Edit Program -->
+          <div class="form-card card" id="modal-program" style="display: none; border-color: var(--admin-green-500); background-color: var(--admin-green-50);">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="edit" size={20} />
+              </div>
+              <div>
+                <h3 id="modal-prog-title">Tambah / Edit Program Unggulan</h3>
+                <p class="card-desc">Atur nama program, pembina (FREEKS.ID), jadwal rutin, dan foto dokumentasi.</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <input type="hidden" id="input-prog-id" value="" />
+              <div class="form-group">
+                <label for="input-prog-title-val">Judul Program <span class="req">*</span></label>
+                <input type="text" id="input-prog-title-val" placeholder="Contoh: Tahfidz Juz 30" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-prog-mentor">Pembina / Mentor <span class="req">*</span></label>
+                <input type="text" id="input-prog-mentor" value="FREEKS.ID" class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-prog-schedule">Jadwal Pelaksanaan <span class="req">*</span></label>
+                <input type="text" id="input-prog-schedule" placeholder="Contoh: Kelas VII–IX, Senin/Rabu/Kamis pukul 06.30 WIB" class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-prog-summary">Ringkasan Singkat (Tampil di Kartu) <span class="req">*</span></label>
+                <input type="text" id="input-prog-summary" placeholder="Deskripsi ringkas 1 kalimat..." class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-prog-desc">Deskripsi Lengkap Program <span class="req">*</span></label>
+                <textarea id="input-prog-desc" rows="3" class="form-control" placeholder="Uraian metode bimbingan dan target capaian siswa..."></textarea>
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-prog-img">Foto Dokumentasi Program (WebP) <span class="req">*</span></label>
+                <div class="asset-preview-row">
+                  <img
+                    id="img-prev-prog"
+                    src="/assets/program-unggulan-tahfidz.webp"
+                    alt="Pratinjau Program"
+                    class="asset-thumb-wide"
+                  />
+                  <div class="asset-details">
+                    <input type="text" id="input-prog-img" value="/assets/program-unggulan-tahfidz.webp" class="form-control" />
+                    <div class="asset-upload-bar">
+                      <label class="btn-upload-file">
+                        <Icon name="upload" size={13} />
+                        <span>Unggah Foto Program</span>
+                        <input type="file" accept="image/*" class="asset-file-uploader" data-target-input="input-prog-img" data-target-preview="img-prev-prog" style="display: none;" />
+                      </label>
+                      <span class="upload-file-status"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-span-2 form-actions-row">
+                <button type="button" id="btn-cancel-prog" class="btn btn-secondary">Batal</button>
+                <button type="button" id="btn-save-prog-item" class="btn btn-primary">Simpan Program</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 3: PRESTASI SISWA -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-prestasi">
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="medal" size={20} />
+                </div>
+                <div>
+                  <h3>Direktori Prestasi Siswa (CRUD)</h3>
+                  <p class="card-desc">Arsip medali, kejuaraan sains, seni kaligrafi, tilawah, dan olahraga santri.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-prestasi" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Prestasi</span>
+              </button>
+            </div>
+
+            <div class="prestasi-admin-grid" id="prestasi-list-container">
+              {achievements.map((ach, idx) => (
+                <div class="prestasi-admin-card" data-idx={idx}>
+                  <div class="prestasi-thumb-wrap">
+                    <img src={ach.image.src} alt={ach.title} class="prestasi-thumb" onerror="this.src='/assets/berita-prestasi-sains.webp'" />
+                  </div>
+                  <div class="prestasi-body">
+                    <div class="prestasi-badges-row">
+                      <span class="level-chip">{ach.level}</span>
+                      <span class="year-chip">{ach.year}</span>
+                    </div>
+                    <h4>{ach.title}</h4>
+                    <p class="student-name">Peraih: <strong>{ach.student}</strong></p>
+                    <p class="organizer-name">Penyelenggara: {ach.organizer}</p>
+                    <div class="prestasi-card-actions">
+                      <button type="button" class="btn-action-edit btn-edit-ach-item" data-idx={idx} title="Edit Prestasi">
+                        <Icon name="edit" size={14} />
+                        <span>Edit</span>
+                      </button>
+                      <button type="button" class="btn-action-delete btn-delete-ach-item" data-idx={idx} title="Hapus Prestasi">
+                        <Icon name="trash-2" size={14} />
+                        <span>Hapus</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Modal Edit Prestasi -->
+          <div class="form-card card" id="modal-prestasi" style="display: none; border-color: var(--admin-green-500); background-color: var(--admin-green-50);">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="edit" size={20} />
+              </div>
+              <div>
+                <h3 id="modal-ach-title">Tambah / Edit Prestasi Siswa</h3>
+                <p class="card-desc">Lengkapi nama kompetisi, peraih juara, tingkat, dan penyelenggara.</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <input type="hidden" id="input-ach-id" value="" />
+              <div class="form-group">
+                <label for="input-ach-title-val">Judul Kejuaraan <span class="req">*</span></label>
+                <input type="text" id="input-ach-title-val" placeholder="Contoh: Juara 1 Olimpiade Sains" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-ach-student">Nama Siswa / Tim Peraih <span class="req">*</span></label>
+                <input type="text" id="input-ach-student" placeholder="Contoh: Aisyah Zahra (Kelas VIII)" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-ach-level">Tingkat Kejuaraan <span class="req">*</span></label>
+                <select id="input-ach-level" class="form-control">
+                  <option value="Kecamatan">Tingkat Kecamatan</option>
+                  <option value="Kabupaten">Tingkat Kabupaten</option>
+                  <option value="Provinsi">Tingkat Provinsi</option>
+                  <option value="Nasional">Tingkat Nasional</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="input-ach-year">Tahun Perolehan <span class="req">*</span></label>
+                <input type="number" id="input-ach-year" value="2026" class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-ach-organizer">Penyelenggara Kegiatan <span class="req">*</span></label>
+                <input type="text" id="input-ach-organizer" placeholder="Contoh: MGMP IPA Kab. Gresik / Kemenag Jatim" class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-ach-img">Foto Piala / Piagam / Prestasi (WebP) <span class="req">*</span></label>
+                <div class="asset-preview-row">
+                  <img
+                    id="img-prev-ach"
+                    src="/assets/berita-prestasi-sains.webp"
+                    alt="Pratinjau Prestasi"
+                    class="asset-thumb-wide"
+                  />
+                  <div class="asset-details">
+                    <input type="text" id="input-ach-img" value="/assets/berita-prestasi-sains.webp" class="form-control" />
+                    <div class="asset-upload-bar">
+                      <label class="btn-upload-file">
+                        <Icon name="upload" size={13} />
+                        <span>Unggah Foto Prestasi</span>
+                        <input type="file" accept="image/*" class="asset-file-uploader" data-target-input="input-ach-img" data-target-preview="img-prev-ach" style="display: none;" />
+                      </label>
+                      <span class="upload-file-status"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-span-2 form-actions-row">
+                <button type="button" id="btn-cancel-ach" class="btn btn-secondary">Batal</button>
+                <button type="button" id="btn-save-ach-item" class="btn btn-primary">Simpan Prestasi</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 4: DEWAN GURU & TENDIK -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-guru">
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="users" size={20} />
+                </div>
+                <div>
+                  <h3>Dewan Guru & Tenaga Kependidikan (CRUD)</h3>
+                  <p class="card-desc">Kelola profil asatidz, mata pelajaran yang diampu, kualifikasi, dan foto formal.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-teacher" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Guru / Tendik</span>
+              </button>
+            </div>
+
+            <div class="teachers-admin-grid" id="teacher-list-container">
+              {teachers.map((tc, idx) => (
+                <div class="teacher-admin-card" data-idx={idx}>
+                  <div class="teacher-thumb-wrap">
+                    <img src={tc.photo.src} alt={tc.fullName} class="teacher-thumb" onerror="this.src='/assets/guru-freeks.webp'" />
+                  </div>
+                  <div class="teacher-body">
+                    <span class="cat-pill">{tc.category}</span>
+                    <h4>{tc.fullName}</h4>
+                    <p class="teacher-subject">Mapel: <strong>{tc.subject}</strong></p>
+                    <p class="teacher-pos">{tc.position}</p>
+                    <small class="teacher-ttl">{tc.birthPlaceDate}</small>
+                    <div class="teacher-card-actions">
+                      <button type="button" class="btn-action-edit btn-edit-tc-item" data-idx={idx} title="Edit Guru">
+                        <Icon name="edit" size={14} />
+                        <span>Edit</span>
+                      </button>
+                      <button type="button" class="btn-action-delete btn-delete-tc-item" data-idx={idx} title="Hapus Guru">
+                        <Icon name="trash-2" size={14} />
+                        <span>Hapus</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Modal Edit Guru -->
+          <div class="form-card card" id="modal-teacher" style="display: none; border-color: var(--admin-green-500); background-color: var(--admin-green-50);">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="edit" size={20} />
+              </div>
+              <div>
+                <h3 id="modal-tc-title">Tambah / Edit Guru & Tendik</h3>
+                <p class="card-desc">Pastikan nama lengkap bergelar dan nama panggilan FREEKS.ID sesuai panduan branding.</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <input type="hidden" id="input-tc-id" value="" />
+              <div class="form-group">
+                <label for="input-tc-name">Nama Panggilan / Brand <span class="req">*</span></label>
+                <input type="text" id="input-tc-name" value="FREEKS.ID" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-tc-fullname">Nama Lengkap + Gelar Resmi <span class="req">*</span></label>
+                <input type="text" id="input-tc-fullname" placeholder="Contoh: FREEKS.ID, S.Pd.I., M.Pd." class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-tc-category">Kategori Departemen <span class="req">*</span></label>
+                <select id="input-tc-category" class="form-control">
+                  <option value="Pimpinan">Pimpinan</option>
+                  <option value="Kurikulum">Kurikulum</option>
+                  <option value="Kesiswaan">Kesiswaan</option>
+                  <option value="Mata Pelajaran">Mata Pelajaran</option>
+                  <option value="Keagamaan">Keagamaan & Tahfidz</option>
+                  <option value="Tata Usaha">Tata Usaha & Administrasi</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="input-tc-role">Jabatan Struktural <span class="req">*</span></label>
+                <input type="text" id="input-tc-role" placeholder="Contoh: Waka Kurikulum / Guru Mapel" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-tc-subject">Mata Pelajaran / Tugas Pokok <span class="req">*</span></label>
+                <input type="text" id="input-tc-subject" placeholder="Contoh: Matematika / IPA" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-tc-ttl">Tempat & Tanggal Lahir <span class="req">*</span></label>
+                <input type="text" id="input-tc-ttl" placeholder="Contoh: Gresik, 14 Mei 1988" class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-tc-photo">Foto Formal Guru & Staf (WebP) <span class="req">*</span></label>
+                <div class="asset-preview-row">
+                  <img
+                    id="img-prev-tc"
+                    src="/assets/guru-freeks.webp"
+                    alt="Pratinjau Guru"
+                    class="asset-thumb-leader"
+                  />
+                  <div class="asset-details">
+                    <input type="text" id="input-tc-photo" value="/assets/guru-freeks.webp" class="form-control" />
+                    <div class="asset-upload-bar">
+                      <label class="btn-upload-file">
+                        <Icon name="upload" size={13} />
+                        <span>Unggah Foto Guru</span>
+                        <input type="file" accept="image/*" class="asset-file-uploader" data-target-input="input-tc-photo" data-target-preview="img-prev-tc" style="display: none;" />
+                      </label>
+                      <span class="upload-file-status"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-span-2 form-actions-row">
+                <button type="button" id="btn-cancel-tc" class="btn btn-secondary">Batal</button>
+                <button type="button" id="btn-save-tc-item" class="btn btn-primary">Simpan Profil Guru</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 5: KALENDER AKADEMIK -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-kalender">
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="calendar" size={20} />
+                </div>
+                <div>
+                  <h3>Agenda Kalender Akademik (CRUD)</h3>
+                  <p class="card-desc">Jadwal ujian tengah semester, libur Sekolah, awal semester, dan gelombang PPDB.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-event" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Agenda</span>
+              </button>
+            </div>
+
+            <div class="events-admin-list" id="event-list-container">
+              {events.map((ev, idx) => (
+                <div class="event-admin-item" data-idx={idx}>
+                  <div class="event-date-box">
+                    <strong>{ev.date}</strong>
+                    <span class={`ev-cat-pill cat-${ev.categoryClass}`}>{ev.category}</span>
+                  </div>
+                  <div class="event-info-col">
+                    <h4>{ev.title}</h4>
+                    <p>{ev.description}</p>
+                    <small>Mulai: {ev.startDate} s.d. {ev.endDate}</small>
+                  </div>
+                  <div class="event-actions">
+                    <button type="button" class="btn-action-edit btn-edit-ev-item" data-idx={idx} title="Edit Agenda">
+                      <Icon name="edit" size={14} />
+                      <span>Edit</span>
+                    </button>
+                    <button type="button" class="btn-action-delete btn-delete-ev-item" data-idx={idx} title="Hapus Agenda">
+                      <Icon name="trash-2" size={14} />
+                      <span>Hapus</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Modal Edit Event -->
+          <div class="form-card card" id="modal-event" style="display: none; border-color: var(--admin-green-500); background-color: var(--admin-green-50);">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="edit" size={20} />
+              </div>
+              <div>
+                <h3 id="modal-ev-title">Tambah / Edit Agenda Kalender</h3>
+                <p class="card-desc">Atur rentang tanggal, kategori (Ujian/Libur/Akademik/PPDB), dan deskripsi agenda.</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <input type="hidden" id="input-ev-id" value="" />
+              <div class="form-group col-span-2">
+                <label for="input-ev-title-val">Nama Agenda Kegiatan <span class="req">*</span></label>
+                <input type="text" id="input-ev-title-val" placeholder="Contoh: Penilaian Tengah Semester (PTS) Ganjil" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-ev-date-label">Teks Tampilan Tanggal <span class="req">*</span></label>
+                <input type="text" id="input-ev-date-label" placeholder="Contoh: 26 Okt – 6 Nov 2026" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-ev-cat">Kategori Agenda <span class="req">*</span></label>
+                <select id="input-ev-cat" class="form-control">
+                  <option value="Ujian|exam">Ujian (PTS/PAS)</option>
+                  <option value="Kegiatan|activity">Kegiatan Siswa</option>
+                  <option value="Libur|holiday">Libur Semester</option>
+                  <option value="Akademik|academic">Akademik Umum</option>
+                  <option value="PPDB|ppdb">PPDB Online</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="input-ev-start">Tanggal Mulai (YYYY-MM-DD) <span class="req">*</span></label>
+                <input type="date" id="input-ev-start" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-ev-end">Tanggal Selesai (YYYY-MM-DD) <span class="req">*</span></label>
+                <input type="date" id="input-ev-end" class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-ev-desc">Deskripsi Agenda <span class="req">*</span></label>
+                <textarea id="input-ev-desc" rows="2" class="form-control" placeholder="Keterangan pelaksanaan ujian atau kegiatan..."></textarea>
+              </div>
+              <div class="col-span-2 form-actions-row">
+                <button type="button" id="btn-cancel-ev" class="btn btn-secondary">Batal</button>
+                <button type="button" id="btn-save-ev-item" class="btn btn-primary">Simpan Agenda</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Right Column: Interactive Live Preview -->
+    <aside class="preview-container">
+      <div class="preview-sticky-wrap">
+        <div class="card preview-card">
+          <div class="card-header-sm">
+            <div class="flex-align-center gap-2">
+              <Icon name="eye" size={18} />
+              <h4>Pratinjau Akademik</h4>
+            </div>
+            <div class="preview-mode-pills" id="akademik-preview-pills">
+              <button type="button" class="pill-btn active" data-mode="kurikulum">Kurikulum</button>
+              <button type="button" class="pill-btn" data-mode="program">Program</button>
+              <button type="button" class="pill-btn" data-mode="prestasi">Prestasi</button>
+              <button type="button" class="pill-btn" data-mode="guru">Guru</button>
+            </div>
+          </div>
+
+          <!-- Preview 1: Kurikulum -->
+          <div id="sim-ak-kurikulum" class="sim-ak-view active">
+            <div class="sim-kurikulum-box">
+              <span class="sim-tag-green">Kerangka Kurikulum</span>
+              <h4 id="sim-kur-system">{system}</h4>
+              <p id="sim-kur-desc" class="sim-desc">{kurikulumDesc}</p>
+              <div class="sim-mapel-preview">
+                <small>Contoh Mata Pelajaran Teratas:</small>
+                <div class="sim-mapel-row">
+                  <strong id="sim-first-mapel-name">{subjectGroups[0].subjects[0].name}</strong>
+                  <span id="sim-first-mapel-hours" class="sim-jp">{subjectGroups[0].subjects[0].hours} JP</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 2: Program Unggulan -->
+          <div id="sim-ak-program" class="sim-ak-view" style="display: none;">
+            <div class="sim-program-card">
+              <img id="sim-prog-img" src={programs[0].image.src} alt={programs[0].title} class="sim-prog-thumb" />
+              <div class="sim-prog-body">
+                <span class="sim-prog-chip">Program Inti</span>
+                <h4 id="sim-prog-title">{programs[0].title}</h4>
+                <p id="sim-prog-summary">{programs[0].summary}</p>
+                <div class="sim-prog-footer">
+                  <small id="sim-prog-mentor">Pembina: {programs[0].mentor}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 3: Prestasi -->
+          <div id="sim-ak-prestasi" class="sim-ak-view" style="display: none;">
+            <div class="sim-prestasi-box">
+              <span class="sim-trophy-badge">🏆 Juara Terverifikasi</span>
+              <h4 id="sim-ach-title">{achievements[0].title}</h4>
+              <p id="sim-ach-student">Peraih: <strong>{achievements[0].student}</strong></p>
+              <small id="sim-ach-level">Tingkat {achievements[0].level} ({achievements[0].year})</small>
+            </div>
+          </div>
+
+          <!-- Preview 4: Dewan Guru -->
+          <div id="sim-ak-guru" class="sim-ak-view" style="display: none;">
+            <div class="sim-guru-card">
+              <img src="/assets/guru-freeks.webp" alt="Foto Guru" class="sim-guru-photo" />
+              <div>
+                <span class="sim-role-pill">Pimpinan</span>
+                <h4 id="sim-tc-name">{teachers[0].fullName}</h4>
+                <p id="sim-tc-sub">{teachers[0].subject}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="preview-footer-action">
+            <button type="button" id="btn-save-akademik-side" class="btn btn-primary btn-block">
+              <Icon name="check" size={18} />
+              <span>Simpan Perubahan Akademik</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</AdminLayout>
+
+<style>
+  .page-header-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--admin-ink-300);
+  }
+
+  @media (min-width: 768px) {
+    .page-header-wrap {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+
+  .module-tag {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--admin-green-700);
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+
+  .page-header-wrap h1 {
+    font-size: clamp(1.4rem, 2vw, 1.85rem);
+    margin-bottom: 6px;
+  }
+
+  .page-subtitle {
+    font-size: 0.9rem;
+    color: var(--admin-ink-500);
+    max-width: 75ch;
+  }
+
+  .header-action-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* Sub-Modul Tabs */
+  .section-tabs-bar {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--admin-ink-100);
+  }
+
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--admin-ink-500);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    border-radius: 6px 6px 0 0;
+  }
+
+  .tab-btn:hover {
+    color: var(--admin-green-800);
+    background-color: var(--admin-green-50);
+  }
+
+  .tab-btn.active {
+    color: var(--admin-green-900);
+    background-color: #FFFFFF;
+    border-bottom-color: var(--admin-green-700);
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.03);
+  }
+
+  /* Layout Grid */
+  .akademik-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  @media (min-width: 1080px) {
+    .akademik-layout-grid {
+      grid-template-columns: 1.55fr 1fr;
+    }
+  }
+
+  .tab-panel {
+    display: none;
+  }
+
+  .tab-panel.active {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Form Cards */
+  .form-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid var(--admin-ink-300);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--admin-ink-100);
+  }
+
+  .card-header.justify-between {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .header-icon-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .header-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: var(--admin-green-100);
+    color: var(--admin-green-800);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-header h3 {
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+  }
+
+  .card-desc {
+    font-size: 0.825rem;
+    color: var(--admin-ink-500);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  @media (min-width: 640px) {
+    .form-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .col-span-2 {
+      grid-column: span 2;
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-group label {
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--admin-ink-700);
+  }
+
+  .req {
+    color: #DC2626;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.875rem;
+    color: var(--admin-ink-900);
+    background-color: #FFFFFF;
+    transition: all 0.15s ease;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: var(--admin-green-700);
+    box-shadow: 0 0 0 3px rgba(27, 122, 47, 0.15);
+  }
+
+  .form-actions-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  /* Subject Admin List (Global for Dynamic JS Nodes) */
+  :global(.subject-admin-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  :global(.subject-admin-item) {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+  }
+
+  :global(.subject-admin-item:hover) {
+    border-color: var(--admin-green-500);
+    box-shadow: 0 4px 12px rgba(27, 122, 47, 0.08);
+    transform: translateY(-1px);
+  }
+
+  :global(.sub-code-tag) {
+    font-size: 0.825rem;
+    font-weight: 800;
+    color: var(--admin-green-800);
+    background: linear-gradient(135deg, var(--admin-green-50), #DCFCE7);
+    border: 1px solid var(--admin-green-200, #BBF7D0);
+    padding: 6px 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+
+  :global(.sub-info-col) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  :global(.sub-info-col strong) {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--admin-ink-900);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  :global(.sub-group-label) {
+    font-size: 0.725rem;
+    font-weight: 600;
+    color: var(--admin-ink-500);
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  :global(.sub-desc-text) {
+    font-size: 0.8125rem;
+    color: var(--admin-ink-600);
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  :global(.sub-hours-badge) {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 5px 10px;
+    background-color: var(--admin-ink-100);
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    color: var(--admin-ink-800);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  :global(.sub-actions) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Programs Admin List (Global for Dynamic JS Nodes) */
+  :global(.programs-admin-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 10px;
+  }
+
+  :global(.program-admin-card) {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 16px 18px;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+  }
+
+  :global(.program-admin-card:hover) {
+    border-color: var(--admin-green-500);
+    box-shadow: 0 4px 14px rgba(27, 122, 47, 0.08);
+    transform: translateY(-1px);
+  }
+
+  :global(.prog-thumb-wrap) {
+    width: 100px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #F1F5F9;
+    border: 1px solid #E2E8F0;
+  }
+
+  :global(.prog-admin-thumb) {
+    width: 100px;
+    height: 80px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.2s ease;
+  }
+
+  :global(.program-admin-card:hover .prog-admin-thumb) {
+    transform: scale(1.04);
+  }
+
+  :global(.prog-admin-content) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  :global(.prog-admin-header-row) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+
+  :global(.prog-admin-header-row h4) {
+    font-size: 0.975rem;
+    font-weight: 700;
+    color: var(--admin-ink-900);
+    margin: 0;
+  }
+
+  :global(.prog-admin-mentor) {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--admin-green-800);
+    background: var(--admin-green-50);
+    border: 1px solid var(--admin-green-200);
+    padding: 2px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  :global(.prog-admin-summary) {
+    font-size: 0.8125rem;
+    color: var(--admin-ink-600);
+    margin: 0 0 6px 0;
+    line-height: 1.4;
+  }
+
+  :global(.prog-admin-meta) {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  :global(.prog-meta-badge) {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.725rem;
+    color: var(--admin-ink-600);
+    background-color: var(--admin-ink-100);
+    padding: 3px 10px;
+    border-radius: 6px;
+  }
+
+  :global(.prog-item-actions) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Prestasi Admin Grid (Global for Dynamic JS Nodes) */
+  :global(.prestasi-admin-grid) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 18px;
+    margin-top: 10px;
+  }
+
+  :global(.prestasi-admin-card) {
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    overflow: hidden;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+  }
+
+  :global(.prestasi-admin-card:hover) {
+    border-color: var(--admin-green-500);
+    box-shadow: 0 8px 24px rgba(27, 122, 47, 0.12);
+    transform: translateY(-2px);
+  }
+
+  :global(.prestasi-thumb-wrap) {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    background-color: #F1F5F9;
+    overflow: hidden;
+  }
+
+  :global(.prestasi-thumb) {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  :global(.prestasi-admin-card:hover .prestasi-thumb) {
+    transform: scale(1.03);
+  }
+
+  :global(.prestasi-body) {
+    padding: 16px 18px 18px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  :global(.prestasi-badges-row) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  :global(.level-chip) {
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 6px;
+    background-color: var(--admin-green-100);
+    color: var(--admin-green-800);
+    border: 1px solid var(--admin-green-200);
+  }
+
+  :global(.year-chip) {
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 6px;
+    background-color: var(--admin-ink-100);
+    color: var(--admin-ink-700);
+    border: 1px solid #E2E8F0;
+  }
+
+  :global(.prestasi-body h4) {
+    font-size: 0.975rem;
+    font-weight: 700;
+    color: var(--admin-ink-900);
+    margin: 0 0 6px 0;
+  }
+
+  :global(.student-name) {
+    font-size: 0.8125rem;
+    color: var(--admin-ink-700);
+    margin: 0 0 2px 0;
+  }
+
+  :global(.organizer-name) {
+    font-size: 0.75rem;
+    color: var(--admin-ink-500);
+    margin: 0 0 12px 0;
+    flex: 1;
+  }
+
+  :global(.prestasi-card-actions) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid #F1F5F9;
+  }
+
+  /* Teachers Admin Grid (Global for Dynamic JS Nodes) */
+  :global(.teachers-admin-grid) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin-top: 10px;
+  }
+
+  :global(.teacher-admin-card) {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+  }
+
+  :global(.teacher-admin-card:hover) {
+    border-color: var(--admin-green-500);
+    box-shadow: 0 6px 18px rgba(27, 122, 47, 0.09);
+    transform: translateY(-1px);
+  }
+
+  :global(.teacher-thumb-wrap) {
+    width: 70px;
+    height: 85px;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #F1F5F9;
+    border: 1px solid #E2E8F0;
+  }
+
+  :global(.teacher-thumb) {
+    width: 70px;
+    height: 85px;
+    object-fit: cover;
+    display: block;
+  }
+
+  :global(.teacher-body) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  :global(.cat-pill) {
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background-color: var(--admin-green-50);
+    color: var(--admin-green-800);
+    border: 1px solid var(--admin-green-200);
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+
+  :global(.teacher-body h4) {
+    font-size: 0.925rem;
+    font-weight: 700;
+    color: var(--admin-ink-900);
+    margin: 0 0 3px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  :global(.teacher-subject) {
+    font-size: 0.775rem;
+    color: var(--admin-ink-700);
+    margin: 0 0 2px 0;
+  }
+
+  :global(.teacher-pos) {
+    font-size: 0.725rem;
+    color: var(--admin-ink-500);
+    margin: 0 0 2px 0;
+  }
+
+  :global(.teacher-ttl) {
+    font-size: 0.7rem;
+    color: var(--admin-ink-400);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  :global(.teacher-card-actions) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Events Admin List (Global for Dynamic JS Nodes) */
+  :global(.events-admin-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  :global(.event-admin-item) {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 18px;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+  }
+
+  :global(.event-admin-item:hover) {
+    border-color: var(--admin-green-500);
+    box-shadow: 0 4px 12px rgba(27, 122, 47, 0.08);
+    transform: translateY(-1px);
+  }
+
+  :global(.event-date-box) {
+    width: 145px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  :global(.event-date-box strong) {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--admin-ink-900);
+    display: block;
+    line-height: 1.3;
+  }
+
+  :global(.ev-cat-pill) {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    width: fit-content;
+  }
+
+  :global(.cat-exam) { background-color: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+  :global(.cat-activity) { background-color: #E0E7FF; color: #3730A3; border: 1px solid #C7D2FE; }
+  :global(.cat-holiday) { background-color: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
+  :global(.cat-academic) { background-color: #DCFCE7; color: #166534; border: 1px solid #BBF7D0; }
+  :global(.cat-ppdb) { background-color: #F3E8FF; color: #6B21A8; border: 1px solid #E9D5FF; }
+
+  :global(.event-info-col) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  :global(.event-info-col h4) {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--admin-ink-900);
+    margin: 0 0 3px 0;
+  }
+
+  :global(.event-info-col p) {
+    font-size: 0.8rem;
+    color: var(--admin-ink-600);
+    margin: 0 0 2px 0;
+    line-height: 1.4;
+  }
+
+  :global(.event-info-col small) {
+    font-size: 0.725rem;
+    color: var(--admin-ink-400);
+  }
+
+  :global(.event-actions) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Universal Action Buttons (Global for Dynamic JS Nodes) */
+  :global(.btn-action-edit) {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: var(--admin-ink-700);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  :global(.btn-action-edit:hover) {
+    color: var(--admin-green-800);
+    border-color: var(--admin-green-500);
+    background-color: var(--admin-green-50);
+  }
+
+  :global(.btn-action-delete) {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border: 1px solid #FCA5A5;
+    border-radius: 8px;
+    background: #FEF2F2;
+    color: #DC2626;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  :global(.btn-action-delete:hover) {
+    color: #FFFFFF;
+    border-color: #DC2626;
+    background-color: #DC2626;
+  }
+
+  :global(.btn-icon) {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 6px;
+    background: #FFFFFF;
+    color: var(--admin-ink-700);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 9px 16px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .btn-block {
+    width: 100%;
+  }
+
+  .btn-primary {
+    background-color: var(--admin-green-700);
+    color: #FFFFFF;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--admin-green-800);
+  }
+
+  .btn-secondary {
+    background-color: #FFFFFF;
+    color: var(--admin-ink-700);
+    border-color: var(--admin-ink-300);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--admin-ink-100);
+    color: var(--admin-ink-900);
+  }
+
+  /* Preview Container */
+  .preview-sticky-wrap {
+    position: sticky;
+    top: 90px;
+  }
+
+  .preview-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--admin-ink-300);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .card-header-sm {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--admin-ink-100);
+  }
+
+  .card-header-sm h4 {
+    font-size: 0.95rem;
+  }
+
+  .preview-mode-pills {
+    display: flex;
+    gap: 4px;
+    background-color: var(--admin-ink-100);
+    padding: 3px;
+    border-radius: 6px;
+  }
+
+  .pill-btn {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--admin-ink-500);
+    cursor: pointer;
+  }
+
+  .pill-btn.active {
+    background: #FFFFFF;
+    color: var(--admin-green-900);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Simulated Visuals */
+  .sim-kurikulum-box {
+    background-color: var(--admin-green-50);
+    border: 1px solid var(--admin-green-100);
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .sim-tag-green {
+    font-size: 0.68rem;
+    font-weight: 700;
+    background-color: var(--admin-green-700);
+    color: #FFFFFF;
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+
+  .sim-kurikulum-box h4 {
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+  }
+
+  .sim-desc {
+    font-size: 0.78rem;
+    color: var(--admin-ink-700);
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+
+  .sim-mapel-preview {
+    border-top: 1px dashed var(--admin-green-100);
+    padding-top: 8px;
+  }
+
+  .sim-mapel-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+  }
+
+  .sim-jp {
+    font-size: 0.72rem;
+    font-weight: 700;
+    background-color: var(--admin-green-100);
+    color: var(--admin-green-800);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .sim-program-card {
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .sim-prog-thumb {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+  }
+
+  .sim-prog-body {
+    padding: 12px;
+  }
+
+  .sim-prog-chip {
+    font-size: 0.65rem;
+    font-weight: 700;
+    background-color: #DC2626;
+    color: #FFFFFF;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+
+  .sim-prog-body h4 {
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+  }
+
+  .sim-prog-body p {
+    font-size: 0.75rem;
+    color: var(--admin-ink-700);
+    margin-bottom: 8px;
+  }
+
+  .sim-prestasi-box {
+    background-color: var(--admin-green-900);
+    color: #FFFFFF;
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .sim-trophy-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--admin-yellow-500);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .sim-prestasi-box h4 {
+    color: #FFFFFF;
+    font-size: 1.05rem;
+    margin-bottom: 4px;
+  }
+
+  .sim-prestasi-box p {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .sim-prestasi-box small {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .sim-guru-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+  }
+
+  .sim-guru-photo {
+    width: 50px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .sim-role-pill {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--admin-green-700);
+    background-color: var(--admin-green-100);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .preview-footer-action {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--admin-ink-100);
+  }
+
+  /* Toast Notification */
+  .toast-notification {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background-color: #ECFDF5;
+    border: 1px solid #A7F3D0;
+    border-left: 4px solid #10B981;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+  }
+
+  .toast-icon {
+    color: #059669;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .toast-body {
+    flex: 1;
+    font-size: 0.875rem;
+    color: #065F46;
+  }
+
+  .toast-body strong {
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .toast-body p {
+    font-size: 0.825rem;
+    color: #047857;
+  }
+
+  .toast-close-btn {
+    background: transparent;
+    border: none;
+    color: #059669;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+  }
+
+  .flex-align-center {
+    display: flex;
+    align-items: center;
+  }
+
+  .gap-2 {
+    gap: 8px;
+  }
+</style>
+
+<script is:inline>
+  function initAkademik() {
+    // Initial states (FREEKS.id Modern Tech School)
+    let subjectState = [
+      { code: "CMP", name: "Informatika & Computational Thinking", hours: 4, group: "Kelompok A (Akademik & Fondasi Sains-Teknologi)", description: "Logika algoritma, dasar pemrograman Python/JS, struktur data, dan keamanan siber dasar." },
+      { code: "AIX", name: "Applied AI & Digital Literacy", hours: 3, group: "Kelompok A (Akademik & Fondasi Sains-Teknologi)", description: "Pemahaman cara kerja kecerdasan buatan, prompt engineering terarah, dan etika kecerdasan buatan." },
+      { code: "MAT", name: "Matematika Komputasi & Logika", hours: 5, group: "Kelompok A (Akademik & Fondasi Sains-Teknologi)", description: "Aljabar, geometri analitik, probabilitas, logika matematika, dan kalkulasi terapan." },
+      { code: "IPA", name: "Ilmu Pengetahuan Alam Terapan", hours: 4, group: "Kelompok A (Akademik & Fondasi Sains-Teknologi)", description: "Praktikum biologi eksperimental, fisika rekayasa energi, dan kimia material ramah lingkungan." },
+      { code: "ING", name: "Bahasa Inggris Komunikasi Global", hours: 4, group: "Kelompok A (Akademik & Fondasi Sains-Teknologi)", description: "Academic English, technical reading, presentation skills, dan diskusi kritis." },
+      { code: "IND", name: "Bahasa Indonesia & Literasi Media", hours: 4, group: "Kelompok A (Akademik & Fondasi Sains-Teknologi)", description: "Penulisan esai kritis, analisis media digital, jurnalisme sains, dan retorika." },
+      { code: "DES", name: "Desain Interaktif, 3D & UI/UX", hours: 3, group: "Kelompok B (Kreativitas, Rekayasa & Pengembangan Karakter)", description: "Prinsip estetika digital, perancangan antarmuka aplikasi, animasi, dan pemodelan objek 3D." },
+      { code: "MAK", name: "Maker Tech & Physical Computing", hours: 3, group: "Kelompok B (Kreativitas, Rekayasa & Pengembangan Karakter)", description: "Rancang bangun purwarupa hardware, sirkuit mikrokontroler IoT, dan fabrikasi 3D printing." },
+      { code: "PKN", name: "Pendidikan Kewarganegaraan & Etika Digital", hours: 3, group: "Kelompok A (Akademik & Fondasi Sains-Teknologi)", description: "Hak kewajiban digital, konstitusi negara, tata kelola informasi, dan citizenship global." },
+      { code: "LDR", name: "Leadership, Mindset & Character Building", hours: 2, group: "Kelompok B (Kreativitas, Rekayasa & Pengembangan Karakter)", description: "Pengembangan kecerdasan emosional (EQ), kepemimpinan tim, kerja sama, dan etika integritas." }
+    ];
+
+    let programsState = [
+      { id: "coding-ai", title: "AI, Coding & Software Engineering", summary: "Pembelajaran pemrograman intensif dan penerapan kecerdasan buatan terapan sejak dini.", schedule: "Kelas VII–IX, Senin & Rabu 13.30–15.00 WIB", mentor: "FREEKS.ID", description: "Membekali siswa dengan logika computational thinking, algoritma modern (Python, JavaScript), pembuatan web/aplikasi, hingga implementasi dasar Machine Learning untuk problem solving.", image: { src: "/assets/hero-siswa-belajar.webp", alt: "Sesi coding dan rekayasa perangkat lunak siswa FREEKS.id School" } },
+      { id: "robotics-iot", title: "Robotics & Smart IoT Systems", summary: "Praktikum rancang bangun robotika otonom dan otomasi cerdas di Maker Space.", schedule: "Selasa & Kamis 14.00–16.00 WIB", mentor: "FREEKS.ID", description: "Eksplorasi perakitan mikrokontroler, pemrograman sensor, sistem otomasi rumah pintar (smart home), dan persiapan tim kompetisi robotika tingkat nasional maupun internasional.", image: { src: "/assets/berita-prestasi-sains.webp", alt: "Rancang bangun sistem robotika dan IoT siswa" } },
+      { id: "creative-3d", title: "3D Modeling, Game Dev & Creative Media", summary: "Produksi aset digital 3D, animasi interaktif, dan pengembangan game indie edukasi.", schedule: "Jumat 13.30–15.30 WIB & Sabtu 09.00–11.00 WIB", mentor: "FREEKS.ID", description: "Pelatihan visual modern menggunakan software industri untuk pemodelan 3D, rigging, rendering, pembuatan game indie (Godot/Unity), serta desain UI/UX interaktif.", image: { src: "/assets/kegiatan-madrasah-2.webp", alt: "Sesi desain 3D dan kreasi multimedia digital" } },
+      { id: "global-speaking", title: "Global Language & Leadership Pitching", summary: "Imersi Bahasa Inggris aktif, debat kritis, dan keterampilan pitching presentasi profesional.", schedule: "Setiap hari 07.45–08.15 WIB & Klub Debat Mingguan", mentor: "FREEKS.ID", description: "Melatih kepercayaan diri siswa menyampaikan ide inovatif dalam bahasa internasional, teknik bernegosiasi, public speaking profesional, serta etika komunikasi global.", image: { src: "/assets/kegiatan-madrasah-2.webp", alt: "Kelas komunikasi global dan presentasi pitching siswa" } },
+      { id: "innovation-project", title: "Social Enterprise & Capstone Project", summary: "Inkubasi ide solusi sosial nyata yang dipamerkan di Annual Demo Day.", schedule: "Proyek terpadu akhir semester", mentor: "FREEKS.ID", description: "Siswa bekerja dalam tim lintas keahlian untuk mengidentifikasi persoalan lingkungan atau sosial, merancang purwarupa produk teknologi, dan mempresentasikannya di hadapan mentor industri.", image: { src: "/assets/kegiatan-madrasah-1.webp", alt: "Kolaborasi proyek capstone dan inovasi terapan siswa" } }
+    ];
+
+    let achievementsState = [
+      { id: "prestasi-2026-1", year: 2026, level: "Nasional", title: "Juara 1 National Youth Robotics Championship", student: "Tim Robotika FREEKS (Kelas VIII)", organizer: "Indonesian Robotics & Automation Association", image: { src: "/assets/berita-prestasi-sains.webp", alt: "Piala dan piagam Juara 1 Robotika Nasional FREEKS.id School" } },
+      { id: "prestasi-2026-2", year: 2026, level: "Provinsi", title: "Best Creative Design & 3D Interactive Award", student: "Nabila Rahma (Kelas VIII)", organizer: "Jawa Timur Creative Tech Festival", image: { src: "/assets/program-unggulan-tahfidz.webp", alt: "Penghargaan Best 3D Interactive Design FREEKS.id School" } },
+      { id: "prestasi-2026-3", year: 2026, level: "Nasional", title: "Top 5 Youth AI & Coding Hackathon", student: "Tim Inovator FREEKS.id", organizer: "National Youth Tech Hub", image: { src: "/assets/kegiatan-madrasah-1.webp", alt: "Dokumentasi kejuaraan tim hackathon FREEKS.id School" } },
+      { id: "prestasi-2025-1", year: 2025, level: "Provinsi", title: "Juara 1 Inovasi Teknologi Tepat Guna Remaja", student: "Tim Maker Space FREEKS", organizer: "Dinas Pendidikan & Riset Teknologi", image: { src: "/assets/berita-prestasi-sains.webp", alt: "Tim Maker Space FREEKS pada kompetisi inovasi" } },
+      { id: "prestasi-2025-2", year: 2025, level: "Regional", title: "Juara 1 English Debate & Public Pitching", student: "Aisyah Zahra (Kelas VIII)", organizer: "Regional Young Leaders Forum", image: { src: "/assets/kegiatan-madrasah-2.webp", alt: "Kejuaraan English Debate dan Public Pitching siswa" } }
+    ];
+
+    let teachersState = [
+      { id: "freeks-kepala", name: "FREEKS.ID", fullName: "FREEKS.ID, M.Sc., M.Ed.", birthPlaceDate: "Gresik, 14 Mei 1988", role: "Head of School / Principal", position: "Head of School / Principal", subject: "Tech Leadership & Education Management", category: "Pimpinan", photo: { src: "/assets/guru-freeks.webp", alt: "Foto FREEKS.ID - Head of School" } },
+      { id: "freeks-kurikulum", name: "FREEKS.ID", fullName: "FREEKS.ID, S.Kom., M.T.", birthPlaceDate: "Gresik, 20 Oktober 1991", role: "VP Curriculum & Innovation", position: "Wakil Kepala Sekolah Bidang Kurikulum & Inovasi", subject: "Informatika & Logika Komputasi", category: "Kurikulum", photo: { src: "/assets/guru-freeks.webp", alt: "Foto FREEKS.ID - VP Curriculum & Innovation" } },
+      { id: "freeks-kesiswaan", name: "FREEKS.ID", fullName: "FREEKS.ID, S.Pd., M.A.", birthPlaceDate: "Gresik, 05 Juli 1990", role: "VP Student Affairs", position: "Wakil Kepala Sekolah Bidang Kesiswaan & Komunitas", subject: "Leadership & Character Mindset", category: "Kesiswaan", photo: { src: "/assets/guru-freeks.webp", alt: "Foto FREEKS.ID - VP Student Affairs" } },
+      { id: "freeks-ipa", name: "FREEKS.ID", fullName: "FREEKS.ID, S.Si.", birthPlaceDate: "Gresik, 18 September 1993", role: "Lead Science Mentor", position: "Mentor Riset Sains & Maker Space", subject: "Sains Terapan & Rekayasa Hardware", category: "Mata Pelajaran", photo: { src: "/assets/guru-freeks.webp", alt: "Foto FREEKS.ID - Mentor Riset Sains" } },
+      { id: "freeks-inggris", name: "FREEKS.ID", fullName: "FREEKS.ID, B.A. (Hons)", birthPlaceDate: "Gresik, 12 Desember 1992", role: "Global Language Mentor", position: "Mentor Bahasa Inggris & Public Pitching", subject: "English for Global Communication", category: "Mata Pelajaran", photo: { src: "/assets/guru-freeks.webp", alt: "Foto FREEKS.ID - Mentor Bahasa Inggris" } },
+      { id: "freeks-creative", name: "FREEKS.ID", fullName: "FREEKS.ID, S.Ds.", birthPlaceDate: "Gresik, 03 Maret 1989", role: "Creative & 3D Lead", position: "Mentor Studio 3D, Animasi & UI/UX", subject: "Desain Interaktif & Game Development", category: "Mata Pelajaran", photo: { src: "/assets/guru-freeks.webp", alt: "Foto FREEKS.ID - Mentor Studio 3D & Desain" } }
+    ];
+
+    let eventsState = [
+      { id: "kal-1", date: "26 Okt – 6 Nov 2026", startDate: "2026-10-26", endDate: "2026-11-06", title: "Penilaian Tengah Semester (PTS) Ganjil", category: "Ujian", categoryClass: "exam", description: "Ujian tengah semester evaluasi proyek dan asesmen digital kelas VII–IX." },
+      { id: "kal-2", date: "9 Nov 2026", startDate: "2026-11-09", endDate: "2026-11-09", title: "FREEKS Innovation Showcase Day", category: "Kegiatan", categoryClass: "activity", description: "Pameran karya coding, pameran game indie, dan demonstrasi robotika siswa." },
+      { id: "kal-3", date: "14 – 18 Des 2026", startDate: "2026-12-14", endDate: "2026-12-18", title: "Capstone Project Demo & PAS Ganjil", category: "Ujian", categoryClass: "exam", description: "Evaluasi akhir semester dan pitching proyek capstone siswa di hadapan juri." },
+      { id: "kal-4", date: "21 Des 2026 – 2 Jan 2027", startDate: "2026-12-21", endDate: "2027-01-02", title: "Libur Semester Ganjil", category: "Libur", categoryClass: "holiday", description: "Libur pembelajaran semester ganjil dan cuti bersama akhir tahun." },
+      { id: "kal-5", date: "4 Jan 2027", startDate: "2027-01-04", endDate: "2027-01-04", title: "Awal Masuk Pembelajaran Semester Genap", category: "Akademik", categoryClass: "academic", description: "Hari pertama efektif pembelajaran semester genap dan sprint proyek baru." },
+      { id: "kal-6", date: "4 Jan 2027", startDate: "2027-01-04", endDate: "2027-01-04", title: "Pembukaan Pendaftaran PPDB Gelombang 1", category: "PPDB", categoryClass: "ppdb", description: "Pendaftaran calon siswa baru tahun ajaran 2027/2028 resmi dibuka." }
+    ];
+
+    // Load from localStorage if available with auto-migration from legacy data
+    const savedAkademik = localStorage.getItem('mts_cms_akademik_data');
+    if (savedAkademik) {
+      try {
+        const parsed = JSON.parse(savedAkademik);
+        if (parsed.subjects && Array.isArray(parsed.subjects) && parsed.subjects.length > 0) {
+          if (parsed.subjects[0]?.code === "QUR") {
+            // Upgrade to modern subjects
+          } else {
+            subjectState = parsed.subjects;
+          }
+        }
+        if (parsed.programs && Array.isArray(parsed.programs) && parsed.programs.length > 0) {
+          if (parsed.programs[0]?.id === "tahfidz") {
+            // Upgrade to modern programs
+          } else {
+            programsState = parsed.programs.map(p => {
+              if (p.image?.src && (p.image.src.includes('Sekolah-2') || p.image.src.includes('undefined'))) {
+                p.image.src = '/assets/kegiatan-madrasah-2.webp';
+              }
+              return p;
+            });
+          }
+        }
+        if (parsed.achievements && Array.isArray(parsed.achievements) && parsed.achievements.length > 0) {
+          if (parsed.achievements[0]?.id === "prestasi-1") {
+            // Upgrade to modern achievements
+          } else {
+            achievementsState = parsed.achievements.map(a => {
+              if (a.image?.src && (a.image.src.includes('Sekolah-1') || a.image.src.includes('undefined'))) {
+                a.image.src = '/assets/kegiatan-madrasah-1.webp';
+              }
+              return a;
+            });
+          }
+        }
+        if (parsed.teachers && Array.isArray(parsed.teachers) && parsed.teachers.length > 0) {
+          if (parsed.teachers[0]?.fullName?.includes('S.Pd.I., M.Pd.')) {
+            // Upgrade to modern mentors
+          } else {
+            teachersState = parsed.teachers;
+          }
+        }
+        if (parsed.events && Array.isArray(parsed.events) && parsed.events.length > 0) {
+          eventsState = parsed.events;
+        }
+        if (parsed.system && document.getElementById('input-kurikulum-system')) {
+          document.getElementById('input-kurikulum-system').value = parsed.system;
+        }
+        if (parsed.description && document.getElementById('input-kurikulum-desc')) {
+          document.getElementById('input-kurikulum-desc').value = parsed.description;
+        }
+      } catch (e) {
+        console.error('Failed to parse saved akademik data:', e);
+      }
+    }
+
+    // Tab switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-tab');
+        tabBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        tabPanels.forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        const targetPanel = document.getElementById(targetId);
+        if (targetPanel) targetPanel.classList.add('active');
+      });
+    });
+
+    // Preview mode switcher
+    const previewPills = document.querySelectorAll('#akademik-preview-pills .pill-btn');
+    const simViews = {
+      kurikulum: document.getElementById('sim-ak-kurikulum'),
+      program: document.getElementById('sim-ak-program'),
+      prestasi: document.getElementById('sim-ak-prestasi'),
+      guru: document.getElementById('sim-ak-guru')
+    };
+
+    previewPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        previewPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        const mode = pill.getAttribute('data-mode');
+        Object.keys(simViews).forEach(k => {
+          if (simViews[k]) simViews[k].style.display = (k === mode) ? 'block' : 'none';
+        });
+      });
+    });
+
+    // Live preview sync
+    function syncAkademikPreview() {
+      const sysInput = document.getElementById('input-kurikulum-system');
+      const descInput = document.getElementById('input-kurikulum-desc');
+      if (sysInput && document.getElementById('sim-kur-system')) {
+        document.getElementById('sim-kur-system').textContent = sysInput.value;
+      }
+      if (descInput && document.getElementById('sim-kur-desc')) {
+        document.getElementById('sim-kur-desc').textContent = descInput.value;
+      }
+    }
+
+    const liveInputs = document.querySelectorAll('#akademik-form input, #akademik-form textarea');
+    liveInputs.forEach(i => i.addEventListener('input', syncAkademikPreview));
+
+    // CRUD Mapel
+    const subContainer = document.getElementById('subject-list-container');
+    const modalSub = document.getElementById('modal-subject');
+    let editingSubIdx = -1;
+
+    function renderSubjectList() {
+      if (!subContainer) return;
+      subContainer.innerHTML = '';
+      subjectState.forEach((sub, idx) => {
+        const item = document.createElement('div');
+        item.className = 'subject-admin-item';
+        item.innerHTML = `
+          <div class="sub-code-tag">${sub.code}</div>
+          <div class="sub-info-col">
+            <strong>${sub.name}</strong>
+            <span class="sub-group-label">${sub.group}</span>
+            <p class="sub-desc-text">${sub.description}</p>
+          </div>
+          <div class="sub-hours-badge">${sub.hours} JP</div>
+          <div class="sub-actions">
+            <button type="button" class="btn-action-edit btn-edit-sub-item" data-idx="${idx}" title="Edit Mapel">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+              <span>Edit</span>
+            </button>
+            <button type="button" class="btn-action-delete btn-delete-sub-item" data-idx="${idx}" title="Hapus Mapel">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <span>Hapus</span>
+            </button>
+          </div>
+        `;
+        subContainer.appendChild(item);
+      });
+
+      document.querySelectorAll('.btn-edit-sub-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          editingSubIdx = idx;
+          const s = subjectState[idx];
+          document.getElementById('modal-sub-title').textContent = 'Edit Mata Pelajaran';
+          document.getElementById('input-sub-code').value = s.code;
+          document.getElementById('input-sub-name').value = s.name;
+          document.getElementById('input-sub-group').value = s.group;
+          document.getElementById('input-sub-hours').value = s.hours;
+          document.getElementById('input-sub-desc').value = s.description;
+          modalSub.style.display = 'block';
+          modalSub.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.btn-delete-sub-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = subjectState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus mata pelajaran "${item.name}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              subjectState.splice(idx, 1);
+              renderSubjectList();
+            });
+          } else if (confirm(msg)) {
+            subjectState.splice(idx, 1);
+            renderSubjectList();
+          }
+        });
+      });
+
+      if (subjectState.length > 0) {
+        if (document.getElementById('sim-first-mapel-name')) document.getElementById('sim-first-mapel-name').textContent = subjectState[0].name;
+        if (document.getElementById('sim-first-mapel-hours')) document.getElementById('sim-first-mapel-hours').textContent = subjectState[0].hours + ' JP';
+      }
+    }
+
+    const btnAddSub = document.getElementById('btn-add-subject');
+    if (btnAddSub) {
+      btnAddSub.addEventListener('click', () => {
+        editingSubIdx = -1;
+        document.getElementById('modal-sub-title').textContent = 'Tambah Mata Pelajaran Baru';
+        document.getElementById('input-sub-code').value = '';
+        document.getElementById('input-sub-name').value = '';
+        document.getElementById('input-sub-hours').value = '2';
+        document.getElementById('input-sub-desc').value = '';
+        modalSub.style.display = 'block';
+        modalSub.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    const btnCancelSub = document.getElementById('btn-cancel-sub');
+    if (btnCancelSub) btnCancelSub.addEventListener('click', () => { modalSub.style.display = 'none'; });
+
+    const btnSaveSubItem = document.getElementById('btn-save-sub-item');
+    if (btnSaveSubItem) {
+      btnSaveSubItem.addEventListener('click', () => {
+        const code = document.getElementById('input-sub-code').value.trim().toUpperCase();
+        const name = document.getElementById('input-sub-name').value.trim();
+        const group = document.getElementById('input-sub-group').value;
+        const hours = parseInt(document.getElementById('input-sub-hours').value, 10) || 2;
+        const desc = document.getElementById('input-sub-desc').value.trim();
+        if (!code || !name) {
+          alert('Mohon lengkapi kode dan nama mata pelajaran!');
+          return;
+        }
+        const obj = { code, name, group, hours, description: desc };
+        if (editingSubIdx >= 0) {
+          subjectState[editingSubIdx] = obj;
+        } else {
+          subjectState.push(obj);
+        }
+        modalSub.style.display = 'none';
+        renderSubjectList();
+      });
+    }
+
+    // CRUD Program Unggulan
+    const progContainer = document.getElementById('program-list-container');
+    const modalProg = document.getElementById('modal-program');
+    let editingProgIdx = -1;
+
+    function renderProgramsList() {
+      if (!progContainer) return;
+      progContainer.innerHTML = '';
+      programsState.forEach((p, idx) => {
+        const item = document.createElement('div');
+        item.className = 'program-admin-card';
+        item.innerHTML = `
+          <div class="prog-thumb-wrap">
+            <img src="${p.image?.src || '/assets/hero-siswa-belajar.webp'}" alt="${p.title}" class="prog-admin-thumb" onerror="this.src='/assets/hero-siswa-belajar.webp'" />
+          </div>
+          <div class="prog-admin-content">
+            <div class="prog-admin-header-row">
+              <h4>${p.title}</h4>
+              <span class="prog-admin-mentor">Pembina: ${p.mentor}</span>
+            </div>
+            <p class="prog-admin-summary">${p.summary}</p>
+            <div class="prog-admin-meta">
+              <span class="prog-meta-badge">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span>${p.schedule}</span>
+              </span>
+            </div>
+          </div>
+          <div class="prog-item-actions">
+            <button type="button" class="btn-action-edit btn-edit-p" data-idx="${idx}" title="Edit Program">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+              <span>Edit</span>
+            </button>
+            <button type="button" class="btn-action-delete btn-delete-p" data-idx="${idx}" title="Hapus Program">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <span>Hapus</span>
+            </button>
+          </div>
+        `;
+        progContainer.appendChild(item);
+      });
+
+      document.querySelectorAll('.btn-edit-p').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          editingProgIdx = idx;
+          const p = programsState[idx];
+          document.getElementById('modal-prog-title').textContent = 'Edit Program Unggulan';
+          document.getElementById('input-prog-id').value = p.id;
+          document.getElementById('input-prog-title-val').value = p.title;
+          document.getElementById('input-prog-mentor').value = p.mentor;
+          document.getElementById('input-prog-schedule').value = p.schedule;
+          document.getElementById('input-prog-summary').value = p.summary;
+          document.getElementById('input-prog-desc').value = p.description;
+          document.getElementById('input-prog-img').value = p.image?.src || '/assets/program-unggulan-tahfidz.webp';
+          const prevProgImg = document.getElementById('img-prev-prog');
+          if (prevProgImg) prevProgImg.src = p.image?.src || '/assets/program-unggulan-tahfidz.webp';
+          modalProg.style.display = 'block';
+          modalProg.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.btn-delete-p').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = programsState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus program "${item.title}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              programsState.splice(idx, 1);
+              renderProgramsList();
+            });
+          } else if (confirm(msg)) {
+            programsState.splice(idx, 1);
+            renderProgramsList();
+          }
+        });
+      });
+
+      if (programsState.length > 0) {
+        if (document.getElementById('sim-prog-title')) document.getElementById('sim-prog-title').textContent = programsState[0].title;
+        if (document.getElementById('sim-prog-summary')) document.getElementById('sim-prog-summary').textContent = programsState[0].summary;
+        if (document.getElementById('sim-prog-mentor')) document.getElementById('sim-prog-mentor').textContent = 'Pembina: ' + programsState[0].mentor;
+      }
+    }
+
+    const btnAddProg = document.getElementById('btn-add-program');
+    if (btnAddProg) {
+      btnAddProg.addEventListener('click', () => {
+        editingProgIdx = -1;
+        document.getElementById('modal-prog-title').textContent = 'Tambah Program Unggulan Baru';
+        document.getElementById('input-prog-id').value = 'prog-' + Date.now();
+        document.getElementById('input-prog-title-val').value = '';
+        document.getElementById('input-prog-mentor').value = 'FREEKS.ID';
+        document.getElementById('input-prog-schedule').value = '';
+        document.getElementById('input-prog-summary').value = '';
+        document.getElementById('input-prog-desc').value = '';
+        document.getElementById('input-prog-img').value = '/assets/program-unggulan-tahfidz.webp';
+        const prevProgImg = document.getElementById('img-prev-prog');
+        if (prevProgImg) prevProgImg.src = '/assets/program-unggulan-tahfidz.webp';
+        modalProg.style.display = 'block';
+        modalProg.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    const btnCancelProg = document.getElementById('btn-cancel-prog');
+    if (btnCancelProg) btnCancelProg.addEventListener('click', () => { modalProg.style.display = 'none'; });
+
+    const btnSaveProgItem = document.getElementById('btn-save-prog-item');
+    if (btnSaveProgItem) {
+      btnSaveProgItem.addEventListener('click', () => {
+        const id = document.getElementById('input-prog-id').value || ('prog-' + Date.now());
+        const title = document.getElementById('input-prog-title-val').value.trim();
+        const mentor = document.getElementById('input-prog-mentor').value.trim();
+        const schedule = document.getElementById('input-prog-schedule').value.trim();
+        const summary = document.getElementById('input-prog-summary').value.trim();
+        const description = document.getElementById('input-prog-desc').value.trim();
+        const src = document.getElementById('input-prog-img').value.trim();
+        if (!title || !mentor) {
+          alert('Mohon lengkapi judul program dan nama pembina!');
+          return;
+        }
+        const obj = { id, title, mentor, schedule, summary, description, image: { src, alt: title, width: 1200, height: 800 } };
+        if (editingProgIdx >= 0) {
+          programsState[editingProgIdx] = obj;
+        } else {
+          programsState.push(obj);
+        }
+        modalProg.style.display = 'none';
+        renderProgramsList();
+      });
+    }
+
+    // CRUD Prestasi
+    const achContainer = document.getElementById('prestasi-list-container');
+    const modalAch = document.getElementById('modal-prestasi');
+    let editingAchIdx = -1;
+
+    function renderPrestasiList() {
+      if (!achContainer) return;
+      achContainer.innerHTML = '';
+      achievementsState.forEach((ach, idx) => {
+        const card = document.createElement('div');
+        card.className = 'prestasi-admin-card';
+        card.innerHTML = `
+          <div class="prestasi-thumb-wrap">
+            <img src="${ach.image?.src || '/assets/berita-prestasi-sains.webp'}" alt="${ach.title}" class="prestasi-thumb" onerror="this.src='/assets/berita-prestasi-sains.webp'" />
+          </div>
+          <div class="prestasi-body">
+            <div class="prestasi-badges-row">
+              <span class="level-chip">${ach.level}</span>
+              <span class="year-chip">${ach.year}</span>
+            </div>
+            <h4>${ach.title}</h4>
+            <p class="student-name">Peraih: <strong>${ach.student}</strong></p>
+            <p class="organizer-name">Penyelenggara: ${ach.organizer}</p>
+            <div class="prestasi-card-actions">
+              <button type="button" class="btn-action-edit btn-edit-ach-item" data-idx="${idx}" title="Edit Prestasi">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                <span>Edit</span>
+              </button>
+              <button type="button" class="btn-action-delete btn-delete-ach-item" data-idx="${idx}" title="Hapus Prestasi">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <span>Hapus</span>
+              </button>
+            </div>
+          </div>
+        `;
+        achContainer.appendChild(card);
+      });
+
+      document.querySelectorAll('.btn-edit-ach-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          editingAchIdx = idx;
+          const a = achievementsState[idx];
+          document.getElementById('modal-ach-title').textContent = 'Edit Prestasi Siswa';
+          document.getElementById('input-ach-id').value = a.id;
+          document.getElementById('input-ach-title-val').value = a.title;
+          document.getElementById('input-ach-student').value = a.student;
+          document.getElementById('input-ach-level').value = a.level;
+          document.getElementById('input-ach-year').value = a.year;
+          document.getElementById('input-ach-organizer').value = a.organizer;
+          document.getElementById('input-ach-img').value = a.image?.src || '/assets/berita-prestasi-sains.webp';
+          const prevAchImg = document.getElementById('img-prev-ach');
+          if (prevAchImg) prevAchImg.src = a.image?.src || '/assets/berita-prestasi-sains.webp';
+          modalAch.style.display = 'block';
+          modalAch.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.btn-delete-ach-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = achievementsState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus prestasi "${item.title}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              achievementsState.splice(idx, 1);
+              renderPrestasiList();
+            });
+          } else if (confirm(msg)) {
+            achievementsState.splice(idx, 1);
+            renderPrestasiList();
+          }
+        });
+      });
+
+      if (achievementsState.length > 0) {
+        if (document.getElementById('sim-ach-title')) document.getElementById('sim-ach-title').textContent = achievementsState[0].title;
+        if (document.getElementById('sim-ach-student')) document.getElementById('sim-ach-student').textContent = achievementsState[0].student;
+        if (document.getElementById('sim-ach-level')) document.getElementById('sim-ach-level').textContent = `Tingkat ${achievementsState[0].level} (${achievementsState[0].year})`;
+      }
+    }
+
+    const btnAddAch = document.getElementById('btn-add-prestasi');
+    if (btnAddAch) {
+      btnAddAch.addEventListener('click', () => {
+        editingAchIdx = -1;
+        document.getElementById('modal-ach-title').textContent = 'Tambah Prestasi Baru';
+        document.getElementById('input-ach-id').value = 'prestasi-' + Date.now();
+        document.getElementById('input-ach-title-val').value = '';
+        document.getElementById('input-ach-student').value = '';
+        document.getElementById('input-ach-year').value = '2026';
+        document.getElementById('input-ach-organizer').value = '';
+        document.getElementById('input-ach-img').value = '/assets/berita-prestasi-sains.webp';
+        const prevAchImg = document.getElementById('img-prev-ach');
+        if (prevAchImg) prevAchImg.src = '/assets/berita-prestasi-sains.webp';
+        modalAch.style.display = 'block';
+        modalAch.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    const btnCancelAch = document.getElementById('btn-cancel-ach');
+    if (btnCancelAch) btnCancelAch.addEventListener('click', () => { modalAch.style.display = 'none'; });
+
+    const btnSaveAchItem = document.getElementById('btn-save-ach-item');
+    if (btnSaveAchItem) {
+      btnSaveAchItem.addEventListener('click', () => {
+        const id = document.getElementById('input-ach-id').value || ('prestasi-' + Date.now());
+        const title = document.getElementById('input-ach-title-val').value.trim();
+        const student = document.getElementById('input-ach-student').value.trim();
+        const level = document.getElementById('input-ach-level').value;
+        const year = parseInt(document.getElementById('input-ach-year').value, 10) || 2026;
+        const organizer = document.getElementById('input-ach-organizer').value.trim();
+        const src = document.getElementById('input-ach-img').value.trim();
+        if (!title || !student) {
+          alert('Mohon lengkapi judul kejuaraan dan nama siswa/tim!');
+          return;
+        }
+        const obj = { id, title, student, level, year, organizer, image: { src, alt: title, width: 1200, height: 800 } };
+        if (editingAchIdx >= 0) {
+          achievementsState[editingAchIdx] = obj;
+        } else {
+          achievementsState.push(obj);
+        }
+        modalAch.style.display = 'none';
+        renderPrestasiList();
+      });
+    }
+
+    // CRUD Guru & Tendik
+    const tcContainer = document.getElementById('teacher-list-container');
+    const modalTc = document.getElementById('modal-teacher');
+    let editingTcIdx = -1;
+
+    function renderTeacherList() {
+      if (!tcContainer) return;
+      tcContainer.innerHTML = '';
+      teachersState.forEach((tc, idx) => {
+        const card = document.createElement('div');
+        card.className = 'teacher-admin-card';
+        card.innerHTML = `
+          <div class="teacher-thumb-wrap">
+            <img src="${tc.photo?.src || '/assets/guru-freeks.webp'}" alt="${tc.fullName}" class="teacher-thumb" onerror="this.src='/assets/guru-freeks.webp'" />
+          </div>
+          <div class="teacher-body">
+            <span class="cat-pill">${tc.category}</span>
+            <h4>${tc.fullName}</h4>
+            <p class="teacher-subject">Mapel: <strong>${tc.subject}</strong></p>
+            <p class="teacher-pos">${tc.position || tc.role}</p>
+            <small class="teacher-ttl">${tc.birthPlaceDate}</small>
+            <div class="teacher-card-actions">
+              <button type="button" class="btn-action-edit btn-edit-tc-item" data-idx="${idx}" title="Edit Guru/Tendik">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                <span>Edit</span>
+              </button>
+              <button type="button" class="btn-action-delete btn-delete-tc-item" data-idx="${idx}" title="Hapus Guru/Tendik">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <span>Hapus</span>
+              </button>
+            </div>
+          </div>
+        `;
+        tcContainer.appendChild(card);
+      });
+
+      document.querySelectorAll('.btn-edit-tc-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          editingTcIdx = idx;
+          const t = teachersState[idx];
+          document.getElementById('modal-tc-title').textContent = 'Edit Guru / Tendik';
+          document.getElementById('input-tc-id').value = t.id;
+          document.getElementById('input-tc-name').value = t.name;
+          document.getElementById('input-tc-fullname').value = t.fullName;
+          document.getElementById('input-tc-category').value = t.category;
+          document.getElementById('input-tc-role').value = t.role;
+          document.getElementById('input-tc-subject').value = t.subject;
+          document.getElementById('input-tc-ttl').value = t.birthPlaceDate;
+          document.getElementById('input-tc-photo').value = t.photo?.src || '/assets/guru-freeks.webp';
+          const prevTcImg = document.getElementById('img-prev-tc');
+          if (prevTcImg) prevTcImg.src = t.photo?.src || '/assets/guru-freeks.webp';
+          modalTc.style.display = 'block';
+          modalTc.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.btn-delete-tc-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = teachersState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus data guru/tendik "${item.fullName}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              teachersState.splice(idx, 1);
+              renderTeacherList();
+            });
+          } else if (confirm(msg)) {
+            teachersState.splice(idx, 1);
+            renderTeacherList();
+          }
+        });
+      });
+
+      if (teachersState.length > 0) {
+        if (document.getElementById('sim-tc-name')) document.getElementById('sim-tc-name').textContent = teachersState[0].fullName;
+        if (document.getElementById('sim-tc-sub')) document.getElementById('sim-tc-sub').textContent = teachersState[0].subject;
+      }
+    }
+
+    const btnAddTc = document.getElementById('btn-add-teacher');
+    if (btnAddTc) {
+      btnAddTc.addEventListener('click', () => {
+        editingTcIdx = -1;
+        document.getElementById('modal-tc-title').textContent = 'Tambah Guru / Tendik Baru';
+        document.getElementById('input-tc-id').value = 'tc-' + Date.now();
+        document.getElementById('input-tc-name').value = 'FREEKS.ID';
+        document.getElementById('input-tc-fullname').value = 'FREEKS.ID, S.Pd.';
+        document.getElementById('input-tc-category').value = 'Mata Pelajaran';
+        document.getElementById('input-tc-role').value = 'Guru Mata Pelajaran';
+        document.getElementById('input-tc-subject').value = '';
+        document.getElementById('input-tc-ttl').value = 'Gresik, ';
+        document.getElementById('input-tc-photo').value = '/assets/guru-freeks.webp';
+        const prevTcImg = document.getElementById('img-prev-tc');
+        if (prevTcImg) prevTcImg.src = '/assets/guru-freeks.webp';
+        modalTc.style.display = 'block';
+        modalTc.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    const btnCancelTc = document.getElementById('btn-cancel-tc');
+    if (btnCancelTc) btnCancelTc.addEventListener('click', () => { modalTc.style.display = 'none'; });
+
+    const btnSaveTcItem = document.getElementById('btn-save-tc-item');
+    if (btnSaveTcItem) {
+      btnSaveTcItem.addEventListener('click', () => {
+        const id = document.getElementById('input-tc-id').value || ('tc-' + Date.now());
+        const name = document.getElementById('input-tc-name').value.trim();
+        const fullName = document.getElementById('input-tc-fullname').value.trim();
+        const category = document.getElementById('input-tc-category').value;
+        const role = document.getElementById('input-tc-role').value.trim();
+        const subject = document.getElementById('input-tc-subject').value.trim();
+        const ttl = document.getElementById('input-tc-ttl').value.trim();
+        const src = document.getElementById('input-tc-photo').value.trim();
+        if (!fullName || !subject) {
+          alert('Mohon lengkapi nama bergelar dan mata pelajaran!');
+          return;
+        }
+        const obj = { id, name, fullName, birthPlaceDate: ttl, role, position: role, subject, category, photo: { src, alt: `Foto ${fullName}`, width: 765, height: 1024 } };
+        if (editingTcIdx >= 0) {
+          teachersState[editingTcIdx] = obj;
+        } else {
+          teachersState.push(obj);
+        }
+        modalTc.style.display = 'none';
+        renderTeacherList();
+      });
+    }
+
+    // CRUD Kalender
+    const evContainer = document.getElementById('event-list-container');
+    const modalEv = document.getElementById('modal-event');
+    let editingEvIdx = -1;
+
+    function renderEventsList() {
+      if (!evContainer) return;
+      evContainer.innerHTML = '';
+      eventsState.forEach((ev, idx) => {
+        const item = document.createElement('div');
+        item.className = 'event-admin-item';
+        item.innerHTML = `
+          <div class="event-date-box">
+            <strong>${ev.date}</strong>
+            <span class="ev-cat-pill cat-${ev.categoryClass || 'academic'}">${ev.category}</span>
+          </div>
+          <div class="event-info-col">
+            <h4>${ev.title}</h4>
+            <p>${ev.description}</p>
+            <small>Mulai: ${ev.startDate} s.d. ${ev.endDate}</small>
+          </div>
+          <div class="event-actions">
+            <button type="button" class="btn-action-edit btn-edit-ev-item" data-idx="${idx}" title="Edit Agenda">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+              <span>Edit</span>
+            </button>
+            <button type="button" class="btn-action-delete btn-delete-ev-item" data-idx="${idx}" title="Hapus Agenda">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <span>Hapus</span>
+            </button>
+          </div>
+        `;
+        evContainer.appendChild(item);
+      });
+
+      document.querySelectorAll('.btn-edit-ev-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          editingEvIdx = idx;
+          const ev = eventsState[idx];
+          document.getElementById('modal-ev-title').textContent = 'Edit Agenda Kalender';
+          document.getElementById('input-ev-id').value = ev.id;
+          document.getElementById('input-ev-title-val').value = ev.title;
+          document.getElementById('input-ev-date-label').value = ev.date;
+          document.getElementById('input-ev-cat').value = `${ev.category}|${ev.categoryClass || 'academic'}`;
+          document.getElementById('input-ev-start').value = ev.startDate;
+          document.getElementById('input-ev-end').value = ev.endDate;
+          document.getElementById('input-ev-desc').value = ev.description;
+          modalEv.style.display = 'block';
+          modalEv.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.btn-delete-ev-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = eventsState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus agenda "${item.title}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              eventsState.splice(idx, 1);
+              renderEventsList();
+            });
+          } else if (confirm(msg)) {
+            eventsState.splice(idx, 1);
+            renderEventsList();
+          }
+        });
+      });
+    }
+
+    const btnAddEv = document.getElementById('btn-add-event');
+    if (btnAddEv) {
+      btnAddEv.addEventListener('click', () => {
+        editingEvIdx = -1;
+        document.getElementById('modal-ev-title').textContent = 'Tambah Agenda Baru';
+        document.getElementById('input-ev-id').value = 'kal-' + Date.now();
+        document.getElementById('input-ev-title-val').value = '';
+        document.getElementById('input-ev-date-label').value = '';
+        document.getElementById('input-ev-start').value = '';
+        document.getElementById('input-ev-end').value = '';
+        document.getElementById('input-ev-desc').value = '';
+        modalEv.style.display = 'block';
+        modalEv.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    const btnCancelEv = document.getElementById('btn-cancel-ev');
+    if (btnCancelEv) btnCancelEv.addEventListener('click', () => { modalEv.style.display = 'none'; });
+
+    const btnSaveEvItem = document.getElementById('btn-save-ev-item');
+    if (btnSaveEvItem) {
+      btnSaveEvItem.addEventListener('click', () => {
+        const id = document.getElementById('input-ev-id').value || ('kal-' + Date.now());
+        const title = document.getElementById('input-ev-title-val').value.trim();
+        const date = document.getElementById('input-ev-date-label').value.trim();
+        const catVal = document.getElementById('input-ev-cat').value.split('|');
+        const category = catVal[0];
+        const categoryClass = catVal[1] || 'academic';
+        const startDate = document.getElementById('input-ev-start').value;
+        const endDate = document.getElementById('input-ev-end').value;
+        const description = document.getElementById('input-ev-desc').value.trim();
+        if (!title || !date) {
+          alert('Mohon lengkapi judul agenda dan tampilan tanggal!');
+          return;
+        }
+        const obj = { id, title, date, category, categoryClass, startDate, endDate, description };
+        if (editingEvIdx >= 0) {
+          eventsState[editingEvIdx] = obj;
+        } else {
+          eventsState.push(obj);
+        }
+        modalEv.style.display = 'none';
+        renderEventsList();
+      });
+    }
+
+    // Save All Akademik
+    function handleSaveAkademik() {
+      const payload = {
+        updatedAt: new Date().toISOString(),
+        system: document.getElementById('input-kurikulum-system')?.value || '',
+        description: document.getElementById('input-kurikulum-desc')?.value || '',
+        p5pra: {
+          title: document.getElementById('input-p5pra-title')?.value || '',
+          description: document.getElementById('input-p5pra-desc')?.value || ''
+        },
+        subjects: subjectState,
+        programs: programsState,
+        achievements: achievementsState,
+        teachers: teachersState,
+        events: eventsState
+      };
+
+      localStorage.setItem('mts_cms_akademik_data', JSON.stringify(payload));
+
+      const toast = document.getElementById('save-toast');
+      if (toast) {
+        toast.hidden = false;
+        toast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    const btnSave1 = document.getElementById('btn-save-akademik');
+    const btnSave2 = document.getElementById('btn-save-akademik-side');
+    if (btnSave1) btnSave1.addEventListener('click', handleSaveAkademik);
+    if (btnSave2) btnSave2.addEventListener('click', handleSaveAkademik);
+
+    const toastClose = document.getElementById('toast-close');
+    if (toastClose) toastClose.addEventListener('click', () => { document.getElementById('save-toast').hidden = true; });
+
+    // Export JSON
+    const btnExport = document.getElementById('btn-export-akademik-json');
+    if (btnExport) {
+      btnExport.addEventListener('click', () => {
+        const saved = localStorage.getItem('mts_cms_akademik_data');
+        const dataObj = saved ? JSON.parse(saved) : { subjects: subjectState, programs: programsState, achievements: achievementsState, teachers: teachersState, events: eventsState };
+        const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(dataObj, null, 2));
+        const a = document.createElement('a');
+        a.setAttribute('href', dataStr);
+        a.setAttribute('download', `akademik-cms-${new Date().toISOString().split('T')[0]}.json`);
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+    }
+
+    // Initial render
+    renderSubjectList();
+    renderProgramsList();
+    renderPrestasiList();
+    renderTeacherList();
+    renderEventsList();
+    syncAkademikPreview();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAkademik);
+  } else {
+    initAkademik();
+  }
+</script>

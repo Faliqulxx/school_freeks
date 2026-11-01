@@ -1,0 +1,511 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Icon from '../components/Icon.astro';
+
+import beritaData from '../data/berita.json';
+import pengumumanData from '../data/pengumuman.json';
+import unduhanData from '../data/unduhan.json';
+
+const breadcrumbItems = [
+  { label: 'Pencarian' }
+];
+
+// Pre-indexed items for instant search
+const siteIndex = [
+  // Halaman Statis Utama
+  { type: 'Halaman', title: 'Beranda FREEKS.id School', url: '/', desc: 'Profil utama, visi misi, info admission, dan kabar kampus.' },
+  { type: 'Halaman', title: 'Sejarah FREEKS.id', url: '/profil/sejarah', desc: 'Perjalanan rintisan inovasi sejak 2019 di bawah naungan FREEKS Foundation.' },
+  { type: 'Halaman', title: 'Visi, Misi & Tujuan', url: '/profil/visi-misi', desc: 'Arah filosofis membentuk siswa beriman, berilmu, dan berakhlak.' },
+  { type: 'Halaman', title: 'Sambutan Principal', url: '/profil/sambutan', desc: 'Pesan hangat dari Head of School FREEKS.ID.' },
+  { type: 'Halaman', title: 'Struktur Organisasi', url: '/profil/struktur-organisasi', desc: 'Bagan kepemimpinan, waka, dewan guru, dan tata usaha.' },
+  { type: 'Halaman', title: 'Profil Yayasan (FREEKS Foundation)', url: '/profil/yayasan', desc: 'Visi filosofis, makna logo, dan ekosistem inovasi FREEKS.' },
+  { type: 'Halaman', title: 'Fasilitas Kampus', url: '/profil/fasilitas', desc: 'Smart classroom, Maker Space, studio 3D, lab VR/AR, dan amphitheater.' },
+  { type: 'Halaman', title: 'Kurikulum Pembelajaran', url: '/akademik/kurikulum', desc: 'Integrasi Kurikulum Merdeka dan Kurikulum Keagamaan Kemenag RI.' },
+  { type: 'Halaman', title: 'Program Unggulan', url: '/akademik/program-unggulan', desc: 'Tahfidz Juz 30, Bahasa Arab & Inggris, Sains Terapan, Literasi, Ibadah.' },
+  { type: 'Halaman', title: 'Mentor & Fasilitator', url: '/akademik/guru', desc: 'Profil praktisi industri dan mentor pengajar FREEKS.id School.' },
+  { type: 'Halaman', title: 'Kalender Akademik', url: '/akademik/kalender', desc: 'Jadwal penilaian PTS/PAS, libur semester, dan agenda siswa.' },
+  { type: 'Halaman', title: 'Prestasi Siswa', url: '/akademik/prestasi', desc: 'Juara olimpiade sains, tilawah, futsal, dan karya ilmiah remaja.' },
+  { type: 'Halaman', title: 'Ekstrakurikuler', url: '/kesiswaan/ekstrakurikuler', desc: 'Hadrah, pramuka, futsal, KIR, tilawah kaligrafi, english club.' },
+  { type: 'Halaman', title: 'Organisasi Siswa (OSIS)', url: '/kesiswaan/osis', desc: 'Struktur BPH dan program kerja empat pilar OSIS.' },
+  { type: 'Halaman', title: 'Tata Tertib Siswa', url: '/kesiswaan/tata-tertib', desc: 'Hak, kewajiban, tata busana seragam, dan sanksi kedisiplinan.' },
+  { type: 'Halaman', title: 'Alumni FREEKS.id', url: '/kesiswaan/alumni', desc: 'Jejak kiprah alumni dan jejaring komunitas inovator muda.' },
+  { type: 'Halaman', title: 'Penerimaan Siswa Baru (PPDB)', url: '/ppdb', desc: 'Informasi alur, jadwal, syarat, dan rincian biaya pendaftaran.' },
+  { type: 'Halaman', title: 'Syarat & Biaya PPDB', url: '/ppdb/syarat-biaya', desc: 'Tabel rincian infaq sarpras, seragam, modul, dan SPP bulanan.' },
+  { type: 'Halaman', title: 'Jadwal Gelombang PPDB', url: '/ppdb/jadwal', desc: 'Jadwal pelaksanaan Gelombang 1 dan Gelombang 2.' },
+  { type: 'Halaman', title: 'Formulir Pendaftaran Online PPDB', url: '/ppdb/daftar', desc: 'Formulir 4 langkah registrasi calon siswa baru.' },
+  { type: 'Halaman', title: 'Tanya Jawab (FAQ PPDB)', url: '/ppdb/faq', desc: 'Jawaban atas pertanyaan seputar PPDB yang sering diajukan.' },
+  { type: 'Halaman', title: 'Kontak & Peta Lokasi', url: '/kontak', desc: 'Nomor telepon, WhatsApp panitia, email, dan peta Google Maps.' },
+
+  // Berita
+  ...beritaData.articles.map(a => ({
+    type: 'Berita',
+    title: a.title,
+    url: `/informasi/berita/${a.slug}`,
+    desc: a.excerpt
+  })),
+
+  // Pengumuman
+  ...pengumumanData.announcements.map(p => ({
+    type: 'Pengumuman',
+    title: p.title,
+    url: '/informasi/pengumuman',
+    desc: p.summary
+  })),
+
+  // Unduhan
+  ...unduhanData.downloads.map(u => ({
+    type: 'Unduhan',
+    title: u.title,
+    url: '/informasi/unduhan',
+    desc: `${u.description} (Format ${u.format}, ${u.size})`
+  }))
+];
+---
+
+<BaseLayout
+  title="Pencarian Situs – FREEKS.id School"
+  description="Pencarian terpadu informasi profil, kurikulum teknologi, berita inovasi, pengumuman, unduhan, dan admission FREEKS.id School."
+>
+  <div class="page-header section-soft">
+    <div class="container-wide">
+      <Breadcrumb items={breadcrumbItems} />
+      <div class="header-meta">
+        <span class="chip chip-primary">Indeks Situs</span>
+      </div>
+      <h1 class="page-title">Pencarian Halaman & Dokumen</h1>
+      <p class="page-description">
+        Temukan informasi yang Anda cari dari seluruh halaman profil, artikel berita, pengumuman resmi, dan berkas unduhan.
+      </p>
+
+      <!-- Search Input -->
+      <div class="main-search-input-wrap">
+        <Icon name="search" size={20} class="search-ico" />
+        <input
+          type="search"
+          id="global-search-input"
+          class="global-search-input"
+          placeholder="Ketik kata kunci (misal: biaya, jadwal, kurikulum, prestasi)..."
+          autofocus
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="container-wide section">
+    <div class="search-results-container">
+      <div class="results-stats-bar">
+        <span id="results-count-text">Menampilkan semua indeks ({siteIndex.length} entri)</span>
+      </div>
+
+      <!-- Grouped Results (PRD 8.8: Hasil dikelompokkan: Halaman, Berita, Pengumuman, Unduhan) -->
+      <div class="grouped-results-area" id="grouped-results">
+        <!-- Grup Halaman -->
+        <section class="result-group" id="group-halaman">
+          <div class="group-header">
+            <Icon name="globe" size={18} class="group-icon" />
+            <h2 class="group-title">Halaman Profil & Panduan</h2>
+          </div>
+          <div class="group-items-list" data-group-type="Halaman"></div>
+        </section>
+
+        <!-- Grup Berita -->
+        <section class="result-group" id="group-berita">
+          <div class="group-header">
+            <Icon name="newspaper" size={18} class="group-icon" />
+            <h2 class="group-title">Berita & Kegiatan</h2>
+          </div>
+          <div class="group-items-list" data-group-type="Berita"></div>
+        </section>
+
+        <!-- Grup Pengumuman -->
+        <section class="result-group" id="group-pengumuman">
+          <div class="group-header">
+            <Icon name="bell" size={18} class="group-icon" />
+            <h2 class="group-title">Pengumuman</h2>
+          </div>
+          <div class="group-items-list" data-group-type="Pengumuman"></div>
+        </section>
+
+        <!-- Grup Unduhan -->
+        <section class="result-group" id="group-unduhan">
+          <div class="group-header">
+            <Icon name="download" size={18} class="group-icon" />
+            <h2 class="group-title">Unduhan Berkas</h2>
+          </div>
+          <div class="group-items-list" data-group-type="Unduhan"></div>
+        </section>
+      </div>
+
+      <!-- Friendly Empty State (PRD 8.8) -->
+      <div id="search-empty-state" class="search-empty card" hidden>
+        <Icon name="search-x" size={48} class="empty-icon" />
+        <h3>Tidak Ditemukan Hasil Pencarian</h3>
+        <p>
+          Kami tidak menemukan halaman atau dokumen yang cocok dengan kata kunci tersebut. Silakan periksa kembali ejaan atau coba kata kunci yang lebih umum.
+        </p>
+        <div class="empty-suggestions">
+          <span class="sugg-label">Saran Kata Kunci Populer:</span>
+          <div class="sugg-chips">
+            <button type="button" class="sugg-btn" data-word="ppdb">PPDB</button>
+            <button type="button" class="sugg-btn" data-word="biaya">Biaya</button>
+            <button type="button" class="sugg-btn" data-word="tahfidz">Tahfidz</button>
+            <button type="button" class="sugg-btn" data-word="jadwal">Jadwal</button>
+            <button type="button" class="sugg-btn" data-word="guru">Guru</button>
+          </div>
+        </div>
+        <div class="empty-contact-cta">
+          <span>Masih belum menemukan informasi yang dicari?</span>
+          <a href="/kontak" class="btn btn-secondary btn-sm">Hubungi Tim Kampus</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-top: var(--s-6);
+    padding-bottom: var(--s-6);
+    border-bottom: 1px solid var(--ink-300);
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--s-3);
+  }
+
+  .page-title {
+    font-size: var(--h1);
+    color: var(--green-900);
+    margin-bottom: var(--s-2);
+  }
+
+  .page-description {
+    font-size: var(--text-lg);
+    color: var(--ink-600);
+    max-width: 65ch;
+    margin-bottom: var(--s-5);
+  }
+
+  .main-search-input-wrap {
+    position: relative;
+    max-width: 600px;
+    width: 100%;
+  }
+
+  .search-ico {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-600);
+    pointer-events: none;
+  }
+
+  .global-search-input {
+    width: 100%;
+    height: 52px;
+    min-height: 48px;
+    padding-left: 48px;
+    padding-right: 18px;
+    border: 1.5px solid var(--ink-300);
+    border-radius: var(--radius-md);
+    font-size: 16px;
+    color: var(--ink-900);
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .global-search-input:focus {
+    border-color: var(--green-700);
+    outline: none;
+  }
+
+  .results-stats-bar {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--ink-600);
+    margin-bottom: var(--s-5);
+  }
+
+  /* Grouped Results */
+  .grouped-results-area {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-7);
+  }
+
+  .result-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-4);
+  }
+
+  .group-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 2px solid var(--green-200);
+    padding-bottom: 6px;
+  }
+
+  .group-icon {
+    color: var(--green-700);
+  }
+
+  .group-title {
+    font-size: 1.15rem;
+    color: var(--green-900);
+    margin: 0;
+  }
+
+  .group-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  @media (min-width: 641px) {
+    .group-items-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s-3);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .page-title {
+      font-size: 1.6rem !important;
+      overflow-wrap: break-word;
+    }
+    .page-description {
+      font-size: var(--text-base) !important;
+      overflow-wrap: break-word;
+    }
+    :global(.search-result-card) {
+      padding: 12px 14px !important;
+    }
+    :global(.result-card-title) {
+      font-size: 0.95rem !important;
+      line-height: 1.35 !important;
+      overflow-wrap: break-word !important;
+      word-break: break-word !important;
+    }
+    :global(.result-card-desc) {
+      font-size: 0.82rem !important;
+      line-height: 1.45 !important;
+      display: -webkit-box !important;
+      -webkit-line-clamp: 3 !important;
+      -webkit-box-orient: vertical !important;
+      overflow: hidden !important;
+      overflow-wrap: break-word !important;
+    }
+    .results-stats-bar {
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+  }
+
+  :global(.search-result-card) {
+    padding: var(--s-4);
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    border: var(--border);
+    border-radius: var(--radius-md);
+    background-color: #FFFFFF;
+    transition: transform var(--dur-fast) var(--ease),
+                border-color var(--dur-fast) var(--ease);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  :global(.search-result-card:hover) {
+    transform: translateY(-2px);
+    border-color: var(--green-500);
+  }
+
+  :global(.result-card-title) {
+    font-size: 1rem;
+    color: var(--green-900);
+    font-weight: 700;
+    margin-bottom: 4px;
+    line-height: 1.35;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  :global(.result-card-desc) {
+    font-size: var(--text-sm);
+    color: var(--ink-600);
+    line-height: 1.5;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    overflow-wrap: break-word;
+  }
+
+  /* Empty state */
+  .search-empty {
+    padding: var(--s-7) var(--s-4);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .search-empty[hidden] {
+    display: none !important;
+  }
+
+  .empty-icon {
+    color: var(--ink-300);
+  }
+
+  .search-empty h3 {
+    color: var(--green-900);
+    margin: 0;
+  }
+
+  .search-empty p {
+    color: var(--ink-600);
+    max-width: 50ch;
+    margin: 0;
+  }
+
+  .empty-suggestions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0;
+  }
+
+  .sugg-label {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--green-900);
+  }
+
+  .sugg-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .sugg-btn {
+    padding: 4px 12px;
+    background-color: var(--green-50);
+    border: 1px solid var(--green-200);
+    color: var(--green-800);
+    border-radius: 999px;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .empty-contact-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    margin-top: 10px;
+  }
+</style>
+
+<script define:vars={{ siteIndex }}>
+  const input = document.getElementById('global-search-input');
+  const countText = document.getElementById('results-count-text');
+  const emptyState = document.getElementById('search-empty-state');
+  const groupsArea = document.getElementById('grouped-results');
+
+  const groups = ['Halaman', 'Berita', 'Pengumuman', 'Unduhan'];
+
+  function render(query = '') {
+    const q = query.toLowerCase().trim();
+    let totalFound = 0;
+
+    groups.forEach((g) => {
+      const container = document.querySelector(`[data-group-type="${g}"]`);
+      const section = document.getElementById(`group-${g.toLowerCase()}`);
+      if (!container || !section) return;
+
+      const filtered = siteIndex.filter((item) => {
+        const matchGroup = item.type === g;
+        if (!matchGroup) return false;
+        if (!q) return true;
+        return item.title.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q);
+      });
+
+      if (filtered.length > 0) {
+        section.hidden = false;
+        totalFound += filtered.length;
+        container.innerHTML = filtered.map((item) => `
+          <a href="${item.url}" class="search-result-card">
+            <h3 class="result-card-title">${item.title}</h3>
+            <p class="result-card-desc">${item.desc}</p>
+          </a>
+        `).join('');
+      } else {
+        section.hidden = true;
+        container.innerHTML = '';
+      }
+    });
+
+    if (countText) {
+      if (q) {
+        countText.textContent = `Ditemukan ${totalFound} hasil pencarian untuk "${query}"`;
+      } else {
+        countText.textContent = `Menampilkan semua indeks (${siteIndex.length} entri)`;
+      }
+    }
+
+    if (emptyState && groupsArea) {
+      if (totalFound === 0) {
+        emptyState.hidden = false;
+        emptyState.style.display = 'flex';
+        groupsArea.hidden = true;
+        groupsArea.style.display = 'none';
+      } else {
+        emptyState.hidden = true;
+        emptyState.style.display = 'none';
+        groupsArea.hidden = false;
+        groupsArea.style.display = '';
+      }
+    }
+  }
+
+  // Initial render
+  render();
+
+  input?.addEventListener('input', (e) => {
+    render(e.target.value);
+  });
+
+  // Suggestion buttons
+  document.querySelectorAll('.sugg-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const word = btn.getAttribute('data-word') || '';
+      if (input) {
+        input.value = word;
+        render(word);
+      }
+    });
+  });
+</script>
+

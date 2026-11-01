@@ -1,0 +1,2067 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import Icon from '../../components/Icon.astro';
+import ppdbData from '../../data/ppdb.json';
+
+const { academicYear, status, statusType, quota, waves, requirements, costs, steps, faq } = ppdbData;
+
+// Initial dummy applicants for administration simulation
+const initialApplicants = [
+  {
+    id: "REG-2027-001",
+    name: "Muhammad Fadhil Pratama",
+    gender: "Laki-laki",
+    originSchool: "SD IT Cendekia Mandiri",
+    parentName: "Bambang Sudarsono",
+    phone: "081234567890",
+    wave: "Early Bird Wave",
+    date: "2027-01-05",
+    status: "Diterima",
+    assessmentScore: "A (Skor Logika 96 - Minat AI & Coding)"
+  },
+  {
+    id: "REG-2027-002",
+    name: "Siti Nur Aini",
+    gender: "Perempuan",
+    originSchool: "SD Kreatif Digital Surabaya",
+    parentName: "Ahmad Syafi'i",
+    phone: "082145678901",
+    wave: "Early Bird Wave",
+    date: "2027-01-08",
+    status: "Menunggu Verifikasi",
+    assessmentScore: "Dalam Peninjauan Berkas"
+  },
+  {
+    id: "REG-2027-003",
+    name: "Rafi Ahmad Fauzan",
+    gender: "Laki-laki",
+    originSchool: "SD Prestasi Mandiri",
+    parentName: "Hendra Wijaya",
+    phone: "085678901234",
+    wave: "Early Bird Wave",
+    date: "2027-01-12",
+    status: "Diterima",
+    assessmentScore: "A- (Skor Logika 92 - Minat Robotika)"
+  },
+  {
+    id: "REG-2027-004",
+    name: "Nabila Zahratun Nisa",
+    gender: "Perempuan",
+    originSchool: "SD Global Islamic Tech",
+    parentName: "H. Abdul Wahid",
+    phone: "081398765432",
+    wave: "Early Bird Wave",
+    date: "2027-01-16",
+    status: "Cadangan",
+    assessmentScore: "B+ (Skor Logika 85 - Jalur Desain UI/UX)"
+  },
+  {
+    id: "REG-2027-005",
+    name: "Arya Maulana",
+    gender: "Laki-laki",
+    originSchool: "SD Nusantara Bintang",
+    parentName: "Drs. M. Subhan",
+    phone: "087812345678",
+    wave: "Early Bird Wave",
+    date: "2027-01-20",
+    status: "Menunggu Verifikasi",
+    assessmentScore: "Dalam Peninjauan Berkas"
+  }
+];
+---
+
+<AdminLayout title="Manajemen PPDB Online (Modul 7)" activeMenu="ppdb">
+  <div class="page-header-wrap">
+    <div>
+      <div class="module-tag">MODUL 7 DARI 8</div>
+      <h1>Manajemen PPDB & Data Pendaftar</h1>
+      <p class="page-subtitle">
+        Kelola jadwal gelombang pendaftaran, status kuota penerimaan siswa, rincian biaya starter pack & fasilitas teknologi, tanya jawab FAQ calon siswa, dan verifikasi kelulusan pendaftar online.
+      </p>
+    </div>
+
+    <div class="header-action-group">
+      <a href="/ppdb" target="_blank" class="btn btn-secondary">
+        <Icon name="external-link" size={16} />
+        <span>Buka Web Publik</span>
+      </a>
+      <button type="button" id="btn-export-ppdb-json" class="btn btn-secondary">
+        <Icon name="download" size={16} />
+        <span>Unduh JSON</span>
+      </button>
+      <button type="button" id="btn-save-ppdb" class="btn btn-primary">
+        <Icon name="check" size={18} />
+        <span>Simpan Perubahan</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="save-toast" class="toast-notification" role="alert" aria-live="polite" hidden>
+    <Icon name="check-circle" size={20} class="toast-icon" />
+    <div class="toast-body">
+      <strong>Data PPDB Berhasil Diperbarui!</strong>
+      <p>Data pengaturan gelombang, rincian biaya, dan status pendaftar telah tersimpan secara lokal di browser Anda.</p>
+    </div>
+    <button type="button" id="toast-close" class="toast-close-btn" aria-label="Tutup notifikasi">
+      <Icon name="x" size={16} />
+    </button>
+  </div>
+
+  <!-- Sub-Modul Tab Navigation -->
+  <div class="section-tabs-bar" role="tablist">
+    <button type="button" class="tab-btn active" data-tab="tab-status" role="tab" aria-selected="true">
+      <Icon name="settings" size={16} />
+      <span>1. Status & Kuota</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-gelombang" role="tab" aria-selected="false">
+      <Icon name="calendar" size={16} />
+      <span>2. Gelombang & Jadwal</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-biaya" role="tab" aria-selected="false">
+      <Icon name="dollar-sign" size={16} />
+      <span>3. Syarat & Biaya</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-faq" role="tab" aria-selected="false">
+      <Icon name="help-circle" size={16} />
+      <span>4. FAQ Calon Siswa</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-pendaftar" role="tab" aria-selected="false">
+      <Icon name="user-check" size={16} />
+      <span>5. Data Pendaftar Online</span>
+    </button>
+  </div>
+
+  <div class="ppdb-layout-grid">
+    <!-- Left Column: Forms -->
+    <div class="form-container">
+      <form id="ppdb-form" onsubmit="return false;">
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 1: STATUS & KUOTA -->
+        <!-- ========================================== -->
+        <div class="tab-panel active" id="tab-status">
+          <div class="form-card card">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="check-circle" size={20} />
+              </div>
+              <div>
+                <h3>Status Pembukaan Pendaftaran</h3>
+                <p class="card-desc">Atur status pendaftaran aktif dan teks badge yang muncul di beranda dan halaman PPDB.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="input-ppdb-year">Tahun Ajaran <span class="req">*</span></label>
+                <input type="text" id="input-ppdb-year" value={academicYear} required class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label for="input-ppdb-status-type">Status Operasional <span class="req">*</span></label>
+                <select id="input-ppdb-status-type" class="form-control">
+                  <option value="open" selected={statusType === 'open'}>Pendaftaran Dibuka (Open)</option>
+                  <option value="closed" selected={statusType === 'closed'}>Pendaftaran Ditutup (Closed)</option>
+                </select>
+              </div>
+
+              <div class="form-group col-span-2">
+                <label for="input-ppdb-status-text">Teks Tampilan Status (Badge) <span class="req">*</span></label>
+                <input type="text" id="input-ppdb-status-text" value={status} required class="form-control" />
+                <span class="form-help">Contoh: "Dibuka s.d. 28 Februari 2027"</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-card card">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="users" size={20} />
+              </div>
+              <div>
+                <h3>Alokasi Kuota & Daya Tampung</h3>
+                <p class="card-desc">Pengaturan jumlah rombongan belajar dan kapasitas maksimal penerimaan siswa baru.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="input-quota-total">Total Daya Tampung (Siswa) <span class="req">*</span></label>
+                <input type="number" id="input-quota-total" value={quota.total} required class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label for="input-quota-classes">Jumlah Rombel (Kelas) <span class="req">*</span></label>
+                <input type="number" id="input-quota-classes" value={quota.classes} required class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label for="input-quota-perclass">Kapasitas Maksimal Per Kelas <span class="req">*</span></label>
+                <input type="number" id="input-quota-perclass" value={quota.perClass} required class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label for="input-quota-perwave">Target Kuota Per Gelombang <span class="req">*</span></label>
+                <input type="number" id="input-quota-perwave" value={quota.perWave} required class="form-control" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 2: GELOMBANG & JADWAL -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-gelombang">
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="calendar" size={20} />
+                </div>
+                <div>
+                  <h3>Jadwal Gelombang Pendaftaran (CRUD)</h3>
+                  <p class="card-desc">Atur rentang masa registrasi, sesi asesmen minat & logika, pengumuman hasil, dan konfirmasi daftar ulang.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-wave" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Gelombang</span>
+              </button>
+            </div>
+
+            <div class="waves-admin-list" id="waves-list-container">
+              {waves.map((w, idx) => (
+                <div class="wave-admin-card" data-idx={idx}>
+                  <div class="wave-card-header">
+                    <div class="wave-title-row">
+                      <span class={`wave-status-chip ${w.isCurrent ? 'active' : ''}`}>
+                        {w.isCurrent ? 'Gelombang Aktif' : 'Akan Datang'}
+                      </span>
+                      <h4>{w.name}</h4>
+                    </div>
+                    <div class="wave-actions">
+                      <button type="button" class="btn-action-edit btn-edit-wave" data-idx={idx} title="Edit Gelombang">
+                        <Icon name="edit" size={14} />
+                        <span>Edit</span>
+                      </button>
+                      <button type="button" class="btn-action-delete btn-delete-wave" data-idx={idx} title="Hapus Gelombang">
+                        <Icon name="trash-2" size={14} />
+                        <span>Hapus</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="wave-dates-grid">
+                    <div>
+                      <small>Pendaftaran</small>
+                      <strong>{w.registration}</strong>
+                    </div>
+                    <div>
+                      <small>Asesmen & Wawancara</small>
+                      <strong>{w.selection}</strong>
+                    </div>
+                    <div>
+                      <small>Pengumuman</small>
+                      <strong>{w.announcement}</strong>
+                    </div>
+                    <div>
+                      <small>Daftar Ulang</small>
+                      <strong>{w.reRegistration}</strong>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Modal Edit Wave -->
+          <div class="form-card card" id="modal-wave" style="display: none; border-color: var(--admin-green-500); background-color: var(--admin-green-50);">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="edit" size={20} />
+              </div>
+              <div>
+                <h3 id="modal-wave-title">Atur Jadwal Gelombang</h3>
+                <p class="card-desc">Lengkapi nama gelombang dan tanggal-tanggal penting penerimaan.</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <input type="hidden" id="input-wave-idx" value="" />
+              <div class="form-group">
+                <label for="input-wave-name">Nama Gelombang <span class="req">*</span></label>
+                <input type="text" id="input-wave-name" placeholder="Contoh: Early Bird Wave / Gelombang 1" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-wave-is-current">Status Keaktifan</label>
+                <select id="input-wave-is-current" class="form-control">
+                  <option value="true">Gelombang Aktif Saat Ini</option>
+                  <option value="false">Belum Aktif / Selesai</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="input-wave-reg">Rentang Pendaftaran <span class="req">*</span></label>
+                <input type="text" id="input-wave-reg" placeholder="Contoh: 4 Jan – 28 Feb 2027" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-wave-sel">Tanggal Asesmen Minat & Logika <span class="req">*</span></label>
+                <input type="text" id="input-wave-sel" placeholder="Contoh: 6 Mar 2027" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-wave-ann">Tanggal Pengumuman Hasil <span class="req">*</span></label>
+                <input type="text" id="input-wave-ann" placeholder="Contoh: 12 Mar 2027" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-wave-rereg">Masa Daftar Ulang & Onboarding <span class="req">*</span></label>
+                <input type="text" id="input-wave-rereg" placeholder="Contoh: 15 – 27 Mar 2027" class="form-control" />
+              </div>
+              <div class="col-span-2 form-actions-row">
+                <button type="button" id="btn-cancel-wave" class="btn btn-secondary">Batal</button>
+                <button type="button" id="btn-save-wave-item" class="btn btn-primary">Simpan Gelombang</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 3: SYARAT & BIAYA -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-biaya">
+          <!-- Syarat Pendaftaran -->
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="check" size={20} />
+                </div>
+                <div>
+                  <h3>Berkas Persyaratan Masuk (CRUD)</h3>
+                  <p class="card-desc">Daftar dokumen digital dan persyaratan usia calon siswa baru FREEKS.id School.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-req" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Syarat</span>
+              </button>
+            </div>
+
+            <div class="requirements-admin-list" id="req-list-container">
+              {requirements.map((req, idx) => (
+                <div class="req-item-row" data-idx={idx}>
+                  <div class="req-num">{idx + 1}</div>
+                  <input type="text" class="form-control req-input" value={req} />
+                  <button type="button" class="btn-action-delete btn-del-req" data-idx={idx} title="Hapus Syarat">
+                    <Icon name="trash-2" size={14} />
+                    <span>Hapus</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Rincian Biaya -->
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="dollar-sign" size={20} />
+                </div>
+                <div>
+                  <h3>Komponen Biaya Pendaftaran & Fasilitas (CRUD)</h3>
+                  <p class="card-desc">Biaya awal masuk, sarpras & lab teknologi, starter pack apparel resmi, modul digital, dan iuran edukasi bulanan.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-cost" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Komponen</span>
+              </button>
+            </div>
+
+            <div class="costs-admin-list" id="costs-list-container">
+              {costs.items.map((c, idx) => (
+                <div class="cost-admin-item" data-idx={idx}>
+                  <div class="cost-main-row">
+                    <input type="text" class="form-control cost-comp-input" value={c.component} placeholder="Nama Komponen..." />
+                    <input type="text" class="form-control cost-amt-input" value={c.amount} placeholder="Nominal (Rp)..." />
+                    <button type="button" class="btn-action-delete btn-del-cost" data-idx={idx} title="Hapus Komponen">
+                      <Icon name="trash-2" size={14} />
+                      <span>Hapus</span>
+                    </button>
+                  </div>
+                  <input type="text" class="form-control cost-note-input" value={c.note} placeholder="Catatan/Keterangan cicilan..." />
+                </div>
+              ))}
+            </div>
+
+            <div class="form-grid mt-2">
+              <div class="form-group col-span-2">
+                <label for="input-costs-concession">Keterangan Program Beasiswa & Keringanan Biaya</label>
+                <textarea id="input-costs-concession" rows="2" class="form-control">{costs.concession}</textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 4: FAQ PPDB -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-faq">
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="help-circle" size={20} />
+                </div>
+                <div>
+                  <h3>Pertanyaan Umum / FAQ PPDB (CRUD)</h3>
+                  <p class="card-desc">Jawaban pertanyaan seputar asesmen eksplorasi logika, skema cicilan sarpras, kurikulum teknologi, dan tata cara pendaftaran.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-faq" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah FAQ</span>
+              </button>
+            </div>
+
+            <div class="faq-admin-list" id="faq-list-container">
+              {faq.map((item, idx) => (
+                <div class="faq-admin-card" data-idx={idx}>
+                  <div class="faq-header-row">
+                    <input type="text" class="form-control faq-q-input" value={item.q} placeholder="Pertanyaan..." />
+                    <button type="button" class="btn-action-delete btn-del-faq" data-idx={idx} title="Hapus FAQ">
+                      <Icon name="trash-2" size={14} />
+                      <span>Hapus</span>
+                    </button>
+                  </div>
+                  <textarea rows="2" class="form-control faq-a-input" placeholder="Jawaban resmi...">{item.a}</textarea>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 5: DATA PENDAFTAR ONLINE -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-pendaftar">
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="user-check" size={20} />
+                </div>
+                <div>
+                  <h3>Data Calon Siswa Baru Online</h3>
+                  <p class="card-desc">Verifikasi berkas pendaftar, hasil asesmen minat & logika, ubah status penerimaan, dan ekspor data ke format CSV.</p>
+                </div>
+              </div>
+
+              <div class="table-actions-group">
+                <button type="button" id="btn-export-csv" class="btn btn-secondary btn-sm">
+                  <Icon name="file-text" size={15} />
+                  <span>Ekspor CSV</span>
+                </button>
+                <button type="button" id="btn-add-applicant" class="btn btn-primary btn-sm">
+                  <Icon name="plus" size={15} />
+                  <span>Tambah Pendaftar</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Filter Status Pill Bar -->
+            <div class="filter-pills-row">
+              <span class="filter-label">Filter:</span>
+              <button type="button" class="filter-pill active" data-filter="all">Semua (<span id="count-all">5</span>)</button>
+              <button type="button" class="filter-pill" data-filter="Menunggu Verifikasi">Menunggu (<span id="count-pending">2</span>)</button>
+              <button type="button" class="filter-pill" data-filter="Diterima">Diterima (<span id="count-accepted">2</span>)</button>
+              <button type="button" class="filter-pill" data-filter="Cadangan">Cadangan (<span id="count-waiting">1</span>)</button>
+            </div>
+
+            <!-- Table of Applicants -->
+            <div class="table-responsive">
+              <table class="admin-data-table" id="applicants-table">
+                <thead>
+                  <tr>
+                    <th>No. Reg</th>
+                    <th>Nama Calon Siswa</th>
+                    <th>Asal Sekolah</th>
+                    <th>Wali & Kontak WhatsApp</th>
+                    <th>Hasil Asesmen Minat & Logika</th>
+                    <th>Status Kelulusan</th>
+                    <th style="min-width: 140px;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="applicants-tbody">
+                  <!-- Dynamically rendered -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Modal Edit Applicant Status -->
+          <div class="form-card card" id="modal-applicant" style="display: none; border-color: var(--admin-green-500); background-color: var(--admin-green-50);">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="edit" size={20} />
+              </div>
+              <div>
+                <h3 id="modal-app-title">Verifikasi Calon Siswa</h3>
+                <p class="card-desc">Ubah status seleksi pendaftaran dan skor hasil asesmen minat/logika calon siswa.</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <input type="hidden" id="input-app-idx" value="" />
+              <div class="form-group">
+                <label for="input-app-id">Nomor Registrasi</label>
+                <input type="text" id="input-app-id" readonly class="form-control" style="background:#F3F4F6;" />
+              </div>
+              <div class="form-group">
+                <label for="input-app-name">Nama Calon Siswa <span class="req">*</span></label>
+                <input type="text" id="input-app-name" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-app-origin">Asal SD/MI Sederajat <span class="req">*</span></label>
+                <input type="text" id="input-app-origin" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-app-parent">Nama Orang Tua / Wali <span class="req">*</span></label>
+                <input type="text" id="input-app-parent" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-app-phone">Nomor HP / WhatsApp Wali <span class="req">*</span></label>
+                <input type="text" id="input-app-phone" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-app-quran">Hasil Asesmen Minat & Logika</label>
+                <input type="text" id="input-app-quran" placeholder="Contoh: A (Skor Logika 94/100, Minat Robotika) / Dalam Peninjauan" class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-app-status">Status Penerimaan Siswa <span class="req">*</span></label>
+                <select id="input-app-status" class="form-control font-semibold">
+                  <option value="Menunggu Verifikasi">Menunggu Verifikasi Berkas</option>
+                  <option value="Diterima">Diterima (Lolos Seleksi)</option>
+                  <option value="Cadangan">Cadangan (Menunggu Kuota)</option>
+                  <option value="Ditolak">Ditolak / Berkas Tidak Memenuhi</option>
+                </select>
+              </div>
+              <div class="col-span-2 form-actions-row">
+                <button type="button" id="btn-cancel-app" class="btn btn-secondary">Batal</button>
+                <button type="button" id="btn-save-app-item" class="btn btn-primary">Simpan Status Verifikasi</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Right Column: Interactive Live Preview -->
+    <aside class="preview-container">
+      <div class="preview-sticky-wrap">
+        <div class="card preview-card">
+          <div class="card-header-sm">
+            <div class="flex-align-center gap-2">
+              <Icon name="eye" size={18} />
+              <h4>Pratinjau PPDB</h4>
+            </div>
+            <div class="preview-mode-pills" id="ppdb-preview-pills">
+              <button type="button" class="pill-btn active" data-mode="status">Status</button>
+              <button type="button" class="pill-btn" data-mode="gelombang">Jadwal</button>
+              <button type="button" class="pill-btn" data-mode="biaya">Biaya</button>
+              <button type="button" class="pill-btn" data-mode="faq">FAQ</button>
+            </div>
+          </div>
+
+          <!-- Preview 1: Status & Kuota -->
+          <div id="sim-pp-status" class="sim-pp-view active">
+            <div class="sim-ppdb-card">
+              <span class="sim-year-chip" id="sim-year-chip">Tahun Ajaran {academicYear}</span>
+              <div class="sim-status-row">
+                <span class="sim-dot"></span>
+                <strong id="sim-status-text">{status}</strong>
+              </div>
+              <div class="sim-quota-box">
+                <div>
+                  <small>Total Daya Tampung</small>
+                  <strong id="sim-total-quota">{quota.total} Siswa</strong>
+                </div>
+                <div>
+                  <small>Jumlah Kelas</small>
+                  <strong id="sim-classes-count">{quota.classes} Rombel</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 2: Gelombang -->
+          <div id="sim-pp-gelombang" class="sim-pp-view" style="display: none;">
+            <div class="sim-wave-card">
+              <span class="sim-wave-badge" id="sim-wave-badge">Gelombang Aktif</span>
+              <h4 id="sim-wave-name">{waves[0].name}</h4>
+              <p class="sim-wave-dates" id="sim-wave-reg">{waves[0].registration}</p>
+              <div class="sim-wave-test">
+                <small>Asesmen & Wawancara:</small>
+                <strong id="sim-wave-sel">{waves[0].selection}</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 3: Biaya -->
+          <div id="sim-pp-biaya" class="sim-pp-view" style="display: none;">
+            <div class="sim-costs-card">
+              <h4 id="sim-cost-first-title">{costs.items[0].component}</h4>
+              <div class="sim-cost-amount" id="sim-cost-first-amt">{costs.items[0].amount}</div>
+              <small id="sim-cost-first-note">{costs.items[0].note}</small>
+              <div class="sim-total-badge">
+                Total Awal: <strong>{costs.totalInitial}</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 4: FAQ -->
+          <div id="sim-pp-faq" class="sim-pp-view" style="display: none;">
+            <div class="sim-faq-box">
+              <strong id="sim-faq-q">Q: {faq[0].q}</strong>
+              <p id="sim-faq-a">{faq[0].a}</p>
+            </div>
+          </div>
+
+          <div class="preview-footer-action">
+            <button type="button" id="btn-save-ppdb-side" class="btn btn-primary btn-block">
+              <Icon name="check" size={18} />
+              <span>Simpan Perubahan PPDB</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</AdminLayout>
+
+<style>
+  .page-header-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--admin-ink-300);
+  }
+
+  @media (min-width: 768px) {
+    .page-header-wrap {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+
+  .module-tag {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--admin-green-700);
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+
+  .page-header-wrap h1 {
+    font-size: clamp(1.4rem, 2vw, 1.85rem);
+    margin-bottom: 6px;
+  }
+
+  .page-subtitle {
+    font-size: 0.9rem;
+    color: var(--admin-ink-500);
+    max-width: 75ch;
+  }
+
+  .header-action-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* Sub-Modul Tabs */
+  .section-tabs-bar {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--admin-ink-100);
+  }
+
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--admin-ink-500);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    border-radius: 6px 6px 0 0;
+  }
+
+  .tab-btn:hover {
+    color: var(--admin-green-800);
+    background-color: var(--admin-green-50);
+  }
+
+  .tab-btn.active {
+    color: var(--admin-green-900);
+    background-color: #FFFFFF;
+    border-bottom-color: var(--admin-green-700);
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.03);
+  }
+
+  /* Layout Grid */
+  .ppdb-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  @media (min-width: 1080px) {
+    .ppdb-layout-grid {
+      grid-template-columns: 1.55fr 1fr;
+    }
+  }
+
+  .tab-panel {
+    display: none;
+  }
+
+  .tab-panel.active {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Form Cards */
+  .form-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid var(--admin-ink-300);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--admin-ink-100);
+  }
+
+  .card-header.justify-between {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .header-icon-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .header-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: var(--admin-green-100);
+    color: var(--admin-green-800);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-header h3 {
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+  }
+
+  .card-desc {
+    font-size: 0.825rem;
+    color: var(--admin-ink-500);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  @media (min-width: 640px) {
+    .form-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .col-span-2 {
+      grid-column: span 2;
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-group label {
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--admin-ink-700);
+  }
+
+  .req {
+    color: #DC2626;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.875rem;
+    color: var(--admin-ink-900);
+    background-color: #FFFFFF;
+    transition: all 0.15s ease;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: var(--admin-green-700);
+    box-shadow: 0 0 0 3px rgba(27, 122, 47, 0.15);
+  }
+
+  .form-help {
+    font-size: 0.75rem;
+    color: var(--admin-ink-500);
+  }
+
+  .form-actions-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .font-semibold {
+    font-weight: 600;
+  }
+
+  /* Waves Admin List */
+  :global(.waves-admin-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  :global(.wave-admin-card) {
+    padding: 18px;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    transition: all 0.2s ease;
+  }
+
+  :global(.wave-admin-card:hover) {
+    border-color: var(--admin-green-300, #86EFAC);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  :global(.wave-card-header) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  :global(.wave-title-row) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  :global(.wave-status-chip) {
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background-color: var(--admin-ink-100);
+    color: var(--admin-ink-700);
+  }
+
+  :global(.wave-status-chip.active) {
+    background-color: var(--admin-green-100);
+    color: var(--admin-green-800);
+  }
+
+  :global(.wave-dates-grid) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    font-size: 0.85rem;
+  }
+
+  @media (min-width: 640px) {
+    :global(.wave-dates-grid) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  :global(.wave-dates-grid small) {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--admin-ink-500);
+    margin-bottom: 2px;
+  }
+
+  :global(.wave-dates-grid strong) {
+    display: block;
+    color: var(--admin-ink-900);
+  }
+
+  :global(.wave-actions) {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  /* Requirements */
+  :global(.requirements-admin-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  :global(.req-item-row) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  :global(.req-num) {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--admin-green-800);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* Costs Admin List */
+  :global(.costs-admin-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  :global(.cost-admin-item) {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    background-color: #FAFAFA;
+    transition: all 0.2s ease;
+  }
+
+  :global(.cost-admin-item:hover) {
+    border-color: var(--admin-green-300, #86EFAC);
+    background-color: #FFFFFF;
+  }
+
+  :global(.cost-main-row) {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr auto;
+    gap: 10px;
+    align-items: center;
+  }
+
+  /* FAQ Admin List */
+  :global(.faq-admin-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  :global(.faq-admin-card) {
+    padding: 16px;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #FAFAFA;
+    transition: all 0.2s ease;
+  }
+
+  :global(.faq-admin-card:hover) {
+    border-color: var(--admin-green-300, #86EFAC);
+    background-color: #FFFFFF;
+  }
+
+  :global(.faq-header-row) {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  /* Applicants Table */
+  .table-actions-group {
+    display: flex;
+    gap: 8px;
+  }
+
+  .filter-pills-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .filter-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--admin-ink-500);
+  }
+
+  .filter-pill {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background-color: var(--admin-ink-100);
+    border: 1px solid transparent;
+    color: var(--admin-ink-700);
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .filter-pill.active {
+    background-color: var(--admin-green-800);
+    color: #FFFFFF;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  :global(.admin-data-table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  :global(.admin-data-table th), :global(.admin-data-table td) {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--admin-ink-300);
+  }
+
+  :global(.admin-data-table th) {
+    background-color: var(--admin-green-50);
+    font-weight: 700;
+    color: var(--admin-green-900);
+  }
+
+  :global(.status-badge) {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  :global(.status-accepted) { background-color: #DCFCE7; color: #166534; }
+  :global(.status-pending) { background-color: #FEF3C7; color: #92400E; }
+  :global(.status-waiting) { background-color: #E0E7FF; color: #3730A3; }
+  :global(.status-rejected) { background-color: #FEE2E2; color: #991B1B; }
+
+  /* Modern Action Buttons */
+  :global(.btn-action-edit),
+  :global(.btn-action-delete) {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+    text-decoration: none;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  :global(.btn-action-edit) {
+    background-color: var(--admin-green-50, #ECFDF5);
+    color: var(--admin-green-800, #065F46);
+    border-color: var(--admin-green-200, #A7F3D0);
+  }
+
+  :global(.btn-action-edit:hover) {
+    background-color: var(--admin-green-100, #D1FAE5);
+    border-color: var(--admin-green-400, #34D399);
+    transform: translateY(-1px);
+  }
+
+  :global(.btn-action-delete) {
+    background-color: #FEF2F2;
+    color: #991B1B;
+    border-color: #FECACA;
+  }
+
+  :global(.btn-action-delete:hover) {
+    background-color: #FEE2E2;
+    border-color: #FCA5A5;
+    transform: translateY(-1px);
+  }
+
+  /* Utility Buttons */
+  :global(.btn-icon) {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 6px;
+    background: #FFFFFF;
+    color: var(--admin-ink-700);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  :global(.btn-icon:hover) {
+    color: var(--admin-green-800);
+    border-color: var(--admin-green-500);
+    background-color: var(--admin-green-50);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 9px 16px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .btn-block {
+    width: 100%;
+  }
+
+  .btn-primary {
+    background-color: var(--admin-green-700);
+    color: #FFFFFF;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--admin-green-800);
+  }
+
+  .btn-secondary {
+    background-color: #FFFFFF;
+    color: var(--admin-ink-700);
+    border-color: var(--admin-ink-300);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--admin-ink-100);
+    color: var(--admin-ink-900);
+  }
+
+  .mt-2 {
+    margin-top: 8px;
+  }
+
+  /* Preview Container */
+  .preview-sticky-wrap {
+    position: sticky;
+    top: 90px;
+  }
+
+  .preview-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--admin-ink-300);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .card-header-sm {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--admin-ink-100);
+  }
+
+  .card-header-sm h4 {
+    font-size: 0.95rem;
+  }
+
+  .preview-mode-pills {
+    display: flex;
+    gap: 4px;
+    background-color: var(--admin-ink-100);
+    padding: 3px;
+    border-radius: 6px;
+  }
+
+  .pill-btn {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--admin-ink-500);
+    cursor: pointer;
+  }
+
+  .pill-btn.active {
+    background: #FFFFFF;
+    color: var(--admin-green-900);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Simulated Box */
+  .sim-ppdb-card {
+    background-color: var(--admin-green-50);
+    border: 1px solid var(--admin-green-100);
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .sim-year-chip {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #DC2626;
+    background-color: #FEE2E2;
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .sim-status-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .sim-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #22C55E;
+  }
+
+  .sim-quota-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    border-top: 1px dashed var(--admin-green-100);
+    padding-top: 10px;
+  }
+
+  .sim-quota-box small {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--admin-ink-500);
+  }
+
+  .sim-wave-card {
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .sim-wave-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    background-color: var(--admin-green-100);
+    color: var(--admin-green-800);
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+
+  .sim-wave-dates {
+    font-size: 0.8rem;
+    color: var(--admin-ink-700);
+    margin-bottom: 8px;
+  }
+
+  .sim-costs-card {
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .sim-cost-amount {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--admin-green-900);
+    margin-bottom: 4px;
+  }
+
+  .sim-total-badge {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--admin-ink-300);
+    font-size: 0.8rem;
+  }
+
+  .sim-faq-box {
+    background-color: var(--admin-ink-100);
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .sim-faq-box strong {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--admin-ink-900);
+    margin-bottom: 4px;
+  }
+
+  .sim-faq-box p {
+    font-size: 0.78rem;
+    color: var(--admin-ink-700);
+  }
+
+  .preview-footer-action {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--admin-ink-100);
+  }
+
+  /* Toast */
+  .toast-notification {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background-color: #ECFDF5;
+    border: 1px solid #A7F3D0;
+    border-left: 4px solid #10B981;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+  }
+
+  .toast-icon {
+    color: #059669;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .toast-body {
+    flex: 1;
+    font-size: 0.875rem;
+    color: #065F46;
+  }
+
+  .toast-body strong {
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .toast-body p {
+    font-size: 0.825rem;
+    color: #047857;
+  }
+
+  .toast-close-btn {
+    background: transparent;
+    border: none;
+    color: #059669;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+  }
+
+  .flex-align-center {
+    display: flex;
+    align-items: center;
+  }
+
+  .gap-2 {
+    gap: 8px;
+  }
+</style>
+
+<script is:inline>
+  function initPPDB() {
+    // Initial State - Aligned with FREEKS.id School Modern Tech Curriculum
+    let wavesState = [
+      { name: "Early Bird Wave", registration: "4 Jan – 28 Feb 2027", selection: "6 Mar 2027", announcement: "12 Mar 2027", reRegistration: "15 – 27 Mar 2027", isCurrent: true },
+      { name: "Regular Wave", registration: "1 Mar – 30 Apr 2027", selection: "8 Mei 2027", announcement: "14 Mei 2027", reRegistration: "17 – 29 Mei 2027", isCurrent: false }
+    ];
+
+    let reqsState = [
+      "Lulus atau akan lulus SD/MI sederajat pada tahun 2027",
+      "Berusia maksimal 15 tahun pada 1 Juli 2027",
+      "Fotokopi / Scan Akta Kelahiran dan Kartu Keluarga (KK)",
+      "Salinan Rapor kelas IV–VI atau Surat Keterangan dari Kepala Sekolah asal",
+      "Pas foto digital terbaru ukuran 3×4",
+      "Mengikuti asesmen pemetaan minat, bakat kreatif, dan logika computational dasar"
+    ];
+
+    let costsState = [
+      { component: "Biaya Registrasi & Asesmen Minat", amount: "Rp200.000", note: "Sekali bayar saat pendaftaran online" },
+      { component: "Inovasi Sarpras & Lab Teknologi (Uang Pangkal)", amount: "Rp2.500.000", note: "Akses fasilitas Maker Space, Cloud Lab, 3D Printer; dapat diangsur" },
+      { component: "Starter Pack & Apparel Resmi FREEKS", amount: "Rp1.100.000", note: "Termasuk 2 stel smart polo/uniform, hoodie identitas FREEKS, kaos olahraga, dan ID lanyard smart card" },
+      { component: "Modul Digital, E-Book & Software License", amount: "Rp600.000", note: "Lisensi platform pembelajaran komputasi, modul proyek, dan repositori riset" },
+      { component: "Iuran Edukasi Bulanan (SPP)", amount: "Rp350.000", note: "Biaya operasional pembelajaran per bulan (mulai Juli 2027)" }
+    ];
+
+    let faqState = [
+      { q: "Apakah pendaftaran bisa dilakukan sepenuhnya online?", a: "Ya, seluruh proses pengisian data dan unggah berkas dapat dilakukan 100% secara daring. Calon siswa hanya dijadwalkan hadir ke kampus saat sesi asesmen eksplorasi atau campus tour." },
+      { q: "Apakah siswa harus sudah bisa coding sebelum mendaftar?", a: "Tidak harus! FREEKS.id School mendesain kurikulum mulai dari fondasi paling dasar. Yang kami cari adalah rasa ingin tahu (curiosity), semangat belajar, dan kemauan bereksplorasi." },
+      { q: "Berapa kapasitas kuota penerimaan siswa baru?", a: "Kapasitas terbatas 120 siswa (4 kelas berukuran optimal maksimal 30 siswa per kelas) untuk menjaga rasio bimbingan mentor yang intensif." },
+      { q: "Apakah biaya uang pangkal dapat diangsur?", a: "Bisa. Biaya sarana prasarana dan teknologi dapat dicicil hingga 3 kali pembayaran selama semester pertama tahun ajaran berjalan." },
+      { q: "Apakah menerima siswa dari luar kota/daerah?", a: "Sangat terbuka. Kami menyambut siswa berbakat dari seluruh Indonesia yang siap berkembang bersama ekosistem teknologi FREEKS." }
+    ];
+
+    let applicantsState = [
+      { id: "REG-2027-001", name: "Muhammad Fadhil Pratama", originSchool: "SD IT Cendekia Mandiri", parentName: "Bambang Sudarsono", phone: "081234567890", wave: "Early Bird Wave", status: "Diterima", assessmentScore: "A (Skor Logika 96 - Minat AI & Coding)" },
+      { id: "REG-2027-002", name: "Siti Nur Aini", originSchool: "SD Kreatif Digital Surabaya", parentName: "Ahmad Syafi'i", phone: "082145678901", wave: "Early Bird Wave", status: "Menunggu Verifikasi", assessmentScore: "Dalam Peninjauan Berkas" },
+      { id: "REG-2027-003", name: "Rafi Ahmad Fauzan", originSchool: "SD Prestasi Mandiri", parentName: "Hendra Wijaya", phone: "085678901234", wave: "Early Bird Wave", status: "Diterima", assessmentScore: "A- (Skor Logika 92 - Minat Robotika)" },
+      { id: "REG-2027-004", name: "Nabila Zahratun Nisa", originSchool: "SD Global Islamic Tech", parentName: "H. Abdul Wahid", phone: "081398765432", wave: "Early Bird Wave", status: "Cadangan", assessmentScore: "B+ (Skor Logika 85 - Jalur Desain UI/UX)" },
+      { id: "REG-2027-005", name: "Arya Maulana", originSchool: "SD Nusantara Bintang", parentName: "Drs. M. Subhan", phone: "087812345678", wave: "Early Bird Wave", status: "Menunggu Verifikasi", assessmentScore: "Dalam Peninjauan Berkas" }
+    ];
+
+    // Load from localStorage if present with auto-migration from legacy data
+    const savedPPDB = localStorage.getItem('mts_cms_ppdb_data');
+    if (savedPPDB) {
+      try {
+        const parsed = JSON.parse(savedPPDB);
+        const isLegacy = parsed.applicants && parsed.applicants.some(a => a.quranScore !== undefined || a.originSchool?.includes('MI Islamiyah') || a.wave === 'Gelombang 1');
+        if (isLegacy) {
+          localStorage.removeItem('mts_cms_ppdb_data');
+        } else {
+          if (parsed.waves) wavesState = parsed.waves;
+          if (parsed.requirements) reqsState = parsed.requirements;
+          if (parsed.costs) costsState = parsed.costs;
+          if (parsed.faq) faqState = parsed.faq;
+          if (parsed.applicants) applicantsState = parsed.applicants;
+          if (parsed.status && document.getElementById('input-ppdb-status-text')) {
+            document.getElementById('input-ppdb-status-text').value = parsed.status;
+          }
+          if (parsed.totalQuota && document.getElementById('input-quota-total')) {
+            document.getElementById('input-quota-total').value = parsed.totalQuota;
+          }
+        }
+      } catch (e) {
+        console.error('Failed to parse saved PPDB data:', e);
+      }
+    }
+
+    // Tab switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-tab');
+        tabBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        tabPanels.forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        const targetPanel = document.getElementById(targetId);
+        if (targetPanel) targetPanel.classList.add('active');
+      });
+    });
+
+    // Preview switcher
+    const previewPills = document.querySelectorAll('#ppdb-preview-pills .pill-btn');
+    const simViews = {
+      status: document.getElementById('sim-pp-status'),
+      gelombang: document.getElementById('sim-pp-gelombang'),
+      biaya: document.getElementById('sim-pp-biaya'),
+      faq: document.getElementById('sim-pp-faq')
+    };
+
+    previewPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        previewPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        const mode = pill.getAttribute('data-mode');
+        Object.keys(simViews).forEach(k => {
+          if (simViews[k]) simViews[k].style.display = (k === mode) ? 'block' : 'none';
+        });
+      });
+    });
+
+    // Live preview sync
+    function syncPPDBPreview() {
+      const stText = document.getElementById('input-ppdb-status-text');
+      const qTotal = document.getElementById('input-quota-total');
+      const qClasses = document.getElementById('input-quota-classes');
+      if (stText && document.getElementById('sim-status-text')) {
+        document.getElementById('sim-status-text').textContent = stText.value;
+      }
+      if (qTotal && document.getElementById('sim-total-quota')) {
+        document.getElementById('sim-total-quota').textContent = `${qTotal.value} Siswa`;
+      }
+      if (qClasses && document.getElementById('sim-classes-count')) {
+        document.getElementById('sim-classes-count').textContent = `${qClasses.value} Rombel`;
+      }
+    }
+
+    const liveInputs = document.querySelectorAll('#ppdb-form input, #ppdb-form textarea, #ppdb-form select');
+    liveInputs.forEach(i => i.addEventListener('input', syncPPDBPreview));
+
+    // CRUD Waves
+    const wavesContainer = document.getElementById('waves-list-container');
+    const modalWave = document.getElementById('modal-wave');
+    let editingWaveIdx = -1;
+
+    function renderWavesList() {
+      if (!wavesContainer) return;
+      wavesContainer.innerHTML = '';
+      wavesState.forEach((w, idx) => {
+        const card = document.createElement('div');
+        card.className = 'wave-admin-card';
+        card.innerHTML = `
+          <div class="wave-card-header">
+            <div class="wave-title-row">
+              <span class="wave-status-chip ${w.isCurrent ? 'active' : ''}">${w.isCurrent ? 'Gelombang Aktif' : 'Akan Datang'}</span>
+              <h4>${w.name}</h4>
+            </div>
+            <div class="wave-actions">
+              <button type="button" class="btn-action-edit btn-edit-w" data-idx="${idx}" title="Edit Gelombang">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                <span>Edit</span>
+              </button>
+              <button type="button" class="btn-action-delete btn-delete-w" data-idx="${idx}" title="Hapus Gelombang">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <span>Hapus</span>
+              </button>
+            </div>
+          </div>
+          <div class="wave-dates-grid">
+            <div><small>Pendaftaran</small><strong>${w.registration}</strong></div>
+            <div><small>Asesmen & Wawancara</small><strong>${w.selection}</strong></div>
+            <div><small>Pengumuman</small><strong>${w.announcement}</strong></div>
+            <div><small>Daftar Ulang</small><strong>${w.reRegistration}</strong></div>
+          </div>
+        `;
+        wavesContainer.appendChild(card);
+      });
+
+      document.querySelectorAll('.btn-edit-w').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          editingWaveIdx = idx;
+          const w = wavesState[idx];
+          document.getElementById('modal-wave-title').textContent = 'Edit Gelombang';
+          document.getElementById('input-wave-name').value = w.name;
+          document.getElementById('input-wave-is-current').value = w.isCurrent ? 'true' : 'false';
+          document.getElementById('input-wave-reg').value = w.registration;
+          document.getElementById('input-wave-sel').value = w.selection;
+          document.getElementById('input-wave-ann').value = w.announcement;
+          document.getElementById('input-wave-rereg').value = w.reRegistration;
+          modalWave.style.display = 'block';
+          modalWave.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.btn-delete-w').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = wavesState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus "${item.name}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              wavesState.splice(idx, 1);
+              renderWavesList();
+            });
+          } else if (confirm(msg)) {
+            wavesState.splice(idx, 1);
+            renderWavesList();
+          }
+        });
+      });
+
+      if (wavesState.length > 0) {
+        if (document.getElementById('sim-wave-name')) document.getElementById('sim-wave-name').textContent = wavesState[0].name;
+        if (document.getElementById('sim-wave-reg')) document.getElementById('sim-wave-reg').textContent = wavesState[0].registration;
+        if (document.getElementById('sim-wave-sel')) document.getElementById('sim-wave-sel').textContent = wavesState[0].selection;
+      }
+    }
+
+    const btnAddWave = document.getElementById('btn-add-wave');
+    if (btnAddWave) {
+      btnAddWave.addEventListener('click', () => {
+        editingWaveIdx = -1;
+        document.getElementById('modal-wave-title').textContent = 'Tambah Gelombang Pendaftaran';
+        document.getElementById('input-wave-name').value = 'Wave ' + (wavesState.length + 1);
+        document.getElementById('input-wave-is-current').value = 'false';
+        document.getElementById('input-wave-reg').value = '';
+        document.getElementById('input-wave-sel').value = '';
+        document.getElementById('input-wave-ann').value = '';
+        document.getElementById('input-wave-rereg').value = '';
+        modalWave.style.display = 'block';
+        modalWave.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    const btnCancelWave = document.getElementById('btn-cancel-wave');
+    if (btnCancelWave) btnCancelWave.addEventListener('click', () => { modalWave.style.display = 'none'; });
+
+    const btnSaveWaveItem = document.getElementById('btn-save-wave-item');
+    if (btnSaveWaveItem) {
+      btnSaveWaveItem.addEventListener('click', () => {
+        const name = document.getElementById('input-wave-name').value.trim();
+        const isCurrent = document.getElementById('input-wave-is-current').value === 'true';
+        const registration = document.getElementById('input-wave-reg').value.trim();
+        const selection = document.getElementById('input-wave-sel').value.trim();
+        const announcement = document.getElementById('input-wave-ann').value.trim();
+        const reRegistration = document.getElementById('input-wave-rereg').value.trim();
+        if (!name || !registration) {
+          alert('Mohon lengkapi nama gelombang dan rentang pendaftaran!');
+          return;
+        }
+        if (isCurrent) {
+          wavesState.forEach(w => w.isCurrent = false);
+        }
+        const obj = { name, isCurrent, registration, selection, announcement, reRegistration };
+        if (editingWaveIdx >= 0) {
+          wavesState[editingWaveIdx] = obj;
+        } else {
+          wavesState.push(obj);
+        }
+        modalWave.style.display = 'none';
+        renderWavesList();
+      });
+    }
+
+    // CRUD Requirements
+    const btnAddReq = document.getElementById('btn-add-req');
+    const reqContainer = document.getElementById('req-list-container');
+
+    function renderRequirementsList() {
+      if (!reqContainer) return;
+      reqContainer.innerHTML = '';
+      reqsState.forEach((r, idx) => {
+        const row = document.createElement('div');
+        row.className = 'req-item-row';
+        row.innerHTML = `
+          <div class="req-num">${idx + 1}</div>
+          <input type="text" class="form-control req-input" value="${r}" />
+          <button type="button" class="btn-action-delete btn-del-req-item" data-idx="${idx}" title="Hapus Syarat">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <span>Hapus</span>
+          </button>
+        `;
+        reqContainer.appendChild(row);
+      });
+
+      document.querySelectorAll('.btn-del-req-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          reqsState.splice(idx, 1);
+          renderRequirementsList();
+        });
+      });
+    }
+
+    if (btnAddReq) {
+      btnAddReq.addEventListener('click', () => {
+        reqsState.push('Persyaratan dokumen atau ketentuan baru...');
+        renderRequirementsList();
+      });
+    }
+
+    // CRUD Costs
+    const btnAddCost = document.getElementById('btn-add-cost');
+    const costsContainer = document.getElementById('costs-list-container');
+
+    function renderCostsList() {
+      if (!costsContainer) return;
+      costsContainer.innerHTML = '';
+      costsState.forEach((c, idx) => {
+        const item = document.createElement('div');
+        item.className = 'cost-admin-item';
+        item.innerHTML = `
+          <div class="cost-main-row">
+            <input type="text" class="form-control cost-comp-input" value="${c.component}" placeholder="Nama Komponen..." />
+            <input type="text" class="form-control cost-amt-input" value="${c.amount}" placeholder="Nominal (Rp)..." />
+            <button type="button" class="btn-action-delete btn-del-cost-item" data-idx="${idx}" title="Hapus Komponen">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <span>Hapus</span>
+            </button>
+          </div>
+          <input type="text" class="form-control cost-note-input" value="${c.note}" placeholder="Catatan/Keterangan cicilan..." />
+        `;
+        costsContainer.appendChild(item);
+      });
+
+      document.querySelectorAll('.btn-del-cost-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          costsState.splice(idx, 1);
+          renderCostsList();
+        });
+      });
+
+      if (costsState.length > 0) {
+        if (document.getElementById('sim-cost-first-title')) document.getElementById('sim-cost-first-title').textContent = costsState[0].component;
+        if (document.getElementById('sim-cost-first-amt')) document.getElementById('sim-cost-first-amt').textContent = costsState[0].amount;
+        if (document.getElementById('sim-cost-first-note')) document.getElementById('sim-cost-first-note').textContent = costsState[0].note;
+      }
+    }
+
+    if (btnAddCost) {
+      btnAddCost.addEventListener('click', () => {
+        costsState.push({ component: "Komponen Biaya Baru", amount: "Rp0", note: "Keterangan rincian atau angsuran" });
+        renderCostsList();
+      });
+    }
+
+    // CRUD FAQ
+    const btnAddFaq = document.getElementById('btn-add-faq');
+    const faqContainer = document.getElementById('faq-list-container');
+
+    function renderFaqList() {
+      if (!faqContainer) return;
+      faqContainer.innerHTML = '';
+      faqState.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = 'faq-admin-card';
+        card.innerHTML = `
+          <div class="faq-header-row">
+            <input type="text" class="form-control faq-q-input" value="${item.q}" placeholder="Pertanyaan..." />
+            <button type="button" class="btn-action-delete btn-del-faq-item" data-idx="${idx}" title="Hapus FAQ">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <span>Hapus</span>
+            </button>
+          </div>
+          <textarea rows="2" class="form-control faq-a-input" placeholder="Jawaban resmi...">${item.a}</textarea>
+        `;
+        faqContainer.appendChild(card);
+      });
+
+      document.querySelectorAll('.btn-del-faq-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          faqState.splice(idx, 1);
+          renderFaqList();
+        });
+      });
+
+      if (faqState.length > 0) {
+        if (document.getElementById('sim-faq-q')) document.getElementById('sim-faq-q').textContent = `Q: ${faqState[0].q}`;
+        if (document.getElementById('sim-faq-a')) document.getElementById('sim-faq-a').textContent = faqState[0].a;
+      }
+    }
+
+    if (btnAddFaq) {
+      btnAddFaq.addEventListener('click', () => {
+        faqState.push({ q: "Pertanyaan baru seputar PPDB?", a: "Jawaban penjelasan dari panitia Admission FREEKS.id School." });
+        renderFaqList();
+      });
+    }
+
+    // CRUD Applicants & Verification Table
+    const tbody = document.getElementById('applicants-tbody');
+    const modalApp = document.getElementById('modal-applicant');
+    let currentFilter = 'all';
+    let editingAppIdx = -1;
+
+    function renderApplicantsTable() {
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      let filtered = applicantsState;
+      if (currentFilter !== 'all') {
+        filtered = applicantsState.filter(a => a.status === currentFilter);
+      }
+
+      // Update counters
+      if (document.getElementById('count-all')) document.getElementById('count-all').textContent = applicantsState.length;
+      if (document.getElementById('count-pending')) document.getElementById('count-pending').textContent = applicantsState.filter(a => a.status === 'Menunggu Verifikasi').length;
+      if (document.getElementById('count-accepted')) document.getElementById('count-accepted').textContent = applicantsState.filter(a => a.status === 'Diterima').length;
+      if (document.getElementById('count-waiting')) document.getElementById('count-waiting').textContent = applicantsState.filter(a => a.status === 'Cadangan').length;
+
+      filtered.forEach((app, idx) => {
+        const originalIdx = applicantsState.indexOf(app);
+        let statusClass = 'status-pending';
+        if (app.status === 'Diterima') statusClass = 'status-accepted';
+        else if (app.status === 'Cadangan') statusClass = 'status-waiting';
+        else if (app.status === 'Ditolak') statusClass = 'status-rejected';
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${app.id}</strong></td>
+          <td>
+            <strong>${app.name}</strong><br/>
+            <small style="color:var(--admin-ink-500);">${app.wave}</small>
+          </td>
+          <td>${app.originSchool}</td>
+          <td>
+            ${app.parentName}<br/>
+            <a href="https://wa.me/62${app.phone.replace(/^0/, '')}" target="_blank" style="color:var(--admin-green-700);text-decoration:none;font-size:0.78rem;font-weight:600;">
+              💬 ${app.phone}
+            </a>
+          </td>
+          <td><span style="font-size:0.8rem;font-weight:600;color:var(--admin-ink-800);">${app.assessmentScore || app.quranScore || 'Dalam Peninjauan'}</span></td>
+          <td><span class="status-badge ${statusClass}">${app.status}</span></td>
+          <td>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <button type="button" class="btn-action-edit btn-verify-app" data-idx="${originalIdx}" title="Verifikasi / Edit">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                <span>Verifikasi</span>
+              </button>
+              <button type="button" class="btn-action-delete btn-del-app" data-idx="${originalIdx}" title="Hapus Data">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <span>Hapus</span>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.querySelectorAll('.btn-verify-app').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          editingAppIdx = idx;
+          const a = applicantsState[idx];
+          document.getElementById('modal-app-title').textContent = 'Verifikasi Calon Siswa';
+          document.getElementById('input-app-id').value = a.id;
+          document.getElementById('input-app-name').value = a.name;
+          document.getElementById('input-app-origin').value = a.originSchool;
+          document.getElementById('input-app-parent').value = a.parentName;
+          document.getElementById('input-app-phone').value = a.phone;
+          document.getElementById('input-app-quran').value = a.assessmentScore || a.quranScore || 'Dalam Peninjauan';
+          document.getElementById('input-app-status').value = a.status;
+          modalApp.style.display = 'block';
+          modalApp.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.btn-del-app').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = applicantsState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus data pendaftar "${item.name}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              applicantsState.splice(idx, 1);
+              renderApplicantsTable();
+            });
+          } else if (confirm(msg)) {
+            applicantsState.splice(idx, 1);
+            renderApplicantsTable();
+          }
+        });
+      });
+    }
+
+    // Filter pills
+    document.querySelectorAll('.filter-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        currentFilter = pill.getAttribute('data-filter');
+        renderApplicantsTable();
+      });
+    });
+
+    const btnAddApp = document.getElementById('btn-add-applicant');
+    if (btnAddApp) {
+      btnAddApp.addEventListener('click', () => {
+        editingAppIdx = -1;
+        document.getElementById('modal-app-title').textContent = 'Tambah Calon Siswa Baru';
+        document.getElementById('input-app-id').value = 'REG-2027-' + String(applicantsState.length + 1).padStart(3, '0');
+        document.getElementById('input-app-name').value = '';
+        document.getElementById('input-app-origin').value = '';
+        document.getElementById('input-app-parent').value = '';
+        document.getElementById('input-app-phone').value = '0812';
+        document.getElementById('input-app-quran').value = 'Dalam Peninjauan Berkas';
+        document.getElementById('input-app-status').value = 'Menunggu Verifikasi';
+        modalApp.style.display = 'block';
+        modalApp.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    const btnCancelApp = document.getElementById('btn-cancel-app');
+    if (btnCancelApp) btnCancelApp.addEventListener('click', () => { modalApp.style.display = 'none'; });
+
+    const btnSaveAppItem = document.getElementById('btn-save-app-item');
+    if (btnSaveAppItem) {
+      btnSaveAppItem.addEventListener('click', () => {
+        const id = document.getElementById('input-app-id').value;
+        const name = document.getElementById('input-app-name').value.trim();
+        const originSchool = document.getElementById('input-app-origin').value.trim();
+        const parentName = document.getElementById('input-app-parent').value.trim();
+        const phone = document.getElementById('input-app-phone').value.trim();
+        const assessmentScore = document.getElementById('input-app-quran').value.trim();
+        const status = document.getElementById('input-app-status').value;
+
+        if (!name || !originSchool || !parentName) {
+          alert('Mohon lengkapi nama calon siswa, asal sekolah, dan orang tua!');
+          return;
+        }
+
+        const obj = { id, name, originSchool, parentName, phone, assessmentScore, status, wave: wavesState[0]?.name || "Early Bird Wave" };
+        if (editingAppIdx >= 0) {
+          applicantsState[editingAppIdx] = obj;
+        } else {
+          applicantsState.push(obj);
+        }
+        modalApp.style.display = 'none';
+        renderApplicantsTable();
+      });
+    }
+
+    // Export CSV
+    const btnExportCSV = document.getElementById('btn-export-csv');
+    if (btnExportCSV) {
+      btnExportCSV.addEventListener('click', () => {
+        let csv = "Nomor Registrasi,Nama Calon Siswa,Asal Sekolah,Nama Orang Tua/Wali,Nomor HP/WA,Gelombang,Asesmen Minat & Logika,Status Penerimaan\n";
+        applicantsState.forEach(a => {
+          csv += `"${a.id}","${a.name}","${a.originSchool}","${a.parentName}","${a.phone}","${a.wave}","${a.assessmentScore || a.quranScore || '-'}","${a.status}"\n`;
+        });
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `rekap-pendaftar-ppdb-${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+    }
+
+    // Save All PPDB
+    function handleSavePPDB() {
+      // Collect costs
+      const costItems = [];
+      document.querySelectorAll('.cost-admin-item').forEach(item => {
+        const comp = item.querySelector('.cost-comp-input')?.value.trim();
+        const amt = item.querySelector('.cost-amt-input')?.value.trim();
+        const note = item.querySelector('.cost-note-input')?.value.trim();
+        if (comp && amt) costItems.push({ component: comp, amount: amt, note });
+      });
+
+      // Collect FAQ
+      const faqItems = [];
+      document.querySelectorAll('.faq-admin-card').forEach(item => {
+        const q = item.querySelector('.faq-q-input')?.value.trim();
+        const a = item.querySelector('.faq-a-input')?.value.trim();
+        if (q && a) faqItems.push({ q, a });
+      });
+
+      // Collect Reqs
+      const reqItems = [];
+      document.querySelectorAll('.req-input').forEach(item => {
+        if (item.value.trim()) reqItems.push(item.value.trim());
+      });
+
+      const payload = {
+        updatedAt: new Date().toISOString(),
+        academicYear: document.getElementById('input-ppdb-year')?.value || '2027/2028',
+        status: document.getElementById('input-ppdb-status-text')?.value || '',
+        statusType: document.getElementById('input-ppdb-status-type')?.value || 'open',
+        totalQuota: parseInt(document.getElementById('input-quota-total')?.value, 10) || 120,
+        classesCount: parseInt(document.getElementById('input-quota-classes')?.value, 10) || 4,
+        waves: wavesState,
+        requirements: reqItems,
+        costs: costItems,
+        concession: document.getElementById('input-costs-concession')?.value || '',
+        faq: faqItems,
+        applicants: applicantsState
+      };
+
+      localStorage.setItem('mts_cms_ppdb_data', JSON.stringify(payload));
+
+      const toast = document.getElementById('save-toast');
+      if (toast) {
+        toast.hidden = false;
+        toast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    const btnSave1 = document.getElementById('btn-save-ppdb');
+    const btnSave2 = document.getElementById('btn-save-ppdb-side');
+    if (btnSave1) btnSave1.addEventListener('click', handleSavePPDB);
+    if (btnSave2) btnSave2.addEventListener('click', handleSavePPDB);
+
+    const toastClose = document.getElementById('toast-close');
+    if (toastClose) toastClose.addEventListener('click', () => { document.getElementById('save-toast').hidden = true; });
+
+    // Export JSON
+    const btnExportJSON = document.getElementById('btn-export-ppdb-json');
+    if (btnExportJSON) {
+      btnExportJSON.addEventListener('click', () => {
+        const saved = localStorage.getItem('mts_cms_ppdb_data');
+        const dataObj = saved ? JSON.parse(saved) : { waves: wavesState, costs: costsState, faq: faqState, applicants: applicantsState };
+        const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(dataObj, null, 2));
+        const a = document.createElement('a');
+        a.setAttribute('href', dataStr);
+        a.setAttribute('download', `ppdb-cms-${new Date().toISOString().split('T')[0]}.json`);
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+    }
+
+    // Initial render
+    renderWavesList();
+    renderRequirementsList();
+    renderCostsList();
+    renderFaqList();
+    renderApplicantsTable();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPPDB);
+  } else {
+    initPPDB();
+  }
+</script>

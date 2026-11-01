@@ -1,0 +1,350 @@
+---
+import ProfilLayout from '../../layouts/ProfilLayout.astro';
+import Icon from '../../components/Icon.astro';
+
+const structure = [
+  {
+    level: 1,
+    role: "Yayasan Inovasi Kreasi Digital (FREEKS Foundation)",
+    name: "Dewan Pembina Yayasan",
+    category: "Yayasan"
+  },
+  {
+    level: 2,
+    role: "Komite & Advisory Board",
+    name: "Perwakilan Tokoh Masyarakat & Wali Murid",
+    category: "Mitra"
+  },
+  {
+    level: 2,
+    role: "Head of School / Principal",
+    name: "FREEKS.ID",
+    category: "Pimpinan"
+  },
+  {
+    level: 3,
+    role: "Kepala Tata Usaha & Administrasi",
+    name: "FREEKS.ID",
+    category: "Administrasi"
+  },
+  {
+    level: 3,
+    role: "Waka Kurikulum",
+    name: "FREEKS.ID",
+    category: "Akademik"
+  },
+  {
+    level: 3,
+    role: "Waka Kesiswaan",
+    name: "FREEKS.ID",
+    category: "Kesiswaan"
+  },
+  {
+    level: 3,
+    role: "Waka Sarana & Prasarana",
+    name: "FREEKS.ID",
+    category: "Sarpras"
+  },
+  {
+    level: 4,
+    role: "Koordinator Tahfidz Al-Qur'an",
+    name: "FREEKS.ID",
+    category: "Keagamaan"
+  },
+  {
+    level: 4,
+    role: "Koordinator Laboratorium IPA",
+    name: "FREEKS.ID",
+    category: "Laboratorium"
+  },
+  {
+    level: 4,
+    role: "Koordinator Perpustakaan",
+    name: "FREEKS.ID",
+    category: "Perpustakaan"
+  },
+  {
+    level: 5,
+    role: "Dewan Guru & Wali Kelas (VII, VIII, IX)",
+    name: "Seluruh Asatidz dan Pembina Rombel",
+    category: "Pengajar"
+  },
+  {
+    level: 6,
+    role: "Organisasi Siswa Intra Sekolah (OSIS)",
+    name: "Pengurus OSIS & Seluruh Siswa",
+    category: "Siswa"
+  }
+];
+---
+
+<ProfilLayout
+  title="Struktur Organisasi"
+  description="Bagan tata kelola dan susunan kepemimpinan civitas akademika FREEKS.id School."
+  currentPage="/profil/struktur-organisasi"
+>
+  <div class="prose-content">
+    <div class="content-header-actions">
+      <a href="/informasi/unduhan" class="btn btn-secondary btn-sm unduh-pdf-btn">
+        <Icon name="download" size={16} />
+        <span>Unduh Bagan Format PDF</span>
+      </a>
+    </div>
+
+    <p class="section-lead">
+      Tata kelola FREEKS.id School dibangun atas prinsip kepemimpinan adaptif, kolaborasi terbuka, dan inovasi berkelanjutan untuk memberikan pelayanan pendidikan teknologi terbaik bagi siswa.
+    </p>
+
+    <!-- Desktop SVG Diagram (PRD 8.2: Desktop diagram SVG, hidden on HP) -->
+    <div class="org-desktop-svg-wrap card">
+      <div class="diagram-heading">
+        <Icon name="sitemap" size={18} />
+        <span>Diagram Hierarki Kepemimpinan Kampus (Tampilan Layar Lebar)</span>
+      </div>
+
+      <svg class="org-svg" viewBox="0 0 800 480" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+        <!-- Connecting Lines -->
+        <path d="M400,60 L400,100" stroke="var(--green-700, #1B7A2F)" stroke-width="2" />
+        <path d="M220,130 L580,130" stroke="var(--green-700, #1B7A2F)" stroke-width="2" />
+        <path d="M220,130 L220,150" stroke="var(--green-700, #1B7A2F)" stroke-width="2" />
+        <path d="M580,130 L580,150" stroke="var(--green-700, #1B7A2F)" stroke-width="2" />
+        <path d="M400,100 L400,150" stroke="var(--green-700, #1B7A2F)" stroke-width="2" />
+
+        <path d="M400,210 L400,240" stroke="var(--green-700, #1B7A2F)" stroke-width="2" />
+        <path d="M120,240 L680,240" stroke="var(--green-700, #1B7A2F)" stroke-width="2" />
+        <path d="M120,240 L120,270" stroke="var(--green-700, #1B7A2F)" stroke-width="2" />
+        <path d="M300,240 L300,270" stroke="var(--green-700, #1B7A2F)" stroke-width="2" />
+        <path d="M500,240 L500,270" stroke="var(--green-700, #1B7A2F)" stroke-width="2" />
+        <path d="M680,240 L680,270" stroke="var(--green-700, #1B7A2F)" stroke-width="2" />
+
+        <path d="M400,330 L400,360" stroke="var(--green-700, #1B7A2F)" stroke-width="2" />
+        <path d="M400,410 L400,430" stroke="var(--green-700, #1B7A2F)" stroke-width="2" />
+
+        <!-- Level 1: Yayasan -->
+        <g transform="translate(250, 10)">
+          <rect width="300" height="50" rx="8" fill="var(--green-900, #0B3B16)" />
+          <text x="150" y="24" fill="#F5D90A" font-size="12" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" text-anchor="middle">FREEKS FOUNDATION (YAYASAN INOVASI)</text>
+          <text x="150" y="40" fill="#FFFFFF" font-size="11" font-family="Inter, sans-serif" text-anchor="middle">Dewan Pembina & Pengurus Yayasan</text>
+        </g>
+
+        <!-- Level 2: Komite & Kepala Madrasah -->
+        <g transform="translate(80, 150)">
+          <rect width="200" height="60" rx="8" fill="var(--green-50, #F1F8EA)" stroke="var(--green-700, #1B7A2F)" stroke-width="1.5" />
+          <text x="100" y="26" fill="var(--green-900, #0B3B16)" font-size="12" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" text-anchor="middle">KOMITE & ADVISORY</text>
+          <text x="100" y="44" fill="#52606D" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">Perwakilan Wali Murid & Tokoh</text>
+        </g>
+
+        <g transform="translate(300, 150)">
+          <rect width="200" height="60" rx="8" fill="var(--green-700, #1B7A2F)" />
+          <text x="100" y="26" fill="#F5D90A" font-size="12" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" text-anchor="middle">HEAD OF SCHOOL</text>
+          <text x="100" y="44" fill="#FFFFFF" font-size="11" font-family="Inter, sans-serif" text-anchor="middle">FREEKS.ID, S.Pd.I., M.Pd.</text>
+        </g>
+
+        <g transform="translate(520, 150)">
+          <rect width="200" height="60" rx="8" fill="var(--green-50, #F1F8EA)" stroke="var(--green-700, #1B7A2F)" stroke-width="1.5" />
+          <text x="100" y="26" fill="var(--green-900, #0B3B16)" font-size="12" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" text-anchor="middle">TATA USAHA & ADM</text>
+          <text x="100" y="44" fill="#52606D" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">FREEKS.ID, A.Md.</text>
+        </g>
+
+        <!-- Level 3: Para Waka -->
+        <g transform="translate(30, 270)">
+          <rect width="180" height="60" rx="6" fill="#FFFFFF" stroke="#CBD2D9" stroke-width="1.5" />
+          <text x="90" y="24" fill="var(--green-700, #1B7A2F)" font-size="11" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" text-anchor="middle">WAKA KURIKULUM</text>
+          <text x="90" y="42" fill="#1F2933" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">FREEKS.ID, S.Pd.</text>
+        </g>
+
+        <g transform="translate(220, 270)">
+          <rect width="180" height="60" rx="6" fill="#FFFFFF" stroke="#CBD2D9" stroke-width="1.5" />
+          <text x="90" y="24" fill="var(--green-700, #1B7A2F)" font-size="11" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" text-anchor="middle">WAKA KESISWAAN</text>
+          <text x="90" y="42" fill="#1F2933" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">FREEKS.ID, S.Pd.I.</text>
+        </g>
+
+        <g transform="translate(410, 270)">
+          <rect width="180" height="60" rx="6" fill="#FFFFFF" stroke="#CBD2D9" stroke-width="1.5" />
+          <text x="90" y="24" fill="var(--green-700, #1B7A2F)" font-size="11" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" text-anchor="middle">WAKA SARPRAS</text>
+          <text x="90" y="42" fill="#1F2933" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">FREEKS.ID, S.Pd.</text>
+        </g>
+
+        <g transform="translate(600, 270)">
+          <rect width="180" height="60" rx="6" fill="#FFFFFF" stroke="#CBD2D9" stroke-width="1.5" />
+          <text x="90" y="24" fill="var(--green-700, #1B7A2F)" font-size="11" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" text-anchor="middle">KOORD. TAHFIDZ</text>
+          <text x="90" y="42" fill="#1F2933" font-size="9" font-family="Inter, sans-serif" text-anchor="middle">FREEKS.ID, S.Ag.</text>
+        </g>
+
+        <!-- Level 4: Dewan Guru & Siswa -->
+        <g transform="translate(200, 360)">
+          <rect width="400" height="50" rx="8" fill="var(--green-50, #F1F8EA)" stroke="var(--green-500, #3DA352)" stroke-width="1" />
+          <text x="200" y="24" fill="var(--green-900, #0B3B16)" font-size="12" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" text-anchor="middle">DEWAN GURU & WALI KELAS (VII, VIII, IX)</text>
+          <text x="200" y="40" fill="#52606D" font-size="11" font-family="Inter, sans-serif" text-anchor="middle">Pelaksana Pembelajaran & Bimbingan Siswa</text>
+        </g>
+
+        <g transform="translate(250, 430)">
+          <rect width="300" height="40" rx="6" fill="#FFFFFF" stroke="var(--green-700, #1B7A2F)" stroke-width="1.5" />
+          <text x="150" y="24" fill="var(--green-700, #1B7A2F)" font-size="12" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" text-anchor="middle">ORGANISASI SISWA (OSIS) & SISWA</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Mobile Indented List (PRD 8.2: di HP diubah menjadi daftar bertingkat indented) -->
+    <div class="org-mobile-indented-wrap">
+      <div class="mobile-list-heading">
+        <Icon name="list-tree" size={18} />
+        <span>Daftar Bertingkat Struktur Organisasi</span>
+      </div>
+
+      <div class="indented-tree">
+        {structure.map((item) => (
+          <div class={`tree-node level-${item.level}`}>
+            <div class="node-card card">
+              <span class="node-category">{item.category}</span>
+              <h4 class="node-role">{item.role}</h4>
+              <p class="node-name">{item.name}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</ProfilLayout>
+
+<style>
+  .content-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: var(--s-4);
+    flex-wrap: wrap;
+  }
+
+  .section-lead {
+    font-size: var(--text-base);
+    color: var(--ink-600);
+    line-height: 1.6;
+    margin-bottom: var(--s-6);
+  }
+
+  /* Desktop SVG Diagram */
+  .org-desktop-svg-wrap {
+    display: none;
+    padding: var(--s-5);
+    background-color: #FFFFFF;
+    overflow-x: auto;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
+  }
+
+  .org-svg {
+    min-width: 680px;
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  @media (min-width: 768px) {
+    .org-desktop-svg-wrap {
+      display: block;
+    }
+    .org-mobile-indented-wrap {
+      display: none;
+    }
+  }
+
+  .diagram-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--green-900);
+    margin-bottom: var(--s-4);
+    padding-bottom: var(--s-3);
+    border-bottom: 1px solid var(--ink-300);
+  }
+
+  /* Mobile Indented Tree */
+  .org-mobile-indented-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .mobile-list-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--green-900);
+    margin-bottom: 4px;
+  }
+
+  .indented-tree {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    padding-left: 6px;
+    border-left: 2px solid var(--green-200);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .tree-node {
+    position: relative;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .tree-node.level-1 { margin-left: 0; }
+  .tree-node.level-2 { margin-left: 6px; }
+  .tree-node.level-3 { margin-left: 12px; }
+  .tree-node.level-4 { margin-left: 16px; }
+  .tree-node.level-5 { margin-left: 20px; }
+  .tree-node.level-6 { margin-left: 24px; }
+
+  .node-card {
+    padding: 8px 12px;
+    border-left: 3px solid var(--green-700);
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .node-category {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--green-700);
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .node-role {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--green-900);
+    margin: 0 0 2px 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .node-name {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    margin: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+</style>
+

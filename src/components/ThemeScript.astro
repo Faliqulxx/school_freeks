@@ -1,0 +1,74 @@
+---
+import siteData from '../data/siteData.json';
+
+const defaultTheme = siteData.theme || {
+  preset: "emerald",
+  primary: "#1B7A2F",
+  primaryDark: "#0B3B16",
+  primaryMid: "#0F4D1C",
+  primaryLight: "#3DA352",
+  primaryBorder: "#CDE8B5",
+  primarySoft: "#F1F8EA"
+};
+---
+
+<script is:inline define:vars={{ defaultTheme }}>
+  (function() {
+    function applyTheme(t) {
+      if (!t || !t.primary) return;
+      var root = document.documentElement;
+      root.style.setProperty('--green-700', t.primary);
+      root.style.setProperty('--green-900', t.primaryDark || t.primary);
+      root.style.setProperty('--green-800', t.primaryMid || t.primary);
+      root.style.setProperty('--green-500', t.primaryLight || t.primary);
+      root.style.setProperty('--green-200', t.primaryBorder || '#CBD2D9');
+      root.style.setProperty('--green-50', t.primarySoft || '#F8FAFC');
+
+      // Admin custom variables sync
+      root.style.setProperty('--admin-green-700', t.primary);
+      root.style.setProperty('--admin-green-900', t.primaryDark || t.primary);
+      root.style.setProperty('--admin-green-800', t.primaryMid || t.primary);
+      root.style.setProperty('--admin-green-500', t.primaryLight || t.primary);
+    }
+
+    function applyLogo(logoSrc) {
+      if (!logoSrc) return;
+      function replaceLogos() {
+        var imgs = document.querySelectorAll('.school-logo-img, .header-logo, .footer-logo, .brand-logo, .preview-logo-img, .model-poster-img, .drawer-brand img, .sim-header img');
+        imgs.forEach(function(img) {
+          if (img && img.src !== logoSrc) {
+            img.src = logoSrc;
+          }
+        });
+        var favicons = document.querySelectorAll("link[rel*='icon']");
+        favicons.forEach(function(fav) {
+          if (fav) fav.href = logoSrc;
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', replaceLogos);
+      } else {
+        replaceLogos();
+      }
+    }
+
+    try {
+      var saved = localStorage.getItem('freeks_theme');
+      if (saved) {
+        applyTheme(JSON.parse(saved));
+      } else if (defaultTheme) {
+        applyTheme(defaultTheme);
+      }
+    } catch (e) {
+      if (defaultTheme) applyTheme(defaultTheme);
+    }
+
+    try {
+      var customLogo = localStorage.getItem('freeks_custom_logo');
+      if (customLogo) {
+        applyLogo(customLogo);
+      }
+    } catch (e) {}
+  })();
+</script>

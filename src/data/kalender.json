@@ -1,0 +1,66 @@
+{
+  "dummy": true,
+  "events": [
+    {
+      "id": "kal-1",
+      "date": "26 Okt – 6 Nov 2026",
+      "startDate": "2026-10-26",
+      "endDate": "2026-11-06",
+      "title": "Penilaian Tengah Semester (PTS) Ganjil",
+      "category": "Ujian",
+      "categoryClass": "exam",
+      "description": "Ujian tengah semester tertulis dan praktik untuk kelas VII, VIII, dan IX."
+    },
+    {
+      "id": "kal-2",
+      "date": "9 Nov 2026",
+      "startDate": "2026-11-09",
+      "endDate": "2026-11-09",
+      "title": "Peringatan Hari Pahlawan Nasional",
+      "category": "Kegiatan",
+      "categoryClass": "activity",
+      "description": "Upacara bendera dan pentas seni kepahlawanan antar siswa."
+    },
+    {
+      "id": "kal-3",
+      "date": "14 – 18 Des 2026",
+      "startDate": "2026-12-14",
+      "endDate": "2026-12-18",
+      "title": "Penilaian Akhir Semester (PAS) Ganjil",
+      "category": "Ujian",
+      "categoryClass": "exam",
+      "description": "Evaluasi akhir semester untuk penentuan nilai rapor semester ganjil."
+    },
+    {
+      "id": "kal-4",
+      "date": "21 Des 2026 – 2 Jan 2027",
+      "startDate": "2026-12-21",
+      "endDate": "2027-01-02",
+      "title": "Libur Semester Ganjil",
+      "category": "Libur",
+      "categoryClass": "holiday",
+      "description": "Libur pembelajaran semester ganjil dan cuti bersama akhir tahun."
+    },
+    {
+      "id": "kal-5",
+      "date": "4 Jan 2027",
+      "startDate": "2027-01-04",
+      "endDate": "2027-01-04",
+      "title": "Awal Masuk Pembelajaran Semester Genap",
+      "category": "Akademik",
+      "categoryClass": "academic",
+      "description": "Hari pertama efektif masuk kegiatan belajar mengajar semester genap."
+    },
+    {
+      "id": "kal-6",
+      "date": "4 Jan 2027",
+      "startDate": "2027-01-04",
+      "endDate": "2027-01-04",
+      "title": "Pembukaan Pendaftaran PPDB Gelombang 1",
+      "category": "PPDB",
+      "categoryClass": "ppdb",
+      "description": "Pendaftaran calon siswa baru tahun ajaran 2027/2028 resmi dibuka."
+    }
+  ]
+}
+

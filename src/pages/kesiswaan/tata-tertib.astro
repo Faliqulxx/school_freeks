@@ -1,0 +1,249 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Icon from '../../components/Icon.astro';
+import kesiswaanData from '../../data/kesiswaan.json';
+
+const { rules } = kesiswaanData;
+
+const breadcrumbItems = [
+  { label: 'Kesiswaan', href: '/kesiswaan/ekstrakurikuler' },
+  { label: 'Tata Tertib Siswa' }
+];
+---
+
+<BaseLayout
+  title="Kode Etik & Tata Tertib Siswa – FREEKS.id School"
+  description="Buku pedoman hak, kewajiban, etika digital, penggunaan laboratorium, dan kedisiplinan siswa FREEKS.id School."
+>
+  <div class="page-header section-soft">
+    <div class="container-wide">
+      <Breadcrumb items={breadcrumbItems} />
+      <div class="header-meta">
+        <span class="chip chip-primary">Edisi {rules.updated}</span>
+      </div>
+      <h1 class="page-title">{rules.title}</h1>
+      <p class="page-description">
+        Pedoman bersama guna mewujudkan lingkungan belajar yang aman, nyaman, berakhlakul karimah, dan penuh rasa saling menghormati.
+      </p>
+
+      <div class="rules-action-bar btn-group-responsive">
+        <button type="button" onclick="window.print()" class="btn btn-secondary btn-sm">
+          <Icon name="printer" size={16} />
+          <span>Cetak Tata Tertib</span>
+        </button>
+        <a href="/informasi/unduhan" class="btn btn-primary btn-sm">
+          <Icon name="download" size={16} />
+          <span>Unduh Format PDF Resmi (540 KB)</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-wide section">
+    <!-- Quick Search within Rules -->
+    <div class="rules-search-box card">
+      <Icon name="search" size={20} class="rules-search-icon" />
+      <input
+        type="search"
+        id="rules-search"
+        class="rules-search-input"
+        placeholder="Cari pasal atau kata kunci tata tertib (misal: seragam, hp, terlambat)..."
+        aria-label="Cari kata kunci tata tertib"
+      />
+    </div>
+
+    <div class="rules-document" id="rules-doc">
+      {rules.chapters.map((ch) => (
+        <section class="chapter-block card">
+          <div class="chapter-header">
+            <h2 class="chapter-title">{ch.chapter}</h2>
+          </div>
+          <div class="chapter-body">
+            <ul class="rules-list">
+              {ch.items.map((item) => (
+                <li class="rule-item-row">
+                  <p class="rule-text">{item}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-top: var(--s-6);
+    padding-bottom: var(--s-6);
+    border-bottom: 1px solid var(--ink-300);
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--s-3);
+  }
+
+  .page-title {
+    font-size: var(--h1);
+    color: var(--green-900);
+    margin-bottom: var(--s-2);
+  }
+
+  .page-description {
+    font-size: var(--text-lg);
+    color: var(--ink-600);
+    max-width: 65ch;
+    margin-bottom: var(--s-5);
+  }
+
+  .rules-action-bar {
+    display: flex;
+    gap: 12px;
+  }
+
+  .rules-search-box {
+    display: flex;
+    align-items: center;
+    padding: 6px 16px;
+    gap: 12px;
+    margin-bottom: var(--s-6);
+    background-color: #FFFFFF;
+  }
+
+  .rules-search-icon {
+    color: var(--ink-600);
+    flex-shrink: 0;
+  }
+
+  .rules-search-input {
+    width: 100%;
+    height: 48px;
+    border: none;
+    font-size: 16px;
+    color: var(--ink-900);
+    outline: none;
+  }
+
+  .rules-document {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-6);
+  }
+
+  .chapter-block {
+    background-color: #FFFFFF;
+    overflow: hidden;
+  }
+
+  .chapter-header {
+    background-color: var(--green-50);
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--green-200);
+    min-width: 0;
+  }
+
+  .chapter-title {
+    font-size: 1.15rem;
+    color: var(--green-900);
+    margin: 0;
+    overflow-wrap: break-word;
+  }
+
+  .chapter-body {
+    padding: 16px;
+    min-width: 0;
+  }
+
+  @media (min-width: 641px) {
+    .chapter-body {
+      padding: var(--s-5);
+    }
+    .chapter-header {
+      padding: var(--s-4) var(--s-5);
+    }
+  }
+
+  /* Rules List: 1 col on mobile, 2 cols on tablet/desktop */
+  .rules-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  @media (min-width: 641px) {
+    .rules-list {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+  }
+
+  .rule-item-row {
+    padding-bottom: 12px;
+    border-bottom: 1px solid #F1F5F9;
+    min-width: 0;
+  }
+
+  .rule-item-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .rule-text {
+    font-size: var(--text-sm);
+    color: var(--ink-900);
+    line-height: 1.6;
+    margin: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  @media (min-width: 641px) {
+    .rule-text {
+      font-size: var(--text-base);
+    }
+  }
+
+  /* Highlight match */
+  :global(.rule-highlight) {
+    background-color: #FEF08A;
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
+</style>
+
+<script>
+  // Simple live search inside the rules
+  const search = document.getElementById('rules-search') as HTMLInputElement | null;
+  const itemRows = document.querySelectorAll('.rule-item-row');
+
+  search?.addEventListener('input', (e) => {
+    const query = (e.target as HTMLInputElement).value.toLowerCase().trim();
+
+    itemRows.forEach((row) => {
+      const p = row.querySelector('.rule-text');
+      if (!p) return;
+
+      const text = p.textContent || '';
+      if (!query) {
+        (row as HTMLElement).style.display = '';
+        p.innerHTML = text;
+      } else if (text.toLowerCase().includes(query)) {
+        (row as HTMLElement).style.display = '';
+        // Highlight matched word
+        const regex = new RegExp(`(${query})`, 'gi');
+        p.innerHTML = text.replace(regex, '<mark class="rule-highlight">$1</mark>');
+      } else {
+        (row as HTMLElement).style.display = 'none';
+      }
+    });
+  });
+</script>
+

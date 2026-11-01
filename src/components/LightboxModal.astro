@@ -1,0 +1,301 @@
+---
+import Icon from './Icon.astro';
+---
+
+<div
+  id="lightbox-modal"
+  class="lightbox-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Tampilan Layar Penuh Gambar"
+  tabindex="-1"
+  hidden
+>
+  <div class="lightbox-overlay" id="lightbox-backdrop"></div>
+
+  <div class="lightbox-content">
+    <!-- Top toolbar: counter & close -->
+    <div class="lightbox-toolbar">
+      <div class="lightbox-counter" id="lightbox-counter" aria-live="polite">1 / 1</div>
+      <button type="button" class="lightbox-btn-close" id="lightbox-close" aria-label="Tutup tampilan gambar">
+        <Icon name="x" size={24} />
+      </button>
+    </div>
+
+    <!-- Main display -->
+    <div class="lightbox-stage">
+      <button type="button" class="lightbox-nav-btn prev" id="lightbox-prev" aria-label="Gambar sebelumnya">
+        <Icon name="chevron-left" size={28} />
+      </button>
+
+      <div class="lightbox-figure-wrap" id="lightbox-swipe-area">
+        <img id="lightbox-img" src="" alt="" class="lightbox-img" />
+        <p id="lightbox-caption" class="lightbox-caption"></p>
+      </div>
+
+      <button type="button" class="lightbox-nav-btn next" id="lightbox-next" aria-label="Gambar berikutnya">
+        <Icon name="chevron-right" size={28} />
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .lightbox-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--dur) var(--ease);
+  }
+
+  .lightbox-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .lightbox-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(11, 59, 22, 0.92);
+    backdrop-filter: blur(4px);
+  }
+
+  .lightbox-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .lightbox-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    color: #FFFFFF;
+  }
+
+  .lightbox-counter {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+  }
+
+  .lightbox-btn-close {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.4);
+    border: none;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color var(--dur-fast) var(--ease);
+  }
+
+  .lightbox-btn-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .lightbox-stage {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .lightbox-figure-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-height: 85svh;
+  }
+
+  .lightbox-img {
+    max-width: 90vw;
+    max-height: 72svh;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    user-select: none;
+  }
+
+  .lightbox-caption {
+    margin-top: 12px;
+    color: #FAFBF5;
+    font-size: var(--text-sm);
+    text-align: center;
+    max-width: 60ch;
+  }
+
+  .lightbox-nav-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.4);
+    border: none;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color var(--dur-fast) var(--ease);
+    flex-shrink: 0;
+  }
+
+  .lightbox-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  @media (max-width: 767px) {
+    .lightbox-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      width: 40px;
+      height: 40px;
+    }
+    .lightbox-nav-btn.prev { left: 4px; }
+    .lightbox-nav-btn.next { right: 4px; }
+  }
+</style>
+
+<script>
+  // Global Lightbox controller
+  interface LightboxItem {
+    src: string;
+    alt: string;
+    caption?: string;
+  }
+
+  let items: LightboxItem[] = [];
+  let currentIndex = 0;
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  const modal = document.getElementById('lightbox-modal');
+  const backdrop = document.getElementById('lightbox-backdrop');
+  const img = document.getElementById('lightbox-img') as HTMLImageElement | null;
+  const caption = document.getElementById('lightbox-caption');
+  const counter = document.getElementById('lightbox-counter');
+  const closeBtn = document.getElementById('lightbox-close');
+  const prevBtn = document.getElementById('lightbox-prev');
+  const nextBtn = document.getElementById('lightbox-next');
+  const swipeArea = document.getElementById('lightbox-swipe-area');
+
+  function updateView() {
+    if (!items.length || !img || !caption || !counter) return;
+    const item = items[currentIndex];
+    img.src = item.src;
+    img.alt = item.alt;
+    caption.textContent = item.caption || item.alt;
+    counter.textContent = `${currentIndex + 1} / ${items.length}`;
+  }
+
+  function openLightbox(galleryItems: LightboxItem[], startIndex = 0) {
+    if (!modal) return;
+    items = galleryItems;
+    currentIndex = startIndex;
+    modal.hidden = false;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    updateView();
+    closeBtn?.focus();
+  }
+
+  function closeLightbox() {
+    if (!modal) return;
+    modal.classList.remove('active');
+    setTimeout(() => {
+      modal.hidden = true;
+    }, 220);
+    document.body.style.overflow = '';
+  }
+
+  function showNext() {
+    if (!items.length) return;
+    currentIndex = (currentIndex + 1) % items.length;
+    updateView();
+  }
+
+  function showPrev() {
+    if (!items.length) return;
+    currentIndex = (currentIndex - 1 + items.length) % items.length;
+    updateView();
+  }
+
+  // Event Listeners
+  closeBtn?.addEventListener('click', closeLightbox);
+  backdrop?.addEventListener('click', closeLightbox);
+  nextBtn?.addEventListener('click', showNext);
+  prevBtn?.addEventListener('click', showPrev);
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (!modal || modal.hidden) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') showNext();
+    if (e.key === 'ArrowLeft') showPrev();
+  });
+
+  // Touch swipe support (PRD 7.7: touch swipe left-right)
+  swipeArea?.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  swipeArea?.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  }, { passive: true });
+
+  function handleSwipe() {
+    const diff = touchEndX - touchStartX;
+    if (Math.abs(diff) > 40) {
+      if (diff < 0) showNext();
+      else showPrev();
+    }
+  }
+
+  // Expose to window for clicks on gallery / images
+  // @ts-ignore
+  window.openLightbox = openLightbox;
+
+  // Auto-bind any element with [data-lightbox]
+  document.addEventListener('click', (e) => {
+    const target = (e.target as HTMLElement).closest('[data-lightbox-src]');
+    if (!target) return;
+    e.preventDefault();
+
+    const group = target.getAttribute('data-lightbox-group') || 'default';
+    const groupElements = Array.from(document.querySelectorAll(`[data-lightbox-group="${group}"]`));
+
+    const galleryItems: LightboxItem[] = groupElements.map((el) => ({
+      src: el.getAttribute('data-lightbox-src') || '',
+      alt: el.getAttribute('data-lightbox-alt') || '',
+      caption: el.getAttribute('data-lightbox-caption') || el.getAttribute('data-lightbox-alt') || ''
+    }));
+
+    const startIndex = groupElements.indexOf(target);
+    openLightbox(galleryItems, startIndex >= 0 ? startIndex : 0);
+  });
+</script>
+

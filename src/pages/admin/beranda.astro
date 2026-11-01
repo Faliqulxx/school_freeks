@@ -1,0 +1,2056 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import Icon from '../../components/Icon.astro';
+import heroSambutanData from '../../data/heroSambutan.json';
+import angkaSekolahData from '../../data/angkaSekolah.json';
+import testimoniData from '../../data/testimoni.json';
+import ppdbData from '../../data/ppdb.json';
+import siteData from '../../data/siteData.json';
+
+const { hero, sambutan } = heroSambutanData;
+const { stats } = angkaSekolahData;
+const { testimonials } = testimoniData;
+const { school } = siteData;
+---
+
+<AdminLayout title="Manajemen Beranda & Hero Section (Modul 2)" activeMenu="beranda">
+  <div class="page-header-wrap">
+    <div>
+      <div class="module-tag">MODUL 2 DARI 8</div>
+      <h1>Manajemen Halaman Beranda</h1>
+      <p class="page-subtitle">
+        Kelola headline Hero, visual gedung & siswa, info cepat PPDB, sambutan Head of School / Principal, statistik angka sekolah, dan testimoni wali murid.
+      </p>
+    </div>
+
+    <div class="header-action-group">
+      <a href="/" target="_blank" class="btn btn-secondary">
+        <Icon name="external-link" size={16} />
+        <span>Buka Web Publik</span>
+      </a>
+      <button type="button" id="btn-export-beranda-json" class="btn btn-secondary">
+        <Icon name="download" size={16} />
+        <span>Unduh JSON</span>
+      </button>
+      <button type="button" id="btn-save-beranda" class="btn btn-primary">
+        <Icon name="check" size={18} />
+        <span>Simpan Perubahan</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="save-toast" class="toast-notification" role="alert" aria-live="polite" hidden>
+    <Icon name="check-circle" size={20} class="toast-icon" />
+    <div class="toast-body">
+      <strong>Perubahan Beranda Berhasil Disimpan!</strong>
+      <p>Data beranda telah tersimpan secara lokal di browser Anda. Anda juga dapat mengunduh berkas JSON terbaru.</p>
+    </div>
+    <button type="button" id="toast-close" class="toast-close-btn" aria-label="Tutup notifikasi">
+      <Icon name="x" size={16} />
+    </button>
+  </div>
+
+  <!-- Tab Navigation for Sections -->
+  <div class="section-tabs-bar" role="tablist">
+    <button type="button" class="tab-btn active" data-tab="tab-hero" role="tab" aria-selected="true">
+      <Icon name="home" size={16} />
+      <span>1. Hero & Banner Visual</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-ppdb" role="tab" aria-selected="false">
+      <Icon name="calendar" size={16} />
+      <span>2. Info PPDB & Banner</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-sambutan" role="tab" aria-selected="false">
+      <Icon name="award" size={16} />
+      <span>3. Sambutan Pimpinan</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-stats" role="tab" aria-selected="false">
+      <Icon name="bar-chart-2" size={16} />
+      <span>4. Angka Kunci</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-testimoni" role="tab" aria-selected="false">
+      <Icon name="users" size={16} />
+      <span>5. Testimoni (CRUD)</span>
+    </button>
+  </div>
+
+  <div class="beranda-layout-grid">
+    <!-- Left Column: Forms -->
+    <div class="form-container">
+      <form id="beranda-form" onsubmit="return false;">
+
+        <!-- ========================================== -->
+        <!-- TAB 1: HERO & VISUAL -->
+        <!-- ========================================== -->
+        <div class="tab-panel active" id="tab-hero">
+          <div class="form-card card">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="home" size={20} />
+              </div>
+              <div>
+                <h3>Hero Section Utama</h3>
+                <p class="card-desc">Teks tajuk selamat datang, motto Sekolah, dan tombol aksi pembuka di bagian paling atas beranda.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group col-span-2">
+                <label for="input-hero-title">Judul Utama Hero (Headline) <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-hero-title"
+                  name="heroTitle"
+                  value={hero.title}
+                  required
+                  class="form-control"
+                />
+                <span class="form-help">Nama Sekolah yang tampil tebal pada headline pembuka.</span>
+              </div>
+
+              <div class="form-group col-span-2">
+                <label for="input-hero-subtitle">Sub-headline / Deskripsi Ringkas <span class="req">*</span></label>
+                <textarea
+                  id="input-hero-subtitle"
+                  name="heroSubtitle"
+                  rows="3"
+                  required
+                  class="form-control"
+                >{hero.subtitle}</textarea>
+                <span class="form-help">Pengantar filosofi belajar di bawah naungan FREEKS Foundation.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="input-hero-cta-text">Teks Tombol Utama (CTA 1) <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-hero-cta-text"
+                  name="heroCtaText"
+                  value={hero.ctaText}
+                  required
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="input-hero-cta-url">Tautan Tombol Utama (URL) <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-hero-cta-url"
+                  name="heroCtaUrl"
+                  value={hero.ctaUrl}
+                  required
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="input-hero-sec-text">Teks Tombol Sekunder (CTA 2) <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-hero-sec-text"
+                  name="heroSecText"
+                  value={hero.secondaryText}
+                  required
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="input-hero-sec-url">Tautan Tombol Sekunder (URL) <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-hero-sec-url"
+                  name="heroSecUrl"
+                  value={hero.secondaryUrl}
+                  required
+                  class="form-control"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Visual & Images -->
+          <div class="form-card card">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="image" size={20} />
+              </div>
+              <div>
+                <h3>Aset Visual Hero Section</h3>
+                <p class="card-desc">Latar gedung kampus dan kartu komposit foto kegiatan siswa.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group col-span-2">
+                <label for="input-hero-bg-src">Path Foto Background gedung kampus <span class="req">*</span></label>
+                <div class="asset-preview-row">
+                  <img
+                    id="img-prev-hero-bg"
+                    src="/assets/gedung-mts-islamiyah.webp"
+                    alt="Latar Gedung"
+                    class="asset-thumb-wide"
+                  />
+                  <div class="asset-details">
+                    <input
+                      type="text"
+                      id="input-hero-bg-src"
+                      name="heroBgSrc"
+                      value="/assets/gedung-mts-islamiyah.webp"
+                      required
+                      class="form-control"
+                    />
+                    <div class="asset-upload-bar">
+                      <label class="btn-upload-file">
+                        <Icon name="upload" size={13} />
+                        <span>Unggah Foto Gedung</span>
+                        <input type="file" accept="image/*" class="asset-file-uploader" data-target-input="input-hero-bg-src" data-target-preview="img-prev-hero-bg" style="display: none;" />
+                      </label>
+                      <span class="upload-file-status"></span>
+                    </div>
+                    <span class="form-help">Foto latar gedung bertingkat FREEKS.id School dengan pola islami transparan.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="input-hero-card-1">Foto Kartu Siswa Belajar <span class="req">*</span></label>
+                <div class="asset-preview-row">
+                  <img
+                    id="img-prev-card-1"
+                    src="/assets/hero-siswa-belajar.webp"
+                    alt="Siswa Belajar"
+                    class="asset-thumb-sq"
+                  />
+                  <div class="asset-details">
+                    <input
+                      type="text"
+                      id="input-hero-card-1"
+                      name="heroCard1"
+                      value="/assets/hero-siswa-belajar.webp"
+                      required
+                      class="form-control"
+                    />
+                    <div class="asset-upload-bar">
+                      <label class="btn-upload-file">
+                        <Icon name="upload" size={13} />
+                        <span>Unggah Foto</span>
+                        <input type="file" accept="image/*" class="asset-file-uploader" data-target-input="input-hero-card-1" data-target-preview="img-prev-card-1" style="display: none;" />
+                      </label>
+                      <span class="upload-file-status"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="input-hero-card-2">Foto Kartu Siswa di Halaman <span class="req">*</span></label>
+                <div class="asset-preview-row">
+                  <img
+                    id="img-prev-card-2"
+                    src="/assets/hero-siswa-berjalan.webp"
+                    alt="Siswa Berjalan"
+                    class="asset-thumb-sq"
+                  />
+                  <div class="asset-details">
+                    <input
+                      type="text"
+                      id="input-hero-card-2"
+                      name="heroCard2"
+                      value="/assets/hero-siswa-berjalan.webp"
+                      required
+                      class="form-control"
+                    />
+                    <div class="asset-upload-bar">
+                      <label class="btn-upload-file">
+                        <Icon name="upload" size={13} />
+                        <span>Unggah Foto</span>
+                        <input type="file" accept="image/*" class="asset-file-uploader" data-target-input="input-hero-card-2" data-target-preview="img-prev-card-2" style="display: none;" />
+                      </label>
+                      <span class="upload-file-status"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: INFO CEPAT PPDB & BANNER -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-ppdb">
+          <div class="form-card card">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="calendar" size={20} />
+              </div>
+              <div>
+                <h3>Info Cepat PPDB (Strip Beranda)</h3>
+                <p class="card-desc">Bar informasi ringkas di bawah hero yang menunjukkan jadwal dan kuota pendaftaran kepada calon siswa.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group col-span-2">
+                <label for="input-ppdb-status">Status Pendaftaran (Badge) <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-ppdb-status"
+                  name="ppdbStatus"
+                  value={ppdbData.status}
+                  required
+                  class="form-control"
+                />
+                <span class="form-help">Contoh: "Dibuka s.d. 28 Februari 2027"</span>
+              </div>
+
+              <div class="form-group">
+                <label for="input-ppdb-wave-dates">Jadwal Gelombang 1 <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-ppdb-wave-dates"
+                  name="ppdbWaveDates"
+                  value={ppdbData.waves[0].registration}
+                  required
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="input-ppdb-quota">Daya Tampung / Total Kuota <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-ppdb-quota"
+                  name="ppdbQuota"
+                  value={`${ppdbData.quota.total} Siswa`}
+                  required
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group col-span-2">
+                <label for="input-ppdb-reqs">Syarat Masuk Ringkas <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-ppdb-reqs"
+                  name="ppdbReqs"
+                  value="Lulus SD/MI & Tes Baca Al-Qur'an"
+                  required
+                  class="form-control"
+                />
+                <span class="form-help">Syarat utama yang tampil langsung di strip info cepat beranda.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Banner Ajakan PPDB Bawah -->
+          <div class="form-card card">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="user-plus" size={20} />
+              </div>
+              <div>
+                <h3>Banner Ajakan PPDB (Bagian Bawah Beranda)</h3>
+                <p class="card-desc">Banner promosi berlatar hijau gelap dengan tombol ajakan mendaftar online.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="input-banner-chip">Teks Label Tahun Ajaran <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-banner-chip"
+                  name="bannerChip"
+                  value="Tahun Ajaran 2027/2028"
+                  required
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group col-span-2">
+                <label for="input-banner-title">Judul Utama Banner <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-banner-title"
+                  name="bannerTitle"
+                  value="Pendaftaran Siswa Baru FREEKS.id School Telah Dibuka"
+                  required
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group col-span-2">
+                <label for="input-banner-desc">Deskripsi Ajakan Banner <span class="req">*</span></label>
+                <textarea
+                  id="input-banner-desc"
+                  name="bannerDesc"
+                  rows="2"
+                  required
+                  class="form-control"
+                >Kuota terbatas untuk 128 siswa. Dapatkan kemudahan pendaftaran online, potongan infaq beasiswa, dan lingkungan belajar ramah siswa.</textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: SAMBUTAN Head of School / Principal -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-sambutan">
+          <div class="form-card card">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="award" size={20} />
+              </div>
+              <div>
+                <h3>Sambutan Head of School / Principal</h3>
+                <p class="card-desc">Profil pimpinan, foto resmi berseragam batik, dan kutipan pengantar silaturahmi kepada wali murid.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="input-sambutan-name">Nama Lengkap Head of School / Principal <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-sambutan-name"
+                  name="sambutanName"
+                  value={sambutan.name}
+                  required
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="input-sambutan-role">Jabatan Resmi <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-sambutan-role"
+                  name="sambutanRole"
+                  value={sambutan.role}
+                  required
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group col-span-2">
+                <label for="input-sambutan-photo">Foto Resmi Head of School / Principal <span class="req">*</span></label>
+                <div class="asset-preview-row">
+                  <img
+                    id="img-prev-sambutan"
+                    src={sambutan.photo.src}
+                    alt={sambutan.photo.alt}
+                    class="asset-thumb-leader"
+                  />
+                  <div class="asset-details">
+                    <input
+                      type="text"
+                      id="input-sambutan-photo"
+                      name="sambutanPhoto"
+                      value={sambutan.photo.src}
+                      required
+                      class="form-control"
+                    />
+                    <div class="asset-upload-bar">
+                      <label class="btn-upload-file">
+                        <Icon name="upload" size={13} />
+                        <span>Unggah Foto Pimpinan</span>
+                        <input type="file" accept="image/*" class="asset-file-uploader" data-target-input="input-sambutan-photo" data-target-preview="img-prev-sambutan" data-sim-preview="sim-sambutan-img" style="display: none;" />
+                      </label>
+                      <span class="upload-file-status"></span>
+                    </div>
+                    <span class="form-help">Foto resmi pose berwibawa dengan format WebP.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-span-2">
+                <label for="input-sambutan-arabic">Salam Pembuka Bahasa Arab <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-sambutan-arabic"
+                  name="sambutanArabic"
+                  value={sambutan.arabicGreeting}
+                  dir="rtl"
+                  required
+                  class="form-control font-arabic"
+                />
+              </div>
+
+              <div class="form-group col-span-2">
+                <label for="input-sambutan-quote">Kutipan Ringkas di Beranda (Short Quote) <span class="req">*</span></label>
+                <textarea
+                  id="input-sambutan-quote"
+                  name="sambutanQuote"
+                  rows="4"
+                  required
+                  class="form-control"
+                >{sambutan.shortQuote}</textarea>
+                <span class="form-help">Teks kutipan yang tampil dalam tanda petik pada kartu sambutan di beranda.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 4: STATISTIK ANGKA KUNCI SEKOLAH -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-stats">
+          <div class="form-card card">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="bar-chart-2" size={20} />
+              </div>
+              <div>
+                <h3>5 Angka Kunci / Statistik Sekolah</h3>
+                <p class="card-desc">Angka pencapaian terverifikasi yang tampil pada strip hijau gelap di halaman beranda.</p>
+              </div>
+            </div>
+
+            <div class="stats-edit-list" id="stats-edit-container">
+              {stats.map((s, idx) => (
+                <div class="stat-edit-item" data-stat-idx={idx}>
+                  <div class="stat-badge-idx">#{idx + 1}</div>
+                  <div class="stat-fields-row">
+                    <div class="form-group stat-val-group">
+                      <label>Nilai / Angka</label>
+                      <input
+                        type="text"
+                        class="form-control stat-input-value"
+                        value={s.value}
+                        data-key="value"
+                      />
+                    </div>
+                    <div class="form-group stat-lbl-group">
+                      <label>Label Indikator</label>
+                      <input
+                        type="text"
+                        class="form-control stat-input-label"
+                        value={s.label}
+                        data-key="label"
+                      />
+                    </div>
+                    <div class="form-group stat-note-group">
+                      <label>Keterangan Tambahan</label>
+                      <input
+                        type="text"
+                        class="form-control stat-input-note"
+                        value={s.note}
+                        data-key="note"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 5: TESTIMONI (CRUD LENGKAP) -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-testimoni">
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="users" size={20} />
+                </div>
+                <div>
+                  <h3>Testimoni Wali Murid & Alumni</h3>
+                  <p class="card-desc">Kelola apresiasi, kesan, dan pengalaman nyata dari wali murid dan alumni FREEKS.id School.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-testimoni" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>+ Tambah Testimoni</span>
+              </button>
+            </div>
+
+            <!-- List of Testimonials -->
+            <div class="testimonials-admin-list" id="testimonials-list">
+              <!-- Dynamically populated via JavaScript, initial server rendered fallback -->
+              {testimonials.map((t, idx) => (
+                <div class="testi-admin-card" data-id={t.id}>
+                  <div class="testi-admin-header">
+                    <div class="avatar-badge">{t.initials}</div>
+                    <div class="testi-author-info">
+                      <div class="testi-name-row">
+                        <strong class="testi-name">{t.name}</strong>
+                        <span class="role-tag">{t.role}</span>
+                      </div>
+                      <div class="testi-rating-stars">★★★★★</div>
+                    </div>
+                    <div class="testi-item-actions">
+                      <button type="button" class="btn-action-edit btn-edit-testi" data-idx={idx} title="Edit Testimoni">
+                        <Icon name="edit" size={14} />
+                        <span>Edit</span>
+                      </button>
+                      <button type="button" class="btn-action-delete btn-delete-testi" data-idx={idx} title="Hapus Testimoni">
+                        <Icon name="trash-2" size={14} />
+                        <span>Hapus</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="testi-quote-box">
+                    <div class="quote-mark-icon">“</div>
+                    <p class="testi-admin-quote">{t.quote}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Add / Edit Modal or Inline Card -->
+          <div class="form-card card" id="modal-testimoni" style="display: none; border-color: var(--admin-green-500); background-color: var(--admin-green-50);">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="edit" size={20} />
+              </div>
+              <div>
+                <h3 id="modal-testi-title">Tambah Testimoni Baru</h3>
+                <p class="card-desc">Pastikan nama dan peran sesuai ketentuan (inisial otomatis dihasilkan).</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <input type="hidden" id="input-testi-id" value="" />
+              <div class="form-group">
+                <label for="input-testi-name">Nama Lengkap <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-testi-name"
+                  placeholder="Contoh: Ibu Sri Wahyuni"
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="input-testi-role">Peran / Status <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-testi-role"
+                  placeholder="Contoh: Wali murid kelas VIII / Alumni 2024"
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="input-testi-initials">Inisial Avatar (Maks 2 Huruf) <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-testi-initials"
+                  maxlength="3"
+                  placeholder="SW"
+                  class="form-control"
+                  style="text-transform: uppercase;"
+                />
+              </div>
+
+              <div class="form-group col-span-2">
+                <label for="input-testi-quote">Isi Kutipan / Pengalaman <span class="req">*</span></label>
+                <textarea
+                  id="input-testi-quote"
+                  rows="3"
+                  placeholder="Tuliskan pengalaman positif dan kesan bersekolah di FREEKS.id School..."
+                  class="form-control"
+                ></textarea>
+              </div>
+
+              <div class="col-span-2 form-actions-row">
+                <button type="button" id="btn-cancel-testi" class="btn btn-secondary">Batal</button>
+                <button type="button" id="btn-save-testi-item" class="btn btn-primary">Simpan Testimoni</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Right Column: Interactive Live Preview & Quick Actions -->
+    <aside class="preview-container">
+      <div class="preview-sticky-wrap">
+        <div class="card preview-card">
+          <div class="card-header-sm">
+            <div class="flex-align-center gap-2">
+              <Icon name="eye" size={18} />
+              <h4>Pratinjau Langsung</h4>
+            </div>
+            <div class="preview-mode-pills" id="preview-tab-pills">
+              <button type="button" class="pill-btn active" data-preview-mode="hero">Hero</button>
+              <button type="button" class="pill-btn" data-preview-mode="sambutan">Sambutan</button>
+              <button type="button" class="pill-btn" data-preview-mode="stats">Angka</button>
+            </div>
+          </div>
+
+          <!-- Preview Mode: HERO & PPDB STRIP -->
+          <div id="sim-view-hero" class="sim-view active">
+            <!-- Simulated Hero Card -->
+            <div class="sim-hero-banner">
+              <div class="sim-chip-row">
+                <span class="sim-chip">{school.foundation}</span>
+              </div>
+              <h3 id="sim-hero-title">{hero.title}</h3>
+              <p id="sim-hero-subtitle">{hero.subtitle}</p>
+              <div class="sim-btn-row">
+                <span id="sim-hero-cta" class="sim-btn sim-btn-cta">{hero.ctaText} →</span>
+                <span id="sim-hero-sec" class="sim-btn sim-btn-sec">{hero.secondaryText}</span>
+              </div>
+            </div>
+
+            <!-- Simulated PPDB Strip -->
+            <div class="sim-ppdb-strip">
+              <div class="sim-strip-badge">
+                <span class="sim-pulse"></span>
+                <span id="sim-ppdb-status">{ppdbData.status}</span>
+              </div>
+              <div class="sim-strip-row">
+                <div>
+                  <small>Gelombang 1</small>
+                  <strong id="sim-ppdb-dates">{ppdbData.waves[0].registration}</strong>
+                </div>
+                <div>
+                  <small>Daya Tampung</small>
+                  <strong id="sim-ppdb-quota">{ppdbData.quota.total} Siswa</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview Mode: SAMBUTAN Head of School / Principal -->
+          <div id="sim-view-sambutan" class="sim-view" style="display: none;">
+            <div class="sim-sambutan-card">
+              <div class="sim-sambutan-top">
+                <img
+                  id="sim-sambutan-img"
+                  src={sambutan.photo.src}
+                  alt={sambutan.name}
+                  class="sim-leader-photo"
+                />
+                <div>
+                  <div class="sim-chip-sm">Pesan Pimpinan</div>
+                  <h4 id="sim-sambutan-name">{sambutan.name}</h4>
+                  <span id="sim-sambutan-role" class="sim-role">{sambutan.role}</span>
+                </div>
+              </div>
+              <div class="sim-arabic" id="sim-sambutan-arabic">{sambutan.arabicGreeting}</div>
+              <blockquote id="sim-sambutan-quote" class="sim-quote">
+                "{sambutan.shortQuote}"
+              </blockquote>
+            </div>
+          </div>
+
+          <!-- Preview Mode: STATS & TESTIMONI -->
+          <div id="sim-view-stats" class="sim-view" style="display: none;">
+            <div class="sim-stats-grid" id="sim-stats-container">
+              {stats.slice(0, 4).map((s) => (
+                <div class="sim-stat-box">
+                  <div class="sim-stat-val">{s.value}</div>
+                  <div class="sim-stat-lbl">{s.label}</div>
+                </div>
+              ))}
+            </div>
+
+            <div class="sim-testi-preview" id="sim-testi-single">
+              <div class="sim-testi-user">
+                <div class="sim-avatar" id="sim-testi-avatar">{testimonials[0].initials}</div>
+                <div>
+                  <strong id="sim-testi-name">{testimonials[0].name}</strong>
+                  <span id="sim-testi-role" class="sim-role-text">{testimonials[0].role}</span>
+                </div>
+              </div>
+              <p id="sim-testi-quote" class="sim-testi-text">"{testimonials[0].quote}"</p>
+            </div>
+          </div>
+
+          <div class="preview-footer-action">
+            <button type="button" id="btn-save-beranda-side" class="btn btn-primary btn-block">
+              <Icon name="check" size={18} />
+              <span>Simpan Perubahan Beranda</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</AdminLayout>
+
+<style>
+  .page-header-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--admin-ink-300);
+  }
+
+  @media (min-width: 768px) {
+    .page-header-wrap {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+
+  .module-tag {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--admin-green-700);
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+
+  .page-header-wrap h1 {
+    font-size: clamp(1.4rem, 2vw, 1.85rem);
+    margin-bottom: 6px;
+  }
+
+  .page-subtitle {
+    font-size: 0.9rem;
+    color: var(--admin-ink-500);
+    max-width: 75ch;
+  }
+
+  .header-action-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* Section Tabs Bar */
+  .section-tabs-bar {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--admin-ink-100);
+  }
+
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--admin-ink-500);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    border-radius: 6px 6px 0 0;
+  }
+
+  .tab-btn:hover {
+    color: var(--admin-green-800);
+    background-color: var(--admin-green-50);
+  }
+
+  .tab-btn.active {
+    color: var(--admin-green-900);
+    background-color: #FFFFFF;
+    border-bottom-color: var(--admin-green-700);
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.03);
+  }
+
+  /* Layout Grid */
+  .beranda-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  @media (min-width: 1080px) {
+    .beranda-layout-grid {
+      grid-template-columns: 1.55fr 1fr;
+    }
+  }
+
+  /* Tab Panels */
+  .tab-panel {
+    display: none;
+  }
+
+  .tab-panel.active {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Form Card & Fields */
+  .form-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid var(--admin-ink-300);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--admin-ink-100);
+  }
+
+  .card-header.justify-between {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .header-icon-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .header-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: var(--admin-green-100);
+    color: var(--admin-green-800);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-header h3 {
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+  }
+
+  .card-desc {
+    font-size: 0.825rem;
+    color: var(--admin-ink-500);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  @media (min-width: 640px) {
+    .form-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .col-span-2 {
+      grid-column: span 2;
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-group label {
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--admin-ink-700);
+  }
+
+  .req {
+    color: #DC2626;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.875rem;
+    color: var(--admin-ink-900);
+    background-color: #FFFFFF;
+    transition: all 0.15s ease;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: var(--admin-green-700);
+    box-shadow: 0 0 0 3px rgba(27, 122, 47, 0.15);
+  }
+
+  .font-arabic {
+    font-size: 1.1rem;
+    font-family: 'Amiri', serif, system-ui;
+    color: var(--admin-green-900);
+  }
+
+  .form-help {
+    font-size: 0.75rem;
+    color: var(--admin-ink-500);
+  }
+
+  .form-actions-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  /* Asset Preview */
+  .asset-preview-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .asset-thumb-wide {
+    width: 120px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--admin-ink-300);
+  }
+
+  .asset-thumb-sq {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--admin-ink-300);
+  }
+
+  .asset-thumb-leader {
+    width: 70px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--admin-ink-300);
+  }
+
+  .asset-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  /* Stats Edit List */
+  .stats-edit-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .stat-edit-item {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    padding: 12px;
+    background-color: var(--admin-ink-100);
+    border-radius: 8px;
+    border: 1px solid var(--admin-ink-300);
+  }
+
+  .stat-badge-idx {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--admin-green-800);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .stat-fields-row {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 2fr;
+    gap: 12px;
+    flex: 1;
+  }
+
+  /* Testimonials Admin List (Global for Dynamic JS Nodes) */
+  :global(.testimonials-admin-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 10px;
+  }
+
+  :global(.testi-admin-card) {
+    padding: 20px 22px;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  :global(.testi-admin-card:hover) {
+    border-color: var(--admin-green-500);
+    box-shadow: 0 6px 16px rgba(27, 122, 47, 0.08);
+    transform: translateY(-1px);
+  }
+
+  :global(.testi-admin-header) {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+  }
+
+  :global(.avatar-badge) {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--admin-green-700), var(--admin-green-900));
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(27, 122, 47, 0.25);
+  }
+
+  :global(.testi-author-info) {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  :global(.testi-name-row) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  :global(.testi-name) {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--admin-ink-900);
+  }
+
+  :global(.role-tag) {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--admin-green-800);
+    background: var(--admin-green-50);
+    border: 1px solid var(--admin-green-200, #CDE8B5);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  :global(.testi-rating-stars) {
+    font-size: 0.8rem;
+    color: #F59E0B;
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+
+  :global(.testi-item-actions) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  :global(.testi-quote-box) {
+    display: flex;
+    gap: 12px;
+    background: #F8FAFC;
+    border: 1px solid #EDF2F7;
+    border-left: 3.5px solid var(--admin-green-500);
+    border-radius: 8px;
+    padding: 14px 18px;
+  }
+
+  :global(.quote-mark-icon) {
+    font-size: 2rem;
+    line-height: 0.9;
+    color: var(--admin-green-700);
+    opacity: 0.35;
+    font-family: Georgia, serif;
+    font-weight: bold;
+    user-select: none;
+    flex-shrink: 0;
+  }
+
+  :global(.testi-admin-quote) {
+    font-size: 0.875rem;
+    color: var(--admin-ink-700);
+    font-style: italic;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  :global(.testi-empty-state) {
+    text-align: center;
+    padding: 36px 20px;
+    border: 2px dashed #CBD5E1;
+    border-radius: 12px;
+    color: #64748B;
+    background: #F8FAFC;
+  }
+
+  /* Preview Container */
+  .preview-sticky-wrap {
+    position: sticky;
+    top: 90px;
+  }
+
+  .preview-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--admin-ink-300);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .card-header-sm {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--admin-ink-100);
+  }
+
+  .card-header-sm h4 {
+    font-size: 0.95rem;
+  }
+
+  .preview-mode-pills {
+    display: flex;
+    gap: 4px;
+    background-color: var(--admin-ink-100);
+    padding: 3px;
+    border-radius: 6px;
+  }
+
+  .pill-btn {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--admin-ink-500);
+    cursor: pointer;
+  }
+
+  .pill-btn.active {
+    background: #FFFFFF;
+    color: var(--admin-green-900);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Simulated Visuals */
+  .sim-hero-banner {
+    background: linear-gradient(135deg, #0B3B16 0%, #0F4D1C 100%);
+    color: #FFFFFF;
+    border-radius: 10px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+
+  .sim-chip-row {
+    margin-bottom: 8px;
+  }
+
+  .sim-chip {
+    font-size: 0.65rem;
+    background-color: rgba(255, 255, 255, 0.15);
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.4px;
+  }
+
+  .sim-hero-banner h3 {
+    color: #FFFFFF;
+    font-size: 1.15rem;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+
+  .sim-hero-banner p {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.4;
+    margin-bottom: 14px;
+  }
+
+  .sim-btn-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .sim-btn {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: inline-block;
+  }
+
+  .sim-btn-cta {
+    background-color: var(--admin-yellow-500);
+    color: var(--admin-green-900);
+  }
+
+  .sim-btn-sec {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+  }
+
+  /* Simulated PPDB Strip */
+  .sim-ppdb-strip {
+    background-color: #FFFFFF;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    padding: 14px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  }
+
+  .sim-strip-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--admin-green-700);
+    margin-bottom: 10px;
+  }
+
+  .sim-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #22C55E;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+  }
+
+  .sim-strip-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    font-size: 0.8rem;
+  }
+
+  .sim-strip-row small {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--admin-ink-500);
+  }
+
+  .sim-strip-row strong {
+    color: var(--admin-ink-900);
+  }
+
+  /* Simulated Sambutan */
+  .sim-sambutan-card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .sim-sambutan-top {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .sim-leader-photo {
+    width: 60px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+
+  .sim-chip-sm {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--admin-green-700);
+    background-color: var(--admin-green-100);
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+
+  .sim-sambutan-top h4 {
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+  }
+
+  .sim-role {
+    font-size: 0.75rem;
+    color: var(--admin-ink-500);
+  }
+
+  .sim-arabic {
+    font-family: 'Amiri', serif, system-ui;
+    font-size: 0.95rem;
+    color: var(--admin-green-800);
+    text-align: right;
+    margin-bottom: 8px;
+  }
+
+  .sim-quote {
+    font-size: 0.8rem;
+    color: var(--admin-ink-700);
+    font-style: italic;
+    line-height: 1.45;
+    border-left: 3px solid var(--admin-green-500);
+    padding-left: 10px;
+  }
+
+  /* Simulated Stats */
+  .sim-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .sim-stat-box {
+    background-color: var(--admin-green-900);
+    color: #FFFFFF;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .sim-stat-val {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--admin-yellow-500);
+  }
+
+  .sim-stat-lbl {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .sim-testi-preview {
+    background-color: var(--admin-green-50);
+    border: 1px solid var(--admin-green-100);
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .sim-testi-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .sim-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--admin-green-700);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sim-testi-text {
+    font-size: 0.775rem;
+    color: var(--admin-ink-700);
+    font-style: italic;
+    line-height: 1.4;
+  }
+
+  .preview-footer-action {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--admin-ink-100);
+  }
+
+  /* Toast Notification */
+  .toast-notification {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background-color: #ECFDF5;
+    border: 1px solid #A7F3D0;
+    border-left: 4px solid #10B981;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .toast-icon {
+    color: #059669;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .toast-body {
+    flex: 1;
+    font-size: 0.875rem;
+    color: #065F46;
+  }
+
+  .toast-body strong {
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .toast-body p {
+    font-size: 0.825rem;
+    color: #047857;
+  }
+
+  .toast-close-btn {
+    background: transparent;
+    border: none;
+    color: #059669;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+  }
+
+  /* Shared Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 9px 16px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .btn-block {
+    width: 100%;
+  }
+
+  .btn-primary {
+    background-color: var(--admin-green-700);
+    color: #FFFFFF;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--admin-green-800);
+  }
+
+  .btn-secondary {
+    background-color: #FFFFFF;
+    color: var(--admin-ink-700);
+    border-color: var(--admin-ink-300);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--admin-ink-100);
+    color: var(--admin-ink-900);
+  }
+
+  .flex-align-center {
+    display: flex;
+    align-items: center;
+  }
+
+  .gap-2 {
+    gap: 8px;
+  }
+</style>
+
+<script is:inline>
+  function initBeranda() {
+    // State management for Testimonials
+    let testimonialsState = [
+      {
+        id: "testi-1",
+        name: "Ibu Sri Wahyuni",
+        role: "Wali Murid Grade 8",
+        initials: "SW",
+        quote: "Anak saya yang awalnya pemalu kini sangat percaya diri melakukan pitching presentasi dan antusias merakit proyek coding di rumah. Perkembangan karakter dan logikanya luar biasa di FREEKS.id School."
+      },
+      {
+        id: "testi-2",
+        name: "Bapak Hendra Pratama",
+        role: "Wali Murid Grade 7",
+        initials: "HP",
+        quote: "Kurikulum berbasis proyeknya benar-benar terasa relevan dengan era sekarang. Siswa tidak stres menghafal rumus semata, tetapi paham cara menerapkannya dalam inovasi teknologi nyata."
+      },
+      {
+        id: "testi-3",
+        name: "Rafi Pratama",
+        role: "Alumni Angkatan 2024",
+        initials: "RP",
+        quote: "Pengalaman di Maker Space FREEKS.id School dan bimbingan mentor 3D design membuat portofolio saya diakui saat kompetisi teknologi. Fondasi computational thinking di sini sangat bernilai."
+      }
+    ];
+
+    // Load from localStorage if present
+    const savedBeranda = localStorage.getItem('mts_cms_beranda_data');
+    if (savedBeranda) {
+      try {
+        const parsed = JSON.parse(savedBeranda);
+        if (parsed.testimonials && parsed.testimonials.length > 0) {
+          const hasOldText = parsed.testimonials.some(t => t.quote && (t.quote.includes('MTs Islamiyah') || t.quote.includes('shalat')));
+          if (!hasOldText) {
+            testimonialsState = parsed.testimonials;
+          }
+        }
+        if (parsed.hero) {
+          if (parsed.hero.title && parsed.hero.title.includes('MTs Islamiyah')) {
+            parsed.hero.title = 'FREEKS.id School';
+            parsed.hero.subtitle = 'Membentuk Generasi Inovator & Digital Leader Berakhlak Mulia';
+          }
+          if (document.getElementById('input-hero-title')) document.getElementById('input-hero-title').value = parsed.hero.title || '';
+          if (document.getElementById('input-hero-subtitle')) document.getElementById('input-hero-subtitle').value = parsed.hero.subtitle || '';
+          if (document.getElementById('input-hero-cta-text')) document.getElementById('input-hero-cta-text').value = parsed.hero.ctaText || '';
+          if (document.getElementById('input-hero-cta-url')) document.getElementById('input-hero-cta-url').value = parsed.hero.ctaUrl || '';
+          if (document.getElementById('input-hero-sec-text')) document.getElementById('input-hero-sec-text').value = parsed.hero.secondaryText || '';
+          if (document.getElementById('input-hero-sec-url')) document.getElementById('input-hero-sec-url').value = parsed.hero.secondaryUrl || '';
+        }
+        if (parsed.sambutan) {
+          if (document.getElementById('input-sambutan-name')) document.getElementById('input-sambutan-name').value = parsed.sambutan.name || '';
+          if (document.getElementById('input-sambutan-role')) document.getElementById('input-sambutan-role').value = parsed.sambutan.role || '';
+          if (document.getElementById('input-sambutan-arabic')) document.getElementById('input-sambutan-arabic').value = parsed.sambutan.arabicGreeting || '';
+          if (document.getElementById('input-sambutan-quote')) document.getElementById('input-sambutan-quote').value = parsed.sambutan.shortQuote || '';
+        }
+        if (parsed.ppdb) {
+          if (document.getElementById('input-ppdb-status')) document.getElementById('input-ppdb-status').value = parsed.ppdb.status || '';
+          if (document.getElementById('input-ppdb-wave-dates')) document.getElementById('input-ppdb-wave-dates').value = parsed.ppdb.waveDates || '';
+          if (document.getElementById('input-ppdb-quota')) document.getElementById('input-ppdb-quota').value = parsed.ppdb.quota || '';
+        }
+      } catch (e) {
+        console.error('Failed to parse saved beranda data:', e);
+      }
+    }
+
+    // Tab switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-tab');
+        tabBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        tabPanels.forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        const targetPanel = document.getElementById(targetId);
+        if (targetPanel) targetPanel.classList.add('active');
+      });
+    });
+
+    // Preview mode pills
+    const previewPills = document.querySelectorAll('#preview-tab-pills .pill-btn');
+    const simViews = {
+      hero: document.getElementById('sim-view-hero'),
+      sambutan: document.getElementById('sim-view-sambutan'),
+      stats: document.getElementById('sim-view-stats')
+    };
+
+    previewPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        previewPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        const mode = pill.getAttribute('data-preview-mode');
+        Object.keys(simViews).forEach(k => {
+          if (simViews[k]) simViews[k].style.display = (k === mode) ? 'block' : 'none';
+        });
+      });
+    });
+
+    // Real-time synchronization
+    function syncLivePreview() {
+      // Hero
+      const titleInput = document.getElementById('input-hero-title');
+      const subtitleInput = document.getElementById('input-hero-subtitle');
+      const ctaTextInput = document.getElementById('input-hero-cta-text');
+      const secTextInput = document.getElementById('input-hero-sec-text');
+
+      if (titleInput && document.getElementById('sim-hero-title')) {
+        document.getElementById('sim-hero-title').textContent = titleInput.value;
+      }
+      if (subtitleInput && document.getElementById('sim-hero-subtitle')) {
+        document.getElementById('sim-hero-subtitle').textContent = subtitleInput.value;
+      }
+      if (ctaTextInput && document.getElementById('sim-hero-cta')) {
+        document.getElementById('sim-hero-cta').textContent = ctaTextInput.value + ' →';
+      }
+      if (secTextInput && document.getElementById('sim-hero-sec')) {
+        document.getElementById('sim-hero-sec').textContent = secTextInput.value;
+      }
+
+      // PPDB Strip
+      const statusInput = document.getElementById('input-ppdb-status');
+      const waveInput = document.getElementById('input-ppdb-wave-dates');
+      const quotaInput = document.getElementById('input-ppdb-quota');
+
+      if (statusInput && document.getElementById('sim-ppdb-status')) {
+        document.getElementById('sim-ppdb-status').textContent = statusInput.value;
+      }
+      if (waveInput && document.getElementById('sim-ppdb-dates')) {
+        document.getElementById('sim-ppdb-dates').textContent = waveInput.value;
+      }
+      if (quotaInput && document.getElementById('sim-ppdb-quota')) {
+        document.getElementById('sim-ppdb-quota').textContent = quotaInput.value;
+      }
+
+      // Sambutan
+      const sambutanName = document.getElementById('input-sambutan-name');
+      const sambutanRole = document.getElementById('input-sambutan-role');
+      const sambutanArabic = document.getElementById('input-sambutan-arabic');
+      const sambutanQuote = document.getElementById('input-sambutan-quote');
+
+      if (sambutanName && document.getElementById('sim-sambutan-name')) {
+        document.getElementById('sim-sambutan-name').textContent = sambutanName.value;
+      }
+      if (sambutanRole && document.getElementById('sim-sambutan-role')) {
+        document.getElementById('sim-sambutan-role').textContent = sambutanRole.value;
+      }
+      if (sambutanArabic && document.getElementById('sim-sambutan-arabic')) {
+        document.getElementById('sim-sambutan-arabic').textContent = sambutanArabic.value;
+      }
+      if (sambutanQuote && document.getElementById('sim-sambutan-quote')) {
+        document.getElementById('sim-sambutan-quote').textContent = '"' + sambutanQuote.value + '"';
+      }
+      const sambutanPhoto = document.getElementById('input-sambutan-photo');
+      const simSambutanImg = document.getElementById('sim-sambutan-img');
+      if (sambutanPhoto && simSambutanImg) {
+        simSambutanImg.src = sambutanPhoto.value;
+      }
+    }
+
+    const formInputs = document.querySelectorAll('#beranda-form input, #beranda-form textarea');
+    formInputs.forEach(input => {
+      input.addEventListener('input', syncLivePreview);
+    });
+
+    // Testimonials CRUD Management
+    const testiListEl = document.getElementById('testimonials-list');
+    const modalEl = document.getElementById('modal-testimoni');
+    const btnAddTesti = document.getElementById('btn-add-testimoni');
+    const btnCancelTesti = document.getElementById('btn-cancel-testi');
+    const btnSaveTestiItem = document.getElementById('btn-save-testi-item');
+
+    let editingIndex = -1;
+
+    function renderTestimonialsList() {
+      if (!testiListEl) return;
+      testiListEl.innerHTML = '';
+
+      if (testimonialsState.length === 0) {
+        testiListEl.innerHTML = `
+          <div class="testi-empty-state">
+            <p>Belum ada testimoni. Klik tombol <strong>+ Tambah Testimoni</strong> di atas untuk menambahkan testimoni baru.</p>
+          </div>
+        `;
+        return;
+      }
+
+      testimonialsState.forEach((t, idx) => {
+        const card = document.createElement('div');
+        card.className = 'testi-admin-card';
+        card.setAttribute('data-id', t.id);
+
+        card.innerHTML = `
+          <div class="testi-admin-header">
+            <div class="avatar-badge">${t.initials || 'TS'}</div>
+            <div class="testi-author-info">
+              <div class="testi-name-row">
+                <strong class="testi-name">${t.name}</strong>
+                <span class="role-tag">${t.role}</span>
+              </div>
+              <div class="testi-rating-stars">★★★★★</div>
+            </div>
+            <div class="testi-item-actions">
+              <button type="button" class="btn-action-edit btn-edit-testi" data-idx="${idx}" title="Edit Testimoni">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                <span>Edit</span>
+              </button>
+              <button type="button" class="btn-action-delete btn-delete-testi" data-idx="${idx}" title="Hapus Testimoni">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                <span>Hapus</span>
+              </button>
+            </div>
+          </div>
+          <div class="testi-quote-box">
+            <div class="quote-mark-icon">“</div>
+            <p class="testi-admin-quote">${t.quote}</p>
+          </div>
+        `;
+
+        testiListEl.appendChild(card);
+      });
+
+      // Bind edit and delete handlers
+      document.querySelectorAll('.btn-edit-testi').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt(btn.getAttribute('data-idx'), 10);
+          openEditModal(idx);
+        });
+      });
+
+      document.querySelectorAll('.btn-delete-testi').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt(btn.getAttribute('data-idx'), 10);
+          const item = testimonialsState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus testimoni dari "${item.name}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              testimonialsState.splice(idx, 1);
+              renderTestimonialsList();
+            });
+          } else if (confirm(msg)) {
+            testimonialsState.splice(idx, 1);
+            renderTestimonialsList();
+          }
+        });
+      });
+
+      // Update simulation single testimonial if present
+      if (testimonialsState.length > 0) {
+        const first = testimonialsState[0];
+        if (document.getElementById('sim-testi-avatar')) document.getElementById('sim-testi-avatar').textContent = first.initials;
+        if (document.getElementById('sim-testi-name')) document.getElementById('sim-testi-name').textContent = first.name;
+        if (document.getElementById('sim-testi-role')) document.getElementById('sim-testi-role').textContent = first.role;
+        if (document.getElementById('sim-testi-quote')) document.getElementById('sim-testi-quote').textContent = '"' + first.quote + '"';
+      }
+    }
+
+    function openEditModal(idx) {
+      editingIndex = idx;
+      const t = testimonialsState[idx];
+      document.getElementById('modal-testi-title').textContent = 'Edit Testimoni';
+      document.getElementById('input-testi-id').value = t.id;
+      document.getElementById('input-testi-name').value = t.name;
+      document.getElementById('input-testi-role').value = t.role;
+      document.getElementById('input-testi-initials').value = t.initials;
+      document.getElementById('input-testi-quote').value = t.quote;
+      modalEl.style.display = 'block';
+      modalEl.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function openAddModal() {
+      editingIndex = -1;
+      document.getElementById('modal-testi-title').textContent = 'Tambah Testimoni Baru';
+      document.getElementById('input-testi-id').value = 'testi-' + Date.now();
+      document.getElementById('input-testi-name').value = '';
+      document.getElementById('input-testi-role').value = '';
+      document.getElementById('input-testi-initials').value = '';
+      document.getElementById('input-testi-quote').value = '';
+      modalEl.style.display = 'block';
+      modalEl.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    if (btnAddTesti) btnAddTesti.addEventListener('click', openAddModal);
+    if (btnCancelTesti) btnCancelTesti.addEventListener('click', () => { modalEl.style.display = 'none'; });
+
+    if (btnSaveTestiItem) {
+      btnSaveTestiItem.addEventListener('click', () => {
+        const name = document.getElementById('input-testi-name').value.trim();
+        const role = document.getElementById('input-testi-role').value.trim();
+        let initials = document.getElementById('input-testi-initials').value.trim().toUpperCase();
+        const quote = document.getElementById('input-testi-quote').value.trim();
+        const id = document.getElementById('input-testi-id').value || ('testi-' + Date.now());
+
+        if (!name || !role || !quote) {
+          alert('Mohon lengkapi Nama, Peran, dan Isi Testimoni!');
+          return;
+        }
+
+        if (!initials) {
+          initials = name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+        }
+
+        const newObj = { id, name, role, initials, quote };
+
+        if (editingIndex >= 0) {
+          testimonialsState[editingIndex] = newObj;
+        } else {
+          testimonialsState.push(newObj);
+        }
+
+        modalEl.style.display = 'none';
+        renderTestimonialsList();
+      });
+    }
+
+    // Auto calculate initials when typing name
+    const inputTestiName = document.getElementById('input-testi-name');
+    if (inputTestiName) {
+      inputTestiName.addEventListener('blur', () => {
+        const initialsField = document.getElementById('input-testi-initials');
+        if (initialsField && !initialsField.value.trim()) {
+          const parts = inputTestiName.value.trim().split(' ');
+          initialsField.value = parts.map(p => p[0]).slice(0, 2).join('').toUpperCase();
+        }
+      });
+    }
+
+    // Save Beranda Handler
+    function handleSave() {
+      // Gather stats
+      const statItems = document.querySelectorAll('.stat-edit-item');
+      const statsData = [];
+      statItems.forEach(el => {
+        const val = el.querySelector('.stat-input-value')?.value || '';
+        const lbl = el.querySelector('.stat-input-label')?.value || '';
+        const note = el.querySelector('.stat-input-note')?.value || '';
+        statsData.push({ label: lbl, value: val, note: note });
+      });
+
+      const payload = {
+        updatedAt: new Date().toISOString(),
+        hero: {
+          title: document.getElementById('input-hero-title')?.value || '',
+          subtitle: document.getElementById('input-hero-subtitle')?.value || '',
+          ctaText: document.getElementById('input-hero-cta-text')?.value || '',
+          ctaUrl: document.getElementById('input-hero-cta-url')?.value || '',
+          secondaryText: document.getElementById('input-hero-sec-text')?.value || '',
+          secondaryUrl: document.getElementById('input-hero-sec-url')?.value || '',
+          image: {
+            src: document.getElementById('input-hero-bg-src')?.value || '/assets/gedung-mts-islamiyah.webp',
+            alt: "Gedung FREEKS.id School"
+          }
+        },
+        sambutan: {
+          name: document.getElementById('input-sambutan-name')?.value || 'FREEKS.ID',
+          role: document.getElementById('input-sambutan-role')?.value || 'Head of School / Principal',
+          photo: {
+            src: document.getElementById('input-sambutan-photo')?.value || '/assets/guru-freeks.webp',
+            alt: `Foto ${document.getElementById('input-sambutan-name')?.value || 'FREEKS.ID'} - Head of School / Principal`
+          },
+          arabicGreeting: document.getElementById('input-sambutan-arabic')?.value || '',
+          shortQuote: document.getElementById('input-sambutan-quote')?.value || ''
+        },
+        ppdb: {
+          status: document.getElementById('input-ppdb-status')?.value || '',
+          waveDates: document.getElementById('input-ppdb-wave-dates')?.value || '',
+          quota: document.getElementById('input-ppdb-quota')?.value || '',
+          reqs: document.getElementById('input-ppdb-reqs')?.value || '',
+          banner: {
+            chip: document.getElementById('input-banner-chip')?.value || '',
+            title: document.getElementById('input-banner-title')?.value || '',
+            desc: document.getElementById('input-banner-desc')?.value || ''
+          }
+        },
+        stats: statsData,
+        testimonials: testimonialsState
+      };
+
+      localStorage.setItem('mts_cms_beranda_data', JSON.stringify(payload));
+
+      // Show toast
+      const toast = document.getElementById('save-toast');
+      if (toast) {
+        toast.hidden = false;
+        toast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    const btnSave1 = document.getElementById('btn-save-beranda');
+    const btnSave2 = document.getElementById('btn-save-beranda-side');
+    if (btnSave1) btnSave1.addEventListener('click', handleSave);
+    if (btnSave2) btnSave2.addEventListener('click', handleSave);
+
+    const toastClose = document.getElementById('toast-close');
+    if (toastClose) {
+      toastClose.addEventListener('click', () => {
+        document.getElementById('save-toast').hidden = true;
+      });
+    }
+
+    // Export JSON
+    const btnExport = document.getElementById('btn-export-beranda-json');
+    if (btnExport) {
+      btnExport.addEventListener('click', () => {
+        const saved = localStorage.getItem('mts_cms_beranda_data');
+        let dataToExport;
+        if (saved) {
+          dataToExport = JSON.parse(saved);
+        } else {
+          dataToExport = {
+            heroSambutan: {
+              hero: {
+                title: document.getElementById('input-hero-title')?.value,
+                subtitle: document.getElementById('input-hero-subtitle')?.value
+              },
+              sambutan: {
+                name: document.getElementById('input-sambutan-name')?.value,
+                role: document.getElementById('input-sambutan-role')?.value
+              }
+            },
+            testimonials: testimonialsState
+          };
+        }
+
+        const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(dataToExport, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute('href', dataStr);
+        downloadAnchor.setAttribute('download', `beranda-cms-${new Date().toISOString().split('T')[0]}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+      });
+    }
+
+    // Initial render
+    renderTestimonialsList();
+    syncLivePreview();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBeranda);
+  } else {
+    initBeranda();
+  }
+</script>
+

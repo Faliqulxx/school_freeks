@@ -1,0 +1,329 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Icon from '../../components/Icon.astro';
+import ppdbData from '../../data/ppdb.json';
+import siteData from '../../data/siteData.json';
+
+const { faq } = ppdbData;
+const { school } = siteData;
+
+const breadcrumbItems = [
+  { label: 'PPDB', href: '/ppdb' },
+  { label: 'Tanya Jawab (FAQ)' }
+];
+---
+
+<BaseLayout
+  title="Tanya Jawab (FAQ) Admission – FREEKS.id School"
+  description="Pertanyaan yang sering ditanyakan seputar pendaftaran siswa baru, asesmen eksplorasi, kuota, cicilan biaya, dan kurikulum."
+>
+  <div class="page-header section-soft">
+    <div class="container-wide">
+      <Breadcrumb items={breadcrumbItems} />
+      <div class="header-meta">
+        <span class="chip chip-primary">Pusat Bantuan PPDB</span>
+      </div>
+      <h1 class="page-title">Tanya Jawab Seputar PPDB (FAQ)</h1>
+      <p class="page-description">
+        Temukan jawaban cepat atas pertanyaan yang paling sering diajukan oleh calon siswa dan orang tua mengenai pelaksanaan admission FREEKS.id School.
+      </p>
+
+      <!-- Search inside FAQ -->
+      <div class="faq-search-box">
+        <Icon name="search" size={18} class="faq-search-icon" />
+        <input
+          type="search"
+          id="faq-search"
+          class="faq-search-input"
+          placeholder="Ketik kata kunci pertanyaan (misal: tes, kuota, cicil, seragam)..."
+          aria-label="Cari pertanyaan FAQ"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="container-wide section">
+    <div class="faq-container">
+      <!-- Accordion List (PRD 8.6: Akordeon details/aria-expanded) -->
+      <div class="faq-accordion-list" id="faq-list">
+        {faq.map((item, idx) => (
+          <details class="faq-item card" data-q={item.q.toLowerCase()} data-a={item.a.toLowerCase()}>
+            <summary class="faq-summary">
+              <span class="faq-q-number">Q{idx + 1}</span>
+              <span class="faq-question-text">{item.q}</span>
+              <Icon name="chevron-down" size={18} class="faq-chevron" />
+            </summary>
+            <div class="faq-answer-body">
+              <p>{item.a}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+
+      <!-- Still have questions? Contact panitia box -->
+      <div class="faq-help-card card">
+        <div class="help-icon-wrap">
+          <Icon name="help-circle" size={32} />
+        </div>
+        <div class="help-body">
+          <h3>Punya Pertanyaan Lain?</h3>
+          <p>
+            Tim admission FREEKS.id School siap melayani pertanyaan Bapak/Ibu pada jam kerja melalui pesan WhatsApp atau email.
+          </p>
+          <div class="help-actions">
+            <a
+              href={`https://wa.me/${school.whatsappRaw}?text=${encodeURIComponent(school.whatsappMessage)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-primary btn-sm"
+            >
+              <Icon name="message-circle" size={16} />
+              <span>Tanya Panitia via WhatsApp</span>
+            </a>
+            <a href="/kontak" class="btn btn-secondary btn-sm">
+              <span>Halaman Kontak Lengkap</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-top: var(--s-6);
+    padding-bottom: var(--s-6);
+    border-bottom: 1px solid var(--ink-300);
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--s-3);
+  }
+
+  .page-title {
+    font-size: var(--h1);
+    color: var(--green-900);
+    margin-bottom: var(--s-2);
+  }
+
+  .page-description {
+    font-size: var(--text-lg);
+    color: var(--ink-600);
+    max-width: 65ch;
+    margin-bottom: var(--s-5);
+  }
+
+  .faq-search-box {
+    position: relative;
+    max-width: 540px;
+  }
+
+  .faq-search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-600);
+  }
+
+  .faq-search-input {
+    width: 100%;
+    height: 48px;
+    padding-left: 44px;
+    padding-right: 16px;
+    border: 1px solid var(--ink-300);
+    border-radius: var(--radius-md);
+    font-size: 16px;
+    color: var(--ink-900);
+    background-color: #FFFFFF;
+  }
+
+  .faq-search-input:focus {
+    border-color: var(--green-700);
+    outline: none;
+  }
+
+  .faq-container {
+    max-width: 820px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-7);
+  }
+
+  .faq-accordion-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-4);
+  }
+
+  @media (max-width: 640px) {
+    .faq-container {
+      gap: var(--s-5) !important;
+    }
+    .faq-accordion-list {
+      gap: 10px !important;
+    }
+    .faq-summary {
+      padding: 12px 14px !important;
+      font-size: 0.95rem !important;
+      gap: 10px !important;
+      min-height: 48px !important;
+    }
+    .faq-answer-body {
+      padding: 14px !important;
+    }
+    .faq-answer-body p {
+      font-size: var(--text-sm) !important;
+      line-height: 1.55 !important;
+    }
+    .faq-help-card {
+      padding: 16px !important;
+      gap: 14px !important;
+      flex-direction: column !important;
+    }
+    .help-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+    .help-actions a {
+      width: 100%;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .faq-item {
+    background-color: #FFFFFF;
+    overflow: hidden;
+  }
+
+  .faq-summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: var(--s-4) var(--s-5);
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--green-900);
+    list-style: none;
+    user-select: none;
+    transition: background-color var(--dur-fast) var(--ease);
+  }
+
+  .faq-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-summary:hover {
+    background-color: var(--green-50);
+  }
+
+  .faq-q-number {
+    font-size: var(--text-xs);
+    font-weight: 800;
+    color: var(--green-700);
+    background-color: var(--green-50);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+  }
+
+  .faq-question-text {
+    flex: 1;
+    min-width: 0;
+    line-height: 1.45;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .faq-chevron {
+    color: var(--ink-600);
+    transition: transform var(--dur-fast) var(--ease);
+    flex-shrink: 0;
+  }
+
+  details[open] .faq-chevron {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer-body {
+    padding: var(--s-4) var(--s-5);
+    border-top: 1px solid var(--ink-300);
+    background-color: var(--bg-soft);
+  }
+
+  .faq-answer-body p {
+    font-size: var(--text-sm);
+    color: var(--ink-900);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  /* Help Card */
+  .faq-help-card {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s-5);
+    padding: var(--s-6);
+    background-color: var(--green-50);
+    border: 1px solid var(--green-200);
+  }
+
+  .help-icon-wrap {
+    color: var(--green-700);
+    flex-shrink: 0;
+  }
+
+  .help-body h3 {
+    font-size: 1.15rem;
+    color: var(--green-900);
+    margin-bottom: 4px;
+  }
+
+  .help-body p {
+    font-size: var(--text-sm);
+    color: var(--ink-600);
+    margin-bottom: var(--s-4);
+  }
+
+  .help-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+</style>
+
+<script>
+  // Live filter FAQ questions
+  const search = document.getElementById('faq-search') as HTMLInputElement | null;
+  const items = document.querySelectorAll('.faq-item') as NodeListOf<HTMLDetailsElement>;
+
+  search?.addEventListener('input', (e) => {
+    const q = (e.target as HTMLInputElement).value.toLowerCase().trim();
+
+    items.forEach((item) => {
+      const qText = item.getAttribute('data-q') || '';
+      const aText = item.getAttribute('data-a') || '';
+
+      if (!q || qText.includes(q) || aText.includes(q)) {
+        item.style.display = '';
+        if (q) item.open = true; // Auto-open matching question
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+</script>
+

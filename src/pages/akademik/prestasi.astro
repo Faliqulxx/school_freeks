@@ -1,0 +1,425 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Icon from '../../components/Icon.astro';
+import prestasiData from '../../data/prestasi.json';
+
+const { achievements } = prestasiData;
+
+const breadcrumbItems = [
+  { label: 'Akademik', href: '/akademik/kurikulum' },
+  { label: 'Prestasi Siswa' }
+];
+
+const years = ['Semua', '2026', '2025', '2020'];
+const levels = ['Semua', 'Kecamatan', 'Kabupaten', 'Provinsi', 'Nasional'];
+---
+
+<BaseLayout
+  title="Prestasi Siswa – FREEKS.id School"
+  description="Rekam jejak kejuaraan dan capaian membanggakan siswa FREEKS.id School di bidang robotika, sains, coding, dan kompetisi kreatif."
+>
+  <div class="page-header section-soft">
+    <div class="container-wide">
+      <Breadcrumb items={breadcrumbItems} />
+      <div class="header-meta">
+        <span class="chip chip-primary">Torehan Juara</span>
+      </div>
+      <h1 class="page-title">Prestasi & Kejuaraan Siswa</h1>
+      <p class="page-description">
+        Dedikasi dan kolaborasi mengantarkan siswa FREEKS.id School meraih berbagai kejuaraan dan penghargaan di tingkat regional hingga nasional.
+      </p>
+
+      <!-- Filter Controls (PRD 8.3) -->
+      <div class="prestasi-filters">
+        <!-- Filter Tahun -->
+        <div class="filter-group">
+          <span class="filter-label">Tahun:</span>
+          <div class="filter-chips" id="year-filters">
+            {years.map((y, idx) => (
+              <button
+                type="button"
+                class={`chip-btn ${idx === 0 ? 'active' : ''}`}
+                data-year={y}
+              >
+                {y}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- Filter Tingkat -->
+        <div class="filter-group">
+          <span class="filter-label">Tingkat:</span>
+          <div class="filter-chips" id="level-filters">
+            {levels.map((lvl, idx) => (
+              <button
+                type="button"
+                class={`chip-btn ${idx === 0 ? 'active' : ''}`}
+                data-level={lvl}
+              >
+                {lvl}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-wide section">
+    <div class="achievements-grid" id="achievements-grid">
+      {achievements.map((ach) => (
+        <div
+          class="achievement-card card"
+          data-year={ach.year.toString()}
+          data-level={ach.level}
+        >
+          {ach.image && (
+            <div class="ach-img-wrap">
+              <img
+                src={ach.image.src}
+                alt={ach.image.alt}
+                width={ach.image.width}
+                height={ach.image.height}
+                class="ach-img"
+                loading="lazy"
+                data-lightbox-src={ach.image.src}
+                data-lightbox-alt={ach.image.alt}
+                data-lightbox-caption={`${ach.title} (${ach.level} ${ach.year})`}
+                data-lightbox-group="prestasi"
+                role="button"
+                tabindex="0"
+              />
+            </div>
+          )}
+
+          <div class="card-body ach-body">
+            <div class="ach-tags-row">
+              <span class="chip chip-primary">{ach.level}</span>
+              <span class="ach-year-tag">{ach.year}</span>
+            </div>
+
+            <h3 class="ach-title">{ach.title}</h3>
+            
+            <div class="ach-details">
+              <div class="ach-detail-item">
+                <Icon name="user" size={16} class="ach-icon" />
+                <span>Siswa: <strong>{ach.student}</strong></span>
+              </div>
+              <div class="ach-detail-item">
+                <Icon name="award" size={16} class="ach-icon" />
+                <span>Penyelenggara: {ach.organizer}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Empty State (PRD A.16: Filter 2020 menampilkan status kosong yang ramah) -->
+    <div id="prestasi-empty" class="prestasi-empty card" hidden>
+      <div class="empty-icon-wrap">
+        <Icon name="inbox" size={48} />
+      </div>
+      <h3>Belum Ada Data Prestasi untuk Filter Ini</h3>
+      <p>Tidak ditemukan arsip prestasi pada kombinasi tahun atau tingkat kompetisi yang dipilih.</p>
+      <button type="button" id="reset-prestasi-filter" class="btn btn-secondary btn-sm">
+        Tampilkan Semua Prestasi
+      </button>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-top: var(--s-6);
+    padding-bottom: var(--s-6);
+    border-bottom: 1px solid var(--ink-300);
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--s-3);
+  }
+
+  .page-title {
+    font-size: var(--h1);
+    color: var(--green-900);
+    margin-bottom: var(--s-2);
+  }
+
+  .page-description {
+    font-size: var(--text-lg);
+    color: var(--ink-600);
+    max-width: 65ch;
+    margin-bottom: var(--s-5);
+  }
+
+  .prestasi-filters {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-4);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--ink-300);
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .filter-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--green-900);
+    min-width: 60px;
+    text-transform: uppercase;
+  }
+
+  .filter-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .chip-btn {
+    padding: 6px 14px;
+    background-color: #FFFFFF;
+    border: 1px solid var(--ink-300);
+    border-radius: 999px;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--ink-900);
+    cursor: pointer;
+    transition: background-color var(--dur-fast) var(--ease),
+                color var(--dur-fast) var(--ease),
+                border-color var(--dur-fast) var(--ease);
+  }
+
+  .chip-btn.active {
+    background-color: var(--green-700);
+    border-color: var(--green-700);
+    color: #FFFFFF;
+  }
+
+  /* Grid: 1 col on mobile, 2 cols on tablet, 3-4 cols on desktop */
+  .achievements-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s-5);
+  }
+
+  @media (min-width: 641px) {
+    .achievements-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--s-5);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .achievements-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .achievements-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .achievement-card {
+    min-width: 0;
+  }
+
+  .ach-img-wrap {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background-color: var(--bg-soft);
+  }
+
+  .ach-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+  }
+
+  .ach-body {
+    padding: var(--s-5);
+    min-width: 0;
+  }
+
+  @media (max-width: 640px) {
+    .ach-body {
+      padding: 16px;
+    }
+  }
+
+  .ach-tags-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: var(--s-3);
+  }
+
+  .ach-year-tag {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--ink-600);
+    background-color: var(--bg-soft);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+  }
+
+  .ach-title {
+    font-size: 1.15rem;
+    color: var(--green-900);
+    margin-bottom: var(--s-3);
+    line-height: 1.35;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .ach-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    border-top: 1px solid var(--ink-300);
+    padding-top: var(--s-3);
+    margin-top: auto;
+  }
+
+  .ach-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    min-width: 0;
+  }
+
+  .ach-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ach-icon {
+    color: var(--green-500);
+    flex-shrink: 0;
+  }
+
+  /* Empty state */
+  .prestasi-empty {
+    padding: var(--s-8) var(--s-5);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .prestasi-empty[hidden] {
+    display: none !important;
+  }
+
+  .empty-icon-wrap {
+    color: var(--ink-300);
+  }
+
+  .prestasi-empty h3 {
+    color: var(--green-900);
+    margin: 0;
+  }
+
+  .prestasi-empty p {
+    color: var(--ink-600);
+    max-width: 48ch;
+    margin: 0;
+  }
+</style>
+
+<script>
+  // Filter achievements by year & level
+  let selectedYear = 'Semua';
+  let selectedLevel = 'Semua';
+
+  const yearButtons = document.querySelectorAll('#year-filters .chip-btn');
+  const levelButtons = document.querySelectorAll('#level-filters .chip-btn');
+  const cards = document.querySelectorAll('.achievement-card') as NodeListOf<HTMLElement>;
+  const emptyBox = document.getElementById('prestasi-empty');
+  const resetBtn = document.getElementById('reset-prestasi-filter');
+
+  function updateFilter() {
+    let visible = 0;
+    cards.forEach((card) => {
+      const cardYear = card.getAttribute('data-year');
+      const cardLevel = card.getAttribute('data-level');
+
+      const matchYear = selectedYear === 'Semua' || cardYear === selectedYear;
+      const matchLevel = selectedLevel === 'Semua' || cardLevel === selectedLevel;
+
+      if (matchYear && matchLevel) {
+        card.style.display = '';
+        visible++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    if (emptyBox) {
+      emptyBox.hidden = visible > 0;
+      emptyBox.style.display = visible > 0 ? 'none' : 'flex';
+    }
+  }
+
+  // Initial call on page load to ensure correct visibility state
+  updateFilter();
+
+  yearButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      yearButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedYear = btn.getAttribute('data-year') || 'Semua';
+      updateFilter();
+    });
+  });
+
+  levelButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      levelButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedLevel = btn.getAttribute('data-level') || 'Semua';
+      updateFilter();
+    });
+  });
+
+  resetBtn?.addEventListener('click', () => {
+    selectedYear = 'Semua';
+    selectedLevel = 'Semua';
+
+    yearButtons.forEach((b, idx) => {
+      if (idx === 0) b.classList.add('active');
+      else b.classList.remove('active');
+    });
+
+    levelButtons.forEach((b, idx) => {
+      if (idx === 0) b.classList.add('active');
+      else b.classList.remove('active');
+    });
+
+    updateFilter();
+  });
+</script>
+

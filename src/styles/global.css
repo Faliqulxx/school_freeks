@@ -1,0 +1,890 @@
+@import './tokens.css';
+
+/* Import Google Fonts with display=swap */
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
+
+/* ==========================================================================
+   CSS Reset & Base
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink-900);
+  background-color: var(--bg);
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-height-scrolled) + 16px);
+}
+
+body {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  position: relative;
+  /* Extra bottom padding on mobile when PPDB bottom bar is active */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+body.has-bottom-bar {
+  padding-bottom: calc(var(--bottom-bar-height) + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 768px) {
+  body.has-bottom-bar {
+    padding-bottom: 0;
+  }
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--green-900);
+  font-weight: 700;
+  line-height: 1.25;
+  text-wrap: balance;
+  text-align: left; /* Anti "AI Slop" Rule #6: Rata kiri sebagai default */
+}
+
+h1 { font-size: var(--h1); line-height: 1.15; font-weight: 800; }
+h2 { font-size: var(--h2); line-height: 1.2; }
+h3 { font-size: var(--h3); line-height: 1.3; }
+h4 { font-size: var(--h4); line-height: 1.35; }
+
+p {
+  margin-bottom: var(--s-3);
+  text-wrap: pretty;
+  max-width: var(--content-max-ch);
+}
+
+a {
+  color: var(--green-700);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+a:hover {
+  color: var(--green-800);
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+ul, ol {
+  padding-left: var(--s-5);
+  margin-bottom: var(--s-3);
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* Focus styles (WCAG 2.2 AA) */
+:focus-visible {
+  outline: 3px solid var(--focus) !important;
+  outline-offset: 2px !important;
+}
+
+/* Skip to main content */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  background: var(--yellow-500);
+  color: var(--green-900);
+  font-weight: 700;
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  z-index: 9999;
+  text-decoration: none;
+  transition: top var(--dur-fast) var(--ease);
+}
+
+.skip-link:focus {
+  top: 16px;
+}
+
+/* Staging Banner (PRD Section 14) */
+.staging-banner {
+  background: #374151;
+  color: #F9FAFB;
+  font-size: var(--text-xs);
+  padding: 6px 16px;
+  text-align: center;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.staging-banner .badge {
+  background: #E5E7EB;
+  color: #111827;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+}
+
+/* DUMMY Chip on blocks (PRD Section 14) */
+.dummy-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  background: #CBD2D9;
+  color: #1F2933;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+/* ==========================================================================
+   Layout Containers & Section Styles
+   ========================================================================== */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(16px, 3.5vw, 48px);
+  padding-right: clamp(16px, 3.5vw, 48px);
+  box-sizing: border-box;
+}
+
+.container-wide {
+  width: 100%;
+  max-width: 1820px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(16px, 3.5vw, 48px);
+  padding-right: clamp(16px, 3.5vw, 48px);
+  box-sizing: border-box;
+}
+
+.container-full {
+  width: 100%;
+  padding-left: clamp(16px, 3.5vw, 48px);
+  padding-right: clamp(16px, 3.5vw, 48px);
+  box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  .container,
+  .container-wide,
+  .container-full {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+.section {
+  padding-top: var(--section-space);
+  padding-bottom: var(--section-space);
+  position: relative;
+}
+
+.section-soft {
+  background-color: var(--bg-soft);
+}
+
+.section-green-light {
+  background-color: var(--green-50);
+}
+
+.section-dark {
+  background-color: var(--green-900);
+  color: #FFFFFF;
+}
+
+.section-dark h1,
+.section-dark h2,
+.section-dark h3,
+.section-dark h4 {
+  color: #FFFFFF;
+}
+
+.section-dark p {
+  color: var(--green-200);
+}
+
+/* Section Header with 48x3px yellow segment */
+.section-header {
+  margin-bottom: var(--s-6);
+  position: relative;
+}
+
+.section-header h2 {
+  margin-bottom: var(--s-2);
+}
+
+.section-header p {
+  font-size: var(--text-lg);
+  color: var(--ink-600);
+  max-width: 60ch;
+}
+
+.section-divider {
+  display: block;
+  width: 48px;
+  height: 3px;
+  background-color: var(--yellow-500);
+  margin-top: var(--s-3);
+  margin-bottom: var(--s-4);
+  border-radius: 2px;
+}
+
+@media (max-width: 640px) {
+  .section-header {
+    margin-bottom: var(--s-4);
+  }
+  .section-divider {
+    margin-top: 6px;
+    margin-bottom: 10px;
+  }
+}
+
+.section-header.center {
+  text-align: center;
+}
+
+.section-header.center .section-divider {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-header.center p {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Page Header (Inner Pages: Profil, Akademik, Kesiswaan, Informasi, PPDB, Kontak) */
+.page-header {
+  padding-top: clamp(20px, 4vw, 40px);
+  padding-bottom: clamp(20px, 4vw, 40px);
+  border-bottom: 1px solid var(--ink-300);
+  background-color: var(--bg-soft);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.page-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 4.5vw, 2.25rem);
+  color: var(--green-900);
+  margin-top: 0;
+  margin-bottom: var(--s-2);
+  line-height: 1.25;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.page-description {
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  color: var(--ink-600);
+  max-width: 65ch;
+  margin: 0;
+  line-height: 1.55;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Islamic Geometric Pattern Background */
+.islamic-pattern {
+  background-color: var(--bg-soft);
+  background-image: url('/assets/hero-pattern-tile.webp');
+  background-repeat: repeat;
+  background-size: 60px 60px;
+}
+
+.islamic-pattern-dark {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L45 15L60 30L45 45L30 60L15 45L0 30L15 15Z' fill='none' stroke='%23F5D90A' stroke-width='0.75' stroke-opacity='0.06'/%3E%3Cpath d='M30 15L45 30L30 45L15 30Z' fill='none' stroke='%23F5D90A' stroke-width='0.75' stroke-opacity='0.06'/%3E%3C/svg%3E");
+}
+
+/* Petal Shape Frame (PRD Section 5.6) */
+.petal-frame {
+  clip-path: polygon(
+    50% 0%, 85% 15%, 100% 50%, 85% 85%,
+    50% 100%, 15% 85%, 0% 50%, 15% 15%
+  );
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   Buttons (PRD Section 7.3)
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 22px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease),
+              color var(--dur-fast) var(--ease),
+              transform var(--dur-fast) var(--ease),
+              box-shadow var(--dur-fast) var(--ease);
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled, .btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Varian Primer: Hijau */
+.btn-primary {
+  background-color: var(--green-700);
+  color: #FFFFFF;
+}
+
+.btn-primary:hover {
+  background-color: var(--green-800);
+  color: #FFFFFF;
+}
+
+/* Varian CTA: Kuning (HANYA SATU per layar untuk PPDB) */
+.btn-cta {
+  background-color: var(--yellow-500);
+  color: var(--green-900);
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(245, 217, 10, 0.3);
+}
+
+.btn-cta:hover {
+  background-color: var(--yellow-600);
+  color: var(--green-900);
+}
+
+/* Varian Sekunder: Outline Hijau */
+.btn-secondary {
+  background-color: transparent;
+  border: 1.5px solid var(--green-700);
+  color: var(--green-700);
+}
+
+.btn-secondary:hover {
+  background-color: var(--green-50);
+  border-color: var(--green-800);
+  color: var(--green-800);
+}
+
+/* Varian Putih / Outline di Latar Gelap */
+.btn-outline-white {
+  background-color: transparent;
+  border: 1.5px solid #FFFFFF;
+  color: #FFFFFF;
+}
+
+.btn-outline-white:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+}
+
+/* Varian Tautan */
+.btn-link {
+  height: auto;
+  padding: 0;
+  background: none;
+  color: var(--green-700);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.btn-link:hover {
+  color: var(--green-800);
+}
+
+/* Hero Button (Size 56px di md+) */
+@media (min-width: 768px) {
+  .btn-hero {
+    height: 56px;
+    padding: 0 28px;
+    font-size: var(--text-base);
+  }
+}
+
+/* Tombol kecil */
+.btn-sm {
+  height: 40px;
+  padding: 0 16px;
+  font-size: var(--text-xs);
+}
+
+/* Full width on xs */
+@media (max-width: 479px) {
+  .btn-group-responsive {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+  .btn-group-responsive .btn {
+    width: 100%;
+  }
+}
+
+/* ==========================================================================
+   Cards (PRD Section 7.4)
+   ========================================================================== */
+.card {
+  background-color: var(--bg);
+  border: var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-1);
+  transition: transform var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease),
+              border-color var(--dur) var(--ease);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (hover: hover) {
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--green-500);
+    box-shadow: var(--shadow-2);
+  }
+}
+
+.card-body {
+  padding: var(--s-5);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+@media (max-width: 640px) {
+  .card-body {
+    padding: var(--s-3);
+  }
+}
+
+.card-title {
+  font-size: var(--h4);
+  margin-bottom: var(--s-2);
+  line-height: 1.35;
+}
+
+.card-title a {
+  color: var(--green-900);
+  text-decoration: none;
+}
+
+.card-title a:hover {
+  color: var(--green-700);
+}
+
+.card-meta {
+  font-size: var(--text-sm);
+  color: var(--ink-600);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: var(--s-3);
+}
+
+.card-excerpt {
+  font-size: var(--text-sm);
+  color: var(--ink-600);
+  line-height: 1.55;
+  margin-bottom: var(--s-4);
+  /* Line clamp 2 baris */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Card Badge / Chip */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  width: fit-content;
+}
+
+.chip-primary {
+  background-color: var(--green-50);
+  color: var(--green-800);
+  border: 1px solid var(--green-200);
+}
+
+.chip-important {
+  background-color: var(--yellow-500);
+  color: var(--green-900);
+  font-weight: 700;
+}
+
+.chip-secondary {
+  background-color: #F3F4F6;
+  color: var(--ink-900);
+}
+
+/* Clickable card overlay */
+.card-clickable::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   Responsive Tables (PRD Section 7.5 & 10)
+   ========================================================================== */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: var(--s-5);
+  border-radius: var(--radius-md);
+  border: var(--border);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: var(--text-sm);
+}
+
+.data-table th {
+  background-color: var(--green-50);
+  color: var(--green-900);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  padding: 14px 16px;
+  border-bottom: 2px solid var(--green-200);
+}
+
+.data-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--ink-300);
+  color: var(--ink-900);
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:nth-child(even) td {
+  background-color: var(--bg-soft);
+}
+
+/* Mobile Stacked Card View for Tables (< 768px) */
+@media (max-width: 767px) {
+  .table-responsive-stacked thead {
+    display: none;
+  }
+  .table-responsive-stacked,
+  .table-responsive-stacked tbody,
+  .table-responsive-stacked tr,
+  .table-responsive-stacked td {
+    display: block;
+    width: 100%;
+  }
+  .table-responsive-stacked tr {
+    margin-bottom: 16px;
+    border: var(--border);
+    border-radius: var(--radius-md);
+    background-color: var(--bg);
+    overflow: hidden;
+  }
+  .table-responsive-stacked td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #F1F5F9;
+    text-align: right;
+  }
+  .table-responsive-stacked td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--green-900);
+    text-align: left;
+    padding-right: 12px;
+  }
+  .table-responsive-stacked td:last-child {
+    border-bottom: none;
+  }
+}
+
+/* ==========================================================================
+   Arabic Text (PRD Section 5.2)
+   ========================================================================== */
+.text-arabic {
+  font-family: var(--font-arabic);
+  direction: rtl;
+  text-align: right;
+  font-size: 1.5rem;
+  line-height: 2;
+  color: var(--green-900);
+}
+
+/* ==========================================================================
+   Breadcrumb (PRD Section 7.10)
+   ========================================================================== */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: var(--text-sm);
+  color: var(--ink-600);
+  margin-bottom: var(--s-4);
+}
+
+.breadcrumb a {
+  color: var(--green-700);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-separator {
+  color: var(--ink-300);
+}
+
+.breadcrumb-mobile-back {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .breadcrumb-full {
+    display: none;
+  }
+  .breadcrumb-mobile-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--text-sm);
+    color: var(--green-700);
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: var(--s-3);
+  }
+}
+
+/* ==========================================================================
+   Floating Elements (PRD Section 7.9)
+   ========================================================================== */
+.floating-actions {
+  position: fixed;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  right: 20px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+@media (max-width: 640px) {
+  .floating-actions {
+    right: 12px;
+    gap: 8px;
+  }
+}
+
+.btn-whatsapp-float {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #25D366;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+  text-decoration: none;
+  transition: transform var(--dur-fast) var(--ease),
+              box-shadow var(--dur-fast) var(--ease);
+}
+
+@media (max-width: 640px) {
+  .btn-whatsapp-float {
+    width: 44px;
+    height: 44px;
+    box-shadow: 0 3px 12px rgba(37, 211, 102, 0.35);
+  }
+  .btn-whatsapp-float svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.btn-whatsapp-float:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+  color: #FFFFFF;
+}
+
+.btn-back-to-top {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: var(--bg);
+  color: var(--green-900);
+  border: var(--border);
+  box-shadow: var(--shadow-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur) var(--ease),
+              transform var(--dur-fast) var(--ease);
+}
+
+@media (max-width: 640px) {
+  .btn-back-to-top {
+    width: 38px;
+    height: 38px;
+  }
+  .btn-back-to-top svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.btn-back-to-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.btn-back-to-top:hover {
+  background-color: var(--green-50);
+  transform: translateY(-2px);
+}
+
+/* Mobile Bottom Bar for PPDB (< 768px) */
+.ppdb-bottom-bar {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  body {
+    padding-bottom: calc(var(--bottom-bar-height) + env(safe-area-inset-bottom, 0px));
+    box-sizing: border-box;
+  }
+
+  .ppdb-bottom-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--bottom-bar-height);
+    background-color: #FFFFFF;
+    border-top: 1px solid var(--ink-300);
+    padding: 8px 16px;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    z-index: 90;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .floating-actions.with-bottom-bar {
+    bottom: calc(var(--bottom-bar-height) + 12px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ==========================================================================
+   Prefers Reduced Motion & Reduced Data (PRD Section 5.5, 9, 10)
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   Print Stylesheet (PRD Section 10 & 16)
+   ========================================================================== */
+@media print {
+  header,
+  footer,
+  .top-bar,
+  .staging-banner,
+  .floating-actions,
+  .ppdb-bottom-bar,
+  .skip-link,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    padding: 0 !important;
+  }
+
+  a {
+    text-decoration: none !important;
+    color: #000000 !important;
+  }
+
+  .container {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .card, .table-wrapper {
+    box-shadow: none !important;
+    border: 1px solid #CCCCCC !important;
+    page-break-inside: avoid;
+  }
+}
+

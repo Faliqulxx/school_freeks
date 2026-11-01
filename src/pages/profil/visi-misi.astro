@@ -1,0 +1,193 @@
+---
+import ProfilLayout from '../../layouts/ProfilLayout.astro';
+import profilData from '../../data/profil.json';
+
+const { vision, missions, goals } = profilData;
+---
+
+<ProfilLayout
+  title="Visi, Misi & Tujuan"
+  description="Arah filosofis dan komitmen pendidikan modern FREEKS.id School dalam membentuk inovator berkarakter."
+  currentPage="/profil/visi-misi"
+>
+  <div class="prose-content">
+    <div class="content-tag">
+    </div>
+
+    <!-- Visi sebagai blok kutipan besar (PRD 8.2) -->
+    <section class="vision-section">
+      <h2 class="sub-heading">Visi Sekolah</h2>
+      <div class="section-divider"></div>
+      <blockquote class="vision-quote-box">
+        <p class="vision-text">
+          "{vision}"
+        </p>
+      </blockquote>
+    </section>
+
+    <!-- Misi Daftar Bernomor (PRD 8.2) -->
+    <section class="mission-section">
+      <h2 class="sub-heading">Misi Sekolah</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">Langkah-langkah strategis untuk mewujudkan visi sekolah secara terukur dan berkelanjutan:</p>
+      
+      <ol class="numbered-list-clean">
+        {missions.map((m, idx) => (
+          <li class="numbered-item">
+            <span class="number-badge">{idx + 1}</span>
+            <div class="item-content">
+              <p>{m}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <!-- Tujuan Daftar Bernomor (PRD 8.2) -->
+    <section class="goals-section">
+      <h2 class="sub-heading">Tujuan Pendidikan</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">Capaian kompetensi utama yang ditargetkan bagi setiap siswa lulusan FREEKS.id School:</p>
+
+      <ol class="numbered-list-clean">
+        {goals.map((g, idx) => (
+          <li class="numbered-item">
+            <span class="number-badge goal-badge">{idx + 1}</span>
+            <div class="item-content">
+              <p>{g}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+  </div>
+</ProfilLayout>
+
+<style>
+  .content-tag {
+    margin-bottom: var(--s-3);
+  }
+
+  .sub-heading {
+    font-size: var(--h3);
+    color: var(--green-900);
+    margin-bottom: 4px;
+  }
+
+  .section-desc {
+    font-size: var(--text-base);
+    color: var(--ink-600);
+    margin-bottom: var(--s-5);
+  }
+
+  /* Visi Quote Box */
+  .vision-section {
+    margin-bottom: var(--s-7);
+  }
+
+  .vision-quote-box {
+    background-color: var(--green-50);
+    border: 2px solid var(--green-200);
+    border-left: 6px solid var(--green-700);
+    padding: var(--s-6) var(--s-5);
+    border-radius: var(--radius-md);
+  }
+
+  .vision-text {
+    font-family: var(--font-heading);
+    font-size: clamp(1.2rem, 1rem + 1vw, 1.6rem);
+    font-weight: 700;
+    color: var(--green-900);
+    line-height: 1.4;
+    margin: 0;
+    text-align: left;
+  }
+
+  /* Numbered List Clean */
+  .mission-section, .goals-section {
+    margin-bottom: var(--s-7);
+  }
+
+  .numbered-list-clean {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  @media (min-width: 641px) {
+    .numbered-list-clean {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .numbered-list-clean {
+      gap: var(--s-4);
+    }
+  }
+
+  .numbered-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    background-color: #FFFFFF;
+    border: var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-1);
+    min-width: 0;
+  }
+
+  .number-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--green-700);
+    color: #FFFFFF;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: var(--text-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .number-badge.goal-badge {
+    background-color: var(--yellow-500);
+    color: var(--green-900);
+  }
+
+  .item-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .item-content p {
+    font-size: var(--text-sm);
+    color: var(--ink-900);
+    line-height: 1.6;
+    margin: 0;
+    overflow-wrap: break-word;
+  }
+
+  @media (min-width: 641px) {
+    .item-content p {
+      font-size: var(--text-base);
+    }
+    .numbered-item {
+      padding: var(--s-4);
+      gap: 16px;
+    }
+    .number-badge {
+      width: 36px;
+      height: 36px;
+    }
+  }
+</style>
+

@@ -1,0 +1,416 @@
+---
+import Icon from './Icon.astro';
+import siteData from '../data/siteData.json';
+
+const { school } = siteData;
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer islamic-pattern-dark" aria-label="Kaki Halaman">
+  <div class="container-wide footer-container">
+    <!-- Grid 4 Kolom di Desktop, 2x2 di Tablet, Akordeon di Mobile -->
+    <div class="footer-grid">
+      <!-- Kolom 1: Identitas & Logo Asli -->
+      <div class="footer-col footer-col-brand">
+        <div class="footer-brand">
+          <img
+            src="/assets/logo-ypi.webp"
+            alt="Logo Resmi FREEKS.id School"
+            width="64"
+            height="56"
+            class="footer-logo school-logo-img"
+          />
+          <div>
+            <h3 class="footer-title">{school.name}</h3>
+            <p class="footer-foundation">{school.foundation}</p>
+          </div>
+        </div>
+        <p class="footer-slogan">"{school.slogan}"</p>
+        <p class="footer-address">
+          <Icon name="map-pin" size={16} class="footer-icon" />
+          <span>{school.address}</span>
+        </p>
+        <div class="footer-npsn">
+          <span>NPSN: {school.npsn}</span>
+          <span class="npsn-dot">•</span>
+          <span>Akreditasi {school.accreditation}</span>
+        </div>
+      </div>
+
+      <!-- Kolom 2: Profil & Akademik -->
+      <div class="footer-col">
+        <h4 class="footer-col-title">Jelajahi Madrasah</h4>
+        <div class="footer-divider"></div>
+        <ul class="footer-links">
+          <li><a href="/profil/sejarah">Sejarah Rintisan</a></li>
+          <li><a href="/profil/visi-misi">Visi, Misi & Tujuan</a></li>
+          <li><a href="/profil/sambutan">Sambutan Kepala Madrasah</a></li>
+          <li><a href="/profil/fasilitas">Fasilitas Sekolah</a></li>
+          <li><a href="/akademik/kurikulum">Struktur Kurikulum</a></li>
+          <li><a href="/akademik/program-unggulan">Program Unggulan</a></li>
+          <li><a href="/akademik/guru">Dewan Guru & Tendik</a></li>
+        </ul>
+      </div>
+
+      <!-- Kolom 3: PPDB & Informasi -->
+      <div class="footer-col">
+        <h4 class="footer-col-title">PPDB & Informasi</h4>
+        <div class="footer-divider"></div>
+        <ul class="footer-links">
+          <li><a href="/ppdb">Informasi PPDB 2027/2028</a></li>
+          <li><a href="/ppdb/syarat-biaya">Syarat & Rincian Biaya</a></li>
+          <li><a href="/ppdb/jadwal">Jadwal Gelombang Pendaftaran</a></li>
+          <li><a href="/ppdb/daftar">Formulir Pendaftaran Online</a></li>
+          <li><a href="/ppdb/faq">Tanya Jawab (FAQ PPDB)</a></li>
+          <li><a href="/informasi/berita">Berita & Kegiatan</a></li>
+          <li><a href="/informasi/unduhan">Unduhan Dokumen Resmi</a></li>
+        </ul>
+      </div>
+
+      <!-- Kolom 4: Kontak & Layanan -->
+      <div class="footer-col">
+        <h4 class="footer-col-title">Kontak & Layanan</h4>
+        <div class="footer-divider"></div>
+        <ul class="footer-contact-list">
+          <li>
+            <Icon name="phone" size={16} class="footer-icon" />
+            <div>
+              <span class="contact-label">Telepon Madrasah:</span>
+              <a href={`tel:${school.phone}`} class="contact-val">{school.phone}</a>
+            </div>
+          </li>
+          <li>
+            <Icon name="whatsapp" size={16} class="footer-icon" />
+            <div>
+              <span class="contact-label">WhatsApp Panitia:</span>
+              <a
+                href={`https://wa.me/${school.whatsappRaw}?text=${encodeURIComponent(school.whatsappMessage)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="contact-val"
+              >
+                {school.whatsapp}
+              </a>
+            </div>
+          </li>
+          <li>
+            <Icon name="mail" size={16} class="footer-icon" />
+            <div>
+              <span class="contact-label">Email Resmi:</span>
+              <a href={`mailto:${school.email}`} class="contact-val email-text">{school.email}</a>
+            </div>
+          </li>
+          <li>
+            <Icon name="clock" size={16} class="footer-icon" />
+            <div>
+              <span class="contact-label">Jam Layanan Kantor:</span>
+              <span class="contact-val">{school.officeHours}</span>
+            </div>
+          </li>
+        </ul>
+
+        <div class="footer-socials">
+          <span class="social-head">Media Sosial:</span>
+          <div class="social-icons">
+            <a href={school.socials.instagramUrl} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <Icon name="instagram" size={18} />
+            </a>
+            <a href={school.socials.youtubeUrl} target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+              <Icon name="youtube" size={18} />
+            </a>
+            <a href={school.socials.facebookUrl} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <Icon name="facebook" size={18} />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bar Paling Bawah -->
+    <div class="footer-bottom">
+      <p class="copyright">
+        &copy; {currentYear} {school.name}. Hak Cipta Dilindungi Undang-Undang. Di bawah naungan {school.foundation}.
+      </p>
+      <div class="footer-bottom-links">
+        <a href="/kesiswaan/tata-tertib">Tata Tertib</a>
+        <span>•</span>
+        <a href="/kontak">Peta Lokasi</a>
+        <span>•</span>
+        <span class="staging-tag">Versi Pengembangan</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background-color: var(--green-900);
+    color: #FFFFFF;
+    padding-top: var(--s-6);
+    padding-bottom: var(--s-5);
+    border-top: 3px solid var(--yellow-500);
+    margin-top: auto;
+  }
+
+  @media (min-width: 768px) {
+    .site-footer {
+      padding-top: var(--s-8);
+      padding-bottom: var(--s-6);
+    }
+  }
+
+  .footer-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-6);
+    margin-bottom: var(--s-6);
+  }
+
+  @media (min-width: 641px) and (max-width: 1023px) {
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s-6);
+      margin-bottom: var(--s-8);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr 0.9fr 1.1fr;
+      gap: var(--s-6);
+      margin-bottom: var(--s-8);
+    }
+  }
+
+  .footer-col {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: var(--s-3);
+  }
+
+  .footer-logo {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+  }
+
+  .footer-title {
+    font-size: 1.15rem;
+    color: #FFFFFF;
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  .footer-foundation {
+    font-size: var(--text-xs);
+    color: var(--green-200);
+    margin: 0;
+  }
+
+  .footer-slogan {
+    font-size: var(--text-sm);
+    color: var(--yellow-500);
+    font-style: italic;
+    font-weight: 500;
+    margin-bottom: var(--s-3);
+  }
+
+  .footer-address {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: var(--text-sm);
+    color: var(--green-200);
+    line-height: 1.5;
+    margin-bottom: var(--s-3);
+  }
+
+  .footer-npsn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(255, 255, 255, 0.08);
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    color: var(--green-200);
+  }
+
+  .npsn-dot {
+    color: var(--yellow-500);
+  }
+
+  .footer-col-title {
+    font-size: 1.05rem;
+    color: #FFFFFF;
+    font-weight: 700;
+    margin-bottom: var(--s-2);
+  }
+
+  .footer-divider {
+    width: 32px;
+    height: 2px;
+    background-color: var(--yellow-500);
+    margin-bottom: var(--s-4);
+    border-radius: 1px;
+  }
+
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-links a {
+    color: var(--green-200);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: color var(--dur-fast) var(--ease), padding-left var(--dur-fast) var(--ease);
+    display: inline-block;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.45;
+    max-width: 100%;
+  }
+
+  .footer-links a:hover {
+    color: var(--yellow-500);
+    padding-left: 4px;
+  }
+
+  .footer-contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-contact-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: var(--text-sm);
+  }
+
+  .footer-icon {
+    color: var(--yellow-500);
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .contact-label {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--green-200);
+  }
+
+  .contact-val {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .contact-val:hover {
+    color: var(--yellow-500);
+  }
+
+  .email-text {
+    overflow-wrap: anywhere;
+  }
+
+  .footer-socials {
+    margin-top: var(--s-4);
+    padding-top: var(--s-3);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .social-head {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--green-200);
+    margin-bottom: 8px;
+  }
+
+  .social-icons {
+    display: flex;
+    gap: 12px;
+  }
+
+  .social-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+  }
+
+  .social-icons a:hover {
+    background-color: var(--yellow-500);
+    color: var(--green-900);
+  }
+
+  /* Footer Bottom */
+  .footer-bottom {
+    padding-top: var(--s-5);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    text-align: center;
+    font-size: var(--text-xs);
+    color: var(--green-200);
+  }
+
+  @media (min-width: 768px) {
+    .footer-bottom {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+    }
+  }
+
+  .copyright {
+    margin: 0;
+    max-width: 65ch;
+  }
+
+  .footer-bottom-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .footer-bottom-links a {
+    color: var(--green-200);
+    text-decoration: none;
+  }
+
+  .footer-bottom-links a:hover {
+    color: var(--yellow-500);
+  }
+
+  .staging-tag {
+    color: var(--yellow-500);
+    font-weight: 600;
+  }
+</style>
+

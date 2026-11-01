@@ -1,0 +1,1001 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import Icon from '../../components/Icon.astro';
+import siteData from '../../data/siteData.json';
+
+const { school } = siteData;
+
+const initialMessages = [
+  {
+    id: "MSG-2026-001",
+    name: "Ibu Sulastri",
+    contact: "081234567890",
+    isWhatsApp: true,
+    subject: "Informasi PPDB",
+    date: "2026-10-27 14:32",
+    status: "Belum Dibaca",
+    message: "Halo tim Admission FREEKS.id School. Mohon informasi apakah pendaftaran Early Bird Wave masih tersedia kuota beasiswa inovasi talenta robotika? Dan format portofolio proyek apa saja yang bisa kami sertakan saat asesmen?"
+  },
+  {
+    id: "MSG-2026-002",
+    name: "Bapak Hadi Pranoto",
+    contact: "hadi.pranoto88@gmail.com",
+    isWhatsApp: false,
+    subject: "Administrasi & SPP",
+    date: "2026-10-26 09:15",
+    status: "Sudah Dibalas",
+    message: "Selamat pagi tata usaha FREEKS.id School. Saya ingin mengonfirmasi penerbitan invoice dan kuitansi pelunasan paket starter pack & modul teknologi anak saya kelas VII-A untuk keperluan administrasi kantor. Terima kasih."
+  },
+  {
+    id: "MSG-2026-003",
+    name: "Bapak Irfan Hakim",
+    contact: "085712349988",
+    isWhatsApp: true,
+    subject: "Akademik & Pembelajaran",
+    date: "2026-10-24 16:40",
+    status: "Sudah Dibalas",
+    message: "Selamat sore tim kurikulum. Mau menanyakan jadwal sesi Showcase Day karya teknologi semester ganjil dan apakah orang tua diperbolehkan hadir untuk menyaksikan demonstrasi prototipe aplikasi siswa?"
+  },
+  {
+    id: "MSG-2026-004",
+    name: "Ibu Rina Setyawati",
+    contact: "082299887766",
+    isWhatsApp: true,
+    subject: "Saran & Pengaduan",
+    date: "2026-10-23 11:20",
+    status: "Belum Dibaca",
+    message: "Mohon izin menyampaikan apresiasi atas penyelenggaraan workshop coding akhir pekan lalu. Anak kami menjadi jauh lebih bersemangat mengeksplorasi computational thinking dan desain antarmuka digital."
+  },
+  {
+    id: "MSG-2026-005",
+    name: "Dimas Pratama",
+    contact: "dimas.pratama@alumni.freeks.id",
+    isWhatsApp: false,
+    subject: "Lainnya",
+    date: "2026-10-20 19:05",
+    status: "Sudah Dibalas",
+    message: "Saya alumni FREEKS.id School angkatan 2024 bermaksud memohon surat rekomendasi akademik dan transkrip portofolio proyek untuk pendaftaran beasiswa teknologi. Apakah bisa diproses dalam 2 hari kerja?"
+  }
+];
+---
+
+<AdminLayout title="Kotak Masuk Kontak & Aspirasi (Modul 8)" activeMenu="kontak">
+  <div class="page-header-wrap">
+    <div>
+      <div class="module-tag">MODUL 8 DARI 8</div>
+      <h1>Kotak Masuk Kontak & Aspirasi</h1>
+      <p class="page-subtitle">
+        Kelola pesan, permohonan informasi PPDB, saran wali murid, dan aspirasi masyarakat yang masuk melalui formulir resmi website.
+      </p>
+    </div>
+
+    <div class="header-action-group">
+      <a href="/kontak" target="_blank" class="btn btn-secondary">
+        <Icon name="external-link" size={16} />
+        <span>Buka Form Kontak Publik</span>
+      </a>
+      <button type="button" id="btn-export-messages-csv" class="btn btn-secondary">
+        <Icon name="file-text" size={16} />
+        <span>Ekspor Rekap CSV</span>
+      </button>
+      <button type="button" id="btn-save-messages" class="btn btn-primary">
+        <Icon name="check" size={18} />
+        <span>Simpan Riwayat</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="save-toast" class="toast-notification" role="alert" aria-live="polite" hidden>
+    <Icon name="check-circle" size={20} class="toast-icon" />
+    <div class="toast-body">
+      <strong>Data Kotak Masuk Berhasil Diperbarui!</strong>
+      <p>Status baca, balasan, dan arsip pesan telah tersimpan secara lokal di browser Anda.</p>
+    </div>
+    <button type="button" id="toast-close" class="toast-close-btn" aria-label="Tutup notifikasi">
+      <Icon name="x" size={16} />
+    </button>
+  </div>
+
+  <!-- Summary Metric Cards -->
+  <div class="metrics-row">
+    <div class="metric-card card">
+      <div class="metric-icon-wrap unread">
+        <Icon name="mail" size={22} />
+      </div>
+      <div>
+        <span class="metric-lbl">Pesan Belum Dibaca</span>
+        <strong class="metric-val" id="metric-unread">2</strong>
+      </div>
+    </div>
+
+    <div class="metric-card card">
+      <div class="metric-icon-wrap replied">
+        <Icon name="check-circle" size={22} />
+      </div>
+      <div>
+        <span class="metric-lbl">Sudah Dibalas</span>
+        <strong class="metric-val" id="metric-replied">3</strong>
+      </div>
+    </div>
+
+    <div class="metric-card card">
+      <div class="metric-icon-wrap ppdb">
+        <Icon name="user-plus" size={22} />
+      </div>
+      <div>
+        <span class="metric-lbl">Pertanyaan PPDB</span>
+        <strong class="metric-val" id="metric-ppdb">1</strong>
+      </div>
+    </div>
+
+    <div class="metric-card card">
+      <div class="metric-icon-wrap total">
+        <Icon name="inbox" size={22} />
+      </div>
+      <div>
+        <span class="metric-lbl">Total Pesan Masuk</span>
+        <strong class="metric-val" id="metric-total">5</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="inbox-layout-grid">
+    <!-- Left Column: Messages List with Filters -->
+    <div class="inbox-list-col">
+      <div class="form-card card">
+        <div class="card-header justify-between">
+          <div class="header-icon-title">
+            <div class="header-icon-wrap">
+              <Icon name="inbox" size={20} />
+            </div>
+            <div>
+              <h3>Daftar Pesan & Aspirasi</h3>
+              <p class="card-desc">Klik salah satu pesan untuk membaca detail dan membalas langsung.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Pills Bar -->
+        <div class="filter-pills-row">
+          <span class="filter-label">Filter:</span>
+          <button type="button" class="filter-pill active" data-filter="all">Semua</button>
+          <button type="button" class="filter-pill" data-filter="Belum Dibaca">Belum Dibaca</button>
+          <button type="button" class="filter-pill" data-filter="Sudah Dibalas">Sudah Dibalas</button>
+          <button type="button" class="filter-pill" data-filter="Informasi PPDB">PPDB</button>
+          <button type="button" class="filter-pill" data-filter="Saran & Pengaduan">Pengaduan</button>
+        </div>
+
+        <!-- Messages Feed List -->
+        <div class="messages-feed-list" id="messages-container">
+          <!-- Dynamically populated via JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Message Detail & Quick Reply Panel -->
+    <aside class="inbox-reader-col">
+      <div class="reader-sticky-wrap">
+        <div class="card reader-card" id="message-reader">
+          <div class="reader-header">
+            <div class="reader-tag-row">
+              <span class="status-pill status-unread" id="reader-status">Belum Dibaca</span>
+              <span class="category-pill" id="reader-cat">Informasi PPDB</span>
+            </div>
+            <h3 id="reader-subject">Pertanyaan PPDB & Beasiswa</h3>
+            <span class="reader-date" id="reader-date">27 Oktober 2026, 14:32 WIB</span>
+          </div>
+
+          <div class="sender-profile-row">
+            <div class="sender-avatar" id="reader-avatar">S</div>
+            <div class="sender-info">
+              <strong id="reader-name">Ibu Sulastri</strong>
+              <span id="reader-contact">0812-3456-7890</span>
+            </div>
+          </div>
+
+          <div class="reader-body">
+            <blockquote class="message-content-box" id="reader-body-text">
+              "Assalamu'alaikum. Mohon tanya apakah pendaftaran gelombang 1 masih ada kuota beasiswa untuk anak yatim? Dan dokumen apa saja yang perlu kami bawa saat tes Al-Qur'an?"
+            </blockquote>
+          </div>
+
+          <div class="reader-actions-bar">
+            <!-- Quick WhatsApp Reply Button -->
+            <a href="#" id="btn-quick-wa" target="_blank" class="btn btn-wa btn-block">
+              <Icon name="message-circle" size={16} />
+              <span>Balas via WhatsApp</span>
+            </a>
+
+            <!-- Quick Email Reply Button -->
+            <a href="#" id="btn-quick-mail" class="btn btn-secondary btn-block">
+              <Icon name="mail" size={16} />
+              <span>Balas via Email</span>
+            </a>
+
+            <div class="status-toggle-row">
+              <button type="button" id="btn-toggle-read" class="btn btn-secondary btn-sm">
+                <Icon name="check" size={14} />
+                <span id="label-toggle-read">Tandai Sudah Dibalas</span>
+              </button>
+              <button type="button" id="btn-delete-msg" class="btn-action-delete" title="Hapus Pesan">
+                <Icon name="trash-2" size={14} />
+                <span>Hapus</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</AdminLayout>
+
+<style>
+  .page-header-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--admin-ink-300);
+  }
+
+  @media (min-width: 768px) {
+    .page-header-wrap {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+
+  .module-tag {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--admin-green-700);
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+
+  .page-header-wrap h1 {
+    font-size: clamp(1.4rem, 2vw, 1.85rem);
+    margin-bottom: 6px;
+  }
+
+  .page-subtitle {
+    font-size: 0.9rem;
+    color: var(--admin-ink-500);
+    max-width: 75ch;
+  }
+
+  .header-action-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* Metrics Row */
+  .metrics-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  @media (min-width: 640px) {
+    .metrics-row {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .metrics-row {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .metric-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid var(--admin-ink-300);
+  }
+
+  .metric-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .metric-icon-wrap.unread { background-color: #FEF3C7; color: #D97706; }
+  .metric-icon-wrap.replied { background-color: #DCFCE7; color: #166534; }
+  .metric-icon-wrap.ppdb { background-color: #E0E7FF; color: #4338CA; }
+  .metric-icon-wrap.total { background-color: var(--admin-ink-100); color: var(--admin-ink-700); }
+
+  .metric-lbl {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--admin-ink-500);
+    font-weight: 600;
+  }
+
+  .metric-val {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--admin-ink-900);
+    line-height: 1.2;
+  }
+
+  /* Layout Grid */
+  .inbox-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  @media (min-width: 1080px) {
+    .inbox-layout-grid {
+      grid-template-columns: 1.4fr 1fr;
+    }
+  }
+
+  /* Form Card & Messages List */
+  .form-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid var(--admin-ink-300);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--admin-ink-100);
+  }
+
+  .card-header.justify-between {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .header-icon-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .header-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: var(--admin-green-100);
+    color: var(--admin-green-800);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-header h3 {
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+  }
+
+  .card-desc {
+    font-size: 0.825rem;
+    color: var(--admin-ink-500);
+  }
+
+  .filter-pills-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .filter-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--admin-ink-500);
+  }
+
+  .filter-pill {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background-color: var(--admin-ink-100);
+    border: 1px solid transparent;
+    color: var(--admin-ink-700);
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .filter-pill.active {
+    background-color: var(--admin-green-800);
+    color: #FFFFFF;
+  }
+
+  /* Messages Feed */
+  .messages-feed-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  :global(.message-item-card) {
+    padding: 14px 16px;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  :global(.message-item-card:hover) {
+    border-color: var(--admin-green-500);
+    background-color: var(--admin-green-50);
+  }
+
+  :global(.message-item-card.active) {
+    border-color: var(--admin-green-700);
+    border-left: 4px solid var(--admin-green-700);
+    background-color: var(--admin-green-50);
+  }
+
+  :global(.message-item-card.unread) {
+    background-color: #FFFDF5;
+    border-left: 4px solid #F59E0B;
+  }
+
+  :global(.msg-item-top) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  :global(.msg-item-top strong) {
+    font-size: 0.9rem;
+    color: var(--admin-ink-900);
+  }
+
+  :global(.msg-item-date) {
+    font-size: 0.72rem;
+    color: var(--admin-ink-500);
+  }
+
+  :global(.msg-item-badges) {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  :global(.status-pill) {
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  :global(.status-unread) { background-color: #FEF3C7; color: #92400E; }
+  :global(.status-replied) { background-color: #DCFCE7; color: #166534; }
+
+  :global(.category-pill) {
+    font-size: 0.68rem;
+    font-weight: 600;
+    background-color: var(--admin-ink-100);
+    color: var(--admin-ink-700);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  :global(.msg-item-snippet) {
+    font-size: 0.8rem;
+    color: var(--admin-ink-700);
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Reader Column */
+  .reader-sticky-wrap {
+    position: sticky;
+    top: 90px;
+  }
+
+  .reader-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--admin-ink-300);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .reader-header {
+    border-bottom: 1px solid var(--admin-ink-100);
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+  }
+
+  .reader-tag-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .reader-header h3 {
+    font-size: 1.15rem;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .reader-date {
+    font-size: 0.75rem;
+    color: var(--admin-ink-500);
+  }
+
+  .sender-profile-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background-color: var(--admin-ink-100);
+    border-radius: 8px;
+    margin-bottom: 14px;
+  }
+
+  .sender-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--admin-green-800);
+    color: #FFFFFF;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sender-info strong {
+    display: block;
+    font-size: 0.875rem;
+  }
+
+  .sender-info span {
+    font-size: 0.75rem;
+    color: var(--admin-ink-500);
+  }
+
+  .reader-body {
+    margin-bottom: 20px;
+  }
+
+  .message-content-box {
+    font-size: 0.85rem;
+    color: var(--admin-ink-900);
+    line-height: 1.55;
+    background-color: #FFFFFF;
+    border-left: 3px solid var(--admin-green-700);
+    padding: 10px 14px;
+    font-style: normal;
+  }
+
+  .reader-actions-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 1px solid var(--admin-ink-100);
+    padding-top: 16px;
+  }
+
+  .btn-wa {
+    background-color: #25D366;
+    color: #FFFFFF;
+  }
+
+  .btn-wa:hover {
+    background-color: #1EBE5D;
+  }
+
+  .status-toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+  }
+
+  .btn-danger {
+    background-color: #FFFFFF;
+    color: #DC2626;
+    border-color: #FCA5A5;
+  }
+
+  .btn-danger:hover {
+    background-color: #FEF2F2;
+    border-color: #DC2626;
+  }
+
+  /* Utility Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 9px 16px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .btn-block {
+    width: 100%;
+  }
+
+  .btn-primary {
+    background-color: var(--admin-green-700);
+    color: #FFFFFF;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--admin-green-800);
+  }
+
+  .btn-secondary {
+    background-color: #FFFFFF;
+    color: var(--admin-ink-700);
+    border-color: var(--admin-ink-300);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--admin-ink-100);
+    color: var(--admin-ink-900);
+  }
+
+  /* Toast */
+  .toast-notification {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background-color: #ECFDF5;
+    border: 1px solid #A7F3D0;
+    border-left: 4px solid #10B981;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+  }
+
+  .toast-icon {
+    color: #059669;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .toast-body {
+    flex: 1;
+    font-size: 0.875rem;
+    color: #065F46;
+  }
+
+  .toast-body strong {
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .toast-body p {
+    font-size: 0.825rem;
+    color: #047857;
+  }
+
+  .toast-close-btn {
+    background: transparent;
+    border: none;
+    color: #059669;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+  }
+</style>
+
+<script is:inline>
+  function initKontak() {
+    let messagesState = [
+      {
+        id: "MSG-2026-001",
+        name: "Ibu Sulastri",
+        contact: "081234567890",
+        isWhatsApp: true,
+        subject: "Informasi PPDB",
+        date: "2026-10-27 14:32",
+        status: "Belum Dibaca",
+        message: "Halo tim Admission FREEKS.id School. Mohon informasi apakah pendaftaran Early Bird Wave masih tersedia kuota beasiswa inovasi talenta robotika? Dan format portofolio proyek apa saja yang bisa kami sertakan saat asesmen?"
+      },
+      {
+        id: "MSG-2026-002",
+        name: "Bapak Hadi Pranoto",
+        contact: "hadi.pranoto88@gmail.com",
+        isWhatsApp: false,
+        subject: "Administrasi & SPP",
+        date: "2026-10-26 09:15",
+        status: "Sudah Dibalas",
+        message: "Selamat pagi tata usaha FREEKS.id School. Saya ingin mengonfirmasi penerbitan invoice dan kuitansi pelunasan paket starter pack & modul teknologi anak saya kelas VII-A untuk keperluan administrasi kantor. Terima kasih."
+      },
+      {
+        id: "MSG-2026-003",
+        name: "Bapak Irfan Hakim",
+        contact: "085712349988",
+        isWhatsApp: true,
+        subject: "Akademik & Pembelajaran",
+        date: "2026-10-24 16:40",
+        status: "Sudah Dibalas",
+        message: "Selamat sore tim kurikulum. Mau menanyakan jadwal sesi Showcase Day karya teknologi semester ganjil dan apakah orang tua diperbolehkan hadir untuk menyaksikan demonstrasi prototipe aplikasi siswa?"
+      },
+      {
+        id: "MSG-2026-004",
+        name: "Ibu Rina Setyawati",
+        contact: "082299887766",
+        isWhatsApp: true,
+        subject: "Saran & Pengaduan",
+        date: "2026-10-23 11:20",
+        status: "Belum Dibaca",
+        message: "Mohon izin menyampaikan apresiasi atas penyelenggaraan workshop coding akhir pekan lalu. Anak kami menjadi jauh lebih bersemangat mengeksplorasi computational thinking dan desain antarmuka digital."
+      },
+      {
+        id: "MSG-2026-005",
+        name: "Dimas Pratama",
+        contact: "dimas.pratama@alumni.freeks.id",
+        isWhatsApp: false,
+        subject: "Lainnya",
+        date: "2026-10-20 19:05",
+        status: "Sudah Dibalas",
+        message: "Saya alumni FREEKS.id School angkatan 2024 bermaksud memohon surat rekomendasi akademik dan transkrip portofolio proyek untuk pendaftaran beasiswa teknologi. Apakah bisa diproses dalam 2 hari kerja?"
+      }
+    ];
+
+    // Load from localStorage if present with auto-migration
+    const savedMessages = localStorage.getItem('mts_cms_kontak_messages');
+    if (savedMessages) {
+      try {
+        const parsed = JSON.parse(savedMessages);
+        const hasLegacy = Array.isArray(parsed) && parsed.some(m => m.message?.includes('Al-Qur\'an') || m.message?.includes('MTs') || m.message?.includes('tadarus'));
+        if (hasLegacy) {
+          localStorage.removeItem('mts_cms_kontak_messages');
+        } else if (Array.isArray(parsed) && parsed.length > 0) {
+          messagesState = parsed;
+        }
+      } catch (e) {
+        console.error('Failed to parse saved messages:', e);
+      }
+    }
+
+    let currentSelectedIdx = 0;
+    let currentFilter = 'all';
+
+    const container = document.getElementById('messages-container');
+
+    function updateMetrics() {
+      const unreadCount = messagesState.filter(m => m.status === 'Belum Dibaca').length;
+      const repliedCount = messagesState.filter(m => m.status === 'Sudah Dibalas').length;
+      const ppdbCount = messagesState.filter(m => m.subject === 'Informasi PPDB').length;
+
+      if (document.getElementById('metric-unread')) document.getElementById('metric-unread').textContent = unreadCount;
+      if (document.getElementById('metric-replied')) document.getElementById('metric-replied').textContent = repliedCount;
+      if (document.getElementById('metric-ppdb')) document.getElementById('metric-ppdb').textContent = ppdbCount;
+      if (document.getElementById('metric-total')) document.getElementById('metric-total').textContent = messagesState.length;
+    }
+
+    function renderReader(idx) {
+      if (idx < 0 || idx >= messagesState.length) return;
+      currentSelectedIdx = idx;
+      const m = messagesState[idx];
+
+      if (document.getElementById('reader-status')) {
+        const statusEl = document.getElementById('reader-status');
+        statusEl.textContent = m.status;
+        statusEl.className = 'status-pill ' + (m.status === 'Belum Dibaca' ? 'status-unread' : 'status-replied');
+      }
+
+      if (document.getElementById('reader-cat')) document.getElementById('reader-cat').textContent = m.subject;
+      if (document.getElementById('reader-subject')) document.getElementById('reader-subject').textContent = m.subject;
+      if (document.getElementById('reader-date')) document.getElementById('reader-date').textContent = m.date;
+      if (document.getElementById('reader-name')) document.getElementById('reader-name').textContent = m.name;
+      if (document.getElementById('reader-contact')) document.getElementById('reader-contact').textContent = m.contact;
+      if (document.getElementById('reader-avatar')) document.getElementById('reader-avatar').textContent = m.name.charAt(0).toUpperCase();
+      if (document.getElementById('reader-body-text')) document.getElementById('reader-body-text').textContent = `"${m.message}"`;
+
+      // Quick WA link
+      const btnWA = document.getElementById('btn-quick-wa');
+      if (btnWA) {
+        if (m.isWhatsApp || m.contact.startsWith('08') || m.contact.startsWith('+62')) {
+          btnWA.style.display = 'inline-flex';
+          const cleanPhone = m.contact.replace(/^0/, '62').replace(/[^0-9]/g, '');
+          const replyText = `Halo ${m.name}. Terima kasih telah menghubungi FREEKS.id School perihal "${m.subject}". Berikut informasi yang dapat kami sampaikan: `;
+          btnWA.href = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(replyText)}`;
+        } else {
+          btnWA.style.display = 'none';
+        }
+      }
+
+      // Quick Email link
+      const btnMail = document.getElementById('btn-quick-mail');
+      if (btnMail) {
+        if (m.contact.includes('@')) {
+          btnMail.style.display = 'inline-flex';
+          btnMail.href = `mailto:${m.contact}?subject=Tanggapan%20FREEKS.id%20School:%20${encodeURIComponent(m.subject)}`;
+        } else {
+          btnMail.style.display = 'none';
+        }
+      }
+
+      // Toggle read label
+      const toggleLabel = document.getElementById('label-toggle-read');
+      if (toggleLabel) {
+        toggleLabel.textContent = m.status === 'Belum Dibaca' ? 'Tandai Sudah Dibalas' : 'Tandai Belum Dibaca';
+      }
+    }
+        toggleLabel.textContent = m.status === 'Belum Dibaca' ? 'Tandai Sudah Dibalas' : 'Tandai Belum Dibaca';
+      }
+    }
+
+    function renderMessagesList() {
+      if (!container) return;
+      container.innerHTML = '';
+
+      let filtered = messagesState;
+      if (currentFilter === 'Belum Dibaca') filtered = messagesState.filter(m => m.status === 'Belum Dibaca');
+      else if (currentFilter === 'Sudah Dibalas') filtered = messagesState.filter(m => m.status === 'Sudah Dibalas');
+      else if (currentFilter === 'Informasi PPDB') filtered = messagesState.filter(m => m.subject === 'Informasi PPDB');
+      else if (currentFilter === 'Saran & Pengaduan') filtered = messagesState.filter(m => m.subject === 'Saran & Pengaduan');
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="padding:24px;text-align:center;color:var(--admin-ink-500);font-size:0.875rem;">Tidak ada pesan dalam kategori ini.</div>';
+        return;
+      }
+
+      filtered.forEach((msg, fIdx) => {
+        const originalIdx = messagesState.indexOf(msg);
+        const card = document.createElement('div');
+        const isUnread = msg.status === 'Belum Dibaca';
+        const isSelected = originalIdx === currentSelectedIdx;
+
+        card.className = `message-item-card ${isUnread ? 'unread' : ''} ${isSelected ? 'active' : ''}`;
+        card.innerHTML = `
+          <div class="msg-item-top">
+            <strong>${msg.name}</strong>
+            <span class="msg-item-date">${msg.date}</span>
+          </div>
+          <div class="msg-item-badges">
+            <span class="status-pill ${isUnread ? 'status-unread' : 'status-replied'}">${msg.status}</span>
+            <span class="category-pill">${msg.subject}</span>
+          </div>
+          <p class="msg-item-snippet">${msg.message}</p>
+        `;
+
+        card.addEventListener('click', () => {
+          renderReader(originalIdx);
+          renderMessagesList();
+        });
+
+        container.appendChild(card);
+      });
+
+      updateMetrics();
+    }
+
+    // Filter pills
+    document.querySelectorAll('.filter-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        currentFilter = pill.getAttribute('data-filter');
+        renderMessagesList();
+      });
+    });
+
+    // Toggle Read Status
+    const btnToggleRead = document.getElementById('btn-toggle-read');
+    if (btnToggleRead) {
+      btnToggleRead.addEventListener('click', () => {
+        if (currentSelectedIdx >= 0 && currentSelectedIdx < messagesState.length) {
+          const current = messagesState[currentSelectedIdx].status;
+          messagesState[currentSelectedIdx].status = (current === 'Belum Dibaca') ? 'Sudah Dibalas' : 'Belum Dibaca';
+          localStorage.setItem('mts_cms_kontak_messages', JSON.stringify(messagesState));
+          renderReader(currentSelectedIdx);
+          renderMessagesList();
+        }
+      });
+    }
+
+    // Delete message
+    const btnDeleteMsg = document.getElementById('btn-delete-msg');
+    if (btnDeleteMsg) {
+      btnDeleteMsg.addEventListener('click', () => {
+        if (currentSelectedIdx >= 0 && currentSelectedIdx < messagesState.length) {
+          const item = messagesState[currentSelectedIdx];
+          const msg = `Apakah Anda yakin ingin menghapus pesan dari "${item.name}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              messagesState.splice(currentSelectedIdx, 1);
+              localStorage.setItem('mts_cms_kontak_messages', JSON.stringify(messagesState));
+              currentSelectedIdx = 0;
+              renderMessagesList();
+              if (messagesState.length > 0) renderReader(0);
+            });
+          } else if (confirm(msg)) {
+            messagesState.splice(currentSelectedIdx, 1);
+            localStorage.setItem('mts_cms_kontak_messages', JSON.stringify(messagesState));
+            currentSelectedIdx = 0;
+            renderMessagesList();
+            if (messagesState.length > 0) renderReader(0);
+          }
+        }
+      });
+    }
+
+    // Export CSV
+    const btnExportCSV = document.getElementById('btn-export-messages-csv');
+    if (btnExportCSV) {
+      btnExportCSV.addEventListener('click', () => {
+        let csv = "ID Pesan,Nama Pengirim,Kontak,Kategori Perihal,Waktu Kirim,Status,Isi Pesan\n";
+        messagesState.forEach(m => {
+          csv += `"${m.id}","${m.name}","${m.contact}","${m.subject}","${m.date}","${m.status}","${m.message.replace(/"/g, '""')}"\n`;
+        });
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `rekap-pesan-aspirasi-${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+    }
+
+    // Save Messages
+    const btnSave = document.getElementById('btn-save-messages');
+    if (btnSave) {
+      btnSave.addEventListener('click', () => {
+        localStorage.setItem('mts_cms_kontak_messages', JSON.stringify(messagesState));
+        const toast = document.getElementById('save-toast');
+        if (toast) {
+          toast.hidden = false;
+          toast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+    }
+
+    const toastClose = document.getElementById('toast-close');
+    if (toastClose) toastClose.addEventListener('click', () => { document.getElementById('save-toast').hidden = true; });
+
+    // Initial render
+    renderMessagesList();
+    if (messagesState.length > 0) renderReader(0);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initKontak);
+  } else {
+    initKontak();
+  }
+</script>

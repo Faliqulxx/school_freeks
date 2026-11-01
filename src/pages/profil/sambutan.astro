@@ -1,0 +1,188 @@
+---
+import ProfilLayout from '../../layouts/ProfilLayout.astro';
+import heroSambutanData from '../../data/heroSambutan.json';
+
+const { sambutan } = heroSambutanData;
+---
+
+<ProfilLayout
+  title="Sambutan Principal"
+  description="Pesan visi dan komitmen FREEKS.ID dalam memimpin ekosistem pembelajaran masa depan di FREEKS.id School."
+  currentPage="/profil/sambutan"
+>
+  <div class="sambutan-detail-wrap">
+    <div class="content-tag">
+    </div>
+
+    <div class="headmaster-banner card">
+      <img
+        src={sambutan.photo.src}
+        alt={sambutan.photo.alt}
+        width={sambutan.photo.width}
+        height={sambutan.photo.height}
+        class="headmaster-detail-photo"
+        loading="lazy"
+      />
+      <div class="headmaster-detail-meta">
+        <h2 class="headmaster-detail-name">{sambutan.name}</h2>
+        <span class="headmaster-detail-role">{sambutan.role} FREEKS.id School</span>
+        <span class="headmaster-motto">"Where Curiosity Meets Future Innovation."</span>
+      </div>
+    </div>
+
+    <!-- Article prose: line-length 68ch (PRD 8.2) -->
+    <article class="prose-body">
+      <!-- Arabic Greeting (PRD 5.2 & A.16) -->
+      <p class="text-arabic greeting-arabic" lang="ar" dir="rtl">
+        {sambutan.arabicGreeting}
+      </p>
+
+      {sambutan.fullText.map((paragraph) => (
+        <p class="sambutan-p">{paragraph}</p>
+      ))}
+
+      <div class="signature-block">
+        <span class="sig-place">FREEKS Campus, Oktober 2026</span>
+        <span class="sig-title">Head of School / Principal FREEKS.id</span>
+        <div class="signature-line"></div>
+        <strong class="sig-name">{sambutan.name}</strong>
+        <span class="sig-nip">Academic Director & Principal</span>
+      </div>
+    </article>
+  </div>
+</ProfilLayout>
+
+<style>
+  .content-tag {
+    margin-bottom: var(--s-3);
+  }
+
+  .headmaster-banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--s-5);
+    margin-bottom: var(--s-6);
+    background-color: var(--green-50);
+    border: 1px solid var(--green-200);
+    text-align: center;
+    gap: var(--s-4);
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .headmaster-banner {
+      flex-direction: row;
+      text-align: left;
+      gap: var(--s-5);
+    }
+  }
+
+  .headmaster-detail-photo {
+    width: 140px;
+    height: 175px;
+    max-width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-1);
+    flex-shrink: 0;
+    display: block;
+  }
+
+  .headmaster-detail-meta {
+    min-width: 0;
+  }
+
+  .headmaster-detail-name {
+    font-size: 1.25rem;
+    color: var(--green-900);
+    margin-bottom: 4px;
+    overflow-wrap: break-word;
+  }
+
+  .headmaster-detail-role {
+    display: block;
+    font-size: var(--text-sm);
+    color: var(--green-700);
+    font-weight: 600;
+    margin-bottom: 8px;
+    overflow-wrap: break-word;
+  }
+
+  .headmaster-motto {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    font-style: italic;
+    overflow-wrap: break-word;
+  }
+
+  /* Prose body: strictly max-width: 100% on mobile, max 68ch on desktop */
+  .prose-body {
+    width: 100%;
+    max-width: 100%;
+    margin-top: var(--s-5);
+    min-width: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .prose-body {
+      max-width: var(--content-max-ch);
+    }
+  }
+
+  .greeting-arabic {
+    font-size: clamp(1.2rem, 4.5vw, 1.75rem);
+    line-height: 1.6;
+    color: var(--green-900);
+    margin-bottom: var(--s-5);
+    text-align: center;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .sambutan-p {
+    font-size: var(--text-base);
+    color: var(--ink-900);
+    line-height: 1.75;
+    margin-bottom: var(--s-4);
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .signature-block {
+    margin-top: var(--s-7);
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--ink-300);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 320px;
+    min-width: 0;
+  }
+
+  .sig-place {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+  }
+
+  .sig-title {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--green-900);
+    margin-bottom: 48px;
+  }
+
+  .sig-name {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    color: var(--green-900);
+  }
+
+  .sig-nip {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+  }
+</style>
+

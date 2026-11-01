@@ -1,0 +1,89 @@
+{
+  "dummy": false,
+  "achievements": [
+    {
+      "id": "prestasi-2026-1",
+      "year": 2026,
+      "level": "Nasional",
+      "title": "Juara 1 National Youth Robotics Championship",
+      "student": "Tim Robotika FREEKS (Kelas VIII)",
+      "organizer": "Indonesian Robotics & Automation Association",
+      "image": {
+        "src": "/assets/berita-prestasi-sains.webp",
+        "alt": "Piala dan piagam Juara 1 Robotika Nasional FREEKS.id School",
+        "width": 1200,
+        "height": 800
+      }
+    },
+    {
+      "id": "prestasi-2026-2",
+      "year": 2026,
+      "level": "Provinsi",
+      "title": "Best Creative Design & 3D Interactive Award",
+      "student": "Nabila Rahma (Kelas VIII)",
+      "organizer": "Jawa Timur Creative Tech Festival",
+      "image": {
+        "src": "/assets/program-unggulan-tahfidz.webp",
+        "alt": "Penghargaan Best 3D Interactive Design FREEKS.id School",
+        "width": 1200,
+        "height": 800
+      }
+    },
+    {
+      "id": "prestasi-2026-3",
+      "year": 2026,
+      "level": "Nasional",
+      "title": "Top 5 Youth AI & Coding Hackathon",
+      "student": "Tim Inovator FREEKS.id",
+      "organizer": "National Youth Tech Hub",
+      "image": {
+        "src": "/assets/kegiatan-madrasah-1.webp",
+        "alt": "Dokumentasi kejuaraan tim hackathon FREEKS.id School",
+        "width": 1200,
+        "height": 800
+      }
+    },
+    {
+      "id": "prestasi-2025-1",
+      "year": 2025,
+      "level": "Provinsi",
+      "title": "Juara 1 Inovasi Teknologi Tepat Guna Remaja",
+      "student": "Tim Maker Space FREEKS",
+      "organizer": "Dinas Pendidikan & Riset Teknologi",
+      "image": {
+        "src": "/assets/berita-prestasi-sains.webp",
+        "alt": "Tim Maker Space FREEKS pada kompetisi inovasi",
+        "width": 1200,
+        "height": 800
+      }
+    },
+    {
+      "id": "prestasi-2025-2",
+      "year": 2025,
+      "level": "Regional",
+      "title": "Juara 1 English Debate & Public Pitching",
+      "student": "Aisyah Zahra (Kelas VIII)",
+      "organizer": "Regional Young Leaders Forum",
+      "image": {
+        "src": "/assets/kegiatan-madrasah-2.webp",
+        "alt": "Kejuaraan English Debate dan Public Pitching siswa",
+        "width": 1200,
+        "height": 800
+      }
+    },
+    {
+      "id": "prestasi-2025-3",
+      "year": 2025,
+      "level": "Nasional",
+      "title": "Finalis Kompetisi Game Indie Remaja Indonesia",
+      "student": "Tim Game Dev Studio FREEKS",
+      "organizer": "Indie Game Developer Community Indonesia",
+      "image": {
+        "src": "/assets/hero-siswa-belajar.webp",
+        "alt": "Finalis pameran game indie karya siswa FREEKS.id",
+        "width": 1200,
+        "height": 800
+      }
+    }
+  ]
+}

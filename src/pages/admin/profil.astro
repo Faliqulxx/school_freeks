@@ -1,0 +1,2482 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import Icon from '../../components/Icon.astro';
+import profilData from '../../data/profil.json';
+import heroSambutanData from '../../data/heroSambutan.json';
+import siteData from '../../data/siteData.json';
+
+const { history, vision, missions, goals, foundation, facilities } = profilData;
+const { sambutan } = heroSambutanData;
+const { school } = siteData;
+
+const initialStructure = [
+  { level: 1, role: "Dewan Pembina & Yayasan", name: "Ketua Pengurus FREEKS Foundation", category: "Yayasan" },
+  { level: 2, role: "Head of School / Principal", name: "FREEKS.ID", category: "Pimpinan" },
+  { level: 2, role: "Dewan Komite & Mitra Industri", name: "Perwakilan Industri Digital & Wali Murid", category: "Mitra" },
+  { level: 3, role: "Waka Akademik & Kurikulum Tech", name: "FREEKS.ID", category: "Akademik" },
+  { level: 3, role: "Waka Kesiswaan & Portofolio Siswa", name: "FREEKS.ID", category: "Kesiswaan" },
+  { level: 3, role: "Waka Sarana & Digital Infrastructure", name: "FREEKS.ID", category: "Sarpras" },
+  { level: 4, role: "Koordinator AI & Robotics Lab", name: "FREEKS.ID", category: "Laboratorium" },
+  { level: 4, role: "Koordinator Digital Media & 3D Studio", name: "FREEKS.ID", category: "Studio" },
+  { level: 4, role: "Koordinator Library & Resource Center", name: "FREEKS.ID", category: "Riset" },
+  { level: 5, role: "Dewan Mentor & Instruktur Teknologi", name: "Seluruh Mentor & Guru Ahli", category: "Pengajar" },
+  { level: 6, role: "Student Innovators & OSIS", name: "Pengurus OSIS & Komunitas Kreatif", category: "Siswa" }
+];
+---
+
+<AdminLayout title="Manajemen Profil Kampus (Modul 3)" activeMenu="profil">
+  <div class="page-header-wrap">
+    <div>
+      <div class="module-tag">MODUL 3 DARI 8</div>
+      <h1>Manajemen Profil Kampus</h1>
+      <p class="page-subtitle">
+        Kelola linimasa sejarah, visi misi tujuan, naskah sambutan pimpinan, hierarki struktur organisasi, profil yayasan YPI, dan fasilitas sarana prasarana.
+      </p>
+    </div>
+
+    <div class="header-action-group">
+      <a href="/profil/sejarah" target="_blank" class="btn btn-secondary">
+        <Icon name="external-link" size={16} />
+        <span>Buka Web Publik</span>
+      </a>
+      <button type="button" id="btn-export-profil-json" class="btn btn-secondary">
+        <Icon name="download" size={16} />
+        <span>Unduh JSON</span>
+      </button>
+      <button type="button" id="btn-save-profil" class="btn btn-primary">
+        <Icon name="check" size={18} />
+        <span>Simpan Perubahan</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="save-toast" class="toast-notification" role="alert" aria-live="polite" hidden>
+    <Icon name="check-circle" size={20} class="toast-icon" />
+    <div class="toast-body">
+      <strong>Perubahan Profil Kampus Berhasil Disimpan!</strong>
+      <p>Data profil telah tersimpan secara lokal di browser Anda. Anda dapat mengunduh berkas profil.json terbaru kapan pun.</p>
+    </div>
+    <button type="button" id="toast-close" class="toast-close-btn" aria-label="Tutup notifikasi">
+      <Icon name="x" size={16} />
+    </button>
+  </div>
+
+  <!-- Sub-Modul Tab Navigation -->
+  <div class="section-tabs-bar" role="tablist">
+    <button type="button" class="tab-btn active" data-tab="tab-sejarah" role="tab" aria-selected="true">
+      <Icon name="calendar" size={16} />
+      <span>1. Sejarah</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-visimisi" role="tab" aria-selected="false">
+      <Icon name="award" size={16} />
+      <span>2. Visi, Misi & Tujuan</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-sambutan" role="tab" aria-selected="false">
+      <Icon name="file-text" size={16} />
+      <span>3. Sambutan Lengkap</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-struktur" role="tab" aria-selected="false">
+      <Icon name="sitemap" size={16} />
+      <span>4. Struktur Organisasi</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-yayasan" role="tab" aria-selected="false">
+      <Icon name="landmark" size={16} />
+      <span>5. Yayasan YPI</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-fasilitas" role="tab" aria-selected="false">
+      <Icon name="box" size={16} />
+      <span>6. Fasilitas Sarpras</span>
+    </button>
+  </div>
+
+  <div class="profil-layout-grid">
+    <!-- Left Column: Forms for 6 Sub-Modules -->
+    <div class="form-container">
+      <form id="profil-form" onsubmit="return false;">
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 1: SEJARAH RINTISAN -->
+        <!-- ========================================== -->
+        <div class="tab-panel active" id="tab-sejarah">
+          <div class="form-card card">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="calendar" size={20} />
+              </div>
+              <div>
+                <h3>Pengantar Sejarah & Dokumentasi Gedung</h3>
+                <p class="card-desc">Paragraf pembuka sejarah Sekolah dan takarir foto arsip gedung utama.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group col-span-2">
+                <label for="input-sejarah-lead">Paragraf Pengantar Sejarah <span class="req">*</span></label>
+                <textarea
+                  id="input-sejarah-lead"
+                  name="sejarahLead"
+                  rows="3"
+                  required
+                  class="form-control"
+                >FREEKS.id School berawal dari kepedulian tokoh masyarakat dan para ulama di bawah naungan Yayasan Inovasi Kreasi Digital (FREEKS Foundation) untuk menghadirkan pendidikan formal tingkat menengah pertama yang berakar pada nilai-nilai keislaman dan akhlak mulia.</textarea>
+              </div>
+
+              <div class="form-group col-span-2">
+                <label for="input-sejarah-img">Path Foto Gedung Sekolah <span class="req">*</span></label>
+                <div class="asset-preview-row">
+                  <img
+                    id="img-prev-sejarah"
+                    src="/assets/gedung-mts-islamiyah.webp"
+                    alt="Foto Gedung Sejarah"
+                    class="asset-thumb-wide"
+                  />
+                  <div class="asset-details">
+                    <input
+                      type="text"
+                      id="input-sejarah-img"
+                      name="sejarahImg"
+                      value="/assets/gedung-mts-islamiyah.webp"
+                      required
+                      class="form-control"
+                    />
+                    <div class="asset-upload-bar">
+                      <label class="btn-upload-file">
+                        <Icon name="upload" size={13} />
+                        <span>Unggah Foto Gedung</span>
+                        <input type="file" accept="image/*" class="asset-file-uploader" data-target-input="input-sejarah-img" data-target-preview="img-prev-sejarah" data-sim-preview="sim-sejarah-preview-img" style="display: none;" />
+                      </label>
+                      <span class="upload-file-status"></span>
+                    </div>
+                    <input
+                      type="text"
+                      id="input-sejarah-caption"
+                      name="sejarahCaption"
+                      value="Foto Gedung: Sekolah FREEKS.id School dengan motto Berilmu Beramal Berakhlak"
+                      placeholder="Takarir foto arsip gedung..."
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CRUD Timeline Tonggak Sejarah -->
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="clock" size={20} />
+                </div>
+                <div>
+                  <h3>Linimasa Tonggak Sejarah (CRUD)</h3>
+                  <p class="card-desc">Tahapan peristiwa penting sejak tahun pendirian hingga era modern.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-history" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Peristiwa</span>
+              </button>
+            </div>
+
+            <div class="history-admin-list" id="history-list-container">
+              {history.map((h, idx) => (
+                <div class="history-admin-item" data-idx={idx}>
+                  <div class="history-year-tag">{h.year}</div>
+                  <div class="history-content-col">
+                    <strong>{h.title}</strong>
+                    <p>{h.description}</p>
+                  </div>
+                  <div class="history-actions">
+                    <button type="button" class="btn-action-edit btn-edit-h" data-idx={idx} title="Edit">
+                      <Icon name="edit" size={14} />
+                      <span>Edit</span>
+                    </button>
+                    <button type="button" class="btn-action-delete btn-delete-h" data-idx={idx} title="Hapus">
+                      <Icon name="trash-2" size={14} />
+                      <span>Hapus</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Modal/Form Edit Tonggak Sejarah -->
+          <div class="form-card card" id="modal-history" style="display: none; border-color: var(--admin-green-500); background-color: var(--admin-green-50);">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="edit" size={20} />
+              </div>
+              <div>
+                <h3 id="modal-history-title">Tambah Tonggak Sejarah</h3>
+                <p class="card-desc">Masukkan tahun, judul peristiwa, dan narasi penjelasan.</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="input-hist-year">Tahun / Rentang <span class="req">*</span></label>
+                <input type="text" id="input-hist-year" placeholder="Contoh: 1987 / 2024–Kini" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-hist-title">Judul Peristiwa <span class="req">*</span></label>
+                <input type="text" id="input-hist-title" placeholder="Contoh: Awal Berdiri & Rintisan" class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-hist-desc">Narasi Sejarah <span class="req">*</span></label>
+                <textarea id="input-hist-desc" rows="3" placeholder="Penjelasan mengenai latar belakang dan capaian peristiwa..." class="form-control"></textarea>
+              </div>
+              <div class="col-span-2 form-actions-row">
+                <button type="button" id="btn-cancel-history" class="btn btn-secondary">Batal</button>
+                <button type="button" id="btn-save-history-item" class="btn btn-primary">Simpan Peristiwa</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 2: VISI, MISI & TUJUAN -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-visimisi">
+          <!-- Visi -->
+          <div class="form-card card">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="award" size={20} />
+              </div>
+              <div>
+                <h3>Visi Sekolah</h3>
+                <p class="card-desc">Pernyataan cita-cita luhur jangka panjang institusi FREEKS.id School.</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="input-vision">Teks Visi Utama <span class="req">*</span></label>
+              <textarea
+                id="input-vision"
+                name="vision"
+                rows="3"
+                required
+                class="form-control"
+              >{vision}</textarea>
+            </div>
+          </div>
+
+          <!-- Misi -->
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="check-circle" size={20} />
+                </div>
+                <div>
+                  <h3>Butir-Butir Misi (CRUD)</h3>
+                  <p class="card-desc">Langkah strategis operasional untuk mewujudkan visi Sekolah.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-mission" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Misi</span>
+              </button>
+            </div>
+
+            <div class="ordered-items-list" id="missions-list-container">
+              {missions.map((m, idx) => (
+                <div class="ordered-item-row" data-idx={idx}>
+                  <div class="order-badge">{idx + 1}</div>
+                  <input type="text" class="form-control mission-input" value={m} />
+                  <button type="button" class="btn-action-delete btn-delete-mission" data-idx={idx} title="Hapus Misi">
+                    <Icon name="trash-2" size={14} />
+                    <span>Hapus</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Tujuan -->
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="target" size={20} />
+                </div>
+                <div>
+                  <h3>Tujuan Pendidikan Sekolah (CRUD)</h3>
+                  <p class="card-desc">Target capaian lulusan dan kelembagaan yang terukur.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-goal" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Tujuan</span>
+              </button>
+            </div>
+
+            <div class="ordered-items-list" id="goals-list-container">
+              {goals.map((g, idx) => (
+                <div class="ordered-item-row" data-idx={idx}>
+                  <div class="order-badge">{idx + 1}</div>
+                  <input type="text" class="form-control goal-input" value={g} />
+                  <button type="button" class="btn-action-delete btn-delete-goal" data-idx={idx} title="Hapus Tujuan">
+                    <Icon name="trash-2" size={14} />
+                    <span>Hapus</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 3: SAMBUTAN Head of School / Principal LENGKAP -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-sambutan">
+          <div class="form-card card">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="file-text" size={20} />
+              </div>
+              <div>
+                <h3>Sambutan Head of School / Principal Lengkap</h3>
+                <p class="card-desc">Naskah pidato resmi untuk halaman profil sambutan (`/profil/sambutan`).</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="input-sambutan-prof-name">Nama Lengkap Head of School / Principal <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-sambutan-prof-name"
+                  value={sambutan.name}
+                  required
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="input-sambutan-prof-role">Jabatan Resmi <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-sambutan-prof-role"
+                  value={sambutan.role}
+                  required
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group col-span-2">
+                <label for="input-sambutan-prof-photo">Foto Resmi Head of School / Principal <span class="req">*</span></label>
+                <div class="asset-preview-row">
+                  <img
+                    id="img-prev-sambutan-prof"
+                    src={sambutan.photo.src}
+                    alt={sambutan.photo.alt}
+                    class="asset-thumb-leader"
+                  />
+                  <div class="asset-details">
+                    <input
+                      type="text"
+                      id="input-sambutan-prof-photo"
+                      value={sambutan.photo.src}
+                      required
+                      class="form-control"
+                    />
+                    <div class="asset-upload-bar">
+                      <label class="btn-upload-file">
+                        <Icon name="upload" size={13} />
+                        <span>Unggah Foto Pimpinan</span>
+                        <input type="file" accept="image/*" class="asset-file-uploader" data-target-input="input-sambutan-prof-photo" data-target-preview="img-prev-sambutan-prof" style="display: none;" />
+                      </label>
+                      <span class="upload-file-status"></span>
+                    </div>
+                    <input
+                      type="text"
+                      id="input-sambutan-prof-motto"
+                      value="Pendidikan adalah amal jariyah dan ikhtiar mencerdaskan umat."
+                      placeholder="Motto pimpinan..."
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-span-2">
+                <label for="input-sambutan-prof-arabic">Salam Pembuka Bahasa Arab <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-sambutan-prof-arabic"
+                  value={sambutan.arabicGreeting}
+                  dir="rtl"
+                  required
+                  class="form-control font-arabic"
+                />
+              </div>
+
+              <div class="form-group col-span-2">
+                <label>Paragraf Pidato Sambutan Lengkap (Per Paragraf)</label>
+                <div class="paragraphs-list" id="sambutan-paragraphs-container">
+                  {sambutan.fullText.map((p, idx) => (
+                    <div class="paragraph-item-row" data-idx={idx}>
+                      <span class="p-num">§{idx + 1}</span>
+                      <textarea rows="3" class="form-control sambutan-p-input">{p}</textarea>
+                      <button type="button" class="btn-action-delete btn-delete-p" data-idx={idx} title="Hapus Paragraf">
+                        <Icon name="trash-2" size={14} />
+                        <span>Hapus</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <button type="button" id="btn-add-paragraph" class="btn btn-secondary btn-sm mt-2">
+                  <Icon name="plus" size={15} />
+                  <span>Tambah Paragraf Pidato</span>
+                </button>
+              </div>
+
+              <div class="form-group">
+                <label for="input-sambutan-sig-city">Kota & Titimangsa Surat</label>
+                <input type="text" id="input-sambutan-sig-city" value="Ujungpangkah, Oktober 2026" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label for="input-sambutan-sig-nip">NIP Pimpinan</label>
+                <input type="text" id="input-sambutan-sig-nip" value="NIP. 19780512 200501 1 004" class="form-control" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 4: STRUKTUR ORGANISASI -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-struktur">
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="sitemap" size={20} />
+                </div>
+                <div>
+                  <h3>Bagan Hierarki & Struktur Organisasi (CRUD)</h3>
+                  <p class="card-desc">Susunan kepemimpinan, waka Sekolah, koordinator, dan dewan pengajar.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-org" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Posisi</span>
+              </button>
+            </div>
+
+            <div class="org-admin-list" id="org-list-container">
+              {initialStructure.map((st, idx) => (
+                <div class="org-admin-card" data-idx={idx}>
+                  <div class={`org-level-badge lvl-${st.level}`}>Lvl {st.level}</div>
+                  <div class="org-info-col">
+                    <strong class="org-role-name">{st.role}</strong>
+                    <span class="org-person-name">{st.name}</span>
+                  </div>
+                  <div class="org-cat-tag">{st.category}</div>
+                  <div class="org-item-actions">
+                    <button type="button" class="btn-action-edit btn-edit-o" data-idx={idx} title="Edit Posisi">
+                      <Icon name="edit" size={14} />
+                      <span>Edit</span>
+                    </button>
+                    <button type="button" class="btn-action-delete btn-delete-o" data-idx={idx} title="Hapus Posisi">
+                      <Icon name="trash-2" size={14} />
+                      <span>Hapus</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Modal/Form Edit Struktur -->
+          <div class="form-card card" id="modal-org" style="display: none; border-color: var(--admin-green-500); background-color: var(--admin-green-50);">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="edit" size={20} />
+              </div>
+              <div>
+                <h3 id="modal-org-title">Tambah Posisi Organisasi</h3>
+                <p class="card-desc">Atur level hierarki (1 = Yayasan, 2 = Pimpinan/Komite, 3 = Waka, 4 = Koordinator).</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="input-org-level">Level Hierarki (1-6) <span class="req">*</span></label>
+                <select id="input-org-level" class="form-control">
+                  <option value="1">Level 1 - Yayasan</option>
+                  <option value="2">Level 2 - Pimpinan / Komite</option>
+                  <option value="3">Level 3 - Waka / Tata Usaha</option>
+                  <option value="4">Level 4 - Koordinator Unit</option>
+                  <option value="5">Level 5 - Dewan Guru / Pembina</option>
+                  <option value="6">Level 6 - Siswa / OSIS</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="input-org-category">Kategori Departemen <span class="req">*</span></label>
+                <input type="text" id="input-org-category" placeholder="Contoh: Pimpinan / Akademik / Sarpras" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-org-role">Nama Jabatan / Posisi <span class="req">*</span></label>
+                <input type="text" id="input-org-role" placeholder="Contoh: Waka Kurikulum" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-org-name">Nama Pejabat / Personil <span class="req">*</span></label>
+                <input type="text" id="input-org-name" placeholder="Contoh: FREEKS.ID" class="form-control" />
+              </div>
+              <div class="col-span-2 form-actions-row">
+                <button type="button" id="btn-cancel-org" class="btn btn-secondary">Batal</button>
+                <button type="button" id="btn-save-org-item" class="btn btn-primary">Simpan Posisi</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 5: PROFIL YAYASAN YPI -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-yayasan">
+          <div class="form-card card">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="landmark" size={20} />
+              </div>
+              <div>
+                <h3>Identitas Yayasan FREEKS Foundation</h3>
+                <p class="card-desc">Informasi yayasan penaung institusi pendidikan FREEKS.id School.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group col-span-2">
+                <label for="input-fnd-name">Nama Resmi Yayasan <span class="req">*</span></label>
+                <input type="text" id="input-fnd-name" value={foundation.name} required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-fnd-est">Tahun Berdiri <span class="req">*</span></label>
+                <input type="text" id="input-fnd-est" value={foundation.established} required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-fnd-leader">Ketua Pengurus Yayasan <span class="req">*</span></label>
+                <input type="text" id="input-fnd-leader" value={foundation.leader} required class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-fnd-desc">Narasi Sejarah & Khidmah Yayasan <span class="req">*</span></label>
+                <textarea id="input-fnd-desc" rows="3" required class="form-control">{foundation.description}</textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- CRUD Makna Lambang Yayasan -->
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="award" size={20} />
+                </div>
+                <div>
+                  <h3>Makna & Simbol Lambang YPI (CRUD)</h3>
+                  <p class="card-desc">Arti filosofis di balik logo 3D yayasan.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-symbol" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Simbol</span>
+              </button>
+            </div>
+
+            <div class="symbols-admin-list" id="symbols-list-container">
+              {foundation.logoMeaning.map((sym, idx) => (
+                <div class="symbol-admin-card" data-idx={idx}>
+                  <div class="sym-elem-pill">{sym.element}</div>
+                  <div class="sym-content-col">
+                    <strong>{sym.symbol}</strong>
+                    <p>{sym.description}</p>
+                  </div>
+                  <div class="sym-actions">
+                    <button type="button" class="btn-action-delete btn-delete-symbol" data-idx={idx} title="Hapus Simbol">
+                      <Icon name="trash-2" size={14} />
+                      <span>Hapus</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Unit Pendidikan Naungan YPI -->
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="book-open" size={20} />
+                </div>
+                <div>
+                  <h3>Unit Pendidikan Naungan YPI (CRUD)</h3>
+                  <p class="card-desc">Lembaga pendidikan mulai dari RA/TK hingga MA/SMA.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-unit" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Unit</span>
+              </button>
+            </div>
+
+            <div class="units-admin-list" id="units-list-container">
+              {foundation.units.map((u, idx) => (
+                <div class="unit-admin-row" data-idx={idx}>
+                  <input type="text" class="form-control unit-name-input" value={u.name} placeholder="Nama Lembaga..." />
+                  <input type="text" class="form-control unit-desc-input" value={u.desc} placeholder="Keterangan Jenjang..." />
+                  <button type="button" class="btn-action-delete btn-delete-unit" data-idx={idx} title="Hapus Unit">
+                    <Icon name="trash-2" size={14} />
+                    <span>Hapus</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 6: FASILITAS SEKOLAH -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-fasilitas">
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="box" size={20} />
+                </div>
+                <div>
+                  <h3>Sarana & Fasilitas Sekolah (CRUD)</h3>
+                  <p class="card-desc">Kelola laboratorium, ruang kelas, musala, perpustakaan, dan gedung utama.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-facility" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Fasilitas</span>
+              </button>
+            </div>
+
+            <div class="facilities-admin-grid" id="facilities-list-container">
+              {facilities.map((fac, idx) => (
+                <div class="facility-admin-card" data-id={fac.id}>
+                  <div class="fac-admin-thumb-wrap">
+                    <img src={fac.image.src} alt={fac.image.alt} class="fac-admin-thumb" onerror="this.src='/assets/hero-siswa-belajar.webp'" />
+                  </div>
+                  <div class="fac-admin-body">
+                    <h4>{fac.name}</h4>
+                    <p class="fac-admin-desc">{fac.description}</p>
+                    <div class="fac-admin-actions">
+                      <button type="button" class="btn-action-edit btn-edit-f" data-idx={idx} title="Edit Fasilitas">
+                        <Icon name="edit" size={14} />
+                        <span>Edit</span>
+                      </button>
+                      <button type="button" class="btn-action-delete btn-delete-f" data-idx={idx} title="Hapus Fasilitas">
+                        <Icon name="trash-2" size={14} />
+                        <span>Hapus</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Modal/Form Edit Fasilitas -->
+          <div class="form-card card" id="modal-facility" style="display: none; border-color: var(--admin-green-500); background-color: var(--admin-green-50);">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="edit" size={20} />
+              </div>
+              <div>
+                <h3 id="modal-fac-title">Tambah Fasilitas Baru</h3>
+                <p class="card-desc">Lengkapi nama ruangan, deskripsi kenyamanan, dan path foto WebP.</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <input type="hidden" id="input-fac-id" value="" />
+              <div class="form-group col-span-2">
+                <label for="input-fac-name">Nama Fasilitas / Ruangan <span class="req">*</span></label>
+                <input type="text" id="input-fac-name" placeholder="Contoh: Laboratorium Komputer Modern" class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-fac-img">Foto Fasilitas (WebP) <span class="req">*</span></label>
+                <div class="asset-preview-row">
+                  <img
+                    id="img-prev-fac"
+                    src="/assets/kegiatan-Sekolah-2.webp"
+                    alt="Pratinjau Fasilitas"
+                    class="asset-thumb-wide"
+                  />
+                  <div class="asset-details">
+                    <input type="text" id="input-fac-img" placeholder="/assets/kegiatan-Sekolah-2.webp" class="form-control" />
+                    <div class="asset-upload-bar">
+                      <label class="btn-upload-file">
+                        <Icon name="upload" size={13} />
+                        <span>Unggah Foto Fasilitas</span>
+                        <input type="file" accept="image/*" class="asset-file-uploader" data-target-input="input-fac-img" data-target-preview="img-prev-fac" style="display: none;" />
+                      </label>
+                      <span class="upload-file-status"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-fac-desc">Deskripsi Fasilitas & Sarana <span class="req">*</span></label>
+                <textarea id="input-fac-desc" rows="3" placeholder="Fasilitas dilengkapi AC, sarana multimedia, dll..." class="form-control"></textarea>
+              </div>
+              <div class="col-span-2 form-actions-row">
+                <button type="button" id="btn-cancel-facility" class="btn btn-secondary">Batal</button>
+                <button type="button" id="btn-save-facility-item" class="btn btn-primary">Simpan Fasilitas</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Right Column: Interactive Live Preview -->
+    <aside class="preview-container">
+      <div class="preview-sticky-wrap">
+        <div class="card preview-card">
+          <div class="card-header-sm">
+            <div class="flex-align-center gap-2">
+              <Icon name="eye" size={18} />
+              <h4>Pratinjau Profil</h4>
+            </div>
+            <div class="preview-mode-pills" id="profil-preview-pills">
+              <button type="button" class="pill-btn active" data-mode="sejarah">Sejarah</button>
+              <button type="button" class="pill-btn" data-mode="visi">Visi</button>
+              <button type="button" class="pill-btn" data-mode="sambutan">Sambutan</button>
+              <button type="button" class="pill-btn" data-mode="struktur">Struktur</button>
+            </div>
+          </div>
+
+          <!-- Preview 1: Sejarah -->
+          <div id="sim-prof-sejarah" class="sim-prof-view active">
+            <div class="sim-sejarah-box">
+              <img id="sim-sejarah-preview-img" src="/assets/gedung-mts-islamiyah.webp" alt="Gedung" class="sim-sejarah-img" />
+              <div class="sim-sejarah-lead" id="sim-sejarah-lead-text">
+                FREEKS.id School berawal dari kepedulian tokoh masyarakat dan ulama...
+              </div>
+              <div class="sim-timeline-mini" id="sim-timeline-mini">
+                <div class="sim-timeline-row">
+                  <span class="sim-yr" id="sim-first-year">{history[0].year}</span>
+                  <span class="sim-tl-title" id="sim-first-title">{history[0].title}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 2: Visi & Misi -->
+          <div id="sim-prof-visi" class="sim-prof-view" style="display: none;">
+            <div class="sim-visi-box">
+              <span class="sim-badge-tag">Visi Institusi</span>
+              <blockquote class="sim-vision-quote" id="sim-vision-text">"{vision}"</blockquote>
+              <div class="sim-missions-preview">
+                <strong>Butir Misi Teratas:</strong>
+                <p id="sim-mission-first">{missions[0]}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 3: Sambutan -->
+          <div id="sim-prof-sambutan" class="sim-prof-view" style="display: none;">
+            <div class="sim-sambutan-box">
+              <div class="sim-sambutan-head">
+                <img src={sambutan.photo.src} alt="Foto" class="sim-leader-avatar" />
+                <div>
+                  <h4 id="sim-prof-sambutan-name">{sambutan.name}</h4>
+                  <small id="sim-prof-sambutan-role">{sambutan.role} FREEKS.id School</small>
+                </div>
+              </div>
+              <div class="sim-arabic" id="sim-prof-arabic">{sambutan.arabicGreeting}</div>
+              <p class="sim-p-first" id="sim-prof-p1">"{sambutan.fullText[0]}"</p>
+            </div>
+          </div>
+
+          <!-- Preview 4: Struktur -->
+          <div id="sim-prof-struktur" class="sim-prof-view" style="display: none;">
+            <div class="sim-struktur-box">
+              <div class="sim-org-node top">
+                <span>Ketua Yayasan</span>
+                <strong>FREEKS Foundation</strong>
+              </div>
+              <div class="sim-org-connector"></div>
+              <div class="sim-org-node mid">
+                <span>Head of School / Principal</span>
+                <strong id="sim-org-mid-name">{sambutan.name}</strong>
+              </div>
+              <div class="sim-org-connector"></div>
+              <div class="sim-org-row">
+                <div class="sim-org-node sub">Kurikulum</div>
+                <div class="sim-org-node sub">Kesiswaan</div>
+                <div class="sim-org-node sub">Sarpras</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="preview-footer-action">
+            <button type="button" id="btn-save-profil-side" class="btn btn-primary btn-block">
+              <Icon name="check" size={18} />
+              <span>Simpan Profil Kampus</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</AdminLayout>
+
+<style>
+  .page-header-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--admin-ink-300);
+  }
+
+  @media (min-width: 768px) {
+    .page-header-wrap {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+
+  .module-tag {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--admin-green-700);
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+
+  .page-header-wrap h1 {
+    font-size: clamp(1.4rem, 2vw, 1.85rem);
+    margin-bottom: 6px;
+  }
+
+  .page-subtitle {
+    font-size: 0.9rem;
+    color: var(--admin-ink-500);
+    max-width: 75ch;
+  }
+
+  .header-action-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* Sub-Modul Tabs */
+  .section-tabs-bar {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--admin-ink-100);
+  }
+
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--admin-ink-500);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    border-radius: 6px 6px 0 0;
+  }
+
+  .tab-btn:hover {
+    color: var(--admin-green-800);
+    background-color: var(--admin-green-50);
+  }
+
+  .tab-btn.active {
+    color: var(--admin-green-900);
+    background-color: #FFFFFF;
+    border-bottom-color: var(--admin-green-700);
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.03);
+  }
+
+  /* Layout Grid */
+  .profil-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  @media (min-width: 1080px) {
+    .profil-layout-grid {
+      grid-template-columns: 1.55fr 1fr;
+    }
+  }
+
+  .tab-panel {
+    display: none;
+  }
+
+  .tab-panel.active {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Form Cards */
+  .form-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid var(--admin-ink-300);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--admin-ink-100);
+  }
+
+  .card-header.justify-between {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .header-icon-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .header-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: var(--admin-green-100);
+    color: var(--admin-green-800);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-header h3 {
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+  }
+
+  .card-desc {
+    font-size: 0.825rem;
+    color: var(--admin-ink-500);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  @media (min-width: 640px) {
+    .form-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .col-span-2 {
+      grid-column: span 2;
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-group label {
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--admin-ink-700);
+  }
+
+  .req {
+    color: #DC2626;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.875rem;
+    color: var(--admin-ink-900);
+    background-color: #FFFFFF;
+    transition: all 0.15s ease;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: var(--admin-green-700);
+    box-shadow: 0 0 0 3px rgba(27, 122, 47, 0.15);
+  }
+
+  .font-arabic {
+    font-size: 1.15rem;
+    font-family: 'Amiri', serif, system-ui;
+    color: var(--admin-green-900);
+  }
+
+  .form-actions-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  /* Asset Previews */
+  .asset-preview-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .asset-thumb-wide {
+    width: 120px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--admin-ink-300);
+  }
+
+  .asset-thumb-leader {
+    width: 70px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--admin-ink-300);
+  }
+
+  .asset-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* History Timeline List (Global for Dynamic JS Nodes) */
+  :global(.history-admin-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 12px;
+  }
+
+  :global(.history-admin-item) {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 18px;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+  }
+
+  :global(.history-admin-item:hover) {
+    border-color: var(--admin-green-500);
+    box-shadow: 0 4px 12px rgba(27, 122, 47, 0.08);
+    transform: translateY(-1px);
+  }
+
+  :global(.history-year-tag) {
+    font-size: 0.875rem;
+    font-weight: 800;
+    color: var(--admin-green-800);
+    background: linear-gradient(135deg, var(--admin-green-50), #DCFCE7);
+    border: 1px solid var(--admin-green-200, #BBF7D0);
+    padding: 6px 14px;
+    border-radius: 8px;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    box-shadow: 0 1px 2px rgba(27, 122, 47, 0.06);
+  }
+
+  :global(.history-content-col) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  :global(.history-content-col strong) {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--admin-ink-900);
+    margin-bottom: 4px;
+  }
+
+  :global(.history-content-col p) {
+    font-size: 0.825rem;
+    color: var(--admin-ink-600);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  :global(.history-actions) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Ordered Lists (Misi & Tujuan) */
+  :global(.ordered-items-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  :global(.ordered-item-row) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  :global(.order-badge) {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--admin-green-800);
+    color: #FFFFFF;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* Paragraphs List */
+  :global(.paragraphs-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  :global(.paragraph-item-row) {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  :global(.p-num) {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--admin-green-700);
+    padding-top: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Org Admin List (Global for Dynamic JS Nodes) */
+  :global(.org-admin-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  :global(.org-admin-card) {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 18px;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+  }
+
+  :global(.org-admin-card:hover) {
+    border-color: var(--admin-green-500);
+    box-shadow: 0 4px 12px rgba(27, 122, 47, 0.08);
+    transform: translateY(-1px);
+  }
+
+  :global(.org-level-badge) {
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 6px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    background-color: var(--admin-green-100);
+    color: var(--admin-green-800);
+    border: 1px solid var(--admin-green-200, #BBF7D0);
+  }
+
+  :global(.org-level-badge.lvl-1) {
+    background-color: #ECFDF5;
+    color: #047857;
+    border-color: #A7F3D0;
+  }
+
+  :global(.org-level-badge.lvl-2) {
+    background-color: #EFF6FF;
+    color: #1D4ED8;
+    border-color: #BFDBFE;
+  }
+
+  :global(.org-level-badge.lvl-3) {
+    background-color: #F5F3FF;
+    color: #6D28D9;
+    border-color: #DDD6FE;
+  }
+
+  :global(.org-level-badge.lvl-4) {
+    background-color: #FEF3C7;
+    color: #B45309;
+    border-color: #FDE68A;
+  }
+
+  :global(.org-level-badge.lvl-5) {
+    background-color: #F0FDFA;
+    color: #0F766E;
+    border-color: #99F6E4;
+  }
+
+  :global(.org-level-badge.lvl-6) {
+    background-color: #FDF2F8;
+    color: #BE185D;
+    border-color: #FBCFE8;
+  }
+
+  :global(.org-info-col) {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  :global(.org-role-name) {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--admin-ink-900);
+  }
+
+  :global(.org-person-name) {
+    font-size: 0.8125rem;
+    color: var(--admin-ink-600);
+  }
+
+  :global(.org-cat-tag) {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--admin-ink-700);
+    background-color: var(--admin-ink-100);
+    border: 1px solid var(--admin-ink-200, #E2E8F0);
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  :global(.org-item-actions) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Symbols Admin List */
+  .symbols-admin-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .symbol-admin-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+  }
+
+  .sym-elem-pill {
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background-color: var(--admin-green-50);
+    color: var(--admin-green-800);
+    border: 1px solid var(--admin-green-100);
+    white-space: nowrap;
+  }
+
+  .sym-content-col {
+    flex: 1;
+  }
+
+  .sym-content-col strong {
+    display: block;
+    font-size: 0.875rem;
+  }
+
+  .sym-content-col p {
+    font-size: 0.775rem;
+    color: var(--admin-ink-500);
+  }
+
+  /* Units Admin List */
+  .units-admin-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .unit-admin-row {
+    display: grid;
+    grid-template-columns: 1.5fr 1.5fr auto;
+    gap: 10px;
+    align-items: center;
+  }
+
+  /* Facilities Admin Grid (Global for Dynamic JS Nodes) */
+  :global(.facilities-admin-grid) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 20px;
+    margin-top: 14px;
+  }
+
+  :global(.facility-admin-card) {
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    overflow: hidden;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+  }
+
+  :global(.facility-admin-card:hover) {
+    border-color: var(--admin-green-500);
+    box-shadow: 0 8px 24px rgba(27, 122, 47, 0.12);
+    transform: translateY(-2px);
+  }
+
+  :global(.fac-admin-thumb-wrap) {
+    position: relative;
+    width: 100%;
+    height: 185px;
+    background-color: #F1F5F9;
+    overflow: hidden;
+  }
+
+  :global(.fac-admin-thumb) {
+    width: 100%;
+    height: 185px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  :global(.facility-admin-card:hover .fac-admin-thumb) {
+    transform: scale(1.03);
+  }
+
+  :global(.fac-admin-body) {
+    padding: 16px 18px 18px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  :global(.fac-admin-body h4) {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--admin-ink-900);
+    margin: 0 0 6px 0;
+  }
+
+  :global(.fac-admin-desc) {
+    font-size: 0.8125rem;
+    color: var(--admin-ink-600);
+    line-height: 1.5;
+    margin: 0 0 16px 0;
+    flex: 1;
+  }
+
+  :global(.fac-admin-actions) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid #F1F5F9;
+  }
+
+  /* Universal Action Buttons (Global for Dynamic JS Nodes) */
+  :global(.btn-action-edit) {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: var(--admin-ink-700);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  :global(.btn-action-edit:hover) {
+    color: var(--admin-green-800);
+    border-color: var(--admin-green-500);
+    background-color: var(--admin-green-50);
+  }
+
+  :global(.btn-action-delete) {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border: 1px solid #FCA5A5;
+    border-radius: 8px;
+    background: #FEF2F2;
+    color: #DC2626;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  :global(.btn-action-delete:hover) {
+    color: #FFFFFF;
+    border-color: #DC2626;
+    background-color: #DC2626;
+  }
+
+  :global(.btn-icon) {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 6px;
+    background: #FFFFFF;
+    color: var(--admin-ink-700);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-icon:hover {
+    color: var(--admin-green-800);
+    border-color: var(--admin-green-500);
+    background-color: var(--admin-green-50);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 9px 16px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .btn-block {
+    width: 100%;
+  }
+
+  .btn-primary {
+    background-color: var(--admin-green-700);
+    color: #FFFFFF;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--admin-green-800);
+  }
+
+  .btn-secondary {
+    background-color: #FFFFFF;
+    color: var(--admin-ink-700);
+    border-color: var(--admin-ink-300);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--admin-ink-100);
+    color: var(--admin-ink-900);
+  }
+
+  .mt-2 {
+    margin-top: 8px;
+  }
+
+  /* Preview Container */
+  .preview-sticky-wrap {
+    position: sticky;
+    top: 90px;
+  }
+
+  .preview-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--admin-ink-300);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .card-header-sm {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--admin-ink-100);
+  }
+
+  .card-header-sm h4 {
+    font-size: 0.95rem;
+  }
+
+  .preview-mode-pills {
+    display: flex;
+    gap: 4px;
+    background-color: var(--admin-ink-100);
+    padding: 3px;
+    border-radius: 6px;
+  }
+
+  .pill-btn {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--admin-ink-500);
+    cursor: pointer;
+  }
+
+  .pill-btn.active {
+    background: #FFFFFF;
+    color: var(--admin-green-900);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Simulated Elements */
+  .sim-sejarah-box {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .sim-sejarah-img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .sim-sejarah-lead {
+    font-size: 0.8rem;
+    color: var(--admin-ink-700);
+    line-height: 1.45;
+  }
+
+  .sim-timeline-mini {
+    background-color: var(--admin-green-50);
+    border: 1px solid var(--admin-green-100);
+    border-radius: 8px;
+    padding: 10px 14px;
+  }
+
+  .sim-timeline-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .sim-yr {
+    font-weight: 800;
+    font-size: 0.8rem;
+    color: var(--admin-green-800);
+  }
+
+  .sim-tl-title {
+    font-size: 0.8rem;
+    color: var(--admin-ink-900);
+  }
+
+  .sim-visi-box {
+    background-color: var(--admin-green-50);
+    border: 1px solid var(--admin-green-100);
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .sim-badge-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    background-color: var(--admin-green-700);
+    color: #FFFFFF;
+    padding: 2px 8px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .sim-vision-quote {
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--admin-green-900);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .sim-missions-preview {
+    font-size: 0.775rem;
+    color: var(--admin-ink-700);
+    border-top: 1px dashed var(--admin-green-100);
+    padding-top: 10px;
+  }
+
+  .sim-sambutan-box {
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .sim-sambutan-head {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .sim-leader-avatar {
+    width: 48px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .sim-arabic {
+    font-family: 'Amiri', serif, system-ui;
+    font-size: 0.95rem;
+    color: var(--admin-green-800);
+    text-align: right;
+    margin-bottom: 8px;
+  }
+
+  .sim-p-first {
+    font-size: 0.775rem;
+    color: var(--admin-ink-700);
+    font-style: italic;
+    line-height: 1.45;
+  }
+
+  .sim-struktur-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0;
+  }
+
+  .sim-org-node {
+    padding: 8px 14px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 0.75rem;
+    width: 85%;
+  }
+
+  .sim-org-node span {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--admin-ink-500);
+  }
+
+  .sim-org-node.top {
+    background-color: var(--admin-ink-100);
+    border: 1px solid var(--admin-ink-300);
+  }
+
+  .sim-org-node.mid {
+    background-color: var(--admin-green-100);
+    border: 1px solid var(--admin-green-500);
+    color: var(--admin-green-900);
+  }
+
+  .sim-org-connector {
+    width: 2px;
+    height: 10px;
+    background-color: var(--admin-green-700);
+  }
+
+  .sim-org-row {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .sim-org-node.sub {
+    width: 30%;
+    padding: 6px;
+    font-size: 0.7rem;
+    background-color: #FFFFFF;
+    border: 1px solid var(--admin-ink-300);
+  }
+
+  .preview-footer-action {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--admin-ink-100);
+  }
+
+  /* Toast */
+  .toast-notification {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background-color: #ECFDF5;
+    border: 1px solid #A7F3D0;
+    border-left: 4px solid #10B981;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+  }
+
+  .toast-icon {
+    color: #059669;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .toast-body {
+    flex: 1;
+    font-size: 0.875rem;
+    color: #065F46;
+  }
+
+  .toast-body strong {
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .toast-body p {
+    font-size: 0.825rem;
+    color: #047857;
+  }
+
+  .toast-close-btn {
+    background: transparent;
+    border: none;
+    color: #059669;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+  }
+
+  .flex-align-center {
+    display: flex;
+    align-items: center;
+  }
+
+  .gap-2 {
+    gap: 8px;
+  }
+</style>
+
+<script is:inline>
+  function initProfil() {
+    // Initial states for interactive sub-modules (FREEKS.id Modern Tech School)
+    let historyState = [
+      { year: "2019", title: "Awal Inisiasi & Digital Sandbox", description: "Berawal dari inisiatif komunitas inkubator teknologi dan lab kreatif independen anak muda bernama FREEKS Studio, yang menguji coba program eksplorasi coding, desain digital, dan robotika interaktif bagi remaja." },
+      { year: "2021", title: "Pendirian FREEKS Foundation & Izin Sekolah", description: "Resmi berbadan hukum di bawah Yayasan Inovasi Kreasi Digital (FREEKS Foundation) dan memperoleh legalitas penyelenggaraan institusi pendidikan modern berbasis kurikulum integratif dan computational thinking." },
+      { year: "2023", title: "Pembangunan Kampus Cerdas & Tech Hub", description: "Peresmian gedung kampus modern ramah lingkungan (FREEKS Campus) lengkap dengan fasilitas Smart Classroom, Maker Space, VR/AR Studio, serta arena kompetisi robotika." },
+      { year: "2024", title: "Akreditasi Unggul & Kemitraan Ekosistem", description: "Meraih akreditasi Unggul (A) dan menjalin kemitraan inkubasi riset dengan berbagai industri kreatif digital, membuka akses magang mini dan mentoring industri untuk siswa." },
+      { year: "2025–Kini", title: "Pelopor Modern Tech School Abad ke-21", description: "Menjadi episentrum pendidikan teknologi masa depan terdepan yang mengintegrasikan kurikulum nasional, kecerdasan buatan terapan, etika digital, dan inkubasi wirausaha teknologi muda." }
+    ];
+
+    let orgState = [
+      { level: 1, role: "Dewan Pembina & Yayasan", name: "Ketua Pengurus FREEKS Foundation", category: "Yayasan" },
+      { level: 2, role: "Head of School / Principal", name: "FREEKS.ID", category: "Pimpinan" },
+      { level: 2, role: "Dewan Komite & Mitra Industri", name: "Perwakilan Industri Digital & Wali Murid", category: "Mitra" },
+      { level: 3, role: "Waka Akademik & Kurikulum Tech", name: "FREEKS.ID", category: "Akademik" },
+      { level: 3, role: "Waka Kesiswaan & Portofolio Siswa", name: "FREEKS.ID", category: "Kesiswaan" },
+      { level: 3, role: "Waka Sarana & Digital Infrastructure", name: "FREEKS.ID", category: "Sarpras" },
+      { level: 4, role: "Koordinator AI & Robotics Lab", name: "FREEKS.ID", category: "Laboratorium" },
+      { level: 4, role: "Koordinator Digital Media & 3D Studio", name: "FREEKS.ID", category: "Studio" },
+      { level: 4, role: "Koordinator Library & Resource Center", name: "FREEKS.ID", category: "Riset" },
+      { level: 5, role: "Dewan Mentor & Instruktur Teknologi", name: "Seluruh Mentor & Guru Ahli", category: "Pengajar" },
+      { level: 6, role: "Student Innovators & OSIS", name: "Pengurus OSIS & Komunitas Kreatif", category: "Siswa" }
+    ];
+
+    let facilitiesState = [
+      { id: "fasilitas-1", name: "Cyber Smart Classrooms", description: "Ruang belajar interaktif ber-AC yang dilengkapi Smart Board digital, modul meja fleksibel untuk diskusi kelompok, dan jaringan gigabit fiber-optic super cepat.", image: { src: "/assets/hero-siswa-belajar.webp", alt: "Ruang Cyber Smart Classroom FREEKS.id School" } },
+      { id: "fasilitas-2", name: "Maker Space & Robotics Arena", description: "Laboratorium rekayasa perangkat keras yang dilengkapi 3D printer, soldering station, mikrokontroler (Arduino/Raspberry Pi), dan lintasan uji robotika otonom.", image: { src: "/assets/berita-prestasi-sains.webp", alt: "Maker Space dan Arena Uji Robotika Siswa" } },
+      { id: "fasilitas-3", name: "Digital Media & 3D Creative Studio", description: "Studio multimedia berkemampuan rendering tinggi untuk produksi karya animasi, pemodelan 3D, motion graphic, game development, dan podcast siswa.", image: { src: "/assets/kegiatan-madrasah-2.webp", alt: "Studio Media Kreatif dan Lab 3D FREEKS.id School" } },
+      { id: "fasilitas-4", name: "VR/AR & Applied AI Laboratory", description: "Fasilitas headset virtual reality imersif dan workstation pengolahan model kecerdasan buatan untuk simulasi sains dan riset visual interaktif.", image: { src: "/assets/program-unggulan-tahfidz.webp", alt: "Lab Riset Sains dan Teknologi Interaktif" } },
+      { id: "fasilitas-5", name: "Innovation Hub & Amphitheater", description: "Auditorium modern dan amfiteater terbuka untuk pitching proyek siswa, pameran karya teknologi (Showcase Day), serta seminar pembicara industri tamu.", image: { src: "/assets/gedung-mts-islamiyah.webp", alt: "Gedung Utama FREEKS Campus dan Area Hub" } },
+      { id: "fasilitas-6", name: "Co-Working Commons & Green Lounge", description: "Area kolaborasi santai luar ruangan dan kafe sehat ramah lingkungan untuk berdiskusi, brainstorming santai, dan relaksasi antar sesi belajar.", image: { src: "/assets/hero-siswa-berjalan.webp", alt: "Koridor dan area lingkungan hijau Sekolah" } }
+    ];
+
+    // Load from localStorage if present with auto-migration from legacy data
+    const savedProfil = localStorage.getItem('mts_cms_profil_data');
+    if (savedProfil) {
+      try {
+        const parsed = JSON.parse(savedProfil);
+        if (parsed.history && Array.isArray(parsed.history) && parsed.history.length > 0) {
+          // If legacy 1987 data, upgrade to modern FREEKS history
+          if (parsed.history[0]?.year === "1987") {
+            // Keep default modern tech history
+          } else {
+            historyState = parsed.history;
+          }
+        }
+        if (parsed.org && Array.isArray(parsed.org) && parsed.org.length > 0) {
+          if (parsed.org[0]?.role?.includes('Yayasan Inovasi Kreasi Digital (FREEKS Foundation)') && parsed.org[0]?.name?.includes('Ketua Pengurus Yayasan')) {
+            // Upgrade to modern org structure
+          } else {
+            orgState = parsed.org;
+          }
+        }
+        if (parsed.facilities && Array.isArray(parsed.facilities) && parsed.facilities.length > 0) {
+          if (parsed.facilities[0]?.name?.includes('Ruang Kelas Bersih')) {
+            // Upgrade to modern tech facilities
+          } else {
+            facilitiesState = parsed.facilities.map(f => {
+              if (f.image && f.image.src && (f.image.src.includes('Sekolah-2') || f.image.src.includes('undefined'))) {
+                f.image.src = '/assets/kegiatan-madrasah-2.webp';
+              }
+              return f;
+            });
+          }
+        }
+        if (parsed.vision && document.getElementById('input-vision')) {
+          document.getElementById('input-vision').value = parsed.vision;
+        }
+      } catch (e) {
+        console.error('Failed to parse saved profil:', e);
+      }
+    }
+
+    // Sub-modul tab switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-tab');
+        tabBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        tabPanels.forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        const targetPanel = document.getElementById(targetId);
+        if (targetPanel) targetPanel.classList.add('active');
+      });
+    });
+
+    // Preview mode switcher
+    const previewPills = document.querySelectorAll('#profil-preview-pills .pill-btn');
+    const simViews = {
+      sejarah: document.getElementById('sim-prof-sejarah'),
+      visi: document.getElementById('sim-prof-visi'),
+      sambutan: document.getElementById('sim-prof-sambutan'),
+      struktur: document.getElementById('sim-prof-struktur')
+    };
+
+    previewPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        previewPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        const mode = pill.getAttribute('data-mode');
+        Object.keys(simViews).forEach(k => {
+          if (simViews[k]) simViews[k].style.display = (k === mode) ? 'block' : 'none';
+        });
+      });
+    });
+
+    // Live preview sync
+    function syncProfilPreview() {
+      // Sejarah
+      const leadInput = document.getElementById('input-sejarah-lead');
+      if (leadInput && document.getElementById('sim-sejarah-lead-text')) {
+        document.getElementById('sim-sejarah-lead-text').textContent = leadInput.value;
+      }
+      // Visi
+      const visionInput = document.getElementById('input-vision');
+      if (visionInput && document.getElementById('sim-vision-text')) {
+        document.getElementById('sim-vision-text').textContent = `"${visionInput.value}"`;
+      }
+      // Sambutan
+      const nameInput = document.getElementById('input-sambutan-prof-name');
+      const roleInput = document.getElementById('input-sambutan-prof-role');
+      const arabicInput = document.getElementById('input-sambutan-prof-arabic');
+      if (nameInput && document.getElementById('sim-prof-sambutan-name')) {
+        document.getElementById('sim-prof-sambutan-name').textContent = nameInput.value;
+        if (document.getElementById('sim-org-mid-name')) document.getElementById('sim-org-mid-name').textContent = nameInput.value;
+      }
+      if (roleInput && document.getElementById('sim-prof-sambutan-role')) {
+        document.getElementById('sim-prof-sambutan-role').textContent = roleInput.value + ' FREEKS.id School';
+      }
+      if (arabicInput && document.getElementById('sim-prof-arabic')) {
+        document.getElementById('sim-prof-arabic').textContent = arabicInput.value;
+      }
+    }
+
+    const liveInputs = document.querySelectorAll('#profil-form input, #profil-form textarea');
+    liveInputs.forEach(i => i.addEventListener('input', syncProfilPreview));
+
+    // CRUD Sejarah
+    const historyListContainer = document.getElementById('history-list-container');
+    const modalHistory = document.getElementById('modal-history');
+    let editingHistoryIdx = -1;
+
+    function renderHistoryList() {
+      if (!historyListContainer) return;
+      historyListContainer.innerHTML = '';
+      historyState.forEach((h, idx) => {
+        const item = document.createElement('div');
+        item.className = 'history-admin-item';
+        item.innerHTML = `
+          <div class="history-year-tag">${h.year}</div>
+          <div class="history-content-col">
+            <strong>${h.title}</strong>
+            <p>${h.description}</p>
+          </div>
+          <div class="history-actions">
+            <button type="button" class="btn-action-edit btn-edit-h" data-idx="${idx}" title="Edit Peristiwa">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+              <span>Edit</span>
+            </button>
+            <button type="button" class="btn-action-delete btn-delete-h" data-idx="${idx}" title="Hapus Peristiwa">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <span>Hapus</span>
+            </button>
+          </div>
+        `;
+        historyListContainer.appendChild(item);
+      });
+
+      document.querySelectorAll('.btn-edit-h').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          editingHistoryIdx = idx;
+          const h = historyState[idx];
+          document.getElementById('modal-history-title').textContent = 'Edit Tonggak Sejarah';
+          document.getElementById('input-hist-year').value = h.year;
+          document.getElementById('input-hist-title').value = h.title;
+          document.getElementById('input-hist-desc').value = h.description;
+          modalHistory.style.display = 'block';
+          modalHistory.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.btn-delete-h').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = historyState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus peristiwa tahun ${item.year}?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              historyState.splice(idx, 1);
+              renderHistoryList();
+            });
+          } else if (confirm(msg)) {
+            historyState.splice(idx, 1);
+            renderHistoryList();
+          }
+        });
+      });
+
+      if (historyState.length > 0) {
+        if (document.getElementById('sim-first-year')) document.getElementById('sim-first-year').textContent = historyState[0].year;
+        if (document.getElementById('sim-first-title')) document.getElementById('sim-first-title').textContent = historyState[0].title;
+      }
+    }
+
+    const btnAddHistory = document.getElementById('btn-add-history');
+    if (btnAddHistory) {
+      btnAddHistory.addEventListener('click', () => {
+        editingHistoryIdx = -1;
+        document.getElementById('modal-history-title').textContent = 'Tambah Tonggak Sejarah';
+        document.getElementById('input-hist-year').value = '';
+        document.getElementById('input-hist-title').value = '';
+        document.getElementById('input-hist-desc').value = '';
+        modalHistory.style.display = 'block';
+        modalHistory.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    const btnCancelHistory = document.getElementById('btn-cancel-history');
+    if (btnCancelHistory) btnCancelHistory.addEventListener('click', () => { modalHistory.style.display = 'none'; });
+
+    const btnSaveHistoryItem = document.getElementById('btn-save-history-item');
+    if (btnSaveHistoryItem) {
+      btnSaveHistoryItem.addEventListener('click', () => {
+        const year = document.getElementById('input-hist-year').value.trim();
+        const title = document.getElementById('input-hist-title').value.trim();
+        const desc = document.getElementById('input-hist-desc').value.trim();
+        if (!year || !title || !desc) {
+          alert('Mohon lengkapi tahun, judul, dan narasi!');
+          return;
+        }
+        if (editingHistoryIdx >= 0) {
+          historyState[editingHistoryIdx] = { year, title, description: desc };
+        } else {
+          historyState.push({ year, title, description: desc });
+        }
+        modalHistory.style.display = 'none';
+        renderHistoryList();
+      });
+    }
+
+    // CRUD Struktur Organisasi
+    const orgListContainer = document.getElementById('org-list-container');
+    const modalOrg = document.getElementById('modal-org');
+    let editingOrgIdx = -1;
+
+    function renderOrgList() {
+      if (!orgListContainer) return;
+      orgListContainer.innerHTML = '';
+      orgState.forEach((st, idx) => {
+        const item = document.createElement('div');
+        item.className = 'org-admin-card';
+        item.innerHTML = `
+          <div class="org-level-badge lvl-${st.level}">Lvl ${st.level}</div>
+          <div class="org-info-col">
+            <strong class="org-role-name">${st.role}</strong>
+            <span class="org-person-name">${st.name}</span>
+          </div>
+          <div class="org-cat-tag">${st.category}</div>
+          <div class="org-item-actions">
+            <button type="button" class="btn-action-edit btn-edit-o" data-idx="${idx}" title="Edit Posisi">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+              <span>Edit</span>
+            </button>
+            <button type="button" class="btn-action-delete btn-delete-o" data-idx="${idx}" title="Hapus Posisi">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <span>Hapus</span>
+            </button>
+          </div>
+        `;
+        orgListContainer.appendChild(item);
+      });
+
+      document.querySelectorAll('.btn-edit-o').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          editingOrgIdx = idx;
+          const o = orgState[idx];
+          document.getElementById('modal-org-title').textContent = 'Edit Posisi Organisasi';
+          document.getElementById('input-org-level').value = o.level;
+          document.getElementById('input-org-category').value = o.category;
+          document.getElementById('input-org-role').value = o.role;
+          document.getElementById('input-org-name').value = o.name;
+          modalOrg.style.display = 'block';
+          modalOrg.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.btn-delete-o').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = orgState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus posisi "${item.role}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              orgState.splice(idx, 1);
+              renderOrgList();
+            });
+          } else if (confirm(msg)) {
+            orgState.splice(idx, 1);
+            renderOrgList();
+          }
+        });
+      });
+    }
+
+    const btnAddOrg = document.getElementById('btn-add-org');
+    if (btnAddOrg) {
+      btnAddOrg.addEventListener('click', () => {
+        editingOrgIdx = -1;
+        document.getElementById('modal-org-title').textContent = 'Tambah Posisi Organisasi';
+        document.getElementById('input-org-level').value = '3';
+        document.getElementById('input-org-category').value = '';
+        document.getElementById('input-org-role').value = '';
+        document.getElementById('input-org-name').value = '';
+        modalOrg.style.display = 'block';
+        modalOrg.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    const btnCancelOrg = document.getElementById('btn-cancel-org');
+    if (btnCancelOrg) btnCancelOrg.addEventListener('click', () => { modalOrg.style.display = 'none'; });
+
+    const btnSaveOrgItem = document.getElementById('btn-save-org-item');
+    if (btnSaveOrgItem) {
+      btnSaveOrgItem.addEventListener('click', () => {
+        const level = parseInt(document.getElementById('input-org-level').value, 10);
+        const category = document.getElementById('input-org-category').value.trim();
+        const role = document.getElementById('input-org-role').value.trim();
+        const name = document.getElementById('input-org-name').value.trim();
+        if (!category || !role || !name) {
+          alert('Mohon lengkapi seluruh formulir posisi!');
+          return;
+        }
+        if (editingOrgIdx >= 0) {
+          orgState[editingOrgIdx] = { level, category, role, name };
+        } else {
+          orgState.push({ level, category, role, name });
+        }
+        modalOrg.style.display = 'none';
+        renderOrgList();
+      });
+    }
+
+    // CRUD Fasilitas
+    const facContainer = document.getElementById('facilities-list-container');
+    const modalFac = document.getElementById('modal-facility');
+    let editingFacIdx = -1;
+
+    function renderFacilitiesList() {
+      if (!facContainer) return;
+      facContainer.innerHTML = '';
+      facilitiesState.forEach((fac, idx) => {
+        const card = document.createElement('div');
+        card.className = 'facility-admin-card';
+        card.innerHTML = `
+          <div class="fac-admin-thumb-wrap">
+            <img src="${fac.image.src}" alt="${fac.name}" class="fac-admin-thumb" onerror="this.src='/assets/hero-siswa-belajar.webp'" />
+          </div>
+          <div class="fac-admin-body">
+            <h4>${fac.name}</h4>
+            <p class="fac-admin-desc">${fac.description}</p>
+            <div class="fac-admin-actions">
+              <button type="button" class="btn-action-edit btn-edit-f" data-idx="${idx}" title="Edit Fasilitas">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                <span>Edit</span>
+              </button>
+              <button type="button" class="btn-action-delete btn-delete-f" data-idx="${idx}" title="Hapus Fasilitas">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <span>Hapus</span>
+              </button>
+            </div>
+          </div>
+        `;
+        facContainer.appendChild(card);
+      });
+
+      document.querySelectorAll('.btn-edit-f').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          editingFacIdx = idx;
+          const f = facilitiesState[idx];
+          document.getElementById('modal-fac-title').textContent = 'Edit Fasilitas';
+          document.getElementById('input-fac-id').value = f.id;
+          document.getElementById('input-fac-name').value = f.name;
+          document.getElementById('input-fac-img').value = f.image.src;
+          const prevFacImg = document.getElementById('img-prev-fac');
+          if (prevFacImg) prevFacImg.src = f.image.src;
+          document.getElementById('input-fac-desc').value = f.description;
+          modalFac.style.display = 'block';
+          modalFac.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.btn-delete-f').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = facilitiesState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus fasilitas "${item.name}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              facilitiesState.splice(idx, 1);
+              renderFacilitiesList();
+            });
+          } else if (confirm(msg)) {
+            facilitiesState.splice(idx, 1);
+            renderFacilitiesList();
+          }
+        });
+      });
+    }
+
+    const btnAddFac = document.getElementById('btn-add-facility');
+    if (btnAddFac) {
+      btnAddFac.addEventListener('click', () => {
+        editingFacIdx = -1;
+        document.getElementById('modal-fac-title').textContent = 'Tambah Fasilitas Baru';
+        document.getElementById('input-fac-id').value = 'fasilitas-' + Date.now();
+        document.getElementById('input-fac-name').value = '';
+        document.getElementById('input-fac-img').value = '/assets/gedung-mts-islamiyah.webp';
+        const prevFacImg = document.getElementById('img-prev-fac');
+        if (prevFacImg) prevFacImg.src = '/assets/gedung-mts-islamiyah.webp';
+        document.getElementById('input-fac-desc').value = '';
+        modalFac.style.display = 'block';
+        modalFac.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    const btnCancelFac = document.getElementById('btn-cancel-facility');
+    if (btnCancelFac) btnCancelFac.addEventListener('click', () => { modalFac.style.display = 'none'; });
+
+    const btnSaveFacItem = document.getElementById('btn-save-facility-item');
+    if (btnSaveFacItem) {
+      btnSaveFacItem.addEventListener('click', () => {
+        const id = document.getElementById('input-fac-id').value || ('fasilitas-' + Date.now());
+        const name = document.getElementById('input-fac-name').value.trim();
+        const src = document.getElementById('input-fac-img').value.trim();
+        const desc = document.getElementById('input-fac-desc').value.trim();
+        if (!name || !src || !desc) {
+          alert('Mohon lengkapi nama fasilitas, foto WebP, dan deskripsi!');
+          return;
+        }
+        const obj = { id, name, description: desc, image: { src, alt: name, width: 1200, height: 800 } };
+        if (editingFacIdx >= 0) {
+          facilitiesState[editingFacIdx] = obj;
+        } else {
+          facilitiesState.push(obj);
+        }
+        modalFac.style.display = 'none';
+        renderFacilitiesList();
+      });
+    }
+
+    // Dynamic Misi, Tujuan, Paragraf, Simbol & Unit Add/Delete with Standardized Action Buttons
+    const btnAddMission = document.getElementById('btn-add-mission');
+    const missionsContainer = document.getElementById('missions-list-container');
+    if (btnAddMission && missionsContainer) {
+      btnAddMission.addEventListener('click', () => {
+        const count = missionsContainer.querySelectorAll('.ordered-item-row').length + 1;
+        const row = document.createElement('div');
+        row.className = 'ordered-item-row';
+        row.innerHTML = `
+          <div class="order-badge">${count}</div>
+          <input type="text" class="form-control mission-input" placeholder="Tuliskan butir misi baru..." />
+          <button type="button" class="btn-action-delete btn-delete-row" title="Hapus Misi">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+            <span>Hapus</span>
+          </button>
+        `;
+        row.querySelector('.btn-delete-row').addEventListener('click', () => row.remove());
+        missionsContainer.appendChild(row);
+      });
+    }
+
+    // Bind SSR missions delete
+    document.querySelectorAll('.btn-delete-mission').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const row = btn.closest('.ordered-item-row');
+        if (row) row.remove();
+      });
+    });
+
+    const btnAddGoal = document.getElementById('btn-add-goal');
+    const goalsContainer = document.getElementById('goals-list-container');
+    if (btnAddGoal && goalsContainer) {
+      btnAddGoal.addEventListener('click', () => {
+        const count = goalsContainer.querySelectorAll('.ordered-item-row').length + 1;
+        const row = document.createElement('div');
+        row.className = 'ordered-item-row';
+        row.innerHTML = `
+          <div class="order-badge">${count}</div>
+          <input type="text" class="form-control goal-input" placeholder="Tuliskan target capaian baru..." />
+          <button type="button" class="btn-action-delete btn-delete-row" title="Hapus Tujuan">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+            <span>Hapus</span>
+          </button>
+        `;
+        row.querySelector('.btn-delete-row').addEventListener('click', () => row.remove());
+        goalsContainer.appendChild(row);
+      });
+    }
+
+    // Bind SSR goals delete
+    document.querySelectorAll('.btn-delete-goal').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const row = btn.closest('.ordered-item-row');
+        if (row) row.remove();
+      });
+    });
+
+    // Paragraphs dynamic
+    const btnAddP = document.getElementById('btn-add-paragraph');
+    const pContainer = document.getElementById('sambutan-paragraphs-container');
+    if (btnAddP && pContainer) {
+      btnAddP.addEventListener('click', () => {
+        const count = pContainer.querySelectorAll('.paragraph-item-row').length + 1;
+        const row = document.createElement('div');
+        row.className = 'paragraph-item-row';
+        row.innerHTML = `
+          <span class="p-num">§${count}</span>
+          <textarea rows="3" class="form-control sambutan-p-input" placeholder="Tuliskan paragraf pidato baru..."></textarea>
+          <button type="button" class="btn-action-delete btn-delete-p" title="Hapus Paragraf">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+            <span>Hapus</span>
+          </button>
+        `;
+        row.querySelector('.btn-delete-p').addEventListener('click', () => row.remove());
+        pContainer.appendChild(row);
+      });
+    }
+
+    document.querySelectorAll('.btn-delete-p').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const row = btn.closest('.paragraph-item-row');
+        if (row) row.remove();
+      });
+    });
+
+    // Symbols & units delete
+    document.querySelectorAll('.btn-delete-symbol').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const row = btn.closest('.symbol-admin-card');
+        if (row) row.remove();
+      });
+    });
+
+    document.querySelectorAll('.btn-delete-unit').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const row = btn.closest('.unit-admin-row');
+        if (row) row.remove();
+      });
+    });
+
+    // Save All Profil Handler
+    function handleSaveProfil() {
+      // Collect missions
+      const missionInputs = document.querySelectorAll('.mission-input');
+      const missionsData = Array.from(missionInputs).map(i => i.value.trim()).filter(Boolean);
+
+      // Collect goals
+      const goalInputs = document.querySelectorAll('.goal-input');
+      const goalsData = Array.from(goalInputs).map(i => i.value.trim()).filter(Boolean);
+
+      // Collect sambutan paragraphs
+      const pInputs = document.querySelectorAll('.sambutan-p-input');
+      const pData = Array.from(pInputs).map(i => i.value.trim()).filter(Boolean);
+
+      const payload = {
+        updatedAt: new Date().toISOString(),
+        history: historyState,
+        vision: document.getElementById('input-vision')?.value || '',
+        missions: missionsData,
+        goals: goalsData,
+        foundation: {
+          name: document.getElementById('input-fnd-name')?.value || '',
+          established: document.getElementById('input-fnd-est')?.value || '',
+          leader: document.getElementById('input-fnd-leader')?.value || '',
+          description: document.getElementById('input-fnd-desc')?.value || ''
+        },
+        sambutan: {
+          name: document.getElementById('input-sambutan-prof-name')?.value || 'FREEKS.ID',
+          role: document.getElementById('input-sambutan-prof-role')?.value || 'Head of School / Principal',
+          photo: {
+            src: document.getElementById('input-sambutan-prof-photo')?.value || '/assets/guru-freeks.webp'
+          },
+          arabicGreeting: document.getElementById('input-sambutan-prof-arabic')?.value || '',
+          fullText: pData
+        },
+        org: orgState,
+        facilities: facilitiesState
+      };
+
+      localStorage.setItem('mts_cms_profil_data', JSON.stringify(payload));
+
+      const toast = document.getElementById('save-toast');
+      if (toast) {
+        toast.hidden = false;
+        toast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    const btnSave1 = document.getElementById('btn-save-profil');
+    const btnSave2 = document.getElementById('btn-save-profil-side');
+    if (btnSave1) btnSave1.addEventListener('click', handleSaveProfil);
+    if (btnSave2) btnSave2.addEventListener('click', handleSaveProfil);
+
+    const toastClose = document.getElementById('toast-close');
+    if (toastClose) toastClose.addEventListener('click', () => { document.getElementById('save-toast').hidden = true; });
+
+    // Export JSON
+    const btnExport = document.getElementById('btn-export-profil-json');
+    if (btnExport) {
+      btnExport.addEventListener('click', () => {
+        const saved = localStorage.getItem('mts_cms_profil_data');
+        const dataObj = saved ? JSON.parse(saved) : { history: historyState, org: orgState, facilities: facilitiesState };
+        const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(dataObj, null, 2));
+        const a = document.createElement('a');
+        a.setAttribute('href', dataStr);
+        a.setAttribute('download', `profil-Sekolah-cms-${new Date().toISOString().split('T')[0]}.json`);
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+    }
+
+    // Initial renders
+    renderHistoryList();
+    renderOrgList();
+    renderFacilitiesList();
+    syncProfilPreview();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProfil);
+  } else {
+    initProfil();
+  }
+</script>
+

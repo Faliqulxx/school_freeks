@@ -1,0 +1,89 @@
+{
+  "dummy": false,
+  "extracurriculars": [
+    {
+      "id": "robotics-drone",
+      "name": "Robotics & Drone Piloting",
+      "category": "Teknologi & Rekayasa",
+      "schedule": "Rabu 15.30 WIB",
+      "mentor": "FREEKS Tech Mentor",
+      "description": "Perakitan robot kompetisi (line follower, sumo bot), navigasi drone mikrokontroler, dan eksperimen otomasi sensor cerdas.",
+      "image": {
+        "src": "/assets/dummy/ekskul-kir.svg",
+        "alt": "Eksperimen robotika dan drone siswa",
+        "width": 800,
+        "height": 500
+      }
+    },
+    {
+      "id": "coding-cyber",
+      "name": "Cyber & Coding Guild",
+      "category": "Komputasi",
+      "schedule": "Kamis 15.30 WIB",
+      "mentor": "FREEKS Tech Mentor",
+      "description": "Komunitas belajar logika pemrograman web modern, problem solving algoritma, dan dasar keamanan sistem siber (ethical hacking).",
+      "image": {
+        "src": "/assets/dummy/ekskul-kir.svg",
+        "alt": "Sesi guild pemrograman siswa",
+        "width": 800,
+        "height": 500
+      }
+    },
+    {
+      "id": "3d-game-dev",
+      "name": "3D Art & Game Design",
+      "category": "Desain Kreatif",
+      "schedule": "Selasa 15.30 WIB",
+      "mentor": "FREEKS Creative Mentor",
+      "description": "Eksplorasi pemodelan 3D, animasi karakter, perancangan mekanik game indie, serta pembuatan aset interaktif visual.",
+      "image": {
+        "src": "/assets/dummy/ekskul-tilawah.svg",
+        "alt": "Pembuatan game dan seni 3D",
+        "width": 800,
+        "height": 500
+      }
+    },
+    {
+      "id": "media-podcast",
+      "name": "Digital Journalism & Broadcast Podcast",
+      "category": "Media & Komunikasi",
+      "schedule": "Senin 15.30 WIB",
+      "mentor": "FREEKS Media Mentor",
+      "description": "Pelatihan produksi audio visual, teknik rekaman podcast, penulisan artikel sains populer, dan kurasi konten media sosial.",
+      "image": {
+        "src": "/assets/dummy/ekskul-hadrah.svg",
+        "alt": "Produksi podcast dan siaran kreatif siswa",
+        "width": 800,
+        "height": 500
+      }
+    },
+    {
+      "id": "english-debate",
+      "name": "Global Speech & Debate Club",
+      "category": "Bahasa & Diplomasi",
+      "schedule": "Sabtu 09.00 WIB",
+      "mentor": "FREEKS Global Mentor",
+      "description": "Mengasah wawasan global, teknik berargumentasi kritis, simulasi sidang Model United Nations (MUN), dan public speaking bahasa Inggris.",
+      "image": {
+        "src": "/assets/dummy/ekskul-english.svg",
+        "alt": "Klub debat dan pidato bahasa Inggris",
+        "width": 800,
+        "height": 500
+      }
+    },
+    {
+      "id": "futsal-sports",
+      "name": "Futsal & Athletics Club",
+      "category": "Olahraga & Kebugaran",
+      "schedule": "Jumat 15.30 WIB",
+      "mentor": "FREEKS Coach",
+      "description": "Pengembangan stamina fisik, kerja sama tim, taktik permainan bola, dan persiapan mengikuti kejuaraan olahraga antarpelajar.",
+      "image": {
+        "src": "/assets/dummy/ekskul-futsal.svg",
+        "alt": "Latihan olahraga dan futsal siswa di kampus",
+        "width": 800,
+        "height": 500
+      }
+    }
+  ]
+}

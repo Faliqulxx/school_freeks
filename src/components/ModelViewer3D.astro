@@ -1,0 +1,131 @@
+---
+interface Props {
+  sizeDesktop?: number;
+  sizeTablet?: number;
+  sizeMobile?: number;
+  altText?: string;
+}
+
+const {
+  sizeDesktop = 540,
+  sizeTablet = 440,
+  sizeMobile = 320,
+  altText = "Model 3D Logo Resmi FREEKS.id School"
+} = Astro.props;
+---
+
+<div class="model-viewer-wrapper" style={`--size-desktop: ${sizeDesktop}px; --size-tablet: ${sizeTablet}px; --size-mobile: ${sizeMobile}px;`}>
+  <!-- Direct <model-viewer> tag with strict no-pan / no-tap / no-zoom to prevent jumping / shifting -->
+  <model-viewer
+    id="freeks-3d-model"
+    src="/assets/3d/freeks.glb"
+    poster="/assets/logo-ypi.webp"
+    alt={altText}
+    camera-controls
+    disable-pan
+    disable-tap
+    disable-zoom
+    camera-orbit="0deg 90deg auto"
+    camera-target="0m 0m 0m"
+    field-of-view="32deg"
+    shadow-intensity="0.8"
+    shadow-softness="0.5"
+    exposure="1.15"
+    environment-image="neutral"
+    auto-rotate
+    auto-rotate-delay="1000"
+    rotation-per-second="8deg"
+    interaction-prompt="none"
+    touch-action="pan-y"
+    loading="eager"
+    class="model-viewer-element"
+  >
+    <!-- Custom centered poster slot for smooth zero-CLS loading -->
+    <div slot="poster" class="model-poster-slot">
+      <img
+        src="/assets/logo-ypi.webp"
+        alt={altText}
+        width={sizeDesktop}
+        height={sizeDesktop}
+        class="model-poster-img school-logo-img"
+        loading="eager"
+      />
+    </div>
+  </model-viewer>
+</div>
+
+<style>
+  .model-viewer-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: var(--size-mobile);
+    height: var(--size-mobile);
+    aspect-ratio: 1 / 1;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    overflow: visible;
+  }
+
+  @media (min-width: 768px) {
+    .model-viewer-wrapper {
+      max-width: var(--size-tablet);
+      height: var(--size-tablet);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .model-viewer-wrapper {
+      max-width: var(--size-desktop);
+      height: var(--size-desktop);
+    }
+  }
+
+  .model-viewer-element {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    background-color: transparent !important;
+    --poster-color: transparent !important;
+    outline: none !important;
+    cursor: grab;
+  }
+
+  .model-viewer-element:active {
+    cursor: grabbing;
+  }
+
+  .model-poster-slot {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+  }
+
+  .model-poster-img {
+    max-width: 85%;
+    max-height: 85%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    margin: auto;
+    filter: drop-shadow(0 14px 28px rgba(11, 59, 22, 0.14));
+  }
+</style>
+
+<script>
+  // Dynamically ensure model-viewer web component script is loaded
+  if (!customElements.get('model-viewer')) {
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
+    document.head.appendChild(script);
+  }
+</script>

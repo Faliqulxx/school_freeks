@@ -1,0 +1,374 @@
+﻿---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import Icon from '../../components/Icon.astro';
+import siteData from '../../data/siteData.json';
+
+const { school } = siteData;
+
+const modules = [
+  {
+    id: 'pengaturan',
+    title: 'Pengaturan Global Situs',
+    desc: 'Kelola identitas Sekolah, alamat, kontak WhatsApp, email, dan akun media sosial resmi.',
+    href: '/admin/pengaturan',
+    icon: 'settings',
+    status: 'Siap Digunakan (Modul 1)',
+    badgeColor: 'green'
+  },
+  {
+    id: 'beranda',
+    title: 'Beranda & Hero Section',
+    desc: 'Atur headline hero, foto latar gedung kampus, info cepat PPDB, dan kutipan sambutan.',
+    href: '/admin/beranda',
+    icon: 'home',
+    status: 'Siap Digunakan (Modul 2)',
+    badgeColor: 'green'
+  },
+  {
+    id: 'profil',
+    title: 'Profil Kampus',
+    desc: 'Manajemen sejarah tonggak tahun, visi misi, profil yayasan YPI, dan sarana fasilitas.',
+    href: '/admin/profil',
+    icon: 'landmark',
+    status: 'Siap Digunakan (Modul 3)',
+    badgeColor: 'green'
+  },
+  {
+    id: 'akademik',
+    title: 'Akademik & Dewan Guru',
+    desc: 'Kelola kurikulum, program unggulan, prestasi juara, dan biodata dewan guru & tendik.',
+    href: '/admin/akademik',
+    icon: 'book-open',
+    status: 'Siap Digunakan (Modul 4)',
+    badgeColor: 'green'
+  },
+  {
+    id: 'kesiswaan',
+    title: 'Kesiswaan & Ekstrakurikuler',
+    desc: 'Kelola program kerja OSIS, jadwal ekstrakurikuler, tata tertib, dan tracer study alumni.',
+    href: '/admin/kesiswaan',
+    icon: 'users',
+    status: 'Siap Digunakan (Modul 5)',
+    badgeColor: 'green'
+  },
+  {
+    id: 'informasi',
+    title: 'Informasi, Berita & Galeri',
+    desc: 'Publikasi artikel berita, surat edaran pengumuman, album foto kegiatan, dan pusat unduhan berkas.',
+    href: '/admin/informasi',
+    icon: 'newspaper',
+    status: 'Siap Digunakan (Modul 6)',
+    badgeColor: 'green'
+  },
+  {
+    id: 'ppdb',
+    title: 'PPDB Online & Pendaftar',
+    desc: 'Pengaturan gelombang pendaftaran, syarat biaya, verifikasi berkas, dan ekspor pendaftar.',
+    href: '/admin/ppdb',
+    icon: 'user-plus',
+    status: 'Siap Digunakan (Modul 7)',
+    badgeColor: 'green'
+  },
+  {
+    id: 'kontak',
+    title: 'Kotak Masuk Pesan',
+    desc: 'Lihat pertanyaan dan aspirasi masyarakat yang dikirim melalui formulir kontak.',
+    href: '/admin/kontak',
+    icon: 'mail',
+    status: 'Siap Digunakan (Modul 8)',
+    badgeColor: 'green'
+  }
+];
+---
+
+<AdminLayout title="Pusat Kendali CMS" activeMenu="pengaturan">
+  <div class="dashboard-hero card">
+    <div class="hero-left">
+      <span class="chip-welcome">Selamat Datang di CMS</span>
+      <h1>Panel Kendali Website {school.shortName}</h1>
+      <p class="hero-desc">
+        Kelola seluruh data konten, informasi akademik, profil guru, berita, dan pendaftaran siswa baru secara mandiri, aman, dan instan.
+      </p>
+      <div class="hero-actions">
+        <a href="/admin/pengaturan" class="btn btn-primary">
+          <Icon name="settings" size={18} />
+          <span>Buka Pengaturan Global (Modul 1)</span>
+        </a>
+        <a href="/" target="_blank" class="btn btn-secondary">
+          <Icon name="external-link" size={16} />
+          <span>Lihat Website Publik</span>
+        </a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="quick-stat-box">
+        <span class="stat-label">Identitas Aktif</span>
+        <strong class="stat-value">{school.name}</strong>
+        <span class="stat-sub">Akreditasi {school.accreditation} • NPSN {school.npsn}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title-wrap">
+    <h2>Semua Modul CMS</h2>
+    <p>Pilih modul di bawah ini untuk memulai pengelolaan konten website:</p>
+  </div>
+
+  <div class="modules-grid">
+    {modules.map((m) => (
+      <a href={m.href} class={`module-card card ${m.id === 'pengaturan' ? 'highlight' : ''}`}>
+        <div class="card-top">
+          <div class={`icon-wrap ${m.id === 'pengaturan' ? 'icon-primary' : ''}`}>
+            <Icon name={m.icon} size={24} />
+          </div>
+          <span class={`module-badge ${m.badgeColor === 'green' ? 'badge-green' : 'badge-gray'}`}>
+            {m.status}
+          </span>
+        </div>
+        <h3 class="module-title">{m.title}</h3>
+        <p class="module-desc">{m.desc}</p>
+        <div class="module-footer">
+          <span class="btn-text">Buka Modul</span>
+          <Icon name="arrow-right" size={16} class="arrow-icon" />
+        </div>
+      </a>
+    ))}
+  </div>
+</AdminLayout>
+
+<style>
+  .card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .dashboard-hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+    background: linear-gradient(135deg, #FFFFFF 0%, var(--admin-green-50) 100%);
+    border: 1.5px solid var(--admin-green-100);
+  }
+
+  @media (min-width: 900px) {
+    .dashboard-hero {
+      grid-template-columns: 2fr 1fr;
+      align-items: center;
+    }
+  }
+
+  .chip-welcome {
+    display: inline-block;
+    padding: 3px 10px;
+    background-color: var(--admin-green-100);
+    color: var(--admin-green-800);
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 999px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .dashboard-hero h1 {
+    font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+    line-height: 1.25;
+    margin-bottom: 10px;
+  }
+
+  .hero-desc {
+    color: var(--admin-ink-700);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    max-width: 65ch;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-primary {
+    background-color: var(--admin-green-700);
+    color: #FFFFFF;
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--admin-green-800);
+    box-shadow: 0 4px 12px rgba(27, 122, 47, 0.25);
+  }
+
+  .btn-secondary {
+    background-color: #FFFFFF;
+    color: var(--admin-ink-900);
+    border: 1px solid var(--admin-ink-300);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--admin-ink-100);
+  }
+
+  .quick-stat-box {
+    background-color: #FFFFFF;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--admin-green-700);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .stat-value {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--admin-ink-900);
+    line-height: 1.3;
+  }
+
+  .stat-sub {
+    font-size: 12px;
+    color: var(--admin-ink-500);
+    margin-top: 4px;
+  }
+
+  .section-title-wrap {
+    margin-bottom: 20px;
+  }
+
+  .section-title-wrap h2 {
+    font-size: 1.25rem;
+    margin-bottom: 4px;
+  }
+
+  .section-title-wrap p {
+    font-size: 0.875rem;
+    color: var(--admin-ink-500);
+  }
+
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .module-card {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .module-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    border-color: var(--admin-green-500);
+  }
+
+  .module-card.highlight {
+    border: 1.5px solid var(--admin-green-500);
+    background: linear-gradient(to bottom, #FFFFFF, var(--admin-green-50));
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background-color: var(--admin-ink-100);
+    color: var(--admin-ink-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-primary {
+    background-color: var(--admin-green-700);
+    color: #FFFFFF;
+  }
+
+  .module-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+  }
+
+  .badge-green {
+    background-color: #D1FAE5;
+    color: #065F46;
+  }
+
+  .badge-gray {
+    background-color: var(--admin-ink-100);
+    color: var(--admin-ink-500);
+  }
+
+  .module-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--admin-ink-900);
+    margin-bottom: 8px;
+  }
+
+  .module-desc {
+    font-size: 0.8125rem;
+    color: var(--admin-ink-500);
+    line-height: 1.5;
+    margin-bottom: 16px;
+    flex: 1;
+  }
+
+  .module-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid var(--admin-ink-100);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--admin-green-700);
+  }
+
+  .arrow-icon {
+    transition: transform 0.15s ease;
+  }
+
+  .module-card:hover .arrow-icon {
+    transform: translateX(4px);
+  }
+</style>

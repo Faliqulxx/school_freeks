@@ -1,0 +1,33 @@
+{
+  "dummy": false,
+  "system": "Kurikulum Merdeka & FREEKS Tech & Innovation Framework",
+  "description": "FREEKS.id School mengintegrasikan Kurikulum Merdeka Nasional dengan kurikulum terapan FREEKS Tech & Innovation. Pembelajaran dirancang berpusat pada eksplorasi siswa (student-centered & project-based), memadukan fondasi akademik kuat dengan penguasaan computational thinking, etika teknologi, dan kreativitas masa depan.",
+  "subjectGroups": [
+    {
+      "group": "Kelompok A (Akademik & Fondasi Sains-Teknologi)",
+      "subjects": [
+        { "code": "CMP", "name": "Informatika & Computational Thinking", "hours": 4, "description": "Logika algoritma, dasar pemrograman Python/JS, struktur data, dan keamanan siber dasar." },
+        { "code": "AIX", "name": "Applied AI & Digital Literacy", "hours": 3, "description": "Pemahaman cara kerja kecerdasan buatan, prompt engineering terarah, dan etika kecerdasan buatan." },
+        { "code": "MAT", "name": "Matematika Komputasi & Logika", "hours": 5, "description": "Aljabar, geometri analitik, probabilitas, logika matematika, dan kalkulasi terapan." },
+        { "code": "IPA", "name": "Ilmu Pengetahuan Alam Terapan", "hours": 4, "description": "Praktikum biologi eksperimental, fisika rekayasa energi, dan kimia material ramah lingkungan." },
+        { "code": "ING", "name": "Bahasa Inggris Komunikasi Global", "hours": 4, "description": "Academic English, technical reading, presentation skills, dan diskusi kritis." },
+        { "code": "IND", "name": "Bahasa Indonesia & Literasi Media", "hours": 4, "description": "Penulisan esai kritis, analisis media digital, jurnalisme sains, dan retorika." },
+        { "code": "PKN", "name": "Pendidikan Kewarganegaraan & Etika Digital", "hours": 3, "description": "Hak kewajiban digital, konstitusi negara, tata kelola informasi, dan citizenship global." },
+        { "code": "IPS", "name": "Ilmu Pengetahuan Sosial & Ekonomi Digital", "hours": 3, "description": "Geografi ekonomi, sosiologi masyarakat digital, dan dasar kewirausahaan modern." }
+      ]
+    },
+    {
+      "group": "Kelompok B (Kreativitas, Rekayasa & Pengembangan Karakter)",
+      "subjects": [
+        { "code": "DES", "name": "Desain Interaktif, 3D & UI/UX", "hours": 3, "description": "Prinsip estetika digital, perancangan antarmuka aplikasi, animasi, dan pemodelan objek 3D." },
+        { "code": "MAK", "name": "Maker Tech & Physical Computing", "hours": 3, "description": "Rancang bangun purwarupa hardware, sirkuit mikrokontroler IoT, dan fabrikasi 3D printing." },
+        { "code": "PJK", "name": "Kebugaran Fisik & Wellness", "hours": 3, "description": "Pembentukan stamina, ergonomi postur kerja, olahraga tim, dan kesehatan holistik." },
+        { "code": "LDR", "name": "Leadership, Mindset & Character Building", "hours": 2, "description": "Pengembangan kecerdasan emosional (EQ), kepemimpinan tim, kerja sama, dan etika integritas." }
+      ]
+    }
+  ],
+  "p5pra": {
+    "title": "Projek Penguatan Profil Pelajar Pancasila & Inovasi Mandiri (P5)",
+    "description": "Program kokurikuler tematik berbasis tantangan nyata (Real-World Challenge) di mana siswa memecahkan persoalan lingkungan hidup, efisiensi energi, dan sosial-kemasyarakatan melalui karya teknologi tepat guna."
+  }
+}

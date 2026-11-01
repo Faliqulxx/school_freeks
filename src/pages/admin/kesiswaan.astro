@@ -1,0 +1,2023 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import Icon from '../../components/Icon.astro';
+import kesiswaanData from '../../data/kesiswaan.json';
+import ekskulData from '../../data/ekskul.json';
+
+const { rules, osis, alumni } = kesiswaanData;
+const { extracurriculars } = ekskulData;
+---
+
+<AdminLayout title="Manajemen Kesiswaan & OSIS (Modul 5)" activeMenu="kesiswaan">
+  <div class="page-header-wrap">
+    <div>
+      <div class="module-tag">MODUL 5 DARI 8</div>
+      <h1>Manajemen Kesiswaan & OSIS</h1>
+      <p class="page-subtitle">
+        Kelola kabinet pengurus OSIS, kegiatan ekstrakurikuler siswa, tata tertib & etika siswa, dan direktori penelusuran jejak alumni (tracer study).
+      </p>
+    </div>
+
+    <div class="header-action-group">
+      <a href="/kesiswaan/osis" target="_blank" class="btn btn-secondary">
+        <Icon name="external-link" size={16} />
+        <span>Buka Web Publik</span>
+      </a>
+      <button type="button" id="btn-export-kesiswaan-json" class="btn btn-secondary">
+        <Icon name="download" size={16} />
+        <span>Unduh JSON</span>
+      </button>
+      <button type="button" id="btn-save-kesiswaan" class="btn btn-primary">
+        <Icon name="check" size={18} />
+        <span>Simpan Perubahan</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="save-toast" class="toast-notification" role="alert" aria-live="polite" hidden>
+    <Icon name="check-circle" size={20} class="toast-icon" />
+    <div class="toast-body">
+      <strong>Perubahan Kesiswaan Berhasil Disimpan!</strong>
+      <p>Data OSIS, ekskul, tata tertib, dan direktori alumni telah tersimpan secara lokal di browser Anda.</p>
+    </div>
+    <button type="button" id="toast-close" class="toast-close-btn" aria-label="Tutup notifikasi">
+      <Icon name="x" size={16} />
+    </button>
+  </div>
+
+  <!-- Sub-Modul Tab Navigation -->
+  <div class="section-tabs-bar" role="tablist">
+    <button type="button" class="tab-btn active" data-tab="tab-osis" role="tab" aria-selected="true">
+      <Icon name="users" size={16} />
+      <span>1. OSIS & MPK</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-ekskul" role="tab" aria-selected="false">
+      <Icon name="activity" size={16} />
+      <span>2. Ekstrakurikuler</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-tatatertib" role="tab" aria-selected="false">
+      <Icon name="file-text" size={16} />
+      <span>3. Tata Tertib Siswa</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-alumni" role="tab" aria-selected="false">
+      <Icon name="award" size={16} />
+      <span>4. Direktori Alumni</span>
+    </button>
+  </div>
+
+  <div class="kesiswaan-layout-grid">
+    <!-- Left Column: Forms -->
+    <div class="form-container">
+      <form id="kesiswaan-form" onsubmit="return false;">
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 1: OSIS & MPK -->
+        <!-- ========================================== -->
+        <div class="tab-panel active" id="tab-osis">
+          <div class="form-card card">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="users" size={20} />
+              </div>
+              <div>
+                <h3>Informasi Kabinet OSIS</h3>
+                <p class="card-desc">Periode masa bakti dan nama kabinet kepengurusan siswa intra Sekolah.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="input-osis-period">Periode Masa Bakti <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-osis-period"
+                  value={osis.period}
+                  required
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="input-osis-cabinet">Nama Kabinet OSIS <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="input-osis-cabinet"
+                  value={osis.cabinet}
+                  required
+                  class="form-control"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- CRUD Pengurus Inti OSIS -->
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="user-check" size={20} />
+                </div>
+                <div>
+                  <h3>Pengurus Inti OSIS (CRUD)</h3>
+                  <p class="card-desc">Ketua, Wakil, Sekretaris, Bendahara, dan pengurus harian.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-osis-member" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Pengurus</span>
+              </button>
+            </div>
+
+            <div class="osis-members-list" id="osis-members-container">
+              {osis.structure.map((st, idx) => (
+                <div class="osis-member-row" data-idx={idx}>
+                  <div class="osis-role-badge">{st.role}</div>
+                  <input type="text" class="form-control osis-name-input" value={st.name} />
+                  <button type="button" class="btn-action-delete btn-del-osis-m" data-idx={idx} title="Hapus Pengurus">
+                    <Icon name="trash-2" size={14} />
+                    <span>Hapus</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- CRUD Departemen & Proker OSIS -->
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="layers" size={20} />
+                </div>
+                <div>
+                  <h3>Departemen & Program Kerja OSIS (CRUD)</h3>
+                  <p class="card-desc">Divisi teknologi & inovasi digital, media kreatif, olahraga & e-sports, serta sosial lingkungan.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-osis-dept" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Departemen</span>
+              </button>
+            </div>
+
+            <div class="osis-dept-list" id="osis-dept-container">
+              {osis.departments.map((dept, idx) => (
+                <div class="osis-dept-card" data-idx={idx}>
+                  <div class="dept-header-row">
+                    <input type="text" class="form-control dept-name-input" value={dept.name} />
+                    <button type="button" class="btn-action-delete btn-del-dept" data-idx={idx} title="Hapus Departemen">
+                      <Icon name="trash-2" size={14} />
+                      <span>Hapus</span>
+                    </button>
+                  </div>
+                  <textarea rows="2" class="form-control dept-prog-input">{dept.programs}</textarea>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 2: EKSTRAKURIKULER -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-ekskul">
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="activity" size={20} />
+                </div>
+                <div>
+                  <h3>Daftar Ekstrakurikuler (CRUD)</h3>
+                  <p class="card-desc">Robotics, Coding Guild, 3D Art & Game Design, Podcast, English Debate, Futsal.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-ekskul" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Ekskul</span>
+              </button>
+            </div>
+
+            <div class="ekskul-admin-grid" id="ekskul-list-container">
+              {extracurriculars.map((ek, idx) => (
+                <div class="ekskul-admin-card" data-idx={idx}>
+                  <div class="ekskul-thumb-wrap">
+                    <img src={ek.image.src} alt={ek.name} class="ekskul-thumb" onerror="this.src='/assets/dummy/ekskul-hadrah.svg'" />
+                  </div>
+                  <div class="ekskul-body">
+                    <span class="cat-pill">{ek.category}</span>
+                    <h4>{ek.name}</h4>
+                    <p class="ekskul-sched">
+                      <Icon name="clock" size={13} />
+                      <span>{ek.schedule}</span>
+                    </p>
+                    <p class="ekskul-mentor">Pelatih: <strong>{ek.mentor}</strong></p>
+                    <p class="ekskul-desc">{ek.description}</p>
+                    <div class="ekskul-card-actions">
+                      <button type="button" class="btn-action-edit btn-edit-ek" data-idx={idx} title="Edit Ekskul">
+                        <Icon name="edit" size={14} />
+                        <span>Edit</span>
+                      </button>
+                      <button type="button" class="btn-action-delete btn-delete-ek" data-idx={idx} title="Hapus Ekskul">
+                        <Icon name="trash-2" size={14} />
+                        <span>Hapus</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Modal Edit Ekskul -->
+          <div class="form-card card" id="modal-ekskul" style="display: none; border-color: var(--admin-green-500); background-color: var(--admin-green-50);">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="edit" size={20} />
+              </div>
+              <div>
+                <h3 id="modal-ek-title">Tambah / Edit Ekstrakurikuler</h3>
+                <p class="card-desc">Lengkapi nama kegiatan, jadwal latihan, pembina, dan foto visual.</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <input type="hidden" id="input-ek-id" value="" />
+              <div class="form-group">
+                <label for="input-ek-name">Nama Ekstrakurikuler <span class="req">*</span></label>
+                <input type="text" id="input-ek-name" placeholder="Contoh: Hadrah dan Qasidah" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-ek-cat">Kategori Kegiatan <span class="req">*</span></label>
+                <select id="input-ek-cat" class="form-control">
+                  <option value="Seni Keagamaan">Seni Keagamaan</option>
+                  <option value="Kepramukaan">Kepramukaan</option>
+                  <option value="Olahraga">Olahraga</option>
+                  <option value="Sains">Sains & Penelitian</option>
+                  <option value="Bahasa">Bahasa Asing</option>
+                  <option value="Keterampilan">Keterampilan & Kesenian</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="input-ek-schedule">Hari & Jam Latihan <span class="req">*</span></label>
+                <input type="text" id="input-ek-schedule" placeholder="Contoh: Rabu 14.00 WIB" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-ek-mentor">Nama Pembina / Pelatih <span class="req">*</span></label>
+                <input type="text" id="input-ek-mentor" placeholder="Contoh: Ust. Laila M." class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-ek-desc">Deskripsi & Aktivitas Latihan <span class="req">*</span></label>
+                <textarea id="input-ek-desc" rows="3" class="form-control" placeholder="Uraian manfaat dan materi latihan ekskul..."></textarea>
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-ek-img">Foto Kegiatan Ekskul (WebP / SVG) <span class="req">*</span></label>
+                <div class="asset-preview-row">
+                  <img
+                    id="img-prev-ek"
+                    src="/assets/dummy/ekskul-hadrah.svg"
+                    alt="Pratinjau Ekskul"
+                    class="asset-thumb-wide"
+                  />
+                  <div class="asset-details">
+                    <input type="text" id="input-ek-img" value="/assets/dummy/ekskul-hadrah.svg" class="form-control" />
+                    <div class="asset-upload-bar">
+                      <label class="btn-upload-file">
+                        <Icon name="upload" size={13} />
+                        <span>Unggah Foto Ekskul</span>
+                        <input type="file" accept="image/*" class="asset-file-uploader" data-target-input="input-ek-img" data-target-preview="img-prev-ek" style="display: none;" />
+                      </label>
+                      <span class="upload-file-status"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-span-2 form-actions-row">
+                <button type="button" id="btn-cancel-ek" class="btn btn-secondary">Batal</button>
+                <button type="button" id="btn-save-ek-item" class="btn btn-primary">Simpan Ekskul</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 3: TATA TERTIB SISWA -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-tatatertib">
+          <div class="form-card card">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="file-text" size={20} />
+              </div>
+              <div>
+                <h3>Pedoman & Tata Tertib Siswa</h3>
+                <p class="card-desc">Aturan kedisiplinan, jam kehadiran, pakaian seragam, dan tata krama pergaulan.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group col-span-2">
+                <label for="input-rules-title">Judul Dokumen Tata Tertib <span class="req">*</span></label>
+                <input type="text" id="input-rules-title" value={rules.title} required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-rules-updated">Bulan & Tahun Pembaruan <span class="req">*</span></label>
+                <input type="text" id="input-rules-updated" value={rules.updated} required class="form-control" />
+              </div>
+            </div>
+          </div>
+
+          <!-- CRUD Bab-Bab Tata Tertib -->
+          <div class="rules-chapters-list" id="rules-chapters-container">
+            {rules.chapters.map((ch, chIdx) => (
+              <div class="form-card card rule-chapter-card" data-ch-idx={chIdx}>
+                <div class="card-header justify-between">
+                  <div class="header-icon-title">
+                    <div class="header-icon-wrap">
+                      <Icon name="bookmark" size={18} />
+                    </div>
+                    <div>
+                      <input type="text" class="form-control chapter-title-input" value={ch.chapter} />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="chapter-items-list" data-ch-idx={chIdx}>
+                  {ch.items.map((item, itIdx) => (
+                    <div class="rule-item-row" data-it-idx={itIdx}>
+                      <textarea rows="2" class="form-control rule-item-input">{item}</textarea>
+                      <button type="button" class="btn-action-delete btn-delete-rule-item" title="Hapus Butir">
+                        <Icon name="trash-2" size={14} />
+                        <span>Hapus</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                <button type="button" class="btn btn-secondary btn-sm btn-add-rule-item mt-2" data-ch-idx={chIdx}>
+                  <Icon name="plus" size={14} />
+                  <span>Tambah Butir Aturan</span>
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 4: DIREKTORI ALUMNI -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-alumni">
+          <div class="form-card card">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="award" size={20} />
+              </div>
+              <div>
+                <h3>Statistik Penelusuran Alumni (Tracer Study)</h3>
+                <p class="card-desc">Data jumlah alumni terdata dan tautan kuesioner pelacakan karir.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="input-alumni-count">Total Alumni Terdata <span class="req">*</span></label>
+                <input type="number" id="input-alumni-count" value={alumni.totalRegistered} required class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label for="input-tracer-link">Tautan Formulir Tracer Study Online</label>
+                <input type="text" id="input-tracer-link" value="https://forms.gle/tracer-study-freeks-school" class="form-control" />
+              </div>
+            </div>
+          </div>
+
+          <!-- CRUD Kisah & Testimoni Alumni -->
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="message-square" size={20} />
+                </div>
+                <div>
+                  <h3>Kisah Inspiratif & Testimoni Alumni (CRUD)</h3>
+                  <p class="card-desc">Pengalaman alumni yang telah berkarya di industri teknologi, melanjutkan studi favorit, atau memenangkan kompetisi.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-alumni-story" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tambah Kisah</span>
+              </button>
+            </div>
+
+            <div class="alumni-stories-list" id="alumni-stories-container">
+              {alumni.stories.map((st, idx) => (
+                <div class="alumni-story-card" data-idx={idx}>
+                  <div class="alumni-story-header">
+                    <div class="alumni-avatar">{st.name.charAt(0)}</div>
+                    <div class="alumni-meta">
+                      <strong>{st.name}</strong>
+                      <span class="alumni-yr">{st.year}</span>
+                      <small class="alumni-current">{st.current}</small>
+                    </div>
+                    <div class="alumni-actions">
+                      <button type="button" class="btn-action-edit btn-edit-alumni" data-idx={idx} title="Edit Kisah">
+                        <Icon name="edit" size={14} />
+                        <span>Edit</span>
+                      </button>
+                      <button type="button" class="btn-action-delete btn-delete-alumni" data-idx={idx} title="Hapus Kisah">
+                        <Icon name="trash-2" size={14} />
+                        <span>Hapus</span>
+                      </button>
+                    </div>
+                  </div>
+                  <blockquote class="alumni-testi-text">"{st.testimony}"</blockquote>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Modal Edit Alumni -->
+          <div class="form-card card" id="modal-alumni" style="display: none; border-color: var(--admin-green-500); background-color: var(--admin-green-50);">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="edit" size={20} />
+              </div>
+              <div>
+                <h3 id="modal-alumni-title">Tambah / Edit Kisah Alumni</h3>
+                <p class="card-desc">Lengkapi nama alumni, tahun kelulusan, aktivitas saat ini, dan kesan pesan.</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <input type="hidden" id="input-alumni-id" value="" />
+              <div class="form-group">
+                <label for="input-al-name">Nama Lengkap Alumni <span class="req">*</span></label>
+                <input type="text" id="input-al-name" placeholder="Contoh: Rafi Pratama" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-al-year">Tahun Angkatan <span class="req">*</span></label>
+                <input type="text" id="input-al-year" placeholder="Contoh: Alumni 2024" class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-al-current">Aktivitas / Sekolah Lanjutan / Profesi <span class="req">*</span></label>
+                <input type="text" id="input-al-current" placeholder="Contoh: Juara Robotika / Software Engineer" class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-al-testi">Kutipan Pengalaman & Kesan <span class="req">*</span></label>
+                <textarea id="input-al-testi" rows="3" class="form-control" placeholder="Pondasi inovasi dan teknologi di FREEKS.id School sangat membantu saya..."></textarea>
+              </div>
+              <div class="col-span-2 form-actions-row">
+                <button type="button" id="btn-cancel-alumni" class="btn btn-secondary">Batal</button>
+                <button type="button" id="btn-save-alumni-item" class="btn btn-primary">Simpan Kisah</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Right Column: Interactive Live Preview -->
+    <aside class="preview-container">
+      <div class="preview-sticky-wrap">
+        <div class="card preview-card">
+          <div class="card-header-sm">
+            <div class="flex-align-center gap-2">
+              <Icon name="eye" size={18} />
+              <h4>Pratinjau Kesiswaan</h4>
+            </div>
+            <div class="preview-mode-pills" id="kesiswaan-preview-pills">
+              <button type="button" class="pill-btn active" data-mode="osis">OSIS</button>
+              <button type="button" class="pill-btn" data-mode="ekskul">Ekskul</button>
+              <button type="button" class="pill-btn" data-mode="rules">Aturan</button>
+              <button type="button" class="pill-btn" data-mode="alumni">Alumni</button>
+            </div>
+          </div>
+
+          <!-- Preview 1: OSIS -->
+          <div id="sim-kes-osis" class="sim-kes-view active">
+            <div class="sim-osis-box">
+              <span class="sim-osis-pill" id="sim-osis-period">{osis.period}</span>
+              <h4 id="sim-osis-cabinet">{osis.cabinet}</h4>
+              <p class="sim-osis-leader">Ketua: <strong id="sim-osis-leader-name">{osis.structure[0].name}</strong></p>
+              <div class="sim-dept-preview">
+                <small>Departemen Unggulan:</small>
+                <strong id="sim-first-dept-name">{osis.departments[0].name}</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 2: Ekskul -->
+          <div id="sim-kes-ekskul" class="sim-kes-view" style="display: none;">
+            <div class="sim-ekskul-card">
+              <img id="sim-ekskul-thumb" src={extracurriculars[0].image.src} alt="Ekskul" class="sim-ek-img" />
+              <div class="sim-ek-body">
+                <span class="sim-cat-tag">{extracurriculars[0].category}</span>
+                <h4 id="sim-ek-title">{extracurriculars[0].name}</h4>
+                <p id="sim-ek-sched" class="sim-sched-text">{extracurriculars[0].schedule}</p>
+                <small id="sim-ek-mentor">Pelatih: {extracurriculars[0].mentor}</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 3: Rules -->
+          <div id="sim-kes-rules" class="sim-kes-view" style="display: none;">
+            <div class="sim-rules-box">
+              <h4 id="sim-rules-title">{rules.title}</h4>
+              <span class="sim-updated-tag" id="sim-rules-updated">Pembaruan: {rules.updated}</span>
+              <div class="sim-rule-sample">
+                <strong>{rules.chapters[0].chapter}</strong>
+                <p id="sim-first-rule-item">{rules.chapters[0].items[0]}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 4: Alumni -->
+          <div id="sim-kes-alumni" class="sim-kes-view" style="display: none;">
+            <div class="sim-alumni-box">
+              <div class="sim-alumni-head">
+                <div class="sim-avatar-circle" id="sim-al-avatar">{alumni.stories[0].name.charAt(0)}</div>
+                <div>
+                  <h4 id="sim-al-name">{alumni.stories[0].name}</h4>
+                  <span id="sim-al-yr" class="sim-al-yr">{alumni.stories[0].year}</span>
+                </div>
+              </div>
+              <p id="sim-al-testi" class="sim-al-quote">"{alumni.stories[0].testimony}"</p>
+            </div>
+          </div>
+
+          <div class="preview-footer-action">
+            <button type="button" id="btn-save-kesiswaan-side" class="btn btn-primary btn-block">
+              <Icon name="check" size={18} />
+              <span>Simpan Perubahan Kesiswaan</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</AdminLayout>
+
+<style>
+  .page-header-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--admin-ink-300);
+  }
+
+  @media (min-width: 768px) {
+    .page-header-wrap {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+
+  .module-tag {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--admin-green-700);
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+
+  .page-header-wrap h1 {
+    font-size: clamp(1.4rem, 2vw, 1.85rem);
+    margin-bottom: 6px;
+  }
+
+  .page-subtitle {
+    font-size: 0.9rem;
+    color: var(--admin-ink-500);
+    max-width: 75ch;
+  }
+
+  .header-action-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* Sub-Modul Tabs */
+  .section-tabs-bar {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--admin-ink-100);
+  }
+
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--admin-ink-500);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    border-radius: 6px 6px 0 0;
+  }
+
+  .tab-btn:hover {
+    color: var(--admin-green-800);
+    background-color: var(--admin-green-50);
+  }
+
+  .tab-btn.active {
+    color: var(--admin-green-900);
+    background-color: #FFFFFF;
+    border-bottom-color: var(--admin-green-700);
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.03);
+  }
+
+  /* Layout Grid */
+  .kesiswaan-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  @media (min-width: 1080px) {
+    .kesiswaan-layout-grid {
+      grid-template-columns: 1.55fr 1fr;
+    }
+  }
+
+  .tab-panel {
+    display: none;
+  }
+
+  .tab-panel.active {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Form Cards */
+  .form-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid var(--admin-ink-300);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--admin-ink-100);
+  }
+
+  .card-header.justify-between {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .header-icon-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .header-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: var(--admin-green-100);
+    color: var(--admin-green-800);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-header h3 {
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+  }
+
+  .card-desc {
+    font-size: 0.825rem;
+    color: var(--admin-ink-500);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  @media (min-width: 640px) {
+    .form-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .col-span-2 {
+      grid-column: span 2;
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-group label {
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--admin-ink-700);
+  }
+
+  .req {
+    color: #DC2626;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.875rem;
+    color: var(--admin-ink-900);
+    background-color: #FFFFFF;
+    transition: all 0.15s ease;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: var(--admin-green-700);
+    box-shadow: 0 0 0 3px rgba(27, 122, 47, 0.15);
+  }
+
+  .form-actions-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  /* OSIS Members List */
+  :global(.osis-members-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  :global(.osis-member-row) {
+    display: grid;
+    grid-template-columns: 220px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    background: #FFFFFF;
+    padding: 10px 14px;
+    border: 1px solid var(--admin-ink-200, #E5E7EB);
+    border-radius: 8px;
+    transition: all 0.15s ease;
+  }
+
+  :global(.osis-member-row:hover) {
+    border-color: var(--admin-green-300, #86EFAC);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  }
+
+  :global(.osis-role-badge) {
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background-color: var(--admin-green-100, #DCFCE7);
+    color: var(--admin-green-800, #166534);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  /* OSIS Dept List */
+  :global(.osis-dept-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  :global(.osis-dept-card) {
+    padding: 16px;
+    border: 1px solid var(--admin-ink-300, #D1D5DB);
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    transition: all 0.15s ease;
+  }
+
+  :global(.osis-dept-card:hover) {
+    border-color: var(--admin-green-400, #4ADE80);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  :global(.dept-header-row) {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    align-items: center;
+  }
+
+  /* Ekskul Admin Grid */
+  :global(.ekskul-admin-grid) {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  @media (min-width: 640px) {
+    :global(.ekskul-admin-grid) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  :global(.ekskul-admin-card) {
+    border: 1px solid var(--admin-ink-200, #E5E7EB);
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+  }
+
+  :global(.ekskul-admin-card:hover) {
+    border-color: var(--admin-green-400, #4ADE80);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+  }
+
+  :global(.ekskul-thumb-wrap) {
+    width: 100%;
+    height: 145px;
+    background-color: #F8FAF7;
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px solid var(--admin-ink-100, #F3F4F6);
+  }
+
+  :global(.ekskul-thumb) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  :global(.ekskul-admin-card:hover .ekskul-thumb) {
+    transform: scale(1.03);
+  }
+
+  :global(.ekskul-body) {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  :global(.cat-pill) {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background-color: var(--admin-green-100, #DCFCE7);
+    color: var(--admin-green-800, #166534);
+    display: inline-block;
+    align-self: flex-start;
+    margin-bottom: 6px;
+  }
+
+  :global(.ekskul-body h4) {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--admin-ink-900, #111827);
+    margin-bottom: 6px;
+  }
+
+  :global(.ekskul-sched) {
+    font-size: 0.78rem;
+    color: var(--admin-ink-600, #4B5563);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+
+  :global(.ekskul-mentor) {
+    font-size: 0.78rem;
+    color: var(--admin-ink-700, #374151);
+    margin-bottom: 8px;
+  }
+
+  :global(.ekskul-desc) {
+    font-size: 0.8rem;
+    color: var(--admin-ink-500, #6B7280);
+    line-height: 1.45;
+    margin-bottom: 14px;
+    flex: 1;
+  }
+
+  :global(.ekskul-card-actions) {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    border-top: 1px solid var(--admin-ink-100, #F3F4F6);
+    padding-top: 12px;
+    margin-top: auto;
+  }
+
+  /* Rules Chapters */
+  :global(.rules-chapters-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  :global(.rule-chapter-card) {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--admin-ink-300, #D1D5DB);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  :global(.chapter-items-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  :global(.rule-item-row) {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  /* Alumni Stories */
+  :global(.alumni-stories-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  :global(.alumni-story-card) {
+    padding: 18px;
+    border: 1px solid var(--admin-ink-200, #E5E7EB);
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    transition: all 0.15s ease;
+  }
+
+  :global(.alumni-story-card:hover) {
+    border-color: var(--admin-green-300, #86EFAC);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  :global(.alumni-story-header) {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  :global(.alumni-avatar) {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--admin-green-800, #166534);
+    color: #FFFFFF;
+    font-size: 1.05rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  :global(.alumni-meta) {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  :global(.alumni-meta strong) {
+    font-size: 0.95rem;
+    color: var(--admin-ink-900, #111827);
+  }
+
+  :global(.alumni-yr) {
+    font-size: 0.75rem;
+    color: var(--admin-green-700, #15803D);
+    font-weight: 600;
+  }
+
+  :global(.alumni-current) {
+    font-size: 0.75rem;
+    color: var(--admin-ink-500, #6B7280);
+  }
+
+  :global(.alumni-actions) {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  :global(.alumni-testi-text) {
+    font-size: 0.85rem;
+    color: var(--admin-ink-700, #374151);
+    font-style: italic;
+    line-height: 1.5;
+    border-left: 3px solid var(--admin-green-300, #86EFAC);
+    padding-left: 12px;
+    margin: 0;
+  }
+
+  /* Modern Action Buttons */
+  :global(.btn-action-edit),
+  :global(.btn-action-delete) {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+    text-decoration: none;
+    line-height: 1;
+  }
+
+  :global(.btn-action-edit) {
+    background-color: var(--admin-green-50, #ECFDF5);
+    color: var(--admin-green-800, #065F46);
+    border-color: var(--admin-green-200, #A7F3D0);
+  }
+
+  :global(.btn-action-edit:hover) {
+    background-color: var(--admin-green-100, #D1FAE5);
+    border-color: var(--admin-green-400, #34D399);
+    transform: translateY(-1px);
+  }
+
+  :global(.btn-action-delete) {
+    background-color: #FEF2F2;
+    color: #991B1B;
+    border-color: #FECACA;
+  }
+
+  :global(.btn-action-delete:hover) {
+    background-color: #FEE2E2;
+    border-color: #FCA5A5;
+    transform: translateY(-1px);
+  }
+
+  /* Utility Buttons */
+  :global(.btn-icon) {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--admin-ink-300, #D1D5DB);
+    border-radius: 6px;
+    background: #FFFFFF;
+    color: var(--admin-ink-700, #374151);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  :global(.btn-icon:hover) {
+    color: var(--admin-green-800, #166534);
+    border-color: var(--admin-green-500, #22C55E);
+    background-color: var(--admin-green-50, #ECFDF5);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 9px 16px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .btn-block {
+    width: 100%;
+  }
+
+  .btn-primary {
+    background-color: var(--admin-green-700);
+    color: #FFFFFF;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--admin-green-800);
+  }
+
+  .btn-secondary {
+    background-color: #FFFFFF;
+    color: var(--admin-ink-700);
+    border-color: var(--admin-ink-300);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--admin-ink-100);
+    color: var(--admin-ink-900);
+  }
+
+  .mt-2 {
+    margin-top: 8px;
+  }
+
+  /* Preview Container */
+  .preview-sticky-wrap {
+    position: sticky;
+    top: 90px;
+  }
+
+  .preview-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--admin-ink-300);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .card-header-sm {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--admin-ink-100);
+  }
+
+  .card-header-sm h4 {
+    font-size: 0.95rem;
+  }
+
+  .preview-mode-pills {
+    display: flex;
+    gap: 4px;
+    background-color: var(--admin-ink-100);
+    padding: 3px;
+    border-radius: 6px;
+  }
+
+  .pill-btn {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--admin-ink-500);
+    cursor: pointer;
+  }
+
+  .pill-btn.active {
+    background: #FFFFFF;
+    color: var(--admin-green-900);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Simulated Box */
+  .sim-osis-box {
+    background-color: var(--admin-green-50);
+    border: 1px solid var(--admin-green-100);
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .sim-osis-pill {
+    font-size: 0.68rem;
+    font-weight: 700;
+    background-color: var(--admin-green-700);
+    color: #FFFFFF;
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+
+  .sim-osis-box h4 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+
+  .sim-osis-leader {
+    font-size: 0.8rem;
+    color: var(--admin-ink-700);
+    margin-bottom: 10px;
+  }
+
+  .sim-dept-preview {
+    border-top: 1px dashed var(--admin-green-100);
+    padding-top: 8px;
+  }
+
+  .sim-dept-preview small {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--admin-ink-500);
+  }
+
+  .sim-ekskul-card {
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .sim-ek-img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+  }
+
+  .sim-ek-body {
+    padding: 12px;
+  }
+
+  .sim-cat-tag {
+    font-size: 0.65rem;
+    font-weight: 700;
+    background-color: var(--admin-green-100);
+    color: var(--admin-green-800);
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+
+  .sim-sched-text {
+    font-size: 0.72rem;
+    color: var(--admin-ink-500);
+  }
+
+  .sim-rules-box {
+    background-color: #FFFFFF;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .sim-rules-box h4 {
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+  }
+
+  .sim-updated-tag {
+    font-size: 0.7rem;
+    color: var(--admin-green-700);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .sim-rule-sample {
+    background-color: var(--admin-ink-100);
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+  }
+
+  .sim-alumni-box {
+    background-color: var(--admin-green-900);
+    color: #FFFFFF;
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .sim-alumni-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .sim-avatar-circle {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background-color: var(--admin-yellow-500);
+    color: var(--admin-green-900);
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sim-alumni-head h4 {
+    color: #FFFFFF;
+    font-size: 0.95rem;
+  }
+
+  .sim-al-yr {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .sim-al-quote {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-style: italic;
+    line-height: 1.45;
+  }
+
+  .preview-footer-action {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--admin-ink-100);
+  }
+
+  /* Toast Notification */
+  .toast-notification {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background-color: #ECFDF5;
+    border: 1px solid #A7F3D0;
+    border-left: 4px solid #10B981;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+  }
+
+  .toast-icon {
+    color: #059669;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .toast-body {
+    flex: 1;
+    font-size: 0.875rem;
+    color: #065F46;
+  }
+
+  .toast-body strong {
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .toast-body p {
+    font-size: 0.825rem;
+    color: #047857;
+  }
+
+  .toast-close-btn {
+    background: transparent;
+    border: none;
+    color: #059669;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+  }
+
+  .flex-align-center {
+    display: flex;
+    align-items: center;
+  }
+
+  .gap-2 {
+    gap: 8px;
+  }
+</style>
+
+<script is:inline>
+  function initKesiswaan() {
+    // Initial states for FREEKS.id School
+    let osisMembersState = [
+      { role: "President of Student Council", name: "M. Rizky Pratama (Grade 8)" },
+      { role: "Vice President", name: "Nabila Rahma (Grade 8)" },
+      { role: "Head of Operations & Secretary", name: "Aisyah Zahra (Grade 8)" },
+      { role: "Vice Secretary", name: "Fajar Al-Ghifari (Grade 7)" },
+      { role: "Head of Finance & Treasury", name: "Salwa Maulida (Grade 8)" },
+      { role: "Vice Treasurer", name: "Rayhan Kurniawan (Grade 7)" }
+    ];
+
+    let osisDeptState = [
+      { name: "Divisi Teknologi & Inovasi Digital", programs: "Pengelolaan portal karya siswa, hackathon mini internal, dan workshop teknologi peer-to-peer." },
+      { name: "Divisi Media Kreatif & Publikasi", programs: "Produksi podcast kesiswaan, liputan event kampus, dan showcase desain grafis mingguan." },
+      { name: "Divisi Olahraga, E-Sports & Wellness", programs: "Turnamen futsal, kompetisi taktik e-sports terarah, dan program kebugaran fisik berkala." },
+      { name: "Divisi Aksi Sosial & Lingkungan Hidup", programs: "Kampanye daur ulang e-waste (sampah elektronik), bakti sosial kemasyarakatan, dan gerakan kampus hijau." }
+    ];
+
+    let ekskulState = [
+      { id: "robotics-drone", name: "Robotics & Drone Piloting", category: "Teknologi & Rekayasa", schedule: "Rabu 15.30 WIB", mentor: "FREEKS Tech Mentor", description: "Perakitan robot kompetisi (line follower, sumo bot), navigasi drone mikrokontroler, dan eksperimen otomasi sensor cerdas.", image: { src: "/assets/dummy/ekskul-kir.svg", alt: "Eksperimen robotika dan drone siswa", width: 800, height: 500 } },
+      { id: "coding-cyber", name: "Cyber & Coding Guild", category: "Komputasi", schedule: "Kamis 15.30 WIB", mentor: "FREEKS Tech Mentor", description: "Komunitas belajar logika pemrograman web modern, problem solving algoritma, dan dasar keamanan sistem siber (ethical hacking).", image: { src: "/assets/dummy/ekskul-kir.svg", alt: "Sesi guild pemrograman siswa", width: 800, height: 500 } },
+      { id: "3d-game-dev", name: "3D Art & Game Design", category: "Desain Kreatif", schedule: "Selasa 15.30 WIB", mentor: "FREEKS Creative Mentor", description: "Eksplorasi pemodelan 3D, animasi karakter, perancangan mekanik game indie, serta pembuatan aset interaktif visual.", image: { src: "/assets/dummy/ekskul-tilawah.svg", alt: "Pembuatan game dan seni 3D", width: 800, height: 500 } },
+      { id: "media-podcast", name: "Digital Journalism & Broadcast Podcast", category: "Media & Komunikasi", schedule: "Senin 15.30 WIB", mentor: "FREEKS Media Mentor", description: "Pelatihan produksi audio visual, teknik rekaman podcast, penulisan artikel sains populer, dan kurasi konten media sosial.", image: { src: "/assets/dummy/ekskul-hadrah.svg", alt: "Produksi podcast dan siaran kreatif siswa", width: 800, height: 500 } },
+      { id: "english-debate", name: "Global Speech & Debate Club", category: "Bahasa & Diplomasi", schedule: "Sabtu 09.00 WIB", mentor: "FREEKS Global Mentor", description: "Mengasah wawasan global, teknik berargumentasi kritis, simulasi sidang Model United Nations (MUN), dan public speaking bahasa Inggris.", image: { src: "/assets/dummy/ekskul-english.svg", alt: "Klub debat dan pidato bahasa Inggris", width: 800, height: 500 } },
+      { id: "futsal-sports", name: "Futsal & Athletics Club", category: "Olahraga & Kebugaran", schedule: "Jumat 15.30 WIB", mentor: "FREEKS Coach", description: "Pengembangan stamina fisik, kerja sama tim, taktik permainan bola, dan persiapan mengikuti kejuaraan olahraga antarpelajar.", image: { src: "/assets/dummy/ekskul-futsal.svg", alt: "Latihan olahraga dan futsal siswa di kampus", width: 800, height: 500 } }
+    ];
+
+    let alumniStoriesState = [
+      { id: "alumni-1", name: "Rafi Pratama", year: "Alumni 2024", current: "Juara Nasional Kompetisi Robotika Remaja", testimony: "Pembelajaran hands-on di Maker Space FREEKS.id School membuat saya terbiasa bereksperimen dengan coding dan sirkuit. Mental problem solving saya terbentuk sejak di sini." },
+      { id: "alumni-2", name: "Nurul Hidayati", year: "Alumni 2022", current: "Founder Startup Edukasi & Tech Fellow", testimony: "Kultur kolaborasi dan dorongan untuk berani pitching ide di hadapan umum adalah bekal paling berharga yang saya dapatkan selama belajar di FREEKS." },
+      { id: "alumni-3", name: "Ahmad Dani", year: "Alumni 2023", current: "Peraih Beasiswa Sains Internasional", testimony: "Penguasaan Bahasa Inggris aktif dan bimbingan computational thinking di sekolah ini membuka gerbang kesempatan internasional bagi saya." }
+    ];
+
+    // Load from localStorage with migration
+    const savedKesiswaan = localStorage.getItem('mts_cms_kesiswaan_data');
+    if (savedKesiswaan) {
+      try {
+        const parsed = JSON.parse(savedKesiswaan);
+        const hasLegacyData = parsed.ekskul && parsed.ekskul.some(e => e.name && e.name.toLowerCase().includes('hadrah'));
+        if (hasLegacyData) {
+          localStorage.removeItem('mts_cms_kesiswaan_data');
+        } else {
+          if (parsed.osisMembers && parsed.osisMembers.length) osisMembersState = parsed.osisMembers;
+          if (parsed.osisDept && parsed.osisDept.length) osisDeptState = parsed.osisDept;
+          if (parsed.ekskul && parsed.ekskul.length) ekskulState = parsed.ekskul;
+          if (parsed.alumniStories && parsed.alumniStories.length) alumniStoriesState = parsed.alumniStories;
+          if (parsed.period && document.getElementById('input-osis-period')) document.getElementById('input-osis-period').value = parsed.period;
+          if (parsed.cabinet && document.getElementById('input-osis-cabinet')) document.getElementById('input-osis-cabinet').value = parsed.cabinet;
+          if (parsed.rulesTitle && document.getElementById('input-rules-title')) document.getElementById('input-rules-title').value = parsed.rulesTitle;
+          if (parsed.rulesUpdated && document.getElementById('input-rules-updated')) document.getElementById('input-rules-updated').value = parsed.rulesUpdated;
+        }
+      } catch (e) {
+        console.error('Failed to parse saved kesiswaan:', e);
+      }
+    }
+
+    // Tab switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-tab');
+        tabBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        tabPanels.forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        const targetPanel = document.getElementById(targetId);
+        if (targetPanel) targetPanel.classList.add('active');
+      });
+    });
+
+    // Preview mode switcher
+    const previewPills = document.querySelectorAll('#kesiswaan-preview-pills .pill-btn');
+    const simViews = {
+      osis: document.getElementById('sim-kes-osis'),
+      ekskul: document.getElementById('sim-kes-ekskul'),
+      rules: document.getElementById('sim-kes-rules'),
+      alumni: document.getElementById('sim-kes-alumni')
+    };
+
+    previewPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        previewPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        const mode = pill.getAttribute('data-mode');
+        Object.keys(simViews).forEach(k => {
+          if (simViews[k]) simViews[k].style.display = (k === mode) ? 'block' : 'none';
+        });
+      });
+    });
+
+    // Live preview sync
+    function syncKesiswaanPreview() {
+      const pInput = document.getElementById('input-osis-period');
+      const cInput = document.getElementById('input-osis-cabinet');
+      if (pInput && document.getElementById('sim-osis-period')) {
+        document.getElementById('sim-osis-period').textContent = pInput.value;
+      }
+      if (cInput && document.getElementById('sim-osis-cabinet')) {
+        document.getElementById('sim-osis-cabinet').textContent = cInput.value;
+      }
+
+      const rtInput = document.getElementById('input-rules-title');
+      const ruInput = document.getElementById('input-rules-updated');
+      if (rtInput && document.getElementById('sim-rules-title')) {
+        document.getElementById('sim-rules-title').textContent = rtInput.value;
+      }
+      if (ruInput && document.getElementById('sim-rules-updated')) {
+        document.getElementById('sim-rules-updated').textContent = `Pembaruan: ${ruInput.value}`;
+      }
+    }
+
+    const liveInputs = document.querySelectorAll('#kesiswaan-form input, #kesiswaan-form textarea');
+    liveInputs.forEach(i => i.addEventListener('input', syncKesiswaanPreview));
+
+    // CRUD Pengurus OSIS
+    const osisMembersContainer = document.getElementById('osis-members-container');
+    const btnAddOsisMember = document.getElementById('btn-add-osis-member');
+
+    function renderOsisMembers() {
+      if (!osisMembersContainer) return;
+      osisMembersContainer.innerHTML = '';
+      osisMembersState.forEach((st, idx) => {
+        const row = document.createElement('div');
+        row.className = 'osis-member-row';
+        row.setAttribute('data-idx', idx);
+        row.innerHTML = `
+          <div class="osis-role-badge">${st.role}</div>
+          <input type="text" class="form-control osis-name-input" value="${st.name}" />
+          <button type="button" class="btn-action-delete btn-del-osis-m" data-idx="${idx}" title="Hapus Pengurus">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <span>Hapus</span>
+          </button>
+        `;
+        osisMembersContainer.appendChild(row);
+      });
+
+      osisMembersContainer.querySelectorAll('.osis-name-input').forEach((inp, idx) => {
+        inp.addEventListener('input', () => {
+          if (osisMembersState[idx]) osisMembersState[idx].name = inp.value;
+          if (idx === 0 && document.getElementById('sim-osis-leader-name')) {
+            document.getElementById('sim-osis-leader-name').textContent = inp.value;
+          }
+        });
+      });
+
+      document.querySelectorAll('.btn-del-osis-m').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = osisMembersState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus pengurus "${item.role}" (${item.name})?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              osisMembersState.splice(idx, 1);
+              renderOsisMembers();
+            });
+          } else if (confirm(msg)) {
+            osisMembersState.splice(idx, 1);
+            renderOsisMembers();
+          }
+        });
+      });
+
+      if (osisMembersState.length > 0 && document.getElementById('sim-osis-leader-name')) {
+        document.getElementById('sim-osis-leader-name').textContent = osisMembersState[0].name;
+      }
+    }
+
+    if (btnAddOsisMember) {
+      btnAddOsisMember.addEventListener('click', () => {
+        const role = prompt('Masukkan Jabatan OSIS (contoh: Head of Innovation & Tech):', 'Head of Division');
+        if (role) {
+          osisMembersState.push({ role, name: 'Nama Siswa (Grade 7/8)' });
+          renderOsisMembers();
+        }
+      });
+    }
+
+    // CRUD Departemen & Proker OSIS
+    const osisDeptContainer = document.getElementById('osis-dept-container');
+    const btnAddOsisDept = document.getElementById('btn-add-osis-dept');
+
+    function renderOsisDept() {
+      if (!osisDeptContainer) return;
+      osisDeptContainer.innerHTML = '';
+      osisDeptState.forEach((dept, idx) => {
+        const card = document.createElement('div');
+        card.className = 'osis-dept-card';
+        card.setAttribute('data-idx', idx);
+        card.innerHTML = `
+          <div class="dept-header-row">
+            <input type="text" class="form-control dept-name-input" value="${dept.name}" placeholder="Nama Divisi / Departemen" />
+            <button type="button" class="btn-action-delete btn-del-dept" data-idx="${idx}" title="Hapus Departemen">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <span>Hapus</span>
+            </button>
+          </div>
+          <textarea rows="2" class="form-control dept-prog-input" placeholder="Uraian agenda dan program kerja divisi...">${dept.programs}</textarea>
+        `;
+        osisDeptContainer.appendChild(card);
+      });
+
+      osisDeptContainer.querySelectorAll('.dept-name-input').forEach((inp, idx) => {
+        inp.addEventListener('input', () => {
+          if (osisDeptState[idx]) osisDeptState[idx].name = inp.value;
+          if (idx === 0 && document.getElementById('sim-first-dept-name')) {
+            document.getElementById('sim-first-dept-name').textContent = inp.value;
+          }
+        });
+      });
+
+      osisDeptContainer.querySelectorAll('.dept-prog-input').forEach((inp, idx) => {
+        inp.addEventListener('input', () => {
+          if (osisDeptState[idx]) osisDeptState[idx].programs = inp.value;
+        });
+      });
+
+      osisDeptContainer.querySelectorAll('.btn-del-dept').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = osisDeptState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus departemen "${item.name}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              osisDeptState.splice(idx, 1);
+              renderOsisDept();
+            });
+          } else if (confirm(msg)) {
+            osisDeptState.splice(idx, 1);
+            renderOsisDept();
+          }
+        });
+      });
+
+      if (osisDeptState.length > 0 && document.getElementById('sim-first-dept-name')) {
+        document.getElementById('sim-first-dept-name').textContent = osisDeptState[0].name;
+      }
+    }
+
+    if (btnAddOsisDept) {
+      btnAddOsisDept.addEventListener('click', () => {
+        osisDeptState.push({
+          name: 'Divisi Baru OSIS',
+          programs: 'Program kerja dan kegiatan inovasi baru.'
+        });
+        renderOsisDept();
+      });
+    }
+
+    // CRUD Ekskul
+    const ekskulContainer = document.getElementById('ekskul-list-container');
+    const modalEkskul = document.getElementById('modal-ekskul');
+    let editingEkIdx = -1;
+
+    function renderEkskulList() {
+      if (!ekskulContainer) return;
+      ekskulContainer.innerHTML = '';
+      ekskulState.forEach((ek, idx) => {
+        const card = document.createElement('div');
+        card.className = 'ekskul-admin-card';
+        card.innerHTML = `
+          <div class="ekskul-thumb-wrap">
+            <img src="${ek.image?.src || '/assets/dummy/ekskul-hadrah.svg'}" alt="${ek.name}" class="ekskul-thumb" onerror="this.src='/assets/dummy/ekskul-hadrah.svg'" />
+          </div>
+          <div class="ekskul-body">
+            <span class="cat-pill">${ek.category}</span>
+            <h4>${ek.name}</h4>
+            <p class="ekskul-sched">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span>${ek.schedule}</span>
+            </p>
+            <p class="ekskul-mentor">Pelatih: <strong>${ek.mentor}</strong></p>
+            <p class="ekskul-desc">${ek.description}</p>
+            <div class="ekskul-card-actions">
+              <button type="button" class="btn-action-edit btn-edit-ek-item" data-idx="${idx}" title="Edit Ekskul">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                <span>Edit</span>
+              </button>
+              <button type="button" class="btn-action-delete btn-delete-ek-item" data-idx="${idx}" title="Hapus Ekskul">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <span>Hapus</span>
+              </button>
+            </div>
+          </div>
+        `;
+        ekskulContainer.appendChild(card);
+      });
+
+      document.querySelectorAll('.btn-edit-ek-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          editingEkIdx = idx;
+          const e = ekskulState[idx];
+          document.getElementById('modal-ek-title').textContent = 'Edit Ekstrakurikuler';
+          document.getElementById('input-ek-id').value = e.id;
+          document.getElementById('input-ek-name').value = e.name;
+          document.getElementById('input-ek-cat').value = e.category;
+          document.getElementById('input-ek-schedule').value = e.schedule;
+          document.getElementById('input-ek-mentor').value = e.mentor;
+          document.getElementById('input-ek-desc').value = e.description;
+          document.getElementById('input-ek-img').value = e.image?.src || '/assets/dummy/ekskul-hadrah.svg';
+          const prevEkImg = document.getElementById('img-prev-ek');
+          if (prevEkImg) prevEkImg.src = e.image?.src || '/assets/dummy/ekskul-hadrah.svg';
+          modalEkskul.style.display = 'block';
+          modalEkskul.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.btn-delete-ek-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = ekskulState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus ekstrakurikuler "${item.name}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              ekskulState.splice(idx, 1);
+              renderEkskulList();
+            });
+          } else if (confirm(msg)) {
+            ekskulState.splice(idx, 1);
+            renderEkskulList();
+          }
+        });
+      });
+
+      if (ekskulState.length > 0) {
+        if (document.getElementById('sim-ek-title')) document.getElementById('sim-ek-title').textContent = ekskulState[0].name;
+        if (document.getElementById('sim-ek-sched')) document.getElementById('sim-ek-sched').textContent = ekskulState[0].schedule;
+        if (document.getElementById('sim-ek-mentor')) document.getElementById('sim-ek-mentor').textContent = 'Pelatih: ' + ekskulState[0].mentor;
+      }
+    }
+
+    const btnAddEk = document.getElementById('btn-add-ekskul');
+    if (btnAddEk) {
+      btnAddEk.addEventListener('click', () => {
+        editingEkIdx = -1;
+        document.getElementById('modal-ek-title').textContent = 'Tambah Ekstrakurikuler Baru';
+        document.getElementById('input-ek-id').value = 'ek-' + Date.now();
+        document.getElementById('input-ek-name').value = '';
+        document.getElementById('input-ek-schedule').value = '';
+        document.getElementById('input-ek-mentor').value = '';
+        document.getElementById('input-ek-desc').value = '';
+        document.getElementById('input-ek-img').value = '/assets/dummy/ekskul-kir.svg';
+        const prevEkImg = document.getElementById('img-prev-ek');
+        if (prevEkImg) prevEkImg.src = '/assets/dummy/ekskul-kir.svg';
+        modalEkskul.style.display = 'block';
+        modalEkskul.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    const btnCancelEk = document.getElementById('btn-cancel-ek');
+    if (btnCancelEk) btnCancelEk.addEventListener('click', () => { modalEkskul.style.display = 'none'; });
+
+    const btnSaveEkItem = document.getElementById('btn-save-ek-item');
+    if (btnSaveEkItem) {
+      btnSaveEkItem.addEventListener('click', () => {
+        const id = document.getElementById('input-ek-id').value || ('ek-' + Date.now());
+        const name = document.getElementById('input-ek-name').value.trim();
+        const category = document.getElementById('input-ek-cat').value;
+        const schedule = document.getElementById('input-ek-schedule').value.trim();
+        const mentor = document.getElementById('input-ek-mentor').value.trim();
+        const description = document.getElementById('input-ek-desc').value.trim();
+        const src = document.getElementById('input-ek-img').value.trim();
+        if (!name || !schedule) {
+          alert('Mohon lengkapi nama ekskul dan jadwal latihan!');
+          return;
+        }
+        const obj = { id, name, category, schedule, mentor, description, image: { src, alt: name, width: 800, height: 500 } };
+        if (editingEkIdx >= 0) {
+          ekskulState[editingEkIdx] = obj;
+        } else {
+          ekskulState.push(obj);
+        }
+        modalEkskul.style.display = 'none';
+        renderEkskulList();
+      });
+    }
+
+    // CRUD Alumni Stories
+    const alumniContainer = document.getElementById('alumni-stories-container');
+    const modalAlumni = document.getElementById('modal-alumni');
+    let editingAlumniIdx = -1;
+
+    function renderAlumniStories() {
+      if (!alumniContainer) return;
+      alumniContainer.innerHTML = '';
+      alumniStoriesState.forEach((st, idx) => {
+        const card = document.createElement('div');
+        card.className = 'alumni-story-card';
+        card.innerHTML = `
+          <div class="alumni-story-header">
+            <div class="alumni-avatar">${st.name.charAt(0)}</div>
+            <div class="alumni-meta">
+              <strong>${st.name}</strong>
+              <span class="alumni-yr">${st.year}</span>
+              <small class="alumni-current">${st.current}</small>
+            </div>
+            <div class="alumni-actions">
+              <button type="button" class="btn-action-edit btn-edit-al-item" data-idx="${idx}" title="Edit Kisah">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                <span>Edit</span>
+              </button>
+              <button type="button" class="btn-action-delete btn-delete-al-item" data-idx="${idx}" title="Hapus Kisah">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <span>Hapus</span>
+              </button>
+            </div>
+          </div>
+          <blockquote class="alumni-testi-text">"${st.testimony}"</blockquote>
+        `;
+        alumniContainer.appendChild(card);
+      });
+
+      document.querySelectorAll('.btn-edit-al-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          editingAlumniIdx = idx;
+          const a = alumniStoriesState[idx];
+          document.getElementById('modal-alumni-title').textContent = 'Edit Kisah Alumni';
+          document.getElementById('input-alumni-id').value = a.id;
+          document.getElementById('input-al-name').value = a.name;
+          document.getElementById('input-al-year').value = a.year;
+          document.getElementById('input-al-current').value = a.current;
+          document.getElementById('input-al-testi').value = a.testimony;
+          modalAlumni.style.display = 'block';
+          modalAlumni.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.btn-delete-al-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = alumniStoriesState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus kisah alumni dari "${item.name}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              alumniStoriesState.splice(idx, 1);
+              renderAlumniStories();
+            });
+          } else if (confirm(msg)) {
+            alumniStoriesState.splice(idx, 1);
+            renderAlumniStories();
+          }
+        });
+      });
+
+      if (alumniStoriesState.length > 0) {
+        if (document.getElementById('sim-al-avatar')) document.getElementById('sim-al-avatar').textContent = alumniStoriesState[0].name.charAt(0);
+        if (document.getElementById('sim-al-name')) document.getElementById('sim-al-name').textContent = alumniStoriesState[0].name;
+        if (document.getElementById('sim-al-yr')) document.getElementById('sim-al-yr').textContent = alumniStoriesState[0].year;
+        if (document.getElementById('sim-al-testi')) document.getElementById('sim-al-testi').textContent = '"' + alumniStoriesState[0].testimony + '"';
+      }
+    }
+
+    const btnAddAlumni = document.getElementById('btn-add-alumni-story');
+    if (btnAddAlumni) {
+      btnAddAlumni.addEventListener('click', () => {
+        editingAlumniIdx = -1;
+        document.getElementById('modal-alumni-title').textContent = 'Tambah Kisah Alumni Baru';
+        document.getElementById('input-alumni-id').value = 'alumni-' + Date.now();
+        document.getElementById('input-al-name').value = '';
+        document.getElementById('input-al-year').value = 'Alumni 2025';
+        document.getElementById('input-al-current').value = '';
+        document.getElementById('input-al-testi').value = '';
+        modalAlumni.style.display = 'block';
+        modalAlumni.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    const btnCancelAlumni = document.getElementById('btn-cancel-alumni');
+    if (btnCancelAlumni) btnCancelAlumni.addEventListener('click', () => { modalAlumni.style.display = 'none'; });
+
+    const btnSaveAlumniItem = document.getElementById('btn-save-alumni-item');
+    if (btnSaveAlumniItem) {
+      btnSaveAlumniItem.addEventListener('click', () => {
+        const id = document.getElementById('input-alumni-id').value || ('alumni-' + Date.now());
+        const name = document.getElementById('input-al-name').value.trim();
+        const year = document.getElementById('input-al-year').value.trim();
+        const current = document.getElementById('input-al-current').value.trim();
+        const testimony = document.getElementById('input-al-testi').value.trim();
+        if (!name || !testimony) {
+          alert('Mohon lengkapi nama alumni dan kutipan testimoni!');
+          return;
+        }
+        const obj = { id, name, year, current, testimony };
+        if (editingAlumniIdx >= 0) {
+          alumniStoriesState[editingAlumniIdx] = obj;
+        } else {
+          alumniStoriesState.push(obj);
+        }
+        modalAlumni.style.display = 'none';
+        renderAlumniStories();
+      });
+    }
+
+    // Dynamic Rule Items
+    document.querySelectorAll('.btn-add-rule-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const chIdx = btn.getAttribute('data-ch-idx');
+        const list = document.querySelector(`.chapter-items-list[data-ch-idx="${chIdx}"]`);
+        if (list) {
+          const row = document.createElement('div');
+          row.className = 'rule-item-row';
+          row.innerHTML = `
+            <textarea rows="2" class="form-control rule-item-input" placeholder="Tuliskan butir aturan baru..."></textarea>
+            <button type="button" class="btn-action-delete btn-delete-rule-item" title="Hapus Butir">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <span>Hapus</span>
+            </button>
+          `;
+          row.querySelector('.btn-delete-rule-item').addEventListener('click', () => row.remove());
+          list.appendChild(row);
+        }
+      });
+    });
+
+    document.querySelectorAll('.btn-delete-rule-item').forEach(b => {
+      b.addEventListener('click', () => {
+        b.closest('.rule-item-row')?.remove();
+      });
+    });
+
+    // Save All Kesiswaan
+    function handleSaveKesiswaan() {
+      // Gather rules
+      const chaptersData = [];
+      document.querySelectorAll('.rule-chapter-card').forEach(card => {
+        const chTitle = card.querySelector('.chapter-title-input')?.value || '';
+        const items = [];
+        card.querySelectorAll('.rule-item-input').forEach(inp => {
+          if (inp.value.trim()) items.push(inp.value.trim());
+        });
+        chaptersData.push({ chapter: chTitle, items });
+      });
+
+      const payload = {
+        updatedAt: new Date().toISOString(),
+        period: document.getElementById('input-osis-period')?.value || '2026/2027',
+        cabinet: document.getElementById('input-osis-cabinet')?.value || 'Kabinet Sinergi Inovasi',
+        osisMembers: osisMembersState,
+        osisDept: osisDeptState,
+        ekskul: ekskulState,
+        rulesTitle: document.getElementById('input-rules-title')?.value || '',
+        rulesUpdated: document.getElementById('input-rules-updated')?.value || '',
+        rulesChapters: chaptersData,
+        alumniTotal: parseInt(document.getElementById('input-alumni-count')?.value, 10) || 1420,
+        alumniStories: alumniStoriesState
+      };
+
+      localStorage.setItem('mts_cms_kesiswaan_data', JSON.stringify(payload));
+
+      const toast = document.getElementById('save-toast');
+      if (toast) {
+        toast.hidden = false;
+        toast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    const btnSave1 = document.getElementById('btn-save-kesiswaan');
+    const btnSave2 = document.getElementById('btn-save-kesiswaan-side');
+    if (btnSave1) btnSave1.addEventListener('click', handleSaveKesiswaan);
+    if (btnSave2) btnSave2.addEventListener('click', handleSaveKesiswaan);
+
+    const toastClose = document.getElementById('toast-close');
+    if (toastClose) toastClose.addEventListener('click', () => { document.getElementById('save-toast').hidden = true; });
+
+    // Export JSON
+    const btnExport = document.getElementById('btn-export-kesiswaan-json');
+    if (btnExport) {
+      btnExport.addEventListener('click', () => {
+        const saved = localStorage.getItem('mts_cms_kesiswaan_data');
+        const dataObj = saved ? JSON.parse(saved) : { osis: { members: osisMembersState, departments: osisDeptState }, ekskul: ekskulState, alumni: alumniStoriesState };
+        const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(dataObj, null, 2));
+        const a = document.createElement('a');
+        a.setAttribute('href', dataStr);
+        a.setAttribute('download', `kesiswaan-cms-${new Date().toISOString().split('T')[0]}.json`);
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+    }
+
+    // Initial render
+    renderOsisMembers();
+    renderOsisDept();
+    renderEkskulList();
+    renderAlumniStories();
+    syncKesiswaanPreview();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initKesiswaan);
+  } else {
+    initKesiswaan();
+  }
+</script>
+

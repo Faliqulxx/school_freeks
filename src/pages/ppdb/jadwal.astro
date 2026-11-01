@@ -1,0 +1,281 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Icon from '../../components/Icon.astro';
+import ppdbData from '../../data/ppdb.json';
+
+const { waves } = ppdbData;
+
+const breadcrumbItems = [
+  { label: 'PPDB', href: '/ppdb' },
+  { label: 'Jadwal Pendaftaran' }
+];
+---
+
+<BaseLayout
+  title="Jadwal Gelombang Admission 2027/2028 – FREEKS.id School"
+  description="Jadwal lengkap masa pendaftaran, asesmen minat bakat logika dasar, pengumuman, dan daftar ulang Early Bird & Regular Wave."
+>
+  <div class="page-header section-soft">
+    <div class="container-wide">
+      <Breadcrumb items={breadcrumbItems} />
+      <div class="header-meta">
+        <span class="chip chip-primary">Agenda Seleksi</span>
+      </div>
+      <h1 class="page-title">Jadwal Gelombang Pendaftaran PPDB</h1>
+      <p class="page-description">
+        Perhatikan batas waktu setiap tahapan gelombang agar tidak terlewat masa pendaftaran dan penyerahan berkas verifikasi.
+      </p>
+
+      <div class="jadwal-action-bar btn-group-responsive">
+        <a
+          href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Admission+FREEKS.id+School+Wave+1&dates=20270104/20270228"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-secondary btn-sm"
+        >
+          <Icon name="calendar-plus" size={16} />
+          <span>Tambah ke Google Calendar</span>
+        </a>
+        <a href="/ppdb/daftar" class="btn btn-cta btn-sm">
+          <span>Daftar Online Sekarang</span>
+          <Icon name="arrow-right" size={16} />
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-wide section">
+    <div class="waves-timeline-container">
+      {waves.map((w) => (
+        <section class={`wave-timeline-card card ${w.isCurrent ? 'active-wave' : ''}`}>
+          <div class="wave-card-top">
+            <div>
+              {w.isCurrent && <span class="chip chip-important">GELOMBANG SEDANG DIBUKA</span>}
+              <h2 class="wave-title">{w.name}</h2>
+            </div>
+            <span class="wave-quota-pill">Kuota: 64 Siswa</span>
+          </div>
+
+          <!-- Milestones Timeline -->
+          <div class="milestones-list">
+            <div class="milestone-item">
+              <div class="ms-marker">1</div>
+              <div class="ms-content">
+                <span class="ms-label">Periode Pendaftaran Online & Pengumpulan Berkas:</span>
+                <strong class="ms-date">{w.registration}</strong>
+              </div>
+            </div>
+
+            <div class="milestone-item">
+              <div class="ms-marker">2</div>
+              <div class="ms-content">
+                <span class="ms-label">Seleksi Administrasi & Tes Baca Al-Qur'an:</span>
+                <strong class="ms-date">{w.selection}</strong>
+              </div>
+            </div>
+
+            <div class="milestone-item">
+              <div class="ms-marker">3</div>
+              <div class="ms-content">
+                <span class="ms-label">Pengumuman Kelulusan Seleksi:</span>
+                <strong class="ms-date">{w.announcement}</strong>
+              </div>
+            </div>
+
+            <div class="milestone-item">
+              <div class="ms-marker">4</div>
+              <div class="ms-content">
+                <span class="ms-label">Daftar Ulang & Pengukuran Seragam:</span>
+                <strong class="ms-date">{w.reRegistration}</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="wave-action-footer">
+            <a href="/ppdb/daftar" class="btn btn-primary btn-sm">
+              <span>Isi Formulir {w.name}</span>
+              <Icon name="arrow-right" size={14} />
+            </a>
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-top: var(--s-6);
+    padding-bottom: var(--s-6);
+    border-bottom: 1px solid var(--ink-300);
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--s-3);
+  }
+
+  .page-title {
+    font-size: var(--h1);
+    color: var(--green-900);
+    margin-bottom: var(--s-2);
+  }
+
+  .page-description {
+    font-size: var(--text-lg);
+    color: var(--ink-600);
+    max-width: 65ch;
+    margin-bottom: var(--s-5);
+  }
+
+  .jadwal-action-bar {
+    display: flex;
+    gap: 12px;
+  }
+
+  /* Waves Timeline: 1 col on mobile, 2 col from 641px */
+  .waves-timeline-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-5);
+  }
+
+  @media (max-width: 640px) {
+    .jadwal-action-bar {
+      flex-direction: column;
+      width: 100%;
+      gap: 10px;
+    }
+    .jadwal-action-bar a {
+      width: 100%;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .wave-timeline-card {
+      padding: 16px;
+    }
+    .wave-title {
+      font-size: 1.15rem;
+    }
+    .wave-quota-pill {
+      font-size: 11px;
+    }
+    .milestone-item {
+      gap: 10px;
+    }
+    .ms-date {
+      font-size: var(--text-sm);
+    }
+    .wave-action-footer a {
+      width: 100%;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  @media (min-width: 641px) {
+    .waves-timeline-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s-7);
+    }
+  }
+
+  .wave-timeline-card {
+    padding: var(--s-5);
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .wave-timeline-card.active-wave {
+    border-top: 4px solid var(--yellow-500);
+    box-shadow: var(--shadow-2);
+  }
+
+  .wave-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: var(--s-4);
+    border-bottom: 1px solid var(--ink-300);
+    margin-bottom: var(--s-5);
+    gap: 8px;
+  }
+
+  .wave-title {
+    font-size: 1.35rem;
+    color: var(--green-900);
+    margin-top: 4px;
+    margin-bottom: 0;
+  }
+
+  .wave-quota-pill {
+    background-color: var(--green-50);
+    color: var(--green-800);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+  }
+
+  .milestones-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-4);
+    margin-bottom: var(--s-6);
+  }
+
+  .milestone-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .ms-marker {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--green-700);
+    color: #FFFFFF;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .ms-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ms-label {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+  }
+
+  .ms-date {
+    font-size: var(--text-sm);
+    color: var(--green-900);
+    margin-top: 2px;
+  }
+
+  .wave-action-footer {
+    margin-top: auto;
+    padding-top: var(--s-4);
+    border-top: 1px solid #F1F5F9;
+  }
+</style>
+

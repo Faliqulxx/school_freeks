@@ -1,0 +1,2255 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import ModelViewer3D from '../components/ModelViewer3D.astro';
+
+import siteData from '../data/siteData.json';
+import heroSambutanData from '../data/heroSambutan.json';
+import angkaSekolahData from '../data/angkaSekolah.json';
+import programUnggulanData from '../data/programUnggulan.json';
+import beritaData from '../data/berita.json';
+import pengumumanData from '../data/pengumuman.json';
+import galeriData from '../data/galeri.json';
+import testimoniData from '../data/testimoni.json';
+import ppdbData from '../data/ppdb.json';
+
+const { school } = siteData;
+const { hero, sambutan } = heroSambutanData;
+const { stats } = angkaSekolahData;
+const { programs } = programUnggulanData;
+const latestNews = beritaData.articles.slice(0, 5);
+const announcements = pengumumanData.announcements.slice(0, 4);
+const featuredPhotos = galeriData.albums.flatMap(a => a.photos).slice(0, 8);
+const testimonials = testimoniData.testimonials;
+
+function formatNewsDate(dateStr: string, short = false) {
+  const [y, m, d] = dateStr.split('-');
+  const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+  const fullMonths = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+  const months = short ? shortMonths : fullMonths;
+  return `${parseInt(d, 10)} ${months[parseInt(m, 10) - 1]} ${y}`;
+}
+---
+
+<BaseLayout
+  title="FREEKS.id School - Empowering Future Thinkers, Creators & Innovators"
+  description={hero.subtitle}
+>
+  <!-- =========================================================================
+       1. HERO SECTION (PRD 8.1 #1)
+       ========================================================================= -->
+  <section class="hero-section section-soft islamic-pattern" aria-label="Bagian Utama">
+    <div class="container-wide hero-container">
+      <!-- Left Column: Hero Text & Actions -->
+      <div class="hero-text-col">
+        <div class="hero-meta">
+          <span class="chip chip-primary">{school.foundation}</span>
+        </div>
+        <h1 class="hero-title">{hero.title}</h1>
+        <p class="hero-subtitle">{hero.subtitle}</p>
+
+        <div class="hero-buttons btn-group-responsive">
+          <a href={hero.ctaUrl} class="btn btn-cta btn-hero">
+            <span>{hero.ctaText}</span>
+            <Icon name="arrow-right" size={18} />
+          </a>
+          <a href={hero.secondaryUrl} class="btn btn-secondary-outline btn-hero">
+            <span>{hero.secondaryText}</span>
+            <Icon name="arrow-right" size={18} />
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: Hero Visual Composite (Matching Reference Design) -->
+      <div class="hero-image-col">
+        <div class="hero-composite-wrap">
+          <!-- Floating Slogan Badge on Top Right (Motto Resmi di Gedung Madrasah) -->
+          <div class="hero-slogan-badge" aria-label="Slogan Sekolah: Empowering Future Thinkers, Creators & Innovators">
+            <span class="slogan-line">Berilmu</span>
+            <span class="slogan-line">Beramal</span>
+            <span class="slogan-line">Berakhlak</span>
+          </div>
+
+          <!-- Decorative Floating Shapes -->
+          <div class="hero-shape pill-yellow" aria-hidden="true"></div>
+          <div class="hero-shape pill-green-left" aria-hidden="true"></div>
+          <div class="hero-shape pill-green-right" aria-hidden="true"></div>
+
+          <!-- Main Featured Card with Sloped Rounded Frame (Siswa Belajar) -->
+          <div class="hero-main-card">
+            <img
+              src="/assets/hero-siswa-belajar.webp"
+              alt="Siswa FREEKS.id School Belajar Kolaboratif"
+              width="1200"
+              height="800"
+              class="hero-building-img"
+              fetchpriority="high"
+            />
+          </div>
+
+          <!-- Floating Card: Siswa Berjalan di Halaman Madrasah -->
+          <div class="hero-floating-card card-bottom-right">
+            <img
+              src="/assets/hero-siswa-berjalan.webp"
+              alt="Siswa FREEKS.id School di Area Kampus"
+              width="600"
+              height="450"
+              class="floating-img"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       3. INFO CEPAT PPDB (PRD 8.1 #3)
+       ========================================================================= -->
+  <section class="ppdb-strip-section" aria-label="Info Cepat PPDB">
+    <div class="container-wide">
+      <div class="ppdb-strip card">
+        <div class="ppdb-strip-header">
+          <div class="ppdb-strip-badge">
+            <span class="pulse-dot"></span>
+            <span>STATUS PPDB 2027/2028</span>
+          </div>
+          <h2 class="ppdb-strip-status">{ppdbData.status}</h2>
+        </div>
+
+        <div class="ppdb-strip-grid">
+          <div class="strip-item">
+            <div class="strip-icon-wrap">
+              <Icon name="calendar" size={20} />
+            </div>
+            <div>
+              <span class="strip-label">Gelombang 1</span>
+              <span class="strip-value">{ppdbData.waves[0].registration}</span>
+            </div>
+          </div>
+
+          <div class="strip-item">
+            <div class="strip-icon-wrap">
+              <Icon name="users" size={20} />
+            </div>
+            <div>
+              <span class="strip-label">Daya Tampung</span>
+              <span class="strip-value">{ppdbData.quota.total} Siswa</span>
+            </div>
+          </div>
+
+          <div class="strip-item">
+            <div class="strip-icon-wrap">
+              <Icon name="check-circle" size={20} />
+            </div>
+            <div>
+              <span class="strip-label">Syarat Masuk</span>
+              <span class="strip-value">Lulus SD/MI & Tes Baca Al-Qur'an</span>
+            </div>
+          </div>
+
+          <div class="strip-item strip-cta-col">
+            <a href="/ppdb/syarat-biaya" class="btn btn-secondary btn-sm">
+              <span>Rincian Biaya</span>
+            </a>
+            <a href="/ppdb/daftar" class="btn btn-primary btn-sm">
+              <span>Daftar Online</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       2. LOGO 3D & IDENTITAS YAYASAN (PRD 8.1 #2 & Bagian 9)
+       ========================================================================= -->
+  <section class="section section-soft" aria-label="Identitas Yayasan dan Model 3D">
+    <div class="container-wide">
+      <div class="identity-grid">
+        <div class="identity-3d-col">
+          <div class="model-frame">
+            <ModelViewer3D
+              sizeDesktop={540}
+              sizeTablet={440}
+              sizeMobile={240}
+              altText="Model 3 Dimensi Logo Resmi FREEKS.id School"
+            />
+          </div>
+        </div>
+
+        <div class="identity-text-col">
+          <div class="section-header">
+            <div class="header-tag">
+              <span class="chip chip-primary">Naungan Yayasan</span>
+            </div>
+            <h2>Yayasan Inovasi Kreasi Digital (FREEKS Foundation)</h2>
+            <div class="section-divider"></div>
+            <p>
+              Berdedikasi mengembangkan potensi generasi muda, FREEKS Foundation menaungi ekosistem pembelajaran modern berbasis riset, teknologi terapan, dan kreativitas masa depan.
+            </p>
+          </div>
+
+          <div class="foundation-features">
+            <div class="feat-item">
+              <div class="feat-icon-wrap">
+                <Icon name="award" size={22} />
+              </div>
+              <div class="feat-content">
+                <h4>Integritas & Akhlak</h4>
+                <p>Pembentukan moral integritas, etika digital, dan empati kepemimpinan dalam memecahkan masalah.</p>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon-wrap">
+                <Icon name="book-open" size={22} />
+              </div>
+              <div class="feat-content">
+                <h4>Kurikulum Terpadu</h4>
+                <p>Memadukan capaian pembelajaran nasional dengan penguasaan computational thinking dan AI.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="foundation-action">
+            <a href="/profil/yayasan" class="btn btn-secondary">
+              <span>Pelajari Profil & Visi Yayasan</span>
+              <Icon name="arrow-right" size={16} />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       4. SAMBUTAN KEPALA MADRASAH (PRD 8.1 #4)
+       ========================================================================= -->
+  <section class="section" aria-label="Sambutan Head of School">
+    <div class="container-wide">
+      <div class="sambutan-grid card">
+        <div class="sambutan-photo-col">
+          <div class="headmaster-photo-wrap">
+            <img
+              src={sambutan.photo.src}
+              alt={sambutan.photo.alt}
+              width={sambutan.photo.width}
+              height={sambutan.photo.height}
+              class="headmaster-img"
+              loading="lazy"
+            />
+            <div class="headmaster-info">
+              <h3 class="headmaster-name">{sambutan.name}</h3>
+              <span class="headmaster-role">{sambutan.role}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sambutan-text-col">
+          <div class="section-header">
+            <div class="header-tag">
+              <span class="chip chip-primary">Pesan Pimpinan</span>
+            </div>
+            <h2>Bersinergi Menumbuhkan Generasi Berkarakter</h2>
+            <div class="section-divider"></div>
+          </div>
+
+          <p class="text-arabic" lang="ar" dir="rtl">{sambutan.arabicGreeting}</p>
+
+          <blockquote class="sambutan-quote">
+            "{sambutan.shortQuote}"
+          </blockquote>
+
+          <div class="sambutan-action">
+            <a href="/profil/sambutan" class="btn btn-secondary">
+              <span>Baca Sambutan Lengkap</span>
+              <Icon name="arrow-right" size={16} />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       5. PROGRAM UNGGULAN (PRD 8.1 #5 - Asymmetric Grid Rhythm)
+       ========================================================================= -->
+  <section class="section section-soft" aria-label="Program Unggulan Sekolah">
+    <div class="container-wide">
+      <div class="section-header">
+        <div class="header-tag">
+          <span class="chip chip-primary">Keunggulan Inovasi</span>
+        </div>
+        <h2>Program Unggulan yang Berdampak Nyata</h2>
+        <div class="section-divider"></div>
+        <p>Dirancang untuk menyeimbangkan kecakapan spiritual, intelektual, dan pembentukan karakter kepemimpinan siswa.</p>
+      </div>
+
+      <!-- Asymmetric Rhythm: 1 Hero Big Card + 4 Smaller Stacked Cards -->
+      <div class="programs-asymmetric-grid">
+        <!-- Big Card: Tahfidz -->
+        <div class="program-card-hero card">
+          <div class="program-hero-img-wrap">
+            <img
+              src={programs[0].image.src}
+              alt={programs[0].image.alt}
+              width={programs[0].image.width}
+              height={programs[0].image.height}
+              class="program-hero-img"
+              loading="lazy"
+            />
+            <span class="chip chip-important program-badge">Program Inti</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">
+              <a href="/akademik/program-unggulan#{programs[0].id}">{programs[0].title}</a>
+            </h3>
+            <p class="program-summary">{programs[0].summary}</p>
+            <p class="program-schedule">
+              <Icon name="clock" size={16} />
+              <span>{programs[0].schedule}</span>
+            </p>
+            <div class="program-footer">
+              <span class="program-mentor">Pembina: {programs[0].mentor}</span>
+              <a href="/akademik/program-unggulan" class="btn btn-primary btn-sm">Pelajari Target</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Smaller Cards -->
+        <div class="programs-side-grid">
+          {programs.slice(1, 5).map((prog) => (
+            <div class="program-card-small card">
+              <div class="card-body">
+                <div class="prog-small-header">
+                  <h4 class="prog-small-title">
+                    <a href={`/akademik/program-unggulan#${prog.id}`}>{prog.title}</a>
+                  </h4>
+                </div>
+                <p class="prog-small-desc">{prog.summary}</p>
+                <div class="prog-small-meta">
+                  <span class="mentor-text">Pembina: {prog.mentor}</span>
+                  <a href="/akademik/program-unggulan" class="prog-arrow-link" aria-label={`Detail ${prog.title}`}>
+                    <Icon name="arrow-right" size={16} />
+                  </a>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       6. ANGKA SEKOLAH (PRD 8.1 #6)
+       ========================================================================= -->
+  <section class="section section-dark islamic-pattern-dark" aria-label="Statistik Kampus">
+    <div class="container-wide">
+      <div class="section-header">
+        <div class="header-tag">
+          <span class="chip chip-important">Data Terverifikasi</span>
+        </div>
+        <h2>Kampus dalam Angka</h2>
+        <div class="section-divider"></div>
+        <p>Pertumbuhan dan dedikasi FREEKS.id School dalam membimbing generasi inovator masa depan.</p>
+      </div>
+
+      <div class="stats-grid">
+        {stats.map((s) => (
+          <div class="stat-card">
+            <span class="stat-value">{s.value}</span>
+            <span class="stat-label">{s.label}</span>
+            <span class="stat-note">{s.note}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       7. BERITA TERBARU (PRD 8.1 #7)
+       ========================================================================= -->
+  <section class="section" aria-label="Berita dan Kabar Kampus">
+    <div class="container-wide">
+      <div class="section-heading-row">
+        <div class="section-header">
+          <div class="header-tag">
+            <span class="chip chip-primary">Kabar Kampus</span>
+          </div>
+          <h2>Berita & Kegiatan Terbaru</h2>
+          <div class="section-divider"></div>
+        </div>
+        <a href="/informasi/berita" class="btn btn-secondary view-all-btn">
+          <span>Semua Berita</span>
+          <Icon name="arrow-right" size={16} />
+        </a>
+      </div>
+
+      <!-- Desktop: 1 Besar + 2 Kecil. Mobile: Horizontal scroll snap -->
+      <div class="news-layout-grid">
+        <!-- Berita Besar #1 -->
+        <article class="news-card-featured card card-clickable">
+          <div class="news-featured-img-wrap">
+            <img
+              src={latestNews[0].image.src}
+              alt={latestNews[0].image.alt}
+              width={latestNews[0].image.width}
+              height={latestNews[0].image.height}
+              class="news-featured-img"
+              loading="lazy"
+            />
+            <span class="chip chip-important news-tag">{latestNews[0].category}</span>
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <time datetime={latestNews[0].date}>22 Oktober 2026</time>
+              <span>•</span>
+              <span>{latestNews[0].author}</span>
+            </div>
+            <h3 class="card-title">
+              <a href={`/informasi/berita/${latestNews[0].slug}`}>{latestNews[0].title}</a>
+            </h3>
+            <p class="card-excerpt">{latestNews[0].excerpt}</p>
+            <span class="btn-link">Baca Selengkapnya &rarr;</span>
+          </div>
+        </article>
+
+        <!-- 4 Berita di Sisi Kanan (Memenuhi Ruang Seimbang) -->
+        <div class="news-side-list">
+          {latestNews.slice(1, 5).map((item) => (
+            <article class="news-card-compact card card-clickable">
+              <div class="compact-img-wrap">
+                <img
+                  src={item.image.src}
+                  alt={item.image.alt}
+                  width={item.image.width}
+                  height={item.image.height}
+                  class="compact-img"
+                  loading="lazy"
+                />
+                <span class="chip chip-primary compact-category-badge">{item.category}</span>
+              </div>
+              <div class="card-body compact-body">
+                <div class="card-meta compact-meta">
+                  <Icon name="calendar" size={13} class="compact-meta-icon" />
+                  <time datetime={item.date}>{formatNewsDate(item.date, true)}</time>
+                </div>
+                <h4 class="card-title compact-title">
+                  <a href={`/informasi/berita/${item.slug}`}>{item.title}</a>
+                </h4>
+                <p class="card-excerpt compact-excerpt">{item.excerpt}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       8. PENGUMUMAN (PRD 8.1 #8)
+       ========================================================================= -->
+  <section class="section section-soft" aria-label="Pengumuman Resmi">
+    <div class="container-wide">
+      <div class="section-heading-row">
+        <div class="section-header">
+          <div class="header-tag">
+            <span class="chip chip-primary">Papan Informasi</span>
+          </div>
+          <h2>Pengumuman Kampus</h2>
+          <div class="section-divider"></div>
+        </div>
+        <a href="/informasi/pengumuman" class="btn btn-secondary view-all-btn">
+          <span>Semua Pengumuman</span>
+          <Icon name="arrow-right" size={16} />
+        </a>
+      </div>
+
+      <div class="announcements-grid">
+        {announcements.map((ann) => (
+          <div class="announcement-card card">
+            <div class="ann-date-box">
+              <span class="ann-day">{ann.day}</span>
+              <span class="ann-month">{ann.month}</span>
+              <span class="ann-year">{ann.year}</span>
+            </div>
+            <div class="ann-content">
+              <div class="ann-header">
+                {ann.important && <span class="chip chip-important">Penting</span>}
+                <h4 class="ann-title">
+                  <a href="/informasi/pengumuman">{ann.title}</a>
+                </h4>
+              </div>
+              <p class="ann-summary">{ann.summary}</p>
+              {ann.attachment && (
+                <div class="ann-attachment">
+                  <Icon name="file-text" size={16} />
+                  <span>Lampiran: {ann.attachment.name} ({ann.attachment.size})</span>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       9. GALERI FOTO (PRD 8.1 #9)
+       ========================================================================= -->
+  <section class="section" aria-label="Galeri Foto Kegiatan">
+    <div class="container-wide">
+      <div class="section-heading-row">
+        <div class="section-header">
+          <div class="header-tag">
+            <span class="chip chip-primary">Dokumentasi</span>
+          </div>
+          <h2>Galeri Suasana Kampus</h2>
+          <div class="section-divider"></div>
+        </div>
+        <a href="/informasi/galeri" class="btn btn-secondary view-all-btn">
+          <span>Lihat Semua Album</span>
+          <Icon name="arrow-right" size={16} />
+        </a>
+      </div>
+
+      <div class="gallery-mosaic-grid">
+        {featuredPhotos.map((photo) => (
+          <div
+            class="gallery-item"
+            data-lightbox-src={photo.src}
+            data-lightbox-alt={photo.alt}
+            data-lightbox-caption={photo.caption}
+            data-lightbox-group="home-gallery"
+            tabindex="0"
+            role="button"
+            aria-label={`Buka gambar: ${photo.alt}`}
+          >
+            <img
+              src={photo.src}
+              alt={photo.alt}
+              width={photo.width}
+              height={photo.height}
+              class="gallery-thumb"
+              loading="lazy"
+            />
+            <div class="gallery-overlay">
+              <Icon name="maximize-2" size={20} class="gallery-zoom-icon" />
+              <p class="gallery-item-caption">{photo.caption}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       10. TESTIMONI (PRD 8.1 #10 - Dummy Marked)
+       ========================================================================= -->
+  <section class="section section-soft" aria-label="Testimoni Wali Murid & Alumni">
+    <div class="container-wide">
+      <div class="section-header">
+        <div class="header-tag">
+          <span class="chip chip-primary">Kata Mereka</span>
+        </div>
+        <h2>Testimoni Wali Murid & Alumni</h2>
+        <div class="section-divider"></div>
+        <p>Kesan nyata dari keluarga besar siswa yang telah mempercayakan pendidikan di FREEKS.id School.</p>
+      </div>
+
+      <div class="testimonials-grid">
+        {testimonials.map((t) => (
+          <div class="testimonial-card card">
+            <div class="testi-header">
+              <!-- Initials in green circle (PRD A.13: inisial bukan foto orang fiktif) -->
+              <div class="initials-avatar">{t.initials}</div>
+              <div>
+                <h4 class="testi-name">{t.name}</h4>
+                <span class="testi-role">{t.role}</span>
+              </div>
+            </div>
+            <blockquote class="testi-quote">
+              "{t.quote}"
+            </blockquote>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       11. BANNER PPDB (PRD 8.1 #11)
+       ========================================================================= -->
+  <section class="banner-ppdb-section section-dark islamic-pattern-dark" aria-label="Ajakan Pendaftaran PPDB">
+    <div class="container-wide">
+      <div class="banner-ppdb-card">
+        <div class="banner-ppdb-text">
+          <span class="chip chip-important">Tahun Ajaran 2027/2028</span>
+          <h2 class="banner-title">Pendaftaran Siswa Baru (Admission) FREEKS.id School Telah Dibuka</h2>
+          <p class="banner-desc">
+            Kuota terbatas untuk 128 siswa. Dapatkan kemudahan pendaftaran online, potongan infaq beasiswa, dan lingkungan belajar ramah siswa.
+          </p>
+        </div>
+        <div class="banner-ppdb-actions btn-group-responsive">
+          <a href="/ppdb/daftar" class="btn btn-cta btn-hero">
+            <span>Daftar PPDB Sekarang</span>
+            <Icon name="arrow-right" size={18} />
+          </a>
+          <a href="/ppdb/syarat-biaya" class="btn btn-outline-white btn-hero">
+            <span>Lihat Rincian Biaya</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       12. LOKASI DAN KONTAK (PRD 8.1 #12)
+       ========================================================================= -->
+  <section class="section" aria-label="Lokasi dan Kontak Kampus">
+    <div class="container-wide">
+      <div class="contact-location-grid">
+        <div class="contact-info-col card">
+          <div class="card-body">
+            <div class="section-header">
+              <div class="header-tag">
+                <span class="chip chip-primary">Kunjungi Sekolah</span>
+              </div>
+              <h2>Lokasi & Informasi Kontak</h2>
+              <div class="section-divider"></div>
+            </div>
+
+            <div class="contact-detail-items">
+              <div class="detail-box">
+                <Icon name="map-pin" size={24} class="detail-icon" />
+                <div>
+                  <h4>Alamat Sekolah</h4>
+                  <p>{school.address}</p>
+                </div>
+              </div>
+
+              <div class="detail-box">
+                <Icon name="clock" size={24} class="detail-icon" />
+                <div>
+                  <h4>Jam Layanan Sekretariat</h4>
+                  <p>{school.officeHours}</p>
+                </div>
+              </div>
+
+              <div class="detail-box">
+                <Icon name="phone" size={24} class="detail-icon" />
+                <div>
+                  <h4>Telepon & WhatsApp</h4>
+                  <p>Telepon: <a href={`tel:${school.phone}`}>{school.phone}</a></p>
+                  <p>WhatsApp: <a href={`https://wa.me/${school.whatsappRaw}?text=${encodeURIComponent(school.whatsappMessage)}`} target="_blank" rel="noopener noreferrer">{school.whatsapp}</a></p>
+                </div>
+              </div>
+
+              <div class="detail-box">
+                <Icon name="mail" size={24} class="detail-icon" />
+                <div>
+                  <h4>Surat Elektronik</h4>
+                  <p><a href={`mailto:${school.email}`} class="email-link">{school.email}</a></p>
+                </div>
+              </div>
+            </div>
+
+            <div class="contact-card-actions btn-group-responsive">
+              <a
+                href={`https://wa.me/${school.whatsappRaw}?text=${encodeURIComponent(school.whatsappMessage)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-primary"
+              >
+                <Icon name="message-circle" size={18} />
+                <span>Tanya Panitia via WhatsApp</span>
+              </a>
+              <a
+                href={school.mapsUrl || `https://maps.google.com/?q=${school.coordinates.lat},${school.coordinates.lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-secondary"
+              >
+                <Icon name="navigation" size={18} />
+                <span>Petunjuk Arah (Maps)</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-embed-col card">
+          <!-- Lazy loaded map placeholder (PRD 7.6) -->
+          <div class="map-container" id="map-container">
+            <iframe
+              src={`https://maps.google.com/maps?q=${school.coordinates.lat},${school.coordinates.lng}&hl=id&z=17&output=embed`}
+              width="100%"
+              height="100%"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Peta Lokasi Kampus FREEKS.id School"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ==========================================================================
+     Hero Styles - Exact Mockup Alignment
+     ========================================================================== */
+  .hero-section {
+    min-height: min(88svh, 720px);
+    display: flex;
+    align-items: center;
+    padding-top: var(--s-6);
+    padding-bottom: clamp(64px, 8vw, 96px);
+    background-color: #F8FAF2;
+    background-image: 
+      linear-gradient(
+        to right,
+        rgba(248, 250, 242, 0.96) 0%,
+        rgba(248, 250, 242, 0.90) 42%,
+        rgba(248, 250, 242, 0.58) 72%,
+        rgba(248, 250, 242, 0.28) 100%
+      ),
+      url('/assets/gedung-mts-islamiyah.webp');
+    background-size: cover;
+    background-position: center 44%;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid rgba(27, 122, 47, 0.15);
+    position: relative;
+    overflow: hidden;
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      background-image: 
+        linear-gradient(
+          to bottom,
+          rgba(248, 250, 242, 0.96) 0%,
+          rgba(248, 250, 242, 0.90) 55%,
+          rgba(248, 250, 242, 0.55) 100%
+        ),
+        url('/assets/gedung-mts-islamiyah.webp');
+      background-position: center top;
+    }
+  }
+
+  .hero-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-6);
+  }
+
+  @media (min-width: 1024px) {
+    .hero-container {
+      display: grid;
+      grid-template-columns: 5.2fr 6.8fr;
+      align-items: center;
+      gap: clamp(32px, 4.5vw, 60px);
+    }
+  }
+
+  .hero-text-col {
+    z-index: 2;
+  }
+
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--s-3);
+  }
+
+  .hero-title {
+    margin-bottom: var(--s-3);
+    font-size: var(--h1);
+    color: var(--green-900);
+    line-height: 1.18;
+  }
+
+  .hero-subtitle {
+    font-size: var(--text-lg);
+    color: var(--ink-600);
+    line-height: 1.6;
+    margin-bottom: var(--s-6);
+    max-width: 54ch;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn-secondary-outline {
+    background-color: #FFFFFF;
+    color: var(--green-800);
+    border: 1.5px solid var(--green-700);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn-secondary-outline:hover {
+    background-color: var(--green-50);
+    color: var(--green-900);
+    border-color: var(--green-900);
+  }
+
+  /* Right Column: Composite Hero Visual */
+  .hero-image-col {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .hero-composite-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 620px;
+    padding: 24px 28px 24px 18px;
+  }
+
+  /* Main Building Card */
+  .hero-main-card {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 11;
+    border-radius: 36px 140px 36px 36px;
+    overflow: hidden;
+    background-color: var(--green-100);
+    box-shadow: 0 20px 45px -12px rgba(11, 59, 22, 0.22);
+    border: 3px solid rgba(255, 255, 255, 0.9);
+    z-index: 2;
+  }
+
+  .hero-building-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 46%;
+    display: block;
+  }
+
+  /* Floating Slogan Badge on Top Right */
+  .hero-slogan-badge {
+    position: absolute;
+    top: -12px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-family: 'Caveat', cursive, sans-serif;
+    font-weight: 700;
+    line-height: 0.95;
+    font-size: clamp(1.65rem, 2.5vw, 2.2rem);
+    color: #12431E;
+    transform: rotate(8deg);
+    z-index: 6;
+    pointer-events: none;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.95);
+  }
+
+  .slogan-line {
+    display: block;
+    letter-spacing: -0.5px;
+  }
+
+  /* Floating Card Styles */
+  .hero-floating-card {
+    position: absolute;
+    background: #FFFFFF;
+    border: 6px solid #FFFFFF;
+    border-radius: 18px;
+    box-shadow: 0 16px 36px rgba(11, 59, 22, 0.24);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .hero-floating-card:hover {
+    transform: translateY(-4px) scale(1.03) !important;
+    box-shadow: 0 22px 44px rgba(11, 59, 22, 0.32);
+  }
+
+  .card-top-right {
+    top: 22%;
+    right: -28px;
+    width: clamp(160px, 24vw, 220px);
+    aspect-ratio: 4 / 3;
+    transform: rotate(7deg);
+    z-index: 4;
+  }
+
+  .card-bottom-right {
+    bottom: 2%;
+    right: -16px;
+    width: clamp(160px, 24vw, 220px);
+    aspect-ratio: 4 / 3;
+    transform: rotate(-4deg);
+    z-index: 5;
+  }
+
+  .floating-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Decorative Shapes */
+  .hero-shape {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 999px;
+  }
+
+  .pill-yellow {
+    top: 14%;
+    left: -6px;
+    width: 22px;
+    height: 60px;
+    background-color: var(--yellow-500);
+    transform: rotate(-30deg);
+    z-index: 3;
+    box-shadow: 0 4px 12px rgba(245, 217, 10, 0.35);
+  }
+
+  .pill-green-left {
+    bottom: 22%;
+    left: 2px;
+    width: 20px;
+    height: 48px;
+    background-color: var(--green-700);
+    transform: rotate(45deg);
+    z-index: 3;
+    box-shadow: 0 4px 12px rgba(27, 122, 47, 0.35);
+  }
+
+  .pill-green-right {
+    top: 58%;
+    right: -22px;
+    width: 18px;
+    height: 40px;
+    background-color: var(--green-600);
+    transform: rotate(-22deg);
+    z-index: 3;
+  }
+
+  @media (max-width: 640px) {
+    .hero-section {
+      min-height: auto;
+      padding-top: var(--s-5);
+      padding-bottom: 40px;
+    }
+    .hero-title {
+      font-size: 1.65rem;
+      line-height: 1.2;
+    }
+    .hero-subtitle {
+      font-size: 0.9rem;
+      margin-bottom: var(--s-3);
+    }
+    .hero-buttons {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 10px;
+    }
+    .hero-buttons .btn {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 0.92rem;
+      justify-content: center;
+    }
+    .hero-composite-wrap {
+      padding: 10px 14px 14px 10px;
+    }
+    .hero-main-card {
+      border-radius: 24px 80px 24px 24px;
+    }
+    .card-top-right {
+      right: -8px;
+      width: 140px;
+      border-width: 4px;
+    }
+    .card-bottom-right {
+      right: 6px;
+      bottom: -8px;
+      width: 128px;
+      border-width: 3px;
+    }
+    .hero-slogan-badge {
+      top: -8px;
+      right: 8px;
+      font-size: 1.05rem;
+    }
+    .pill-yellow, .pill-green-left, .pill-green-right {
+      display: none;
+    }
+  }
+
+  /* ==========================================================================
+     PPDB Strip
+     ========================================================================== */
+  .ppdb-strip-section {
+    margin-top: -32px;
+    position: relative;
+    z-index: 20;
+    padding-bottom: var(--s-5);
+  }
+
+  .ppdb-strip {
+    padding: var(--s-5);
+    background-color: #FFFFFF;
+    border-top: 4px solid var(--yellow-500);
+  }
+
+  .ppdb-strip-header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: var(--s-4);
+    padding-bottom: var(--s-3);
+    border-bottom: 1px solid var(--ink-300);
+  }
+
+  @media (min-width: 768px) {
+    .ppdb-strip-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .ppdb-strip-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--text-xs);
+    font-weight: 800;
+    color: var(--green-700);
+    letter-spacing: 0.5px;
+  }
+
+  .pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--success);
+    box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.2);
+  }
+
+  .ppdb-strip-status {
+    font-size: 1.15rem;
+    color: var(--green-900);
+    margin: 0;
+  }
+
+  .ppdb-strip-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .ppdb-strip {
+      padding: 14px;
+    }
+    .ppdb-strip-header {
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+    }
+    .strip-item {
+      gap: 8px;
+    }
+    .strip-icon-wrap {
+      width: 36px;
+      height: 36px;
+    }
+    .strip-label {
+      font-size: 11px;
+    }
+    .strip-value {
+      font-size: 12px;
+      line-height: 1.25;
+    }
+    .strip-cta-col {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .strip-cta-col .btn {
+      width: 100%;
+      padding: 8px 10px;
+      font-size: 12px;
+      justify-content: center;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .ppdb-strip-grid {
+      grid-template-columns: 1fr 1fr 1.2fr 1.2fr;
+      align-items: center;
+      gap: var(--s-4);
+    }
+  }
+
+  .strip-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .strip-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    background-color: var(--green-50);
+    color: var(--green-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .strip-label {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+  }
+
+  .strip-value {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--green-900);
+  }
+
+  .strip-cta-col {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-start;
+  }
+
+  @media (min-width: 1024px) {
+    .strip-cta-col {
+      justify-content: flex-end;
+    }
+  }
+
+  /* ==========================================================================
+     Identity 3D Section
+     ========================================================================== */
+  .identity-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s-6);
+    align-items: center;
+  }
+
+  @media (min-width: 1024px) {
+    .identity-grid {
+      grid-template-columns: 5.5fr 6.5fr;
+      gap: clamp(32px, 5vw, 64px);
+    }
+  }
+
+  .model-frame {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .model-caption {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    font-style: italic;
+  }
+
+  .foundation-features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: var(--s-4) 0;
+  }
+
+  @media (max-width: 640px) {
+    .foundation-features {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+    .feat-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 14px 16px;
+      background: #FFFFFF;
+      border: 1px solid var(--ink-300);
+      border-radius: var(--radius-md);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .feat-icon-wrap {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+    }
+    .feat-content {
+      min-width: 0;
+    }
+    .feat-content h4 {
+      font-size: 0.95rem;
+      margin-bottom: 3px;
+    }
+    .feat-content p {
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .foundation-features {
+      gap: var(--s-6);
+    }
+  }
+
+  .feat-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .feat-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--green-200);
+    color: var(--green-900);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .feat-content h4 {
+    font-size: 1.05rem;
+    color: var(--green-900);
+    margin-bottom: 4px;
+  }
+
+  .feat-content p {
+    font-size: var(--text-sm);
+    color: var(--ink-600);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* ==========================================================================
+     Sambutan Grid
+     ========================================================================== */
+  .sambutan-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: var(--s-5);
+    gap: var(--s-5);
+  }
+
+  @media (max-width: 640px) {
+    .sambutan-grid {
+      padding: 18px 16px;
+      gap: 14px;
+    }
+    .headmaster-photo-wrap {
+      flex-direction: row;
+      align-items: center;
+      text-align: left;
+      gap: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--ink-300);
+    }
+    .headmaster-img {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 3px solid var(--green-200);
+      flex-shrink: 0;
+    }
+    .headmaster-name {
+      font-size: 1rem;
+      margin-bottom: 2px;
+    }
+    .headmaster-role {
+      font-size: 0.78rem;
+    }
+    .sambutan-quote {
+      font-size: 0.88rem;
+      line-height: 1.5;
+      margin: 12px 0;
+      padding-left: 12px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .sambutan-grid {
+      grid-template-columns: 4fr 8fr;
+      padding: var(--s-6);
+      gap: var(--s-6);
+    }
+  }
+
+  .headmaster-photo-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .headmaster-img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top center;
+    border: 4px solid var(--green-200);
+  }
+
+  @media (min-width: 768px) {
+    .headmaster-img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4 / 5;
+      border-radius: var(--radius-md);
+      border: none;
+      object-fit: cover;
+      object-position: top center;
+    }
+  }
+
+  .headmaster-name {
+    font-size: 1.05rem;
+    color: var(--green-900);
+    margin: 0;
+  }
+
+  .headmaster-role {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+  }
+
+  .sambutan-quote {
+    font-size: var(--text-base);
+    font-style: italic;
+    color: var(--ink-900);
+    line-height: 1.6;
+    margin: var(--s-4) 0;
+    border-left: 3px solid var(--green-500);
+    padding-left: var(--s-4);
+  }
+
+  /* ==========================================================================
+     Program Unggulan Asymmetric Grid (PRD 4.2 #5 & 8.1 #5)
+     ========================================================================== */
+  .programs-asymmetric-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s-5);
+  }
+
+  @media (min-width: 1024px) {
+    .programs-asymmetric-grid {
+      grid-template-columns: 5fr 7fr;
+      gap: var(--s-6);
+    }
+  }
+
+  .program-card-hero {
+    height: 100%;
+  }
+
+  .program-hero-img-wrap {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  .program-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .program-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+  }
+
+  .program-summary {
+    font-size: var(--text-base);
+    color: var(--ink-600);
+    margin-bottom: var(--s-3);
+  }
+
+  .program-schedule {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--text-sm);
+    color: var(--green-800);
+    font-weight: 600;
+    margin-bottom: var(--s-5);
+  }
+
+  .program-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--ink-300);
+  }
+
+  .program-mentor {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+  }
+
+  .programs-side-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  @media (max-width: 640px) {
+    .prog-small-card {
+      padding: 12px;
+    }
+    .prog-small-title {
+      font-size: 0.88rem;
+      line-height: 1.3;
+    }
+    .prog-small-desc {
+      font-size: 0.75rem;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .prog-small-meta {
+      font-size: 11px;
+    }
+    .prog-arrow-link {
+      width: 26px;
+      height: 26px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .programs-side-grid {
+      gap: var(--s-4);
+    }
+  }
+
+  .prog-small-title {
+    font-size: var(--h4);
+    margin-bottom: 6px;
+  }
+
+  .prog-small-title a {
+    color: var(--green-900);
+    text-decoration: none;
+  }
+
+  .prog-small-desc {
+    font-size: var(--text-sm);
+    color: var(--ink-600);
+    line-height: 1.5;
+    margin-bottom: var(--s-4);
+  }
+
+  .prog-small-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    font-size: var(--text-xs);
+  }
+
+  .mentor-text {
+    color: var(--ink-600);
+  }
+
+  .prog-arrow-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--green-50);
+    color: var(--green-700);
+    text-decoration: none;
+  }
+
+  /* ==========================================================================
+     Angka Sekolah
+     ========================================================================== */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  @media (min-width: 540px) {
+    .stats-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .stats-grid {
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--s-4);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .stat-card {
+      padding: 12px 8px;
+    }
+    .stat-value {
+      font-size: 1.75rem;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+    }
+    .stat-note {
+      font-size: 11px;
+    }
+  }
+
+  .stat-card {
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-md);
+    padding: var(--s-5) var(--s-4);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stat-value {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 1.6rem + 2vw, 3rem);
+    font-weight: 800;
+    color: var(--yellow-500);
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 4px;
+  }
+
+  .stat-note {
+    font-size: var(--text-xs);
+    color: var(--green-200);
+  }
+
+  /* ==========================================================================
+     Berita Layout Grid
+     ========================================================================== */
+  .section-heading-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--s-5);
+  }
+
+  @media (min-width: 768px) {
+    .section-heading-row {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+
+  .view-all-btn {
+    align-self: flex-start;
+    margin-bottom: var(--s-4);
+  }
+
+  @media (min-width: 768px) {
+    .view-all-btn {
+      align-self: auto;
+      margin-bottom: 0;
+    }
+  }
+
+  .news-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s-5);
+  }
+
+  @media (min-width: 1024px) {
+    .news-layout-grid {
+      grid-template-columns: 5.2fr 6.8fr;
+      gap: clamp(20px, 2.5vw, 36px);
+      align-items: stretch;
+    }
+  }
+
+  .news-card-featured {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .news-featured-img-wrap {
+    position: relative;
+    aspect-ratio: 16 / 10;
+  }
+
+  .news-featured-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .news-tag {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+  }
+
+  .news-side-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  @media (min-width: 641px) and (max-width: 1023px) {
+    .news-side-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .news-side-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      height: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  .news-card-compact {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+  }
+
+  @media (min-width: 1024px) {
+    .news-card-compact {
+      flex-direction: row;
+      align-items: stretch;
+    }
+    .compact-img-wrap {
+      width: 140px;
+      min-width: 140px;
+      flex-shrink: 0;
+    }
+  }
+
+  .compact-img-wrap {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  .compact-category-badge {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    font-size: 10px;
+    padding: 2px 7px;
+    line-height: 1.2;
+    z-index: 2;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .compact-meta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--ink-500);
+    margin: 0;
+  }
+
+  .compact-meta-icon {
+    color: var(--green-700);
+    flex-shrink: 0;
+  }
+
+  .compact-meta time {
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .compact-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .compact-body {
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    flex-grow: 1;
+  }
+
+  .compact-title {
+    font-size: 0.85rem;
+    line-height: 1.35;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .compact-excerpt {
+    font-size: 11px;
+    color: var(--ink-600);
+    line-height: 1.4;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  @media (max-width: 640px) {
+    .news-card-featured .card-body {
+      padding: 14px 14px 16px;
+    }
+    .news-card-featured .card-title {
+      font-size: 1.05rem;
+      line-height: 1.35;
+      margin-bottom: 6px;
+    }
+    .news-card-featured .card-excerpt {
+      font-size: 0.85rem;
+      line-height: 1.45;
+      margin-bottom: 10px;
+    }
+    .news-side-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .news-card-compact {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      min-height: 96px;
+    }
+    .compact-img-wrap {
+      width: 110px;
+      min-width: 110px;
+      aspect-ratio: auto;
+      flex-shrink: 0;
+    }
+    .compact-img {
+      height: 100%;
+      object-fit: cover;
+    }
+    .compact-body {
+      padding: 10px 12px;
+      gap: 4px;
+      justify-content: center;
+      min-width: 0;
+    }
+    .compact-meta {
+      font-size: 11.5px;
+      color: var(--ink-500);
+      margin-bottom: 2px;
+    }
+    .compact-title {
+      font-size: 0.88rem;
+      line-height: 1.35;
+      font-weight: 700;
+      color: var(--green-900);
+      margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .compact-excerpt {
+      display: none;
+    }
+  }
+
+  /* ==========================================================================
+     Pengumuman Grid
+     ========================================================================== */
+  .announcements-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  @media (min-width: 768px) {
+    .announcements-grid {
+      gap: var(--s-4);
+    }
+  }
+
+  .announcement-card {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    gap: 10px;
+  }
+
+  @media (min-width: 768px) {
+    .announcement-card {
+      flex-direction: row;
+      padding: var(--s-4);
+      gap: var(--s-4);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .ann-date-box {
+      width: 100%;
+      height: auto;
+      padding: 4px 8px;
+      flex-direction: row;
+      gap: 6px;
+      justify-content: flex-start;
+      border-radius: var(--radius-sm);
+    }
+    .ann-day {
+      font-size: 1.15rem;
+    }
+    .ann-month {
+      font-size: 11px;
+    }
+    .ann-title {
+      font-size: 0.82rem;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .ann-summary {
+      font-size: 0.75rem;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+
+  .ann-date-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 76px;
+    background-color: var(--green-50);
+    border: 1px solid var(--green-200);
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+    text-align: center;
+  }
+
+  .ann-day {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--green-900);
+    line-height: 1;
+  }
+
+  .ann-month {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--green-700);
+    text-transform: uppercase;
+  }
+
+  .ann-year {
+    font-size: 10px;
+    color: var(--ink-600);
+  }
+
+  .ann-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .ann-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+
+  .ann-title {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    line-height: 1.35;
+    margin: 0;
+  }
+
+  .ann-title a {
+    color: var(--green-900);
+    text-decoration: none;
+  }
+
+  .ann-summary {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    margin: 6px 0 0 0;
+    line-height: 1.5;
+  }
+
+  .ann-attachment {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--green-700);
+    margin-top: 8px;
+    font-weight: 600;
+  }
+
+  /* ==========================================================================
+     Galeri Mosaic
+     ========================================================================== */
+  .gallery-mosaic-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  @media (min-width: 480px) {
+    .gallery-mosaic-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .gallery-mosaic-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(14px, 1.8vw, 24px);
+    }
+  }
+
+  .gallery-item {
+    position: relative;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    aspect-ratio: 16 / 11;
+    cursor: pointer;
+    box-shadow: var(--shadow-1);
+    transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+  }
+
+  .gallery-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-2);
+  }
+
+  .gallery-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--dur) var(--ease);
+  }
+
+  .gallery-item:hover .gallery-thumb {
+    transform: scale(1.04);
+  }
+
+  .gallery-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(11, 59, 22, 0.85) 0%, transparent 60%);
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: var(--s-4);
+    color: #FFFFFF;
+    transition: opacity var(--dur) var(--ease);
+  }
+
+  .gallery-item:hover .gallery-overlay,
+  .gallery-item:focus .gallery-overlay {
+    opacity: 1;
+  }
+
+  .gallery-zoom-icon {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    color: var(--yellow-500);
+  }
+
+  .gallery-item-caption {
+    font-size: var(--text-xs);
+    margin: 0;
+    color: #FAFBF5;
+    line-height: 1.4;
+  }
+
+  /* ==========================================================================
+     Testimoni Grid
+     ========================================================================== */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  @media (min-width: 768px) {
+    .testimonials-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s-5);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .testimonial-card {
+      padding: 12px;
+    }
+    .testi-header {
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .initials-avatar {
+      width: 36px;
+      height: 36px;
+      font-size: 0.95rem;
+    }
+    .testi-name {
+      font-size: 0.85rem;
+    }
+    .testi-role {
+      font-size: 11px;
+    }
+    .testi-quote {
+      font-size: 0.78rem;
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+
+  .testimonial-card {
+    padding: var(--s-5);
+  }
+
+  .testi-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: var(--s-4);
+  }
+
+  .initials-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--green-200);
+    color: var(--green-900);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .testi-name {
+    font-size: 1rem;
+    color: var(--green-900);
+    margin: 0;
+  }
+
+  .testi-role {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+  }
+
+  .testi-quote {
+    font-size: var(--text-sm);
+    color: var(--ink-900);
+    line-height: 1.6;
+    margin: 0;
+    font-style: italic;
+  }
+
+  /* ==========================================================================
+     Banner PPDB
+     ========================================================================== */
+  .banner-ppdb-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-5);
+    padding: var(--s-6) 0;
+  }
+
+  @media (min-width: 1024px) {
+    .banner-ppdb-card {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .banner-title {
+    color: #FFFFFF;
+    margin: 12px 0 8px 0;
+    font-size: var(--h2);
+  }
+
+  .banner-desc {
+    color: var(--green-200);
+    max-width: 75ch;
+    margin: 0;
+  }
+
+  /* ==========================================================================
+     Kontak & Lokasi
+     ========================================================================== */
+  .contact-location-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s-6);
+  }
+
+  @media (min-width: 1024px) {
+    .contact-location-grid {
+      grid-template-columns: 6fr 6fr;
+      gap: clamp(24px, 4vw, 48px);
+    }
+  }
+
+  .contact-detail-items {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: var(--s-4);
+  }
+
+  @media (max-width: 640px) {
+    .detail-box {
+      gap: 8px;
+    }
+    .detail-box h4 {
+      font-size: 0.82rem;
+    }
+    .detail-box p {
+      font-size: 0.75rem;
+    }
+  }
+
+  .detail-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .detail-icon {
+    color: var(--green-700);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .detail-box h4 {
+    font-size: var(--text-sm);
+    color: var(--green-900);
+    margin-bottom: 2px;
+  }
+
+  .detail-box p {
+    font-size: var(--text-sm);
+    color: var(--ink-600);
+    margin: 0;
+  }
+
+  .email-link {
+    overflow-wrap: anywhere;
+  }
+
+  .contact-card-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .map-embed-col {
+    min-height: 280px;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .map-embed-col {
+      min-height: 400px;
+    }
+  }
+
+  .map-container {
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+  }
+</style>
+

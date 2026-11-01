@@ -1,0 +1,26 @@
+{
+  "dummy": false,
+  "testimonials": [
+    {
+      "id": "testi-1",
+      "name": "Ibu Sri Wahyuni",
+      "role": "Wali Murid Grade 8",
+      "initials": "SW",
+      "quote": "Anak saya yang awalnya pemalu kini sangat percaya diri melakukan pitching presentasi dan antusias merakit proyek coding di rumah. Perkembangan karakter dan logikanya luar biasa di FREEKS."
+    },
+    {
+      "id": "testi-2",
+      "name": "Bapak Hendra Pratama",
+      "role": "Wali Murid Grade 7",
+      "initials": "HP",
+      "quote": "Kurikulum berbasis proyeknya benar-benar terasa relevan dengan era sekarang. Anak tidak stres menghafal rumus melulu, tetapi paham cara menerapkannya dalam teknologi nyata."
+    },
+    {
+      "id": "testi-3",
+      "name": "Rafi Pratama",
+      "role": "Alumni Angkatan 2024",
+      "initials": "RP",
+      "quote": "Pengalaman di Maker Space FREEKS dan bimbingan mentor 3D design membuat portofolio saya diakui saat kompetisi teknologi. Fondasi computational thinking di sini sangat bernilai."
+    }
+  ]
+}

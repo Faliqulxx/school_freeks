@@ -1,0 +1,95 @@
+---
+import Icon from './Icon.astro';
+import siteData from '../data/siteData.json';
+import ppdbData from '../data/ppdb.json';
+
+const { school } = siteData;
+const isPpdbOpen = ppdbData.statusType === 'open';
+---
+
+<div class={`floating-actions ${isPpdbOpen ? 'with-bottom-bar' : ''}`} aria-label="Aksi Cepat">
+  <!-- Back to top button -->
+  <button
+    type="button"
+    id="btn-back-to-top"
+    class="btn-back-to-top"
+    aria-label="Kembali ke atas halaman"
+  >
+    <Icon name="arrow-up" size={20} />
+  </button>
+
+  <!-- WhatsApp Float Button -->
+  <a
+    href={`https://wa.me/${school.whatsappRaw}?text=${encodeURIComponent(school.whatsappMessage)}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="btn-whatsapp-float"
+    aria-label="Hubungi Panitia via WhatsApp"
+    title="Tanya Panitia PPDB via WhatsApp"
+  >
+    <Icon name="whatsapp" size={30} />
+  </a>
+</div>
+
+<!-- Mobile PPDB Bottom Bar (< 768px) -->
+{isPpdbOpen && (
+  <div class="ppdb-bottom-bar" role="region" aria-label="Akses Pendaftaran PPDB Mobile">
+    <div class="bottom-bar-info">
+      <span class="bottom-bar-badge">PPDB DIBUKA</span>
+      <a href="/ppdb/syarat-biaya" class="bottom-bar-link">Lihat Syarat & Biaya</a>
+    </div>
+    <a href="/ppdb/daftar" class="btn btn-cta btn-sm bottom-bar-cta">
+      <span>Daftar Sekarang</span>
+      <Icon name="arrow-right" size={16} />
+    </a>
+  </div>
+)}
+
+<style>
+  .bottom-bar-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+  }
+
+  .bottom-bar-badge {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--green-700);
+    letter-spacing: 0.5px;
+  }
+
+  .bottom-bar-link {
+    font-size: var(--text-xs);
+    color: var(--ink-900);
+    text-decoration: underline;
+    font-weight: 500;
+  }
+
+  .bottom-bar-cta {
+    white-space: nowrap;
+  }
+</style>
+
+<script>
+  // Back to top scroll visibility
+  const backToTopBtn = document.getElementById('btn-back-to-top');
+
+  window.addEventListener('scroll', () => {
+    // Show after scrolling > 1.5 viewports
+    if (window.scrollY > window.innerHeight * 1.5) {
+      backToTopBtn?.classList.add('visible');
+    } else {
+      backToTopBtn?.classList.remove('visible');
+    }
+  }, { passive: true });
+
+  backToTopBtn?.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+</script>
+

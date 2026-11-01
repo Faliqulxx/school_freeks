@@ -1,0 +1,274 @@
+---
+import ProfilLayout from '../../layouts/ProfilLayout.astro';
+import ModelViewer3D from '../../components/ModelViewer3D.astro';
+import Icon from '../../components/Icon.astro';
+import profilData from '../../data/profil.json';
+
+const { foundation } = profilData;
+---
+
+<ProfilLayout
+  title="Profil Yayasan (FREEKS Foundation)"
+  description="Mengenal Yayasan Inovasi Kreasi Digital (FREEKS Foundation), visi pergerakan, dan filosofi lambang 3D yayasan."
+  currentPage="/profil/yayasan"
+>
+  <div class="prose-content">
+    <div class="content-tag">
+    </div>
+
+    <!-- Foundation Overview -->
+    <div class="foundation-overview card">
+      <div class="foundation-meta-row">
+        <div>
+          <span class="chip chip-primary">Berdiri Sejak {foundation.established}</span>
+          <h2 class="foundation-name">{foundation.name}</h2>
+        </div>
+      </div>
+      <p class="foundation-lead">{foundation.description}</p>
+    </div>
+
+    <!-- 3D Model & Makna Logo Section (PRD 8.2 & Bagian 9) -->
+    <section class="logo-meaning-section">
+      <div class="section-header">
+        <h2 class="sub-title">Filosofi & Makna Lambang Yayasan</h2>
+        <div class="section-divider"></div>
+        <p>Setiap elemen pada identitas visual FREEKS Foundation merangkum komitmen dalam memadukan kreativitas, logika komputasi, dan kepemimpinan masa depan.</p>
+      </div>
+
+      <div class="logo-3d-showcase">
+        <div class="model-center-box">
+          <ModelViewer3D
+            sizeDesktop={540}
+            sizeTablet={440}
+            sizeMobile={270}
+            altText="Model 3D Resmi FREEKS Foundation"
+          />
+        </div>
+
+        <div class="symbols-list">
+          {foundation.logoMeaning.map((item) => (
+            <div class="symbol-card">
+              <div class="symbol-header">
+                <span class="symbol-badge">{item.element}</span>
+                <span class="symbol-meaning">{item.symbol}</span>
+              </div>
+              <p class="symbol-desc">{item.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Unit Pendidikan di Bawah Yayasan -->
+    <section class="units-section">
+      <div class="section-header">
+        <h2 class="sub-title">Ekosistem & Unit Inovasi FREEKS</h2>
+        <div class="section-divider"></div>
+        <p>Ekosistem pendidikan dan riset terpadu untuk membina talenta masa depan:</p>
+      </div>
+
+      <div class="units-grid">
+        {foundation.units.map((unit) => (
+          <div class="unit-card card">
+            <div class="unit-icon-wrap">
+              <Icon name="graduation-cap" size={24} />
+            </div>
+            <div class="unit-body">
+              <h4 class="unit-title">{unit.name}</h4>
+              <p class="unit-desc">{unit.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</ProfilLayout>
+
+<style>
+  .content-tag {
+    margin-bottom: var(--s-3);
+  }
+
+  .foundation-overview {
+    padding: var(--s-5);
+    background-color: var(--green-50);
+    border: 1px solid var(--green-200);
+    margin-bottom: var(--s-7);
+  }
+
+  .foundation-name {
+    font-size: var(--h3);
+    color: var(--green-900);
+    margin-top: 8px;
+    margin-bottom: 4px;
+  }
+
+  .foundation-lead {
+    font-size: var(--text-base);
+    color: var(--ink-900);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  /* Logo Meaning Section */
+  .logo-meaning-section {
+    margin-bottom: var(--s-7);
+  }
+
+  .sub-title {
+    font-size: var(--h3);
+    color: var(--green-900);
+    margin-bottom: 4px;
+  }
+
+  .logo-3d-showcase {
+    padding: var(--s-4) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-6);
+  }
+
+  @media (min-width: 641px) {
+    .logo-3d-showcase {
+      padding: var(--s-5);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .logo-3d-showcase {
+      display: grid;
+      grid-template-columns: 5fr 7fr;
+      align-items: center;
+      gap: var(--s-6);
+    }
+  }
+
+  .model-center-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .model-tip {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    font-style: italic;
+  }
+
+  .symbols-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  @media (min-width: 641px) {
+    .symbols-list {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+  }
+
+  .symbol-card {
+    padding: 12px 14px;
+    background-color: var(--bg-soft);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--ink-300);
+    min-width: 0;
+  }
+
+  .symbol-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+
+  .symbol-badge {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--green-900);
+  }
+
+  .symbol-meaning {
+    font-size: var(--text-xs);
+    color: var(--green-700);
+    font-weight: 600;
+  }
+
+  .symbol-desc {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    line-height: 1.5;
+    margin: 0;
+    overflow-wrap: break-word;
+  }
+
+  /* Units Section */
+  .units-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  @media (min-width: 641px) {
+    .units-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .units-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--s-5);
+    }
+  }
+
+  .unit-card {
+    display: flex;
+    align-items: flex-start;
+    padding: var(--s-4);
+    gap: 14px;
+    min-width: 0;
+  }
+
+  .unit-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    background-color: var(--green-50);
+    color: var(--green-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .unit-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .unit-title {
+    font-size: var(--text-sm);
+    color: var(--green-900);
+    margin-bottom: 4px;
+    overflow-wrap: break-word;
+  }
+
+  .unit-desc {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    line-height: 1.5;
+    margin: 0;
+    overflow-wrap: break-word;
+  }
+</style>
+

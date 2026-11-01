@@ -1,0 +1,135 @@
+---
+import '../styles/global.css';
+import StagingBanner from '../components/StagingBanner.astro';
+import TopBar from '../components/TopBar.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FloatingActions from '../components/FloatingActions.astro';
+import LightboxModal from '../components/LightboxModal.astro';
+import siteData from '../data/siteData.json';
+import ppdbData from '../data/ppdb.json';
+import ThemeScript from '../components/ThemeScript.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: string;
+  publishedTime?: string;
+}
+
+const {
+  title = "FREEKS.id School – Empowering Future Thinkers, Creators & Innovators",
+  description = "Website resmi FREEKS.id School di bawah naungan FREEKS Foundation. Informasi admission/PPDB 2027/2028, kurikulum teknologi modern, lab riset, dan profil kampus.",
+  image = "/assets/dummy/hero-madrasah.svg",
+  type = "website",
+  publishedTime
+} = Astro.props;
+
+const { school } = siteData;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site || 'https://freeks.id').href;
+const ogImageUrl = new URL(image, Astro.site || 'https://freeks.id').href;
+const isPpdbOpen = ppdbData.statusType === 'open';
+
+// Schema.org EducationalOrganization
+const schemaOrganization = {
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": school.name,
+  "alternateName": school.shortName,
+  "url": "https://freeks.id/",
+  "logo": "https://freeks.id/assets/logo-ypi.webp",
+  "description": description,
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Jl. Lembah Inovasi Cyber No. 88",
+    "addressLocality": "Gresik",
+    "addressRegion": "Gresik, Jawa Timur",
+    "postalCode": "61151",
+    "addressCountry": "ID"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": school.coordinates.lat,
+    "longitude": school.coordinates.lng
+  },
+  "telephone": school.phone,
+  "email": school.email,
+  "sameAs": [
+    school.socials.instagramUrl,
+    school.socials.youtubeUrl,
+    school.socials.facebookUrl
+  ]
+};
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#1B7A2F" />
+
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph / WhatsApp sharing -->
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content={school.name} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/logo-ypi.webp" />
+    <link rel="apple-touch-icon" href="/assets/logo-ypi.webp" />
+
+    <!-- Preconnect & Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- JSON-LD EducationalOrganization -->
+    <script type="application/ld+json" set:html={JSON.stringify(schemaOrganization)} />
+    <!-- Dynamic Theme Color Injection -->
+    <ThemeScript />
+  </head>
+
+  <body class={isPpdbOpen ? 'has-bottom-bar' : ''}>
+    <!-- Accessibility Skip Link (PRD 7.2) -->
+    <a href="#main-content" class="skip-link">Lewati ke konten utama</a>
+
+    <!-- Top Bar (>= lg only) -->
+    <TopBar />
+
+    <!-- Header Sticky Navigation -->
+    <Header currentPath={Astro.url.pathname} />
+
+    <!-- Main Content -->
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <Footer />
+
+    <!-- Floating Actions (WhatsApp + Back to top + PPDB mobile bar) -->
+    <FloatingActions />
+
+    <!-- Lightbox Modal for Image Previews -->
+    <LightboxModal />
+  </body>
+</html>
+

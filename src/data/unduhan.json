@@ -1,0 +1,55 @@
+{
+  "dummy": false,
+  "downloads": [
+    {
+      "id": "unduh-form-ppdb",
+      "title": "Formulir Pendaftaran Admission (Format Cetak)",
+      "category": "Admission",
+      "format": "PDF",
+      "size": "210 KB",
+      "date": "2026-10-10",
+      "url": "#download-form-admission",
+      "description": "Formulir pendaftaran fisik bagi calon siswa atau orang tua yang ingin mengisi secara manual sebelum diserahkan ke tim admission."
+    },
+    {
+      "id": "unduh-brosur-ppdb",
+      "title": "Buku Prospektus & Brosur Resmi FREEKS.id School",
+      "category": "Admission",
+      "format": "PDF",
+      "size": "1,8 MB",
+      "date": "2026-10-15",
+      "url": "#download-prospektus",
+      "description": "Memuat informasi program inovasi, kurikulum computational, profil kampus, dan rincian biaya penerimaan."
+    },
+    {
+      "id": "unduh-kalender-akademik",
+      "title": "Kalender Akademik & Project Milestones 2026/2027",
+      "category": "Akademik",
+      "format": "PDF",
+      "size": "320 KB",
+      "date": "2026-07-15",
+      "url": "#download-kalender",
+      "description": "Agenda pembelajaran terpadu, jadwal sprint proyek, demo day, dan hari libur resmi."
+    },
+    {
+      "id": "unduh-tata-tertib",
+      "title": "Buku Panduan & Kode Etik Siswa FREEKS (Student Handbook)",
+      "category": "Kesiswaan",
+      "format": "PDF",
+      "size": "540 KB",
+      "date": "2026-07-20",
+      "url": "#download-tata-tertib",
+      "description": "Pedoman hak, kewajiban, etika digital, pemanfaatan laboratorium, dan nilai integritas siswa."
+    },
+    {
+      "id": "unduh-surat-pernyataan",
+      "title": "Format Surat Komitmen Orang Tua / Wali Siswa",
+      "category": "Admission",
+      "format": "DOCX",
+      "size": "38 KB",
+      "date": "2026-10-10",
+      "url": "#download-komitmen",
+      "description": "Dokumen kesediaan kolaborasi mendampingi perkembangan akademik dan karya teknologi anak."
+    }
+  ]
+}

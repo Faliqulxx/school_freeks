@@ -1,0 +1,472 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Icon from '../../components/Icon.astro';
+import ppdbData from '../../data/ppdb.json';
+
+const { requirements, costs } = ppdbData;
+
+const breadcrumbItems = [
+  { label: 'PPDB', href: '/ppdb' },
+  { label: 'Syarat & Biaya' }
+];
+---
+
+<BaseLayout
+  title="Syarat & Rincian Biaya Admission – FREEKS.id School"
+  description="Informasi transparan rincian biaya masuk awal, sarana lab teknologi, apparel, SPP bulanan, dan syarat pendaftaran admission."
+>
+  <div class="page-header section-soft">
+    <div class="container-wide">
+      <Breadcrumb items={breadcrumbItems} />
+      <div class="header-meta">
+        <span class="chip chip-primary">Transparansi Pembiayaan</span>
+      </div>
+      <h1 class="page-title">Syarat Pendaftaran & Rincian Biaya</h1>
+      <p class="page-description">
+        Semua komponen biaya dijelaskan secara terbuka tanpa ada pungutan tak terduga. Tersedia program beasiswa serta skema cicilan infaq gedung.
+      </p>
+
+      <div class="action-buttons-row btn-group-responsive">
+        <button type="button" onclick="window.print()" class="btn btn-secondary btn-sm">
+          <Icon name="printer" size={16} />
+          <span>Cetak Lembar Biaya</span>
+        </button>
+        <a href="/ppdb/daftar" class="btn btn-cta btn-sm">
+          <span>Daftar Online Sekarang</span>
+          <Icon name="arrow-right" size={16} />
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-wide section">
+    <!-- SEKSI 1: SYARAT PENDAFTARAN -->
+    <section class="syarat-section">
+      <div class="section-header">
+        <h2>Persyaratan Masuk Calon Siswa</h2>
+        <div class="section-divider"></div>
+        <p>Pastikan seluruh berkas berikut disiapkan sebelum pengisian formulir online:</p>
+      </div>
+
+      <div class="checklist-grid">
+        {requirements.map((req, idx) => (
+          <div class="requirement-box card">
+            <div class="check-box-icon">
+              <Icon name="check" size={18} />
+            </div>
+            <div class="req-text-wrap">
+              <span class="req-num">Syarat #{idx + 1}</span>
+              <p class="req-title">{req}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- SEKSI 2: TABEL RINCIAN BIAYA -->
+    <section class="biaya-section">
+      <div class="section-header">
+        <h2>Rincian Komponen Biaya Pendidikan (TA 2027/2028)</h2>
+        <div class="section-divider"></div>
+        <p>Rincian pembiayaan awal masuk bagi siswa baru:</p>
+      </div>
+
+      <!-- Responsive Table: Desktop Table, Mobile Component Cards (PRD 8.6 & A.16) -->
+      <div class="table-wrapper">
+        <table class="data-table table-responsive-stacked" id="costs-table">
+          <thead>
+            <tr>
+              <th style="width: 50px;">No</th>
+              <th>Komponen Biaya</th>
+              <th style="width: 180px; text-align: right;">Nominal (Rp)</th>
+              <th>Keterangan Pembayaran</th>
+            </tr>
+          </thead>
+          <tbody>
+            {costs.items.map((item, idx) => (
+              <tr>
+                <td data-label="No">{idx + 1}</td>
+                <td data-label="Komponen">
+                  <strong class="cost-component-name">{item.component}</strong>
+                </td>
+                <td data-label="Nominal" style="text-align: right;">
+                  <strong class="cost-amount-number">{item.amount}</strong>
+                </td>
+                <td data-label="Keterangan">
+                  <span class="cost-note-text">{item.note}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr class="total-row">
+              <td colspan="2" class="total-label-cell">
+                <strong>TOTAL AWAL MASUK (INITIAL COST)</strong>
+              </td>
+              <td data-label="Total Masuk" class="total-amount-cell" style="text-align: right;">
+                <!-- Big number: tested on 320px width (PRD A.16) -->
+                <strong class="total-amount-highlight">{costs.totalInitial}</strong>
+              </td>
+              <td data-label="Catatan Akhir" class="total-note-cell">
+                <span>{costs.totalInitialNote}</span>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- Keringanan & Beasiswa Banner -->
+      <div class="concession-card card">
+        <div class="concession-icon-wrap">
+          <Icon name="heart-handshake" size={32} />
+        </div>
+        <div class="concession-text">
+          <h3 class="concession-title">Program Beasiswa & Keringanan Biaya</h3>
+          <p>{costs.concession}</p>
+          <span class="concession-cta-text">
+            Konsultasikan pengajuan beasiswa yatim/piatu dan prestasi kepada panitia sekretariat PPDB via WhatsApp.
+          </span>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-top: var(--s-6);
+    padding-bottom: var(--s-6);
+    border-bottom: 1px solid var(--ink-300);
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--s-3);
+  }
+
+  .page-title {
+    font-size: var(--h1);
+    color: var(--green-900);
+    margin-bottom: var(--s-2);
+  }
+
+  .page-description {
+    font-size: var(--text-lg);
+    color: var(--ink-600);
+    max-width: 65ch;
+    margin-bottom: var(--s-5);
+  }
+
+  .action-buttons-row {
+    display: flex;
+    gap: 12px;
+  }
+
+  /* Syarat Checklist Grid: 1 col on mobile, 2 col tablet */
+  .checklist-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .action-buttons-row {
+      flex-direction: column;
+      width: 100%;
+      gap: 10px;
+    }
+    .action-buttons-row button,
+    .action-buttons-row a {
+      width: 100%;
+      min-height: 44px;
+      justify-content: center;
+    }
+    .requirement-box {
+      padding: 14px 16px;
+      gap: 12px;
+    }
+    .check-box-icon {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+    .req-title {
+      font-size: var(--text-sm);
+      line-height: 1.5;
+    }
+
+    /* Tabel Biaya -> Kartu Per Item di Mobile */
+    .table-wrapper {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      overflow-x: auto;
+    }
+    .table-responsive-stacked thead {
+      display: none;
+    }
+    .table-responsive-stacked tbody tr {
+      display: flex;
+      flex-direction: column;
+      background: #FFFFFF;
+      border: 1px solid var(--ink-300);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      gap: 8px;
+    }
+    .table-responsive-stacked td {
+      border: none;
+      padding: 0;
+    }
+    .table-responsive-stacked td[data-label="No"] {
+      display: none;
+    }
+    .table-responsive-stacked td[data-label="Komponen"] {
+      display: block;
+      border-bottom: 1px solid var(--ink-200);
+      padding-bottom: 6px;
+    }
+    .table-responsive-stacked td[data-label="Komponen"]::before {
+      display: none;
+    }
+    .cost-component-name {
+      font-size: var(--text-sm);
+      font-weight: 700;
+      color: var(--green-900);
+      display: block;
+      text-align: left;
+    }
+    .table-responsive-stacked td[data-label="Nominal"] {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .table-responsive-stacked td[data-label="Nominal"]::before {
+      content: "Nominal Biaya";
+      font-size: var(--text-xs);
+      color: var(--ink-600);
+      font-weight: 600;
+    }
+    .cost-amount-number {
+      font-size: 1.05rem;
+      color: var(--green-700);
+      white-space: nowrap;
+      text-align: right;
+    }
+    .table-responsive-stacked td[data-label="Keterangan"] {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      padding-top: 6px;
+      border-top: 1px dashed var(--ink-200);
+      font-size: var(--text-xs);
+    }
+    .table-responsive-stacked td[data-label="Keterangan"]::before {
+      content: "Keterangan";
+      font-size: 11px;
+      color: var(--ink-500);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .cost-note-text {
+      text-align: right;
+    }
+    .table-responsive-stacked tfoot tr.total-row {
+      display: flex;
+      flex-direction: column;
+      background: var(--green-50);
+      border: 2px solid var(--green-700);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      gap: 8px;
+    }
+    .total-row td {
+      border: none;
+      padding: 0;
+    }
+    .total-label-cell {
+      font-size: var(--text-sm);
+      color: var(--green-900);
+      text-align: left;
+    }
+    .total-amount-cell {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--green-200);
+      padding-top: 8px !important;
+    }
+    .total-amount-cell::before {
+      content: "Total Masuk";
+      font-size: var(--text-xs);
+      font-weight: 700;
+      color: var(--green-900);
+    }
+    .total-amount-highlight {
+      font-size: 1.35rem;
+      color: var(--green-900);
+      white-space: nowrap;
+    }
+    .total-note-cell {
+      font-size: var(--text-xs);
+      color: var(--ink-600);
+      border-top: 1px dashed var(--green-200);
+      padding-top: 6px !important;
+    }
+  }
+
+  @media (min-width: 641px) {
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--s-4);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .checklist-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .checklist-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .requirement-box {
+    display: flex;
+    align-items: flex-start;
+    padding: var(--s-4);
+    gap: 14px;
+    background-color: #FFFFFF;
+  }
+
+  .check-box-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background-color: var(--green-700);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .req-num {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--green-700);
+    text-transform: uppercase;
+  }
+
+  .req-title {
+    font-size: var(--text-sm);
+    color: var(--ink-900);
+    line-height: 1.5;
+    margin: 2px 0 0 0;
+  }
+
+  /* Biaya Section */
+  .cost-component-name {
+    color: var(--green-900);
+    font-size: var(--text-sm);
+  }
+
+  .cost-amount-number {
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    color: var(--green-900);
+  }
+
+  .cost-note-text {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+  }
+
+  /* Total Row in Table */
+  .total-row {
+    background-color: var(--green-50);
+    border-top: 2px solid var(--green-700);
+  }
+
+  .total-label-cell {
+    font-family: var(--font-heading);
+    color: var(--green-900);
+    font-size: var(--text-base);
+  }
+
+  .total-amount-highlight {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    color: var(--green-900);
+    white-space: nowrap;
+  }
+
+  .total-note-cell {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+  }
+
+  /* Concession Card */
+  .concession-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--s-5);
+    gap: var(--s-4);
+    background-color: var(--green-50);
+    border: 1px solid var(--green-200);
+    margin-top: var(--s-6);
+  }
+
+  @media (min-width: 640px) {
+    .concession-card {
+      flex-direction: row;
+      align-items: flex-start;
+      padding: var(--s-6);
+    }
+  }
+
+  .concession-icon-wrap {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    background-color: var(--green-700);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .concession-title {
+    font-size: 1.2rem;
+    color: var(--green-900);
+    margin-bottom: 6px;
+  }
+
+  .concession-text p {
+    font-size: var(--text-sm);
+    color: var(--ink-900);
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+
+  .concession-cta-text {
+    font-size: var(--text-xs);
+    color: var(--green-800);
+    font-weight: 600;
+  }
+</style>
+

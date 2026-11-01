@@ -1,0 +1,30 @@
+{
+  "dummy": false,
+  "stats": [
+    {
+      "label": "Tahun Inisiasi",
+      "value": "2019",
+      "note": "Episentrum Edukasi & Inovasi"
+    },
+    {
+      "label": "Siswa Aktif",
+      "value": "360",
+      "note": "Rasio kelas interaktif intensif"
+    },
+    {
+      "label": "Mentor & Pendidik",
+      "value": "32",
+      "note": "Praktisi Tech & Akademisi Unggul"
+    },
+    {
+      "label": "Karya & Portofolio Proyek",
+      "value": "120+",
+      "note": "Prototipe aplikasi, IoT, & 3D art"
+    },
+    {
+      "label": "Prestasi Kompetisi",
+      "value": "28+",
+      "note": "Tingkat Provinsi & Nasional"
+    }
+  ]
+}

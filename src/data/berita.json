@@ -1,0 +1,172 @@
+{
+  "dummy": false,
+  "articles": [
+    {
+      "slug": "showcase-day-karya-teknologi-2026",
+      "date": "2026-10-22",
+      "category": "Kegiatan",
+      "title": "Annual Showcase Day 2026: Siswa FREEKS.id Pamerkan 24 Prototipe IoT & Game Edukasi",
+      "excerpt": "Seluruh siswa menampilkan karya capstone inovatif di hadapan mentor industri dan para wali murid.",
+      "image": {
+        "src": "/assets/kegiatan-madrasah-1.webp",
+        "alt": "Suasana Annual Showcase Day karya teknologi siswa FREEKS.id School",
+        "width": 1200,
+        "height": 800
+      },
+      "author": "Tim Media FREEKS.id",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Pagi ini kampus FREEKS.id School dipenuhi antusiasme tinggi dalam perhelatan Annual Showcase Day 2026. Sebanyak 24 proyek inovasi hasil kolaborasi antarsiswa dipamerkan, mulai dari sistem sensor daur ulang sampah cerdas berbasis IoT hingga prototipe game edukasi 3D."
+        },
+        {
+          "type": "quote",
+          "text": "Pendidikan masa depan bukan hanya tentang mengonsumsi teknologi, tetapi membekali generasi muda dengan keberanian dan keterampilan nyata untuk menciptakannya.",
+          "author": "FREEKS.ID"
+        },
+        {
+          "type": "paragraph",
+          "text": "Para mentor industri tamu memberikan apresiasi mendalam atas orisinalitas ide dan kemampuan pitching siswa dalam mempresentasikan solusi teknologi yang mereka rancang."
+        },
+        {
+          "type": "table",
+          "caption": "Karya Terpilih Best Innovation Showcase Day 2026",
+          "headers": [
+            "Penghargaan",
+            "Nama Proyek",
+            "Kategori",
+            "Tim Pengembang"
+          ],
+          "rows": [
+            [
+              "Best Overall Innovation",
+              "EcoSensor Smart Bin",
+              "IoT & Green Tech",
+              "Tim Genesis (Grade 8)"
+            ],
+            [
+              "Best Interactive UI/UX",
+              "EduSphere 3D Learning",
+              "Game Dev & EdTech",
+              "Tim PixelCraft (Grade 8)"
+            ],
+            [
+              "Most Creative Concept",
+              "HealthBot Micro Assistant",
+              "Applied AI",
+              "Tim MindWave (Grade 7)"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Acara diakhiri dengan sesi networking interaktif dan demonstrasi langsung prototipe robotika siswa di Maker Space FREEKS."
+        }
+      ]
+    },
+    {
+      "slug": "tim-robotika-freeks-juara-1-nasional",
+      "date": "2026-10-15",
+      "category": "Prestasi",
+      "title": "Tim Robotika FREEKS.id School Raih Juara 1 Tingkat Nasional",
+      "excerpt": "Inovasi robot pemilah barang otomatis karya siswa menyabet emas setelah bersaing dengan 60 tim se-Indonesia.",
+      "image": {
+        "src": "/assets/berita-prestasi-sains.webp",
+        "alt": "Tim Robotika FREEKS.id memegang piala kejuaraan nasional",
+        "width": 1200,
+        "height": 800
+      },
+      "author": "Head of Maker Space",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Prestasi gemilang diraih kontingen FREEKS.id School pada National Youth Robotics Championship 2026. Robot otonom berkamera cerdas buatan siswa sukses menyelesaikan rintangan dengan akurasi dan waktu tercepat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pencapaian ini menjadi bukti komitmen sekolah dalam menghadirkan sarana praktikum hardware dan coding berstandar industri."
+        }
+      ]
+    },
+    {
+      "slug": "mid-term-project-sprint-dimulai",
+      "date": "2026-10-08",
+      "category": "Akademik",
+      "title": "Mid-Term Project Sprint & Asesmen Terpadu Dimulai Pekan Depan",
+      "excerpt": "Panduan pelaksanaan project sprint, kolaborasi tim, dan jadwal konsultasi mentor akademik.",
+      "image": {
+        "src": "/assets/kegiatan-madrasah-2.webp",
+        "alt": "Siswa berdiskusi dalam kelompok kerja project sprint",
+        "width": 1200,
+        "height": 800
+      },
+      "author": "Head of Curriculum",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Memasuki pertengahan semester, seluruh siswa FREEKS.id School akan mengikuti Project Sprint Terpadu. Selama satu pekan, siswa memfokuskan pengerjaan deliverable karya bersama mentor pembimbing."
+        }
+      ]
+    },
+    {
+      "slug": "freeks-code-for-impact-berbagi-komunitas",
+      "date": "2026-09-29",
+      "category": "Kegiatan",
+      "title": "FREEKS Code for Impact: Pelatihan Literasi Komputer Gratis untuk Anak Sekitar",
+      "excerpt": "Siswa dan mentor FREEKS mengadakan workshop coding dasar dan etika internet bagi anak-anak warga sekitar kampus.",
+      "image": {
+        "src": "/assets/berita-kegiatan-osis.webp",
+        "alt": "Siswa mengajar kelas literasi digital interaktif untuk anak-anak sekitar",
+        "width": 1200,
+        "height": 800
+      },
+      "author": "Divisi Sosial & Student Affairs",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Sebagai wujud empati sosial nyata, OSIS FREEKS menyelenggarakan program Code for Impact. Siswa melatih adik-adik sekitar kampus membuat animasi interaktif sederhana menggunakan Scratch dan Blockly."
+        }
+      ]
+    },
+    {
+      "slug": "pelantikan-student-council-2026-2027",
+      "date": "2026-09-17",
+      "category": "Kesiswaan",
+      "title": "Inaugurasi Student Council Periode 2026/2027: Kabinet Sinergi Inovasi",
+      "excerpt": "Jajaran pengurus dewan siswa resmi dilantik dengan fokus program hackathon mini dan kolaborasi kreatif.",
+      "image": {
+        "src": "/assets/berita-kegiatan-osis.webp",
+        "alt": "Inaugurasi pengurus Student Council FREEKS.id School",
+        "width": 1200,
+        "height": 800
+      },
+      "author": "Tim Media FREEKS.id",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Pemilihan Student Council FREEKS berlangsung dengan pemungutan suara digital terdesentralisasi. Pengurus baru bertekad memperbanyak ruang kreasi dan ajang ekspresi teknologi bagi seluruh civitas kampus."
+        }
+      ]
+    },
+    {
+      "slug": "kunjungan-studi-ekosistem-teknologi",
+      "date": "2026-09-03",
+      "category": "Pengumuman",
+      "title": "Studi Ekosistem Industri Digital & Kolaborasi Maker Space Bersama Kampus Mitra",
+      "excerpt": "FREEKS.id School menerima delegasi pemerhati pendidikan teknologi untuk bertukar pengalaman kurikulum terapan.",
+      "image": {
+        "src": "/assets/kegiatan-madrasah-2.webp",
+        "alt": "Diskusi kolaborasi ekosistem pembelajaran modern",
+        "width": 1200,
+        "height": 800
+      },
+      "author": "Divisi Kemitraan & Ekosistem",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "FREEKS.id School terus memperkuat jejaring kemitraan strategis dalam rangka memperkaya wawasan kurikulum berbasis proyek dan teknologi terkini."
+        }
+      ]
+    }
+  ]
+}

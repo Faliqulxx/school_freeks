@@ -1,0 +1,133 @@
+{
+  "dummy": false,
+  "teachers": [
+    {
+      "id": "freeks-kepala",
+      "name": "FREEKS.ID",
+      "fullName": "FREEKS.ID, M.Sc., M.Ed.",
+      "birthPlaceDate": "Gresik, 14 Mei 1988",
+      "role": "Head of School / Principal",
+      "position": "Head of School / Principal",
+      "subject": "Tech Leadership & Education Management",
+      "category": "Pimpinan",
+      "photo": {
+        "src": "/assets/guru-freeks.webp",
+        "alt": "Foto FREEKS.ID - Head of School",
+        "width": 765,
+        "height": 1024
+      }
+    },
+    {
+      "id": "freeks-kurikulum",
+      "name": "FREEKS.ID",
+      "fullName": "FREEKS.ID, S.Kom., M.T.",
+      "birthPlaceDate": "Gresik, 20 Oktober 1991",
+      "role": "VP Curriculum & Innovation",
+      "position": "Wakil Kepala Sekolah Bidang Kurikulum & Inovasi",
+      "subject": "Informatika & Logika Komputasi",
+      "category": "Kurikulum",
+      "photo": {
+        "src": "/assets/guru-freeks.webp",
+        "alt": "Foto FREEKS.ID - VP Curriculum & Innovation",
+        "width": 765,
+        "height": 1024
+      }
+    },
+    {
+      "id": "freeks-kesiswaan",
+      "name": "FREEKS.ID",
+      "fullName": "FREEKS.ID, S.Pd., M.A.",
+      "birthPlaceDate": "Gresik, 05 Juli 1990",
+      "role": "VP Student Affairs",
+      "position": "Wakil Kepala Sekolah Bidang Kesiswaan & Komunitas",
+      "subject": "Leadership & Character Mindset",
+      "category": "Kesiswaan",
+      "photo": {
+        "src": "/assets/guru-freeks.webp",
+        "alt": "Foto FREEKS.ID - VP Student Affairs",
+        "width": 765,
+        "height": 1024
+      }
+    },
+    {
+      "id": "freeks-ipa",
+      "name": "FREEKS.ID",
+      "fullName": "FREEKS.ID, S.Si.",
+      "birthPlaceDate": "Gresik, 18 September 1993",
+      "role": "Lead Science Mentor",
+      "position": "Mentor Riset Sains & Maker Space",
+      "subject": "Sains Terapan & Rekayasa Hardware",
+      "category": "Mata Pelajaran",
+      "photo": {
+        "src": "/assets/guru-freeks.webp",
+        "alt": "Foto FREEKS.ID - Mentor Riset Sains",
+        "width": 765,
+        "height": 1024
+      }
+    },
+    {
+      "id": "freeks-inggris",
+      "name": "FREEKS.ID",
+      "fullName": "FREEKS.ID, B.A. (Hons)",
+      "birthPlaceDate": "Gresik, 12 Desember 1992",
+      "role": "Global Language Mentor",
+      "position": "Mentor Bahasa Inggris & Public Pitching",
+      "subject": "English for Global Communication",
+      "category": "Mata Pelajaran",
+      "photo": {
+        "src": "/assets/guru-freeks.webp",
+        "alt": "Foto FREEKS.ID - Mentor Bahasa Inggris",
+        "width": 765,
+        "height": 1024
+      }
+    },
+    {
+      "id": "freeks-creative",
+      "name": "FREEKS.ID",
+      "fullName": "FREEKS.ID, S.Ds.",
+      "birthPlaceDate": "Gresik, 03 Maret 1989",
+      "role": "Creative & 3D Lead",
+      "position": "Mentor Studio 3D, Animasi & UI/UX",
+      "subject": "Desain Interaktif & Game Development",
+      "category": "Keagamaan",
+      "photo": {
+        "src": "/assets/guru-freeks.webp",
+        "alt": "Foto FREEKS.ID - Mentor Studio 3D & Desain",
+        "width": 765,
+        "height": 1024
+      }
+    },
+    {
+      "id": "freeks-ips",
+      "name": "FREEKS.ID",
+      "fullName": "FREEKS.ID, S.E., M.M.",
+      "birthPlaceDate": "Gresik, 28 April 1994",
+      "role": "Social & Enterprise Mentor",
+      "position": "Mentor Kewirausahaan & Masyarakat Digital",
+      "subject": "Ekonomi Digital & Social Enterprise",
+      "category": "Mata Pelajaran",
+      "photo": {
+        "src": "/assets/guru-freeks.webp",
+        "alt": "Foto FREEKS.ID - Mentor Ekonomi Digital",
+        "width": 765,
+        "height": 1024
+      }
+    },
+    {
+      "id": "freeks-tu",
+      "name": "FREEKS.ID",
+      "fullName": "FREEKS.ID, A.Md.",
+      "birthPlaceDate": "Gresik, 17 November 1995",
+      "role": "Operations & Registry Lead",
+      "position": "Kepala Operasional Kampus & Registrasi",
+      "subject": "Campus Operations & Student Data",
+      "category": "Tata Usaha",
+      "photo": {
+        "src": "/assets/guru-freeks.webp",
+        "alt": "Foto FREEKS.ID - Kepala Operasional Kampus",
+        "width": 765,
+        "height": 1024
+      }
+    }
+  ]
+}

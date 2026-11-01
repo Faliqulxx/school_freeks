@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <rect width="100%" height="100%" fill="#E4E7EB" />
+  <rect x="12" y="12" width="1176" height="776" fill="none" stroke="#CBD2D9" stroke-width="2" stroke-dasharray="6 6" rx="8" />
+  <g transform="translate(600, 380)" text-anchor="middle">
+    <!-- Camera icon -->
+    <path d="M-20 -10 L-14 -18 L14 -18 L20 -10 L28 -10 C30.2 -10 32 -8.2 32 -6 L32 22 C32 24.2 30.2 26 28 26 L-28 26 C-30.2 26 -32 24.2 -32 22 L-32 -6 C-32 -8.2 -30.2 -10 -28 -10 Z" fill="none" stroke="#52606D" stroke-width="2.5" stroke-linejoin="round" />
+    <circle cx="0" cy="8" r="9" fill="none" stroke="#52606D" stroke-width="2.5" />
+    
+    <text y="54" font-family="Inter, sans-serif" font-size="18" font-weight="600" fill="#52606D">Fasilitas: Lapangan Serbaguna</text>
+    <text y="78" font-family="Inter, sans-serif" font-size="14" fill="#52606D" opacity="0.85">Futsal, voli, basket, dan upacara bendera (3:2)</text>
+  </g>
+</svg>

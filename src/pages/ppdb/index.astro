@@ -1,0 +1,614 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Icon from '../../components/Icon.astro';
+import ppdbData from '../../data/ppdb.json';
+import siteData from '../../data/siteData.json';
+
+const { school } = siteData;
+const { waves, requirements, costs, steps, quota } = ppdbData;
+
+const breadcrumbItems = [
+  { label: 'PPDB' }
+];
+---
+
+<BaseLayout
+  title="Admission 2027/2028 – FREEKS.id School"
+  description="Informasi resmi Pendaftaran Siswa Baru (Admission) FREEKS.id School. Syarat, rincian biaya, alur seleksi, jadwal gelombang, dan formulir pendaftaran daring."
+>
+  <div class="page-header section-soft">
+    <div class="container-wide">
+      <Breadcrumb items={breadcrumbItems} />
+      <div class="header-meta">
+        <span class="chip chip-important">Tahun Ajaran {ppdbData.academicYear}</span>
+      </div>
+      <h1 class="page-title">Penerimaan Peserta Didik Baru (PPDB)</h1>
+      <p class="page-description">
+        Membuka pintu gerbang masa depan bagi putra-putri Anda untuk mengasah logika komputasi, keahlian kreatif, dan karakter inovator di FREEKS.id School.
+      </p>
+
+      <!-- Status Periode Besar (PRD 8.6) -->
+      <div class="ppdb-hero-status-card card">
+        <div class="status-left">
+          <div class="status-indicator">
+            <span class="pulse-indicator"></span>
+            <span class="status-label">STATUS PENDAFTARAN</span>
+          </div>
+          <h2 class="status-title">{ppdbData.status}</h2>
+          <p class="status-quota">
+            Daya tampung: <strong>{quota.total} siswa baru</strong> ({quota.classes} rombongan belajar @ {quota.perClass} siswa).
+          </p>
+        </div>
+
+        <div class="status-actions btn-group-responsive">
+          <a href="/ppdb/daftar" class="btn btn-cta btn-hero">
+            <span>Daftar Online Sekarang</span>
+            <Icon name="arrow-right" size={18} />
+          </a>
+          <a
+            href={`https://wa.me/${school.whatsappRaw}?text=${encodeURIComponent(school.whatsappMessage)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-secondary btn-hero"
+          >
+            <Icon name="message-circle" size={18} />
+            <span>Tanya Panitia via WA</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-wide section">
+    <!-- Sub Nav PPDB (PRD 8.6) -->
+    <nav class="ppdb-subnav" aria-label="Menu Informasi PPDB">
+      <ul class="ppdb-nav-list">
+        <li><a href="/ppdb" class="ppdb-nav-item active">Ringkasan Info</a></li>
+        <li><a href="/ppdb/alur" class="ppdb-nav-item">Alur Pendaftaran</a></li>
+        <li><a href="/ppdb/syarat-biaya" class="ppdb-nav-item">Syarat & Biaya</a></li>
+        <li><a href="/ppdb/jadwal" class="ppdb-nav-item">Jadwal Gelombang</a></li>
+        <li><a href="/ppdb/daftar" class="ppdb-nav-item">Formulir Daftar Online</a></li>
+        <li><a href="/ppdb/faq" class="ppdb-nav-item">Tanya Jawab (FAQ)</a></li>
+      </ul>
+    </nav>
+
+    <!-- 4 Langkah Alur Ringkas (PRD 8.6) -->
+    <section class="ppdb-section-block">
+      <div class="section-header">
+        <span class="chip chip-primary">Panduan Singkat</span>
+        <h2>4 Langkah Mudah Pendaftaran</h2>
+        <div class="section-divider"></div>
+        <p>Proses pendaftaran siswa baru dirancang praktis, transparan, dan ramah wali murid:</p>
+      </div>
+
+      <div class="steps-compact-grid">
+        {steps.map((st) => (
+          <div class="step-card card">
+            <div class="step-badge-num">{st.step}</div>
+            <h3 class="step-title">{st.title}</h3>
+            <p class="step-summary">{st.summary}</p>
+            <div class="step-docs-tag">
+              <Icon name="file-check" size={14} />
+              <span>{st.documents.join(', ')}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="steps-cta-row">
+        <a href="/ppdb/alur" class="btn btn-secondary">
+          <span>Pelajari Rincian Alur & Berkas Fisik &rarr;</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Ringkasan Syarat & Biaya (PRD 8.6) -->
+    <section class="ppdb-section-block">
+      <div class="syarat-biaya-summary-grid">
+        <!-- Syarat Box -->
+        <div class="card summary-box">
+          <div class="section-header">
+            <h3>Syarat Pendaftaran Utama</h3>
+            <div class="section-divider"></div>
+          </div>
+          <ul class="checklist-items">
+            {requirements.map((req) => (
+              <li>
+                <Icon name="check" size={18} class="check-icon" />
+                <span>{req}</span>
+              </li>
+            ))}
+          </ul>
+          <a href="/ppdb/syarat-biaya" class="btn-link">Lihat rincian dokumen lengkap &rarr;</a>
+        </div>
+
+        <!-- Biaya Box -->
+        <div class="card summary-box">
+          <div class="section-header">
+            <h3>Biaya Pendidikan Terjangkau & Transparan</h3>
+            <div class="section-divider"></div>
+          </div>
+          <p class="cost-lead-text">
+            Total biaya awal masuk sekolah:
+          </p>
+          <div class="total-cost-display">
+            <span class="total-number">{costs.totalInitial}</span>
+            <span class="total-sub">({costs.totalInitialNote})</span>
+          </div>
+
+          <p class="concession-note">
+            <Icon name="heart-handshake" size={18} class="concession-icon" />
+            <span>{costs.concession}</span>
+          </p>
+
+          <a href="/ppdb/syarat-biaya" class="btn btn-secondary btn-sm" style="margin-top: auto;">
+            Lihat Tabel Rincian Komponen Biaya &rarr;
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Jadwal Gelombang Ringkas (PRD 8.6) -->
+    <section class="ppdb-section-block">
+      <div class="section-header">
+        <span class="chip chip-primary">Agenda Pendaftaran</span>
+        <h2>Jadwal Pelaksanaan Gelombang</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="waves-grid">
+        {waves.map((w) => (
+          <div class={`wave-card card ${w.isCurrent ? 'current-wave' : ''}`}>
+            <div class="wave-header">
+              {w.isCurrent && <span class="chip chip-important">GELOMBANG AKTIF</span>}
+              <h3 class="wave-name">{w.name}</h3>
+            </div>
+            <div class="wave-body">
+              <div class="wave-row">
+                <span class="wave-label">Masa Pendaftaran:</span>
+                <span class="wave-val">{w.registration}</span>
+              </div>
+              <div class="wave-row">
+                <span class="wave-label">Seleksi & Tes Al-Qur'an:</span>
+                <span class="wave-val">{w.selection}</span>
+              </div>
+              <div class="wave-row">
+                <span class="wave-label">Pengumuman Kelulusan:</span>
+                <span class="wave-val">{w.announcement}</span>
+              </div>
+              <div class="wave-row">
+                <span class="wave-label">Daftar Ulang & Seragam:</span>
+                <span class="wave-val">{w.reRegistration}</span>
+              </div>
+            </div>
+            <div class="wave-footer">
+              <a href="/ppdb/daftar" class="btn btn-primary btn-sm btn-full">
+                <span>Daftar {w.name}</span>
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-top: var(--s-6);
+    padding-bottom: var(--s-6);
+    border-bottom: 1px solid var(--ink-300);
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--s-3);
+  }
+
+  .page-title {
+    font-size: var(--h1);
+    color: var(--green-900);
+    margin-bottom: var(--s-2);
+  }
+
+  .page-description {
+    font-size: var(--text-lg);
+    color: var(--ink-600);
+    max-width: 65ch;
+    margin-bottom: var(--s-5);
+  }
+
+  /* Status Card */
+  .ppdb-hero-status-card {
+    padding: var(--s-5);
+    background-color: #FFFFFF;
+    border-top: 4px solid var(--yellow-500);
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-5);
+  }
+
+  @media (min-width: 1024px) {
+    .ppdb-hero-status-card {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--s-6);
+    }
+  }
+
+  .status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .pulse-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--success);
+    box-shadow: 0 0 0 4px rgba(21, 128, 61, 0.2);
+  }
+
+  .status-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--green-700);
+    letter-spacing: 0.5px;
+  }
+
+  .status-title {
+    font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+    color: var(--green-900);
+    margin-bottom: 4px;
+  }
+
+  .status-quota {
+    font-size: var(--text-sm);
+    color: var(--ink-600);
+    margin: 0;
+  }
+
+  .status-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 640px) {
+    .status-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    .status-actions a {
+      width: 100%;
+      min-height: 48px;
+      justify-content: center;
+    }
+  }
+
+  /* Subnav */
+  .ppdb-subnav {
+    margin-bottom: var(--s-7);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--ink-300);
+  }
+
+  .ppdb-nav-list {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: max-content;
+  }
+
+  .ppdb-nav-item {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--ink-900);
+    text-decoration: none;
+    transition: background-color var(--dur-fast) var(--ease),
+                color var(--dur-fast) var(--ease);
+  }
+
+  .ppdb-nav-item:hover {
+    background-color: var(--green-50);
+    color: var(--green-700);
+  }
+
+  .ppdb-nav-item.active {
+    background-color: var(--green-700);
+    color: #FFFFFF;
+  }
+
+  .ppdb-section-block {
+    margin-bottom: var(--s-8);
+  }
+
+  /* 4 Steps Grid: 1 col on mobile, 2 col tablet, 4 col desktop */
+  .steps-compact-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+    margin-bottom: var(--s-4);
+  }
+
+  @media (min-width: 641px) {
+    .steps-compact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .step-card {
+      padding: 16px;
+      gap: 8px;
+    }
+    .step-badge-num {
+      width: 36px !important;
+      height: 36px !important;
+      font-size: 1rem !important;
+      margin-bottom: 4px !important;
+    }
+    .step-title {
+      font-size: 1rem !important;
+      margin-bottom: 4px !important;
+    }
+    .step-summary {
+      font-size: var(--text-sm) !important;
+      line-height: 1.5 !important;
+      margin-bottom: 8px !important;
+    }
+    .step-docs-tag {
+      font-size: 11px !important;
+      padding: 6px 10px !important;
+    }
+    .steps-cta-row a {
+      width: 100%;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .steps-compact-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--s-4);
+      margin-bottom: var(--s-5);
+    }
+  }
+
+  .step-card {
+    padding: var(--s-5);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .step-badge-num {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: var(--green-700);
+    color: #FFFFFF;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--s-3);
+  }
+
+  .step-title {
+    font-size: 1.05rem;
+    color: var(--green-900);
+    margin-bottom: 8px;
+  }
+
+  .step-summary {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    line-height: 1.5;
+    margin-bottom: var(--s-4);
+  }
+
+  .step-docs-tag {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--green-700);
+    background-color: var(--green-50);
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Summary Box */
+  .syarat-biaya-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s-6);
+  }
+
+  @media (min-width: 1024px) {
+    .syarat-biaya-summary-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .summary-box {
+    padding: var(--s-6);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .checklist-items {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--s-5) 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .checklist-items li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: var(--text-sm);
+    color: var(--ink-900);
+  }
+
+  .check-icon {
+    color: var(--green-700);
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .cost-lead-text {
+    font-size: var(--text-sm);
+    color: var(--ink-600);
+    margin-bottom: 4px;
+  }
+
+  .total-cost-display {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: var(--s-4);
+    flex-wrap: wrap;
+  }
+
+  .total-number {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 1.6rem + 1.5vw, 2.75rem);
+    font-weight: 800;
+    color: var(--green-900);
+    line-height: 1.1;
+  }
+
+  .total-sub {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+  }
+
+  .concession-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background-color: var(--green-50);
+    border: 1px solid var(--green-200);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-size: var(--text-xs);
+    color: var(--green-900);
+    line-height: 1.5;
+    margin-bottom: var(--s-5);
+  }
+
+  .concession-icon {
+    color: var(--green-700);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Waves Grid: 1 col on mobile, 2 col from 641px */
+  .waves-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-4);
+  }
+
+  @media (min-width: 641px) {
+    .waves-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s-5);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .wave-card {
+      padding: 16px;
+    }
+    .wave-name {
+      font-size: 1.15rem;
+    }
+    .wave-footer .btn {
+      width: 100%;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .wave-card {
+    padding: var(--s-5);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .wave-card.current-wave {
+    border-top: 4px solid var(--yellow-500);
+    box-shadow: var(--shadow-2);
+  }
+
+  .wave-header {
+    margin-bottom: var(--s-4);
+  }
+
+  .wave-name {
+    font-size: 1.25rem;
+    color: var(--green-900);
+    margin-top: 4px;
+    margin-bottom: 0;
+  }
+
+  .wave-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: var(--s-5);
+  }
+
+  .wave-row {
+    display: flex;
+    flex-direction: column;
+    font-size: var(--text-xs);
+    border-bottom: 1px solid #F1F5F9;
+    padding-bottom: 8px;
+  }
+
+  .wave-label {
+    color: var(--ink-600);
+  }
+
+  .wave-val {
+    font-weight: 700;
+    color: var(--green-900);
+    font-size: var(--text-sm);
+  }
+
+  .wave-footer {
+    margin-top: auto;
+  }
+</style>
+

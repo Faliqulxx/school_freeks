@@ -1,0 +1,158 @@
+{
+  "dummy": false,
+  "history": [
+    {
+      "year": "2019",
+      "title": "Awal Inisiasi & Digital Sandbox",
+      "description": "Berawal dari inisiatif komunitas inkubator teknologi dan lab kreatif independen anak muda bernama FREEKS Studio, yang menguji coba program eksplorasi coding, desain digital, dan robotika interaktif bagi remaja."
+    },
+    {
+      "year": "2021",
+      "title": "Pendirian FREEKS Foundation & Izin Sekolah",
+      "description": "Resmi berbadan hukum di bawah Yayasan Inovasi Kreasi Digital (FREEKS Foundation) dan memperoleh legalitas penyelenggaraan institusi pendidikan modern berbasis kurikulum integratif dan computational thinking."
+    },
+    {
+      "year": "2023",
+      "title": "Pembangunan Kampus Cerdas & Tech Hub",
+      "description": "Peresmian gedung kampus modern ramah lingkungan (FREEKS Campus) lengkap dengan fasilitas Smart Classroom, Maker Space, VR/AR Studio, serta arena kompetisi robotika."
+    },
+    {
+      "year": "2024",
+      "title": "Akreditasi Unggul & Kemitraan Ekosistem",
+      "description": "Meraih akreditasi Unggul (A) dan menjalin kemitraan inkubasi riset dengan berbagai industri kreatif digital, membuka akses magang mini dan mentoring industri untuk siswa."
+    },
+    {
+      "year": "2025–Kini",
+      "title": "Pelopor Modern Tech School Abad ke-21",
+      "description": "Menjadi episentrum pendidikan teknologi masa depan terdepan yang mengintegrasikan kurikulum nasional, kecerdasan buatan terapan, etika digital, dan inkubasi wirausaha teknologi muda."
+    }
+  ],
+  "vision": "Menjadi ekosistem pendidikan teknologi dan kreatif modern terdepan yang melahirkan inovator muda visioner, berkarakter mulia, dan siap memimpin transformasi masa depan.",
+  "missions": [
+    "Menyelenggarakan pembelajaran modern berbasis proyek (Project-Based Learning) yang memadukan kurikulum akademik nasional dengan literasi teknologi global.",
+    "Membekali setiap siswa dengan pemahaman computational thinking, rekayasa perangkat lunak, kecerdasan buatan, dan desain media interaktif sejak dini.",
+    "Membentuk karakter kepemimpinan yang berintegritas, beretika digital tinggi, kritis, dan berempati terhadap permasalahan sosial kemasyarakatan.",
+    "Memfasilitasi siswa untuk berkompetisi dan berprestasi dalam olimpiade sains, kompetisi robotika, hackathon, serta festival seni dan teknologi tingkat nasional maupun global.",
+    "Mewujudkan lingkungan kampus yang ramah inovasi, inklusif, berkelanjutan (green campus), dan mendorong kolaborasi riset kreatif."
+  ],
+  "goals": [
+    "Mencapai kelulusan 100% dengan portofolio proyek teknologi, karya kreatif digital, atau riset terapan yang siap pakai.",
+    "Memastikan setiap lulusan menguasai fundamental coding, literasi AI, serta keterampilan komunikasi publik dan Bahasa Inggris aktif.",
+    "Mengantarkan perwakilan siswa meraih prestasi dan medali kejuaraan bidang sains, teknologi, dan kreatif minimal 10 kompetisi per tahun.",
+    "Menjadi rujukan modern tech school dengan tata kelola sekolah digital mandiri yang transparan, adaptif, dan berwawasan lingkungan."
+  ],
+  "foundation": {
+    "name": "Yayasan Inovasi Kreasi Digital (FREEKS Foundation)",
+    "established": "2019",
+    "leader": "Dewan Pembina FREEKS Foundation",
+    "description": "Yayasan Inovasi Kreasi Digital (FREEKS Foundation) adalah lembaga nirlaba yang berdedikasi memajukan ekosistem pendidikan teknologi, riset kreatif, dan pengembangan potensi generasi muda Indonesia agar adaptif terhadap dinamika era kecerdasan buatan.",
+    "logoMeaning": [
+      {
+        "element": "Prisma & Sudut Geometris 3D",
+        "symbol": "Dimensi Kreativitas & Perspektif Luas",
+        "description": "Melambangkan cara pandang multidimensi dalam memecahkan masalah kompleks melalui perpaduan seni, logika, dan teknologi."
+      },
+      {
+        "element": "Jalur Koneksi Sirkuit Digital",
+        "symbol": "Konektivitas & Kolaborasi Terbuka",
+        "description": "Menggambarkan semangat jejaring, kerja sama tim lintas disiplin, dan integrasi ekosistem teknologi masa depan."
+      },
+      {
+        "element": "Nyala Gradien Neon Cyber",
+        "symbol": "Semangat Eksplorasi Tanpa Batas",
+        "description": "Warna gradien dinamis melambangkan energi generasi muda yang tak henti berinovasi dan berevolusi bersama zaman."
+      },
+      {
+        "element": "Bintang Arah Inovasi",
+        "symbol": "Integritas & Kepemimpinan Global",
+        "description": "Menunjukkan kompas moral dan etika yang kuat dalam menavigasi disrupsi teknologi digital."
+      }
+    ],
+    "units": [
+      {
+        "name": "FREEKS Junior Studio",
+        "desc": "Program Eksplorasi Kreatif & Logika Digital Usia Dini"
+      },
+      {
+        "name": "FREEKS.id School",
+        "desc": "Sekolah Menengah Modern Tech & Creative Academy"
+      },
+      {
+        "name": "FREEKS Innovation Labs",
+        "desc": "Inkubator Riset Siswa, AI, dan Robotika Terapan"
+      },
+      {
+        "name": "FREEKS Community Outreach",
+        "desc": "Program Beasiswa & Literasi Digital Masyarakat"
+      }
+    ]
+  },
+  "facilities": [
+    {
+      "id": "fasilitas-1",
+      "name": "Cyber Smart Classrooms",
+      "description": "Ruang belajar interaktif ber-AC yang dilengkapi Smart Board digital, modul meja fleksibel untuk diskusi kelompok, dan jaringan gigabit fiber-optic super cepat.",
+      "image": {
+        "src": "/assets/hero-siswa-belajar.webp",
+        "alt": "Ruang Cyber Smart Classroom FREEKS.id School",
+        "width": 1200,
+        "height": 800
+      }
+    },
+    {
+      "id": "fasilitas-2",
+      "name": "Maker Space & Robotics Arena",
+      "description": "Laboratorium rekayasa perangkat keras yang dilengkapi 3D printer, soldering station, mikrokontroler (Arduino/Raspberry Pi), dan lintasan uji robotika otonom.",
+      "image": {
+        "src": "/assets/berita-prestasi-sains.webp",
+        "alt": "Maker Space dan Arena Uji Robotika Siswa",
+        "width": 1200,
+        "height": 800
+      }
+    },
+    {
+      "id": "fasilitas-3",
+      "name": "Digital Media & 3D Creative Studio",
+      "description": "Studio multimedia berkemampuan rendering tinggi untuk produksi karya animasi, pemodelan 3D, motion graphic, game development, dan podcast siswa.",
+      "image": {
+        "src": "/assets/kegiatan-madrasah-2.webp",
+        "alt": "Studio Media Kreatif dan Lab 3D FREEKS.id School",
+        "width": 1200,
+        "height": 800
+      }
+    },
+    {
+      "id": "fasilitas-4",
+      "name": "VR/AR & Applied AI Laboratory",
+      "description": "Fasilitas headset virtual reality imersif dan workstation pengolahan model kecerdasan buatan untuk simulasi sains dan riset visual interaktif.",
+      "image": {
+        "src": "/assets/program-unggulan-tahfidz.webp",
+        "alt": "Lab Riset Sains dan Teknologi Interaktif",
+        "width": 1200,
+        "height": 800
+      }
+    },
+    {
+      "id": "fasilitas-5",
+      "name": "Innovation Hub & Amphitheater",
+      "description": "Auditorium modern dan amfiteater terbuka untuk pitching proyek siswa, pameran karya teknologi (Showcase Day), serta seminar pembicara industri tamu.",
+      "image": {
+        "src": "/assets/gedung-mts-islamiyah.webp",
+        "alt": "Gedung Utama FREEKS Campus dan Area Hub",
+        "width": 1200,
+        "height": 800
+      }
+    },
+    {
+      "id": "fasilitas-6",
+      "name": "Co-Working Commons & Green Lounge",
+      "description": "Area kolaborasi santai luar ruangan dan kafe sehat ramah lingkungan untuk berdiskusi, *brainstorming* santai, dan relaksasi antar sesi belajar.",
+      "image": {
+        "src": "/assets/hero-siswa-berjalan.webp",
+        "alt": "Area terbuka hijau dan student lounge FREEKS Campus",
+        "width": 1200,
+        "height": 800
+      }
+    }
+  ]
+}

@@ -1,0 +1,2299 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import Icon from '../../components/Icon.astro';
+import beritaData from '../../data/berita.json';
+import pengumumanData from '../../data/pengumuman.json';
+import galeriData from '../../data/galeri.json';
+import unduhanData from '../../data/unduhan.json';
+
+const { articles } = beritaData;
+const { announcements } = pengumumanData;
+const { albums } = galeriData;
+const { downloads } = unduhanData;
+---
+
+<AdminLayout title="Manajemen Informasi & Berita (Modul 6)" activeMenu="informasi">
+  <div class="page-header-wrap">
+    <div>
+      <div class="module-tag">MODUL 6 DARI 8</div>
+      <h1>Manajemen Informasi & Publikasi</h1>
+      <p class="page-subtitle">
+        Publikasikan artikel berita Sekolah, surat edaran pengumuman resmi, album dokumentasi galeri foto, dan pusat unduhan berkas publik.
+      </p>
+    </div>
+
+    <div class="header-action-group">
+      <a href="/informasi/berita" target="_blank" class="btn btn-secondary">
+        <Icon name="external-link" size={16} />
+        <span>Buka Web Publik</span>
+      </a>
+      <button type="button" id="btn-export-informasi-json" class="btn btn-secondary">
+        <Icon name="download" size={16} />
+        <span>Unduh JSON</span>
+      </button>
+      <button type="button" id="btn-save-informasi" class="btn btn-primary">
+        <Icon name="check" size={18} />
+        <span>Simpan Perubahan</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="save-toast" class="toast-notification" role="alert" aria-live="polite" hidden>
+    <Icon name="check-circle" size={20} class="toast-icon" />
+    <div class="toast-body">
+      <strong>Publikasi Berhasil Disimpan!</strong>
+      <p>Data artikel berita, pengumuman, album galeri, dan repositori unduhan telah diperbarui secara lokal.</p>
+    </div>
+    <button type="button" id="toast-close" class="toast-close-btn" aria-label="Tutup notifikasi">
+      <Icon name="x" size={16} />
+    </button>
+  </div>
+
+  <!-- Sub-Modul Tab Navigation -->
+  <div class="section-tabs-bar" role="tablist">
+    <button type="button" class="tab-btn active" data-tab="tab-berita" role="tab" aria-selected="true">
+      <Icon name="newspaper" size={16} />
+      <span>1. Berita & Kegiatan</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-pengumuman" role="tab" aria-selected="false">
+      <Icon name="bell" size={16} />
+      <span>2. Pengumuman Resmi</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-galeri" role="tab" aria-selected="false">
+      <Icon name="image" size={16} />
+      <span>3. Galeri Foto Album</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-unduhan" role="tab" aria-selected="false">
+      <Icon name="download" size={16} />
+      <span>4. Pusat Unduhan Berkas</span>
+    </button>
+  </div>
+
+  <div class="informasi-layout-grid">
+    <!-- Left Column: Forms -->
+    <div class="form-container">
+      <form id="informasi-form" onsubmit="return false;">
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 1: BERITA & ARTIKEL -->
+        <!-- ========================================== -->
+        <div class="tab-panel active" id="tab-berita">
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="newspaper" size={20} />
+                </div>
+                <div>
+                  <h3>Daftar Artikel Berita Sekolah (CRUD)</h3>
+                  <p class="card-desc">Publikasikan liputan kegiatan kampus, prestasi siswa inovatif, dan artikel teknologi edukasi.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-article" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Tulis Berita Baru</span>
+              </button>
+            </div>
+
+            <div class="articles-admin-list" id="articles-list-container">
+              {articles.map((art, idx) => (
+                <div class="article-admin-card" data-idx={idx}>
+                  <div class="article-thumb-wrap">
+                    <img src={art.image.src} alt={art.title} class="article-thumb" onerror="this.src='/assets/berita-kegiatan-osis.webp'" />
+                  </div>
+                  <div class="article-content-col">
+                    <div class="article-badges-row">
+                      <span class="cat-pill">{art.category}</span>
+                      <span class="date-text">{art.date}</span>
+                      <span class="author-text">Oleh: {art.author}</span>
+                    </div>
+                    <h4>{art.title}</h4>
+                    <p class="article-excerpt-text">{art.excerpt}</p>
+                    <small class="slug-text">/{art.slug}</small>
+                  </div>
+                  <div class="article-actions">
+                    <button type="button" class="btn-action-edit btn-edit-article" data-idx={idx} title="Edit Artikel">
+                      <Icon name="edit" size={14} />
+                      <span>Edit</span>
+                    </button>
+                    <button type="button" class="btn-action-delete btn-delete-article" data-idx={idx} title="Hapus Artikel">
+                      <Icon name="trash-2" size={14} />
+                      <span>Hapus</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Modal Edit Berita -->
+          <div class="form-card card" id="modal-article" style="display: none; border-color: var(--admin-green-500); background-color: var(--admin-green-50);">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="edit" size={20} />
+              </div>
+              <div>
+                <h3 id="modal-art-title">Tulis / Edit Artikel Berita</h3>
+                <p class="card-desc">Lengkapi judul, slug unik, kategori, ringkasan, dan teks isi berita.</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group col-span-2">
+                <label for="input-art-title">Judul Berita <span class="req">*</span></label>
+                <input type="text" id="input-art-title" placeholder="Contoh: Annual Showcase Day 2026..." class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-art-slug">Slug URL Unik <span class="req">*</span></label>
+                <input type="text" id="input-art-slug" placeholder="annual-showcase-day-2026" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-art-cat">Kategori Berita <span class="req">*</span></label>
+                <select id="input-art-cat" class="form-control">
+                  <option value="Kegiatan">Kegiatan Sekolah</option>
+                  <option value="Prestasi">Prestasi & Juara</option>
+                  <option value="Akademik">Akademik & Kurikulum</option>
+                  <option value="Kesiswaan">Kesiswaan & OSIS</option>
+                  <option value="Opini">Opini & Wawasan</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="input-art-date">Tanggal Rilis <span class="req">*</span></label>
+                <input type="date" id="input-art-date" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-art-author">Penulis / Sumber <span class="req">*</span></label>
+                <input type="text" id="input-art-author" value="Humas FREEKS.id School" class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-art-img">Thumbnail Gambar Berita (WebP) <span class="req">*</span></label>
+                <div class="asset-preview-row">
+                  <img
+                    id="img-prev-art"
+                    src="/assets/berita-kegiatan-osis.webp"
+                    alt="Pratinjau Berita"
+                    class="asset-thumb-wide"
+                  />
+                  <div class="asset-details">
+                    <input type="text" id="input-art-img" value="/assets/berita-kegiatan-osis.webp" class="form-control" />
+                    <div class="asset-upload-bar">
+                      <label class="btn-upload-file">
+                        <Icon name="upload" size={13} />
+                        <span>Unggah Foto Berita</span>
+                        <input type="file" accept="image/*" class="asset-file-uploader" data-target-input="input-art-img" data-target-preview="img-prev-art" style="display: none;" />
+                      </label>
+                      <span class="upload-file-status"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-art-excerpt">Ringkasan Berita (Excerpt 1–2 Kalimat) <span class="req">*</span></label>
+                <input type="text" id="input-art-excerpt" placeholder="Ringkasan yang tampil di kartu cuplikan..." class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-art-body">Paragraf Konten Berita <span class="req">*</span></label>
+                <textarea id="input-art-body" rows="4" class="form-control" placeholder="Tuliskan isi berita lengkap..."></textarea>
+              </div>
+              <div class="col-span-2 form-actions-row">
+                <button type="button" id="btn-cancel-article" class="btn btn-secondary">Batal</button>
+                <button type="button" id="btn-save-article-item" class="btn btn-primary">Publikasikan Berita</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 2: PENGUMUMAN RESMI -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-pengumuman">
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="bell" size={20} />
+                </div>
+                <div>
+                  <h3>Papan Pengumuman Resmi Sekolah (CRUD)</h3>
+                  <p class="card-desc">Edaran jadwal PTS, libur hari besar, pengambilan seragam, dan jadwal pendaftaran.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-announcement" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Buat Pengumuman</span>
+              </button>
+            </div>
+
+            <div class="announcements-admin-list" id="announcements-list-container">
+              {announcements.map((ann, idx) => (
+                <div class="announcement-admin-card" data-idx={idx}>
+                  <div class="ann-date-badge">
+                    <span class="ann-d">{ann.day}</span>
+                    <span class="ann-m">{ann.month}</span>
+                  </div>
+                  <div class="ann-info-col">
+                    <div class="ann-badges-row">
+                      {ann.important && <span class="important-pill">PENTING</span>}
+                      <span class="ann-full-date">{ann.date}</span>
+                    </div>
+                    <h4>{ann.title}</h4>
+                    <p class="ann-summary-text">{ann.summary}</p>
+                    {ann.attachment && (
+                      <span class="ann-file-tag">
+                        <Icon name="file-text" size={13} />
+                        <span>{ann.attachment.name} ({ann.attachment.size})</span>
+                      </span>
+                    )}
+                  </div>
+                  <div class="ann-actions">
+                    <button type="button" class="btn-action-edit btn-edit-ann" data-idx={idx} title="Edit Pengumuman">
+                      <Icon name="edit" size={14} />
+                      <span>Edit</span>
+                    </button>
+                    <button type="button" class="btn-action-delete btn-delete-ann" data-idx={idx} title="Hapus Pengumuman">
+                      <Icon name="trash-2" size={14} />
+                      <span>Hapus</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Modal Edit Pengumuman -->
+          <div class="form-card card" id="modal-announcement" style="display: none; border-color: var(--admin-green-500); background-color: var(--admin-green-50);">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="edit" size={20} />
+              </div>
+              <div>
+                <h3 id="modal-ann-title">Buat / Edit Pengumuman Resmi</h3>
+                <p class="card-desc">Tentukan judul maklumat, tingkat urgensi (Penting), dan berkas lampiran.</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <input type="hidden" id="input-ann-id" value="" />
+              <div class="form-group col-span-2">
+                <label for="input-ann-title-val">Judul Pengumuman <span class="req">*</span></label>
+                <input type="text" id="input-ann-title-val" placeholder="Contoh: Jadwal Penilaian Akhir Semester (PAS)..." class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-ann-date">Tanggal Terbit <span class="req">*</span></label>
+                <input type="date" id="input-ann-date" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-ann-important">Tingkat Urgensi</label>
+                <select id="input-ann-important" class="form-control">
+                  <option value="false">Normal</option>
+                  <option value="true">Penting (Badge Merah)</option>
+                </select>
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-ann-summary">Ringkasan Isi Pengumuman <span class="req">*</span></label>
+                <textarea id="input-ann-summary" rows="3" class="form-control" placeholder="Diberitahukan kepada seluruh siswa dan wali murid..."></textarea>
+              </div>
+              <div class="form-group">
+                <label for="input-ann-file-name">Nama File Lampiran (Opsional)</label>
+                <input type="text" id="input-ann-file-name" placeholder="Contoh: Jadwal_PAS_Ganjil.pdf" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-ann-file-size">Ukuran File</label>
+                <input type="text" id="input-ann-file-size" placeholder="Contoh: 150 KB" class="form-control" />
+              </div>
+              <div class="col-span-2 form-actions-row">
+                <button type="button" id="btn-cancel-ann" class="btn btn-secondary">Batal</button>
+                <button type="button" id="btn-save-ann-item" class="btn btn-primary">Simpan Pengumuman</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 3: GALERI FOTO ALBUM -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-galeri">
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="image" size={20} />
+                </div>
+                <div>
+                  <h3>Album Dokumentasi Kegiatan (CRUD)</h3>
+                  <p class="card-desc">Koleksi dokumentasi visual acara showcase karya, riset robotika, dan aktivitas teknologi kampus.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-album" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Buat Album Baru</span>
+              </button>
+            </div>
+
+            <div class="albums-admin-grid" id="albums-list-container">
+              {albums.map((alb, idx) => (
+                <div class="album-admin-card" data-idx={idx}>
+                  <div class="album-thumb-wrap">
+                    <img src={alb.cover.src} alt={alb.title} class="album-thumb" onerror="this.src='/assets/kegiatan-madrasah-1.webp'" />
+                  </div>
+                  <div class="album-body">
+                    <span class="photo-count-pill">{alb.photoCount} Foto</span>
+                    <h4>{alb.title}</h4>
+                    <p class="album-date-text">{alb.date}</p>
+                    <div class="album-card-actions">
+                      <button type="button" class="btn-action-edit btn-edit-album" data-idx={idx} title="Edit Album">
+                        <Icon name="edit" size={14} />
+                        <span>Edit</span>
+                      </button>
+                      <button type="button" class="btn-action-delete btn-delete-album" data-idx={idx} title="Hapus Album">
+                        <Icon name="trash-2" size={14} />
+                        <span>Hapus</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Modal Edit Album -->
+          <div class="form-card card" id="modal-album" style="display: none; border-color: var(--admin-green-500); background-color: var(--admin-green-50);">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="edit" size={20} />
+              </div>
+              <div>
+                <h3 id="modal-alb-title">Buat / Edit Album Galeri</h3>
+                <p class="card-desc">Lengkapi nama album, tanggal kegiatan, jumlah foto, dan cover utama.</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <input type="hidden" id="input-alb-id" value="" />
+              <div class="form-group col-span-2">
+                <label for="input-alb-title-val">Nama Album Kegiatan <span class="req">*</span></label>
+                <input type="text" id="input-alb-title-val" placeholder="Contoh: Showcase Day & Tech Expo 2026" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-alb-date">Tanggal Dokumentasi <span class="req">*</span></label>
+                <input type="date" id="input-alb-date" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-alb-count">Jumlah Foto Terkumpul</label>
+                <input type="number" id="input-alb-count" value="12" class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-alb-cover">Cover Foto Utama Album (WebP) <span class="req">*</span></label>
+                <div class="asset-preview-row">
+                  <img
+                    id="img-prev-alb"
+                    src="/assets/kegiatan-madrasah-1.webp"
+                    alt="Pratinjau Album"
+                    class="asset-thumb-wide"
+                  />
+                  <div class="asset-details">
+                    <input type="text" id="input-alb-cover" value="/assets/kegiatan-madrasah-1.webp" class="form-control" />
+                    <div class="asset-upload-bar">
+                      <label class="btn-upload-file">
+                        <Icon name="upload" size={13} />
+                        <span>Unggah Foto Cover</span>
+                        <input type="file" accept="image/*" class="asset-file-uploader" data-target-input="input-alb-cover" data-target-preview="img-prev-alb" style="display: none;" />
+                      </label>
+                      <span class="upload-file-status"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-span-2 form-actions-row">
+                <button type="button" id="btn-cancel-album" class="btn btn-secondary">Batal</button>
+                <button type="button" id="btn-save-album-item" class="btn btn-primary">Simpan Album</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-MODUL 4: PUSAT UNDUHAN BERKAS -->
+        <!-- ========================================== -->
+        <div class="tab-panel" id="tab-unduhan">
+          <div class="form-card card">
+            <div class="card-header justify-between">
+              <div class="header-icon-title">
+                <div class="header-icon-wrap">
+                  <Icon name="download" size={20} />
+                </div>
+                <div>
+                  <h3>Pusat Berkas & Dokumen Publik (CRUD)</h3>
+                  <p class="card-desc">Formulir admission, prospektus resmi, kalender akademik, dan buku panduan kode etik siswa.</p>
+                </div>
+              </div>
+              <button type="button" id="btn-add-download" class="btn btn-primary btn-sm">
+                <Icon name="plus" size={16} />
+                <span>Unggah Berkas Baru</span>
+              </button>
+            </div>
+
+            <div class="downloads-admin-list" id="downloads-list-container">
+              {downloads.map((dl, idx) => (
+                <div class="download-admin-item" data-idx={idx}>
+                  <div class="dl-format-tag">{dl.format}</div>
+                  <div class="dl-info-col">
+                    <div class="dl-meta-row">
+                      <span class="cat-pill">{dl.category}</span>
+                      <span class="dl-size-tag">{dl.size}</span>
+                      <span class="dl-date">{dl.date}</span>
+                    </div>
+                    <h4>{dl.title}</h4>
+                    <p class="dl-desc-text">{dl.description}</p>
+                  </div>
+                  <div class="dl-actions">
+                    <button type="button" class="btn-action-edit btn-edit-dl" data-idx={idx} title="Edit Berkas">
+                      <Icon name="edit" size={14} />
+                      <span>Edit</span>
+                    </button>
+                    <button type="button" class="btn-action-delete btn-delete-dl" data-idx={idx} title="Hapus Berkas">
+                      <Icon name="trash-2" size={14} />
+                      <span>Hapus</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Modal Edit Unduhan -->
+          <div class="form-card card" id="modal-download" style="display: none; border-color: var(--admin-green-500); background-color: var(--admin-green-50);">
+            <div class="card-header">
+              <div class="header-icon-wrap">
+                <Icon name="edit" size={20} />
+              </div>
+              <div>
+                <h3 id="modal-dl-title">Tambah / Edit Berkas Unduhan</h3>
+                <p class="card-desc">Lengkapi nama berkas, kategori, format ekstensi, dan ukuran file.</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <input type="hidden" id="input-dl-id" value="" />
+              <div class="form-group col-span-2">
+                <label for="input-dl-title-val">Judul Dokumen Publik <span class="req">*</span></label>
+                <input type="text" id="input-dl-title-val" placeholder="Contoh: Formulir Pendaftaran PPDB 2027/2028" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-dl-cat">Kategori Berkas <span class="req">*</span></label>
+                <select id="input-dl-cat" class="form-control">
+                  <option value="PPDB">PPDB & Pendaftaran</option>
+                  <option value="Akademik">Akademik & Kalender</option>
+                  <option value="Kesiswaan">Kesiswaan & Tata Tertib</option>
+                  <option value="Umum">Umum & Surat Resmi</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="input-dl-format">Format Berkas <span class="req">*</span></label>
+                <select id="input-dl-format" class="form-control">
+                  <option value="PDF">PDF</option>
+                  <option value="DOCX">DOCX</option>
+                  <option value="XLSX">XLSX</option>
+                  <option value="ZIP">ZIP</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="input-dl-size">Ukuran Berkas <span class="req">*</span></label>
+                <input type="text" id="input-dl-size" placeholder="Contoh: 240 KB / 1,4 MB" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="input-dl-date">Tanggal Rilis <span class="req">*</span></label>
+                <input type="date" id="input-dl-date" class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-dl-url">Tautan / Link Berkas</label>
+                <input type="text" id="input-dl-url" value="#download-file" class="form-control" />
+              </div>
+              <div class="form-group col-span-2">
+                <label for="input-dl-desc">Keterangan Dokumen <span class="req">*</span></label>
+                <textarea id="input-dl-desc" rows="2" class="form-control" placeholder="Petunjuk pengisian atau isi dokumen singkat..."></textarea>
+              </div>
+              <div class="col-span-2 form-actions-row">
+                <button type="button" id="btn-cancel-dl" class="btn btn-secondary">Batal</button>
+                <button type="button" id="btn-save-dl-item" class="btn btn-primary">Simpan Berkas</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Right Column: Interactive Live Preview -->
+    <aside class="preview-container">
+      <div class="preview-sticky-wrap">
+        <div class="card preview-card">
+          <div class="card-header-sm">
+            <div class="flex-align-center gap-2">
+              <Icon name="eye" size={18} />
+              <h4>Pratinjau Publikasi</h4>
+            </div>
+            <div class="preview-mode-pills" id="informasi-preview-pills">
+              <button type="button" class="pill-btn active" data-mode="berita">Berita</button>
+              <button type="button" class="pill-btn" data-mode="pengumuman">Pengumuman</button>
+              <button type="button" class="pill-btn" data-mode="galeri">Galeri</button>
+              <button type="button" class="pill-btn" data-mode="unduhan">Unduhan</button>
+            </div>
+          </div>
+
+          <!-- Preview 1: Berita -->
+          <div id="sim-inf-berita" class="sim-inf-view active">
+            <div class="sim-art-card">
+              <img id="sim-art-thumb" src={articles[0].image.src} alt="Thumbnail" class="sim-art-img" />
+              <div class="sim-art-body">
+                <span class="sim-cat-tag" id="sim-art-cat">{articles[0].category}</span>
+                <h4 id="sim-art-title">{articles[0].title}</h4>
+                <p id="sim-art-excerpt" class="sim-excerpt">{articles[0].excerpt}</p>
+                <small id="sim-art-meta">Oleh: {articles[0].author} ({articles[0].date})</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 2: Pengumuman -->
+          <div id="sim-inf-pengumuman" class="sim-inf-view" style="display: none;">
+            <div class="sim-ann-box">
+              <div class="sim-ann-head">
+                <span class="sim-important-pill" id="sim-ann-pill">PENTING</span>
+                <span id="sim-ann-date">{announcements[0].date}</span>
+              </div>
+              <h4 id="sim-ann-title">{announcements[0].title}</h4>
+              <p id="sim-ann-summary">{announcements[0].summary}</p>
+            </div>
+          </div>
+
+          <!-- Preview 3: Galeri -->
+          <div id="sim-inf-galeri" class="sim-inf-view" style="display: none;">
+            <div class="sim-gal-card">
+              <img id="sim-gal-thumb" src={albums[0].cover.src} alt="Cover" class="sim-gal-img" />
+              <div class="sim-gal-body">
+                <span class="sim-photo-pill" id="sim-gal-count">{albums[0].photoCount} Foto</span>
+                <h4 id="sim-gal-title">{albums[0].title}</h4>
+                <small id="sim-gal-date">{albums[0].date}</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 4: Unduhan -->
+          <div id="sim-inf-unduhan" class="sim-inf-view" style="display: none;">
+            <div class="sim-dl-box">
+              <div class="sim-dl-fmt" id="sim-dl-fmt">{downloads[0].format}</div>
+              <div class="sim-dl-content">
+                <h4 id="sim-dl-title">{downloads[0].title}</h4>
+                <p id="sim-dl-desc">{downloads[0].description}</p>
+                <small id="sim-dl-size">{downloads[0].size} • {downloads[0].category}</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="preview-footer-action">
+            <button type="button" id="btn-save-informasi-side" class="btn btn-primary btn-block">
+              <Icon name="check" size={18} />
+              <span>Simpan Perubahan Informasi</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</AdminLayout>
+
+<style>
+  .page-header-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--admin-ink-300);
+  }
+
+  @media (min-width: 768px) {
+    .page-header-wrap {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+
+  .module-tag {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--admin-green-700);
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+
+  .page-header-wrap h1 {
+    font-size: clamp(1.4rem, 2vw, 1.85rem);
+    margin-bottom: 6px;
+  }
+
+  .page-subtitle {
+    font-size: 0.9rem;
+    color: var(--admin-ink-500);
+    max-width: 75ch;
+  }
+
+  .header-action-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* Sub-Modul Tabs */
+  .section-tabs-bar {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--admin-ink-100);
+  }
+
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--admin-ink-500);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    border-radius: 6px 6px 0 0;
+  }
+
+  .tab-btn:hover {
+    color: var(--admin-green-800);
+    background-color: var(--admin-green-50);
+  }
+
+  .tab-btn.active {
+    color: var(--admin-green-900);
+    background-color: #FFFFFF;
+    border-bottom-color: var(--admin-green-700);
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.03);
+  }
+
+  /* Layout Grid */
+  .informasi-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  @media (min-width: 1080px) {
+    .informasi-layout-grid {
+      grid-template-columns: 1.55fr 1fr;
+    }
+  }
+
+  .tab-panel {
+    display: none;
+  }
+
+  .tab-panel.active {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Form Cards */
+  .form-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid var(--admin-ink-300);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--admin-ink-100);
+  }
+
+  .card-header.justify-between {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .header-icon-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .header-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: var(--admin-green-100);
+    color: var(--admin-green-800);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-header h3 {
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+  }
+
+  .card-desc {
+    font-size: 0.825rem;
+    color: var(--admin-ink-500);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  @media (min-width: 640px) {
+    .form-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .col-span-2 {
+      grid-column: span 2;
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-group label {
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--admin-ink-700);
+  }
+
+  .req {
+    color: #DC2626;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.875rem;
+    color: var(--admin-ink-900);
+    background-color: #FFFFFF;
+    transition: all 0.15s ease;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: var(--admin-green-700);
+    box-shadow: 0 0 0 3px rgba(27, 122, 47, 0.15);
+  }
+
+  .form-actions-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  /* Articles Admin List */
+  :global(.articles-admin-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  :global(.article-admin-card) {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid var(--admin-ink-200, #E5E7EB);
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    transition: all 0.15s ease;
+  }
+
+  :global(.article-admin-card:hover) {
+    border-color: var(--admin-green-300, #86EFAC);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  :global(.article-thumb-wrap) {
+    width: 110px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #F8FAF7;
+    flex-shrink: 0;
+  }
+
+  :global(.article-thumb) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  :global(.article-content-col) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  :global(.article-badges-row) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+
+  :global(.cat-pill) {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background-color: var(--admin-green-100, #DCFCE7);
+    color: var(--admin-green-800, #166534);
+  }
+
+  :global(.date-text), :global(.author-text) {
+    font-size: 0.75rem;
+    color: var(--admin-ink-500, #6B7280);
+  }
+
+  :global(.article-content-col h4) {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--admin-ink-900, #111827);
+    margin-bottom: 4px;
+    line-height: 1.35;
+  }
+
+  :global(.article-excerpt-text) {
+    font-size: 0.825rem;
+    color: var(--admin-ink-600, #4B5563);
+    margin-bottom: 6px;
+    line-height: 1.45;
+  }
+
+  :global(.slug-text) {
+    font-size: 0.72rem;
+    color: var(--admin-green-700, #15803D);
+    font-family: monospace;
+    background: var(--admin-green-50, #ECFDF5);
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  :global(.article-actions) {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Announcements Admin List */
+  :global(.announcements-admin-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  :global(.announcement-admin-card) {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid var(--admin-ink-200, #E5E7EB);
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    transition: all 0.15s ease;
+  }
+
+  :global(.announcement-admin-card:hover) {
+    border-color: var(--admin-green-300, #86EFAC);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  :global(.ann-date-badge) {
+    width: 54px;
+    height: 54px;
+    border-radius: 8px;
+    background-color: var(--admin-green-50, #ECFDF5);
+    border: 1px solid var(--admin-green-200, #A7F3D0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  :global(.ann-d) {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--admin-green-900, #064E3B);
+    line-height: 1;
+  }
+
+  :global(.ann-m) {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--admin-green-700, #15803D);
+    text-transform: uppercase;
+  }
+
+  :global(.ann-info-col) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  :global(.ann-badges-row) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  :global(.important-pill) {
+    font-size: 0.65rem;
+    font-weight: 800;
+    background-color: #DC2626;
+    color: #FFFFFF;
+    padding: 2px 7px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  :global(.ann-full-date) {
+    font-size: 0.75rem;
+    color: var(--admin-ink-500, #6B7280);
+  }
+
+  :global(.ann-info-col h4) {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--admin-ink-900, #111827);
+    margin-bottom: 4px;
+  }
+
+  :global(.ann-summary-text) {
+    font-size: 0.825rem;
+    color: var(--admin-ink-600, #4B5563);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+
+  :global(.ann-file-tag) {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.75rem;
+    color: var(--admin-green-800, #166534);
+    background-color: var(--admin-green-100, #DCFCE7);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  :global(.ann-actions) {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Albums Admin Grid */
+  :global(.albums-admin-grid) {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  @media (min-width: 640px) {
+    :global(.albums-admin-grid) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  :global(.album-admin-card) {
+    border: 1px solid var(--admin-ink-200, #E5E7EB);
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  :global(.album-admin-card:hover) {
+    border-color: var(--admin-green-400, #4ADE80);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+  }
+
+  :global(.album-thumb-wrap) {
+    width: 100%;
+    height: 155px;
+    background-color: #F8FAF7;
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px solid var(--admin-ink-100, #F3F4F6);
+  }
+
+  :global(.album-thumb) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  :global(.album-admin-card:hover .album-thumb) {
+    transform: scale(1.03);
+  }
+
+  :global(.album-body) {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  :global(.photo-count-pill) {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background-color: var(--admin-ink-100, #F3F4F6);
+    color: var(--admin-ink-700, #374151);
+    display: inline-block;
+    align-self: flex-start;
+    margin-bottom: 6px;
+  }
+
+  :global(.album-body h4) {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--admin-ink-900, #111827);
+    margin-bottom: 4px;
+  }
+
+  :global(.album-date-text) {
+    font-size: 0.75rem;
+    color: var(--admin-ink-500, #6B7280);
+    margin-bottom: 14px;
+  }
+
+  :global(.album-card-actions) {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    border-top: 1px solid var(--admin-ink-100, #F3F4F6);
+    padding-top: 12px;
+    margin-top: auto;
+  }
+
+  /* Downloads Admin List */
+  :global(.downloads-admin-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  :global(.download-admin-item) {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid var(--admin-ink-200, #E5E7EB);
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    transition: all 0.15s ease;
+  }
+
+  :global(.download-admin-item:hover) {
+    border-color: var(--admin-green-300, #86EFAC);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  :global(.dl-format-tag) {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background-color: var(--admin-green-800, #166534);
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  :global(.dl-info-col) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  :global(.dl-meta-row) {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+
+  :global(.dl-size-tag), :global(.dl-date) {
+    font-size: 0.75rem;
+    color: var(--admin-ink-500, #6B7280);
+  }
+
+  :global(.dl-info-col h4) {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--admin-ink-900, #111827);
+    margin-bottom: 4px;
+  }
+
+  :global(.dl-desc-text) {
+    font-size: 0.825rem;
+    color: var(--admin-ink-600, #4B5563);
+    line-height: 1.4;
+  }
+
+  :global(.dl-actions) {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Modern Action Buttons */
+  :global(.btn-action-edit),
+  :global(.btn-action-delete) {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+    text-decoration: none;
+    line-height: 1;
+  }
+
+  :global(.btn-action-edit) {
+    background-color: var(--admin-green-50, #ECFDF5);
+    color: var(--admin-green-800, #065F46);
+    border-color: var(--admin-green-200, #A7F3D0);
+  }
+
+  :global(.btn-action-edit:hover) {
+    background-color: var(--admin-green-100, #D1FAE5);
+    border-color: var(--admin-green-400, #34D399);
+    transform: translateY(-1px);
+  }
+
+  :global(.btn-action-delete) {
+    background-color: #FEF2F2;
+    color: #991B1B;
+    border-color: #FECACA;
+  }
+
+  :global(.btn-action-delete:hover) {
+    background-color: #FEE2E2;
+    border-color: #FCA5A5;
+    transform: translateY(-1px);
+  }
+
+  /* Utility Buttons */
+  :global(.btn-icon) {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--admin-ink-300, #D1D5DB);
+    border-radius: 6px;
+    background: #FFFFFF;
+    color: var(--admin-ink-700, #374151);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  :global(.btn-icon:hover) {
+    color: var(--admin-green-800, #166534);
+    border-color: var(--admin-green-500, #22C55E);
+    background-color: var(--admin-green-50, #ECFDF5);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 9px 16px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .btn-block {
+    width: 100%;
+  }
+
+  .btn-primary {
+    background-color: var(--admin-green-700);
+    color: #FFFFFF;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--admin-green-800);
+  }
+
+  .btn-secondary {
+    background-color: #FFFFFF;
+    color: var(--admin-ink-700);
+    border-color: var(--admin-ink-300);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--admin-ink-100);
+    color: var(--admin-ink-900);
+  }
+
+  /* Preview Container */
+  .preview-sticky-wrap {
+    position: sticky;
+    top: 90px;
+  }
+
+  .preview-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--admin-ink-300);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .card-header-sm {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--admin-ink-100);
+  }
+
+  .card-header-sm h4 {
+    font-size: 0.95rem;
+  }
+
+  .preview-mode-pills {
+    display: flex;
+    gap: 4px;
+    background-color: var(--admin-ink-100);
+    padding: 3px;
+    border-radius: 6px;
+  }
+
+  .pill-btn {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--admin-ink-500);
+    cursor: pointer;
+  }
+
+  .pill-btn.active {
+    background: #FFFFFF;
+    color: var(--admin-green-900);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Simulated Box */
+  .sim-art-card {
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .sim-art-img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+  }
+
+  .sim-art-body {
+    padding: 12px;
+  }
+
+  .sim-cat-tag {
+    font-size: 0.65rem;
+    font-weight: 700;
+    background-color: var(--admin-green-100);
+    color: var(--admin-green-800);
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+
+  .sim-art-body h4 {
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+  }
+
+  .sim-excerpt {
+    font-size: 0.75rem;
+    color: var(--admin-ink-700);
+    margin-bottom: 6px;
+  }
+
+  .sim-ann-box {
+    background-color: #FFFFFF;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .sim-ann-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.72rem;
+    color: var(--admin-ink-500);
+    margin-bottom: 6px;
+  }
+
+  .sim-important-pill {
+    background-color: #DC2626;
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 0.65rem;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .sim-ann-box h4 {
+    font-size: 0.925rem;
+    margin-bottom: 4px;
+  }
+
+  .sim-ann-box p {
+    font-size: 0.78rem;
+    color: var(--admin-ink-700);
+  }
+
+  .sim-gal-card {
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .sim-gal-img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+  }
+
+  .sim-gal-body {
+    padding: 12px;
+  }
+
+  .sim-photo-pill {
+    font-size: 0.65rem;
+    font-weight: 700;
+    background-color: var(--admin-ink-100);
+    color: var(--admin-ink-700);
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+
+  .sim-dl-box {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 8px;
+    padding: 12px;
+  }
+
+  .sim-dl-fmt {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    background-color: var(--admin-green-800);
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .sim-dl-content h4 {
+    font-size: 0.875rem;
+    margin-bottom: 2px;
+  }
+
+  .sim-dl-desc {
+    font-size: 0.72rem;
+    color: var(--admin-ink-700);
+    margin-bottom: 2px;
+  }
+
+  .preview-footer-action {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--admin-ink-100);
+  }
+
+  /* Toast Notification */
+  .toast-notification {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background-color: #ECFDF5;
+    border: 1px solid #A7F3D0;
+    border-left: 4px solid #10B981;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+  }
+
+  .toast-icon {
+    color: #059669;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .toast-body {
+    flex: 1;
+    font-size: 0.875rem;
+    color: #065F46;
+  }
+
+  .toast-body strong {
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .toast-body p {
+    font-size: 0.825rem;
+    color: #047857;
+  }
+
+  .toast-close-btn {
+    background: transparent;
+    border: none;
+    color: #059669;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+  }
+
+  .flex-align-center {
+    display: flex;
+    align-items: center;
+  }
+
+  .gap-2 {
+    gap: 8px;
+  }
+</style>
+
+<script is:inline>
+  function initInformasi() {
+    // Initial states for FREEKS.id School
+    let articlesState = [
+      {
+        slug: "showcase-day-karya-teknologi-2026",
+        date: "2026-10-22",
+        category: "Kegiatan",
+        title: "Annual Showcase Day 2026: Siswa FREEKS.id Pamerkan 24 Prototipe IoT & Game Edukasi",
+        excerpt: "Seluruh siswa menampilkan karya capstone inovatif di hadapan mentor industri dan para wali murid.",
+        author: "Tim Media FREEKS.id",
+        image: { src: "/assets/kegiatan-madrasah-1.webp", alt: "Showcase Day FREEKS.id School", width: 1200, height: 800 }
+      },
+      {
+        slug: "tim-robotika-freeks-juara-1-nasional",
+        date: "2026-10-15",
+        category: "Prestasi",
+        title: "Tim Robotika FREEKS Raih Medali Emas National Youth Robotics Summit",
+        excerpt: "Prototipe robot penyelamat otonom karya tim siswa berhasil unggul di antara 80 tim dari seluruh Indonesia.",
+        author: "Pembina Robotika",
+        image: { src: "/assets/berita-prestasi-sains.webp", alt: "Prestasi Robotika Siswa FREEKS", width: 1200, height: 800 }
+      },
+      {
+        slug: "mid-term-project-sprint-dimulai",
+        date: "2026-10-08",
+        category: "Akademik",
+        title: "Mid-Term Project Sprint 2026 Dimulai: Kolaborasi Riset Terintegrasi Siswa",
+        excerpt: "Siswa memulai sprint riset terintegrasi selama dua pekan untuk memecahkan tantangan lingkungan kampus.",
+        author: "Academic Lead",
+        image: { src: "/assets/kegiatan-madrasah-2.webp", alt: "Project Sprint Akademik", width: 1200, height: 800 }
+      }
+    ];
+
+    let announcementsState = [
+      {
+        id: "pts-ganjil-2026",
+        date: "2026-10-24",
+        day: "24",
+        month: "Okt",
+        year: "2026",
+        title: "Jadwal Mid-Term Project Sprint & Asesmen Terpadu Semester Ganjil",
+        important: true,
+        summary: "Diberitahukan kepada seluruh siswa dan orang tua bahwa pelaksanaan Project Sprint dan Asesmen Ganjil dimulai 26 Oktober 2026. Jadwal mentorship lab dan demo project dapat diunduh pada lampiran.",
+        attachment: { name: "Jadwal_Project_Sprint_2026.pdf", size: "180 KB" }
+      },
+      {
+        id: "workshop-ai-2026",
+        date: "2026-10-20",
+        day: "20",
+        month: "Okt",
+        year: "2026",
+        title: "FREEKS Tech Talk: Menjelajahi Kecerdasan Buatan dan Etika Digital",
+        important: false,
+        summary: "Sesi seminar interaktif bersama pembicara tamu praktisi industri teknologi untuk seluruh siswa dan terbuka bagi orang tua.",
+        attachment: null
+      },
+      {
+        id: "apparel-gel-2",
+        date: "2026-10-12",
+        day: "12",
+        month: "Okt",
+        year: "2026",
+        title: "Distribusi Starter Pack & Apparel Resmi FREEKS Gelombang 2",
+        important: false,
+        summary: "Pengambilan hoodie identitas dan polo shirt resmi FREEKS dapat dilakukan di Campus Registry Office pada jam layanan operasional.",
+        attachment: { name: "Daftar_Apparel_Batch2.pdf", size: "95 KB" }
+      }
+    ];
+
+    let albumsState = [
+      {
+        id: "showcase-day-2026",
+        title: "Annual Showcase Day & Tech Expo 2026",
+        date: "2026-10-22",
+        photoCount: 24,
+        cover: { src: "/assets/kegiatan-madrasah-1.webp", alt: "Showcase Day Expo", width: 1200, height: 800 }
+      },
+      {
+        id: "olimpiade-sains-2026",
+        title: "Kompetisi Robotika & Sains Nasional",
+        date: "2026-10-15",
+        photoCount: 12,
+        cover: { src: "/assets/kegiatan-madrasah-2.webp", alt: "Kompetisi Sains", width: 1200, height: 800 }
+      }
+    ];
+
+    let downloadsState = [
+      {
+        id: "unduh-form-ppdb",
+        title: "Formulir Pendaftaran Admission (Format Cetak)",
+        category: "Admission",
+        format: "PDF",
+        size: "210 KB",
+        date: "2026-10-10",
+        description: "Formulir pendaftaran fisik bagi calon siswa atau orang tua yang ingin mengisi secara manual sebelum diserahkan ke tim admission."
+      },
+      {
+        id: "unduh-brosur-ppdb",
+        title: "Buku Prospektus & Brosur Resmi FREEKS.id School",
+        category: "Admission",
+        format: "PDF",
+        size: "1,8 MB",
+        date: "2026-10-15",
+        description: "Memuat informasi program inovasi, kurikulum computational, profil kampus, dan rincian biaya penerimaan."
+      },
+      {
+        id: "unduh-kalender-akademik",
+        title: "Kalender Akademik & Project Milestones 2026/2027",
+        category: "Akademik",
+        format: "PDF",
+        size: "320 KB",
+        date: "2026-07-15",
+        description: "Agenda pembelajaran terpadu, jadwal sprint proyek, demo day, dan hari libur resmi."
+      },
+      {
+        id: "unduh-tata-tertib",
+        title: "Buku Panduan & Kode Etik Siswa FREEKS (Student Handbook)",
+        category: "Kesiswaan",
+        format: "PDF",
+        size: "540 KB",
+        date: "2026-07-20",
+        description: "Pedoman hak, kewajiban, etika digital, pemanfaatan laboratorium, dan nilai integritas siswa."
+      }
+    ];
+
+    // Load from localStorage with migration
+    const savedInf = localStorage.getItem('mts_cms_informasi_data');
+    if (savedInf) {
+      try {
+        const parsed = JSON.parse(savedInf);
+        const hasLegacy = parsed.articles && parsed.articles.some(a => (a.slug && a.slug.includes('hari-siswa')) || (a.image?.src && a.image.src.includes('Sekolah-')));
+        if (hasLegacy) {
+          localStorage.removeItem('mts_cms_informasi_data');
+        } else {
+          if (parsed.articles && parsed.articles.length) articlesState = parsed.articles;
+          if (parsed.announcements && parsed.announcements.length) announcementsState = parsed.announcements;
+          if (parsed.albums && parsed.albums.length) albumsState = parsed.albums;
+          if (parsed.downloads && parsed.downloads.length) downloadsState = parsed.downloads;
+        }
+      } catch (e) {
+        console.error('Failed to parse saved informasi:', e);
+      }
+    }
+
+    // Tab switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-tab');
+        tabBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        tabPanels.forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        const targetPanel = document.getElementById(targetId);
+        if (targetPanel) targetPanel.classList.add('active');
+      });
+    });
+
+    // Preview switcher
+    const previewPills = document.querySelectorAll('#informasi-preview-pills .pill-btn');
+    const simViews = {
+      berita: document.getElementById('sim-inf-berita'),
+      pengumuman: document.getElementById('sim-inf-pengumuman'),
+      galeri: document.getElementById('sim-inf-galeri'),
+      unduhan: document.getElementById('sim-inf-unduhan')
+    };
+
+    previewPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        previewPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        const mode = pill.getAttribute('data-mode');
+        Object.keys(simViews).forEach(k => {
+          if (simViews[k]) simViews[k].style.display = (k === mode) ? 'block' : 'none';
+        });
+      });
+    });
+
+    // CRUD Berita
+    const artContainer = document.getElementById('articles-list-container');
+    const modalArt = document.getElementById('modal-article');
+    let editingArtIdx = -1;
+
+    function renderArticlesList() {
+      if (!artContainer) return;
+      artContainer.innerHTML = '';
+      articlesState.forEach((art, idx) => {
+        const card = document.createElement('div');
+        card.className = 'article-admin-card';
+        card.innerHTML = `
+          <div class="article-thumb-wrap">
+            <img src="${art.image?.src || '/assets/berita-kegiatan-osis.webp'}" alt="${art.title}" class="article-thumb" onerror="this.src='/assets/berita-kegiatan-osis.webp'" />
+          </div>
+          <div class="article-content-col">
+            <div class="article-badges-row">
+              <span class="cat-pill">${art.category}</span>
+              <span class="date-text">${art.date}</span>
+              <span class="author-text">Oleh: ${art.author}</span>
+            </div>
+            <h4>${art.title}</h4>
+            <p class="article-excerpt-text">${art.excerpt}</p>
+            <small class="slug-text">/${art.slug}</small>
+          </div>
+          <div class="article-actions">
+            <button type="button" class="btn-action-edit btn-edit-art-item" data-idx="${idx}" title="Edit Artikel">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+              <span>Edit</span>
+            </button>
+            <button type="button" class="btn-action-delete btn-delete-art-item" data-idx="${idx}" title="Hapus Artikel">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <span>Hapus</span>
+            </button>
+          </div>
+        `;
+        artContainer.appendChild(card);
+      });
+
+      document.querySelectorAll('.btn-edit-art-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          editingArtIdx = idx;
+          const a = articlesState[idx];
+          document.getElementById('modal-art-title').textContent = 'Edit Artikel Berita';
+          document.getElementById('input-art-title').value = a.title;
+          document.getElementById('input-art-slug').value = a.slug;
+          document.getElementById('input-art-cat').value = a.category;
+          document.getElementById('input-art-date').value = a.date;
+          document.getElementById('input-art-author').value = a.author;
+          document.getElementById('input-art-img').value = a.image?.src || '/assets/berita-kegiatan-osis.webp';
+          const prevArtImg = document.getElementById('img-prev-art');
+          if (prevArtImg) prevArtImg.src = a.image?.src || '/assets/berita-kegiatan-osis.webp';
+          document.getElementById('input-art-excerpt').value = a.excerpt;
+          document.getElementById('input-art-body').value = a.excerpt;
+          modalArt.style.display = 'block';
+          modalArt.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.btn-delete-art-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = articlesState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus artikel "${item.title}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              articlesState.splice(idx, 1);
+              renderArticlesList();
+            });
+          } else if (confirm(msg)) {
+            articlesState.splice(idx, 1);
+            renderArticlesList();
+          }
+        });
+      });
+
+      if (articlesState.length > 0) {
+        if (document.getElementById('sim-art-cat')) document.getElementById('sim-art-cat').textContent = articlesState[0].category;
+        if (document.getElementById('sim-art-title')) document.getElementById('sim-art-title').textContent = articlesState[0].title;
+        if (document.getElementById('sim-art-excerpt')) document.getElementById('sim-art-excerpt').textContent = articlesState[0].excerpt;
+        if (document.getElementById('sim-art-meta')) document.getElementById('sim-art-meta').textContent = `Oleh: ${articlesState[0].author} (${articlesState[0].date})`;
+      }
+    }
+
+    const btnAddArt = document.getElementById('btn-add-article');
+    if (btnAddArt) {
+      btnAddArt.addEventListener('click', () => {
+        editingArtIdx = -1;
+        document.getElementById('modal-art-title').textContent = 'Tulis Artikel Berita Baru';
+        document.getElementById('input-art-title').value = '';
+        document.getElementById('input-art-slug').value = 'berita-' + Date.now();
+        document.getElementById('input-art-cat').value = 'Kegiatan';
+        document.getElementById('input-art-date').value = new Date().toISOString().split('T')[0];
+        document.getElementById('input-art-author').value = 'Humas FREEKS.id School';
+        document.getElementById('input-art-img').value = '/assets/berita-kegiatan-osis.webp';
+        const prevArtImg = document.getElementById('img-prev-art');
+        if (prevArtImg) prevArtImg.src = '/assets/berita-kegiatan-osis.webp';
+        document.getElementById('input-art-excerpt').value = '';
+        document.getElementById('input-art-body').value = '';
+        modalArt.style.display = 'block';
+        modalArt.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    const btnCancelArt = document.getElementById('btn-cancel-article');
+    if (btnCancelArt) btnCancelArt.addEventListener('click', () => { modalArt.style.display = 'none'; });
+
+    const btnSaveArtItem = document.getElementById('btn-save-article-item');
+    if (btnSaveArtItem) {
+      btnSaveArtItem.addEventListener('click', () => {
+        const title = document.getElementById('input-art-title').value.trim();
+        const slug = document.getElementById('input-art-slug').value.trim();
+        const category = document.getElementById('input-art-cat').value;
+        const date = document.getElementById('input-art-date').value;
+        const author = document.getElementById('input-art-author').value.trim();
+        const src = document.getElementById('input-art-img').value.trim();
+        const excerpt = document.getElementById('input-art-excerpt').value.trim();
+        if (!title || !slug || !excerpt) {
+          alert('Mohon lengkapi judul, slug unik, dan ringkasan berita!');
+          return;
+        }
+        const obj = { slug, date, category, title, excerpt, author, image: { src, alt: title, width: 1200, height: 800 } };
+        if (editingArtIdx >= 0) {
+          articlesState[editingArtIdx] = obj;
+        } else {
+          articlesState.push(obj);
+        }
+        modalArt.style.display = 'none';
+        renderArticlesList();
+      });
+    }
+
+    // Auto slug on typing article title
+    const inputArtTitle = document.getElementById('input-art-title');
+    if (inputArtTitle) {
+      inputArtTitle.addEventListener('blur', () => {
+        const slugInput = document.getElementById('input-art-slug');
+        if (slugInput && !slugInput.value.trim() || slugInput.value.startsWith('berita-')) {
+          slugInput.value = inputArtTitle.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+        }
+      });
+    }
+
+    // CRUD Pengumuman
+    const annContainer = document.getElementById('announcements-list-container');
+    const modalAnn = document.getElementById('modal-announcement');
+    let editingAnnIdx = -1;
+
+    function renderAnnouncementsList() {
+      if (!annContainer) return;
+      annContainer.innerHTML = '';
+      announcementsState.forEach((ann, idx) => {
+        const card = document.createElement('div');
+        card.className = 'announcement-admin-card';
+        card.innerHTML = `
+          <div class="ann-date-badge">
+            <span class="ann-d">${ann.day}</span>
+            <span class="ann-m">${ann.month}</span>
+          </div>
+          <div class="ann-info-col">
+            <div class="ann-badges-row">
+              ${ann.important ? '<span class="important-pill">PENTING</span>' : ''}
+              <span class="ann-full-date">${ann.date}</span>
+            </div>
+            <h4>${ann.title}</h4>
+            <p class="ann-summary-text">${ann.summary}</p>
+            ${ann.attachment ? `<span class="ann-file-tag">${ann.attachment.name} (${ann.attachment.size})</span>` : ''}
+          </div>
+          <div class="ann-actions">
+            <button type="button" class="btn-action-edit btn-edit-ann-item" data-idx="${idx}" title="Edit Pengumuman">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+              <span>Edit</span>
+            </button>
+            <button type="button" class="btn-action-delete btn-delete-ann-item" data-idx="${idx}" title="Hapus Pengumuman">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <span>Hapus</span>
+            </button>
+          </div>
+        `;
+        annContainer.appendChild(card);
+      });
+
+      document.querySelectorAll('.btn-edit-ann-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          editingAnnIdx = idx;
+          const a = announcementsState[idx];
+          document.getElementById('modal-ann-title').textContent = 'Edit Pengumuman';
+          document.getElementById('input-ann-id').value = a.id;
+          document.getElementById('input-ann-title-val').value = a.title;
+          document.getElementById('input-ann-date').value = a.date;
+          document.getElementById('input-ann-important').value = a.important ? 'true' : 'false';
+          document.getElementById('input-ann-summary').value = a.summary;
+          document.getElementById('input-ann-file-name').value = a.attachment?.name || '';
+          document.getElementById('input-ann-file-size').value = a.attachment?.size || '';
+          modalAnn.style.display = 'block';
+          modalAnn.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.btn-delete-ann-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = announcementsState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus pengumuman "${item.title}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              announcementsState.splice(idx, 1);
+              renderAnnouncementsList();
+            });
+          } else if (confirm(msg)) {
+            announcementsState.splice(idx, 1);
+            renderAnnouncementsList();
+          }
+        });
+      });
+
+      if (announcementsState.length > 0) {
+        if (document.getElementById('sim-ann-date')) document.getElementById('sim-ann-date').textContent = announcementsState[0].date;
+        if (document.getElementById('sim-ann-title')) document.getElementById('sim-ann-title').textContent = announcementsState[0].title;
+        if (document.getElementById('sim-ann-summary')) document.getElementById('sim-ann-summary').textContent = announcementsState[0].summary;
+      }
+    }
+
+    const btnAddAnn = document.getElementById('btn-add-announcement');
+    if (btnAddAnn) {
+      btnAddAnn.addEventListener('click', () => {
+        editingAnnIdx = -1;
+        document.getElementById('modal-ann-title').textContent = 'Buat Pengumuman Baru';
+        document.getElementById('input-ann-id').value = 'ann-' + Date.now();
+        document.getElementById('input-ann-title-val').value = '';
+        document.getElementById('input-ann-date').value = new Date().toISOString().split('T')[0];
+        document.getElementById('input-ann-important').value = 'false';
+        document.getElementById('input-ann-summary').value = '';
+        document.getElementById('input-ann-file-name').value = '';
+        document.getElementById('input-ann-file-size').value = '';
+        modalAnn.style.display = 'block';
+        modalAnn.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    const btnCancelAnn = document.getElementById('btn-cancel-ann');
+    if (btnCancelAnn) btnCancelAnn.addEventListener('click', () => { modalAnn.style.display = 'none'; });
+
+    const btnSaveAnnItem = document.getElementById('btn-save-ann-item');
+    if (btnSaveAnnItem) {
+      btnSaveAnnItem.addEventListener('click', () => {
+        const id = document.getElementById('input-ann-id').value || ('ann-' + Date.now());
+        const title = document.getElementById('input-ann-title-val').value.trim();
+        const date = document.getElementById('input-ann-date').value;
+        const important = document.getElementById('input-ann-important').value === 'true';
+        const summary = document.getElementById('input-ann-summary').value.trim();
+        const fileName = document.getElementById('input-ann-file-name').value.trim();
+        const fileSize = document.getElementById('input-ann-file-size').value.trim();
+
+        if (!title || !date || !summary) {
+          alert('Mohon lengkapi judul, tanggal, dan ringkasan pengumuman!');
+          return;
+        }
+
+        const dateParts = date.split('-');
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        const day = dateParts[2];
+        const month = months[parseInt(dateParts[1], 10) - 1];
+        const year = dateParts[0];
+
+        const attachment = fileName ? { name: fileName, size: fileSize || '100 KB', url: '#' } : null;
+        const obj = { id, date, day, month, year, title, important, summary, attachment };
+
+        if (editingAnnIdx >= 0) {
+          announcementsState[editingAnnIdx] = obj;
+        } else {
+          announcementsState.push(obj);
+        }
+        modalAnn.style.display = 'none';
+        renderAnnouncementsList();
+      });
+    }
+
+    // CRUD Galeri Album
+    const albContainer = document.getElementById('albums-list-container');
+    const modalAlb = document.getElementById('modal-album');
+    let editingAlbIdx = -1;
+
+    function renderAlbumsList() {
+      if (!albContainer) return;
+      albContainer.innerHTML = '';
+      albumsState.forEach((alb, idx) => {
+        const card = document.createElement('div');
+        card.className = 'album-admin-card';
+        card.innerHTML = `
+          <div class="album-thumb-wrap">
+            <img src="${alb.cover?.src || '/assets/kegiatan-madrasah-1.webp'}" alt="${alb.title}" class="album-thumb" onerror="this.src='/assets/kegiatan-madrasah-1.webp'" />
+          </div>
+          <div class="album-body">
+            <span class="photo-count-pill">${alb.photoCount} Foto</span>
+            <h4>${alb.title}</h4>
+            <p class="album-date-text">${alb.date}</p>
+            <div class="album-card-actions">
+              <button type="button" class="btn-action-edit btn-edit-alb-item" data-idx="${idx}" title="Edit Album">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                <span>Edit</span>
+              </button>
+              <button type="button" class="btn-action-delete btn-delete-alb-item" data-idx="${idx}" title="Hapus Album">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <span>Hapus</span>
+              </button>
+            </div>
+          </div>
+        `;
+        albContainer.appendChild(card);
+      });
+
+      document.querySelectorAll('.btn-edit-alb-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          editingAlbIdx = idx;
+          const a = albumsState[idx];
+          document.getElementById('modal-alb-title').textContent = 'Edit Album Galeri';
+          document.getElementById('input-alb-id').value = a.id;
+          document.getElementById('input-alb-title-val').value = a.title;
+          document.getElementById('input-alb-date').value = a.date;
+          document.getElementById('input-alb-count').value = a.photoCount;
+          document.getElementById('input-alb-cover').value = a.cover?.src || '/assets/kegiatan-madrasah-1.webp';
+          const prevAlbImg = document.getElementById('img-prev-alb');
+          if (prevAlbImg) prevAlbImg.src = a.cover?.src || '/assets/kegiatan-madrasah-1.webp';
+          modalAlb.style.display = 'block';
+          modalAlb.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.btn-delete-alb-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = albumsState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus album "${item.title}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              albumsState.splice(idx, 1);
+              renderAlbumsList();
+            });
+          } else if (confirm(msg)) {
+            albumsState.splice(idx, 1);
+            renderAlbumsList();
+          }
+        });
+      });
+    }
+
+    const btnAddAlb = document.getElementById('btn-add-album');
+    if (btnAddAlb) {
+      btnAddAlb.addEventListener('click', () => {
+        editingAlbIdx = -1;
+        document.getElementById('modal-alb-title').textContent = 'Buat Album Galeri Baru';
+        document.getElementById('input-alb-id').value = 'album-' + Date.now();
+        document.getElementById('input-alb-title-val').value = '';
+        document.getElementById('input-alb-date').value = new Date().toISOString().split('T')[0];
+        document.getElementById('input-alb-count').value = '8';
+        document.getElementById('input-alb-cover').value = '/assets/kegiatan-madrasah-1.webp';
+        const prevAlbImg = document.getElementById('img-prev-alb');
+        if (prevAlbImg) prevAlbImg.src = '/assets/kegiatan-madrasah-1.webp';
+        modalAlb.style.display = 'block';
+        modalAlb.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    const btnCancelAlb = document.getElementById('btn-cancel-album');
+    if (btnCancelAlb) btnCancelAlb.addEventListener('click', () => { modalAlb.style.display = 'none'; });
+
+    const btnSaveAlbItem = document.getElementById('btn-save-album-item');
+    if (btnSaveAlbItem) {
+      btnSaveAlbItem.addEventListener('click', () => {
+        const id = document.getElementById('input-alb-id').value || ('album-' + Date.now());
+        const title = document.getElementById('input-alb-title-val').value.trim();
+        const date = document.getElementById('input-alb-date').value;
+        const photoCount = parseInt(document.getElementById('input-alb-count').value, 10) || 10;
+        const src = document.getElementById('input-alb-cover').value.trim();
+        if (!title || !date) {
+          alert('Mohon lengkapi judul album dan tanggal acara!');
+          return;
+        }
+        const obj = { id, title, date, photoCount, cover: { src, alt: title, width: 1200, height: 800 } };
+        if (editingAlbIdx >= 0) {
+          albumsState[editingAlbIdx] = obj;
+        } else {
+          albumsState.push(obj);
+        }
+        modalAlb.style.display = 'none';
+        renderAlbumsList();
+      });
+    }
+
+    // CRUD Unduhan
+    const dlContainer = document.getElementById('downloads-list-container');
+    const modalDl = document.getElementById('modal-download');
+    let editingDlIdx = -1;
+
+    function renderDownloadsList() {
+      if (!dlContainer) return;
+      dlContainer.innerHTML = '';
+      downloadsState.forEach((dl, idx) => {
+        const item = document.createElement('div');
+        item.className = 'download-admin-item';
+        item.innerHTML = `
+          <div class="dl-format-tag">${dl.format}</div>
+          <div class="dl-info-col">
+            <div class="dl-meta-row">
+              <span class="cat-pill">${dl.category}</span>
+              <span class="dl-size-tag">${dl.size}</span>
+              <span class="dl-date">${dl.date}</span>
+            </div>
+            <h4>${dl.title}</h4>
+            <p class="dl-desc-text">${dl.description}</p>
+          </div>
+          <div class="dl-actions">
+            <button type="button" class="btn-action-edit btn-edit-dl-item" data-idx="${idx}" title="Edit Berkas">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+              <span>Edit</span>
+            </button>
+            <button type="button" class="btn-action-delete btn-delete-dl-item" data-idx="${idx}" title="Hapus Berkas">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <span>Hapus</span>
+            </button>
+          </div>
+        `;
+        dlContainer.appendChild(item);
+      });
+
+      document.querySelectorAll('.btn-edit-dl-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          editingDlIdx = idx;
+          const d = downloadsState[idx];
+          document.getElementById('modal-dl-title').textContent = 'Edit Berkas Unduhan';
+          document.getElementById('input-dl-id').value = d.id;
+          document.getElementById('input-dl-title-val').value = d.title;
+          document.getElementById('input-dl-cat').value = d.category;
+          document.getElementById('input-dl-format').value = d.format;
+          document.getElementById('input-dl-size').value = d.size;
+          document.getElementById('input-dl-date').value = d.date;
+          document.getElementById('input-dl-desc').value = d.description;
+          modalDl.style.display = 'block';
+          modalDl.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.btn-delete-dl-item').forEach(b => {
+        b.addEventListener('click', () => {
+          const idx = parseInt(b.getAttribute('data-idx'), 10);
+          const item = downloadsState[idx];
+          if (!item) return;
+          const msg = `Apakah Anda yakin ingin menghapus berkas unduhan "${item.title}"?`;
+          if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete(msg, () => {
+              downloadsState.splice(idx, 1);
+              renderDownloadsList();
+            });
+          } else if (confirm(msg)) {
+            downloadsState.splice(idx, 1);
+            renderDownloadsList();
+          }
+        });
+      });
+
+      if (downloadsState.length > 0) {
+        if (document.getElementById('sim-dl-fmt')) document.getElementById('sim-dl-fmt').textContent = downloadsState[0].format;
+        if (document.getElementById('sim-dl-title')) document.getElementById('sim-dl-title').textContent = downloadsState[0].title;
+        if (document.getElementById('sim-dl-desc')) document.getElementById('sim-dl-desc').textContent = downloadsState[0].description;
+        if (document.getElementById('sim-dl-size')) document.getElementById('sim-dl-size').textContent = `${downloadsState[0].size} • ${downloadsState[0].category}`;
+      }
+    }
+
+    const btnAddDl = document.getElementById('btn-add-download');
+    if (btnAddDl) {
+      btnAddDl.addEventListener('click', () => {
+        editingDlIdx = -1;
+        document.getElementById('modal-dl-title').textContent = 'Unggah Berkas Baru';
+        document.getElementById('input-dl-id').value = 'unduh-' + Date.now();
+        document.getElementById('input-dl-title-val').value = '';
+        document.getElementById('input-dl-cat').value = 'Admission';
+        document.getElementById('input-dl-format').value = 'PDF';
+        document.getElementById('input-dl-size').value = '250 KB';
+        document.getElementById('input-dl-date').value = new Date().toISOString().split('T')[0];
+        document.getElementById('input-dl-desc').value = '';
+        modalDl.style.display = 'block';
+        modalDl.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    const btnCancelDl = document.getElementById('btn-cancel-dl');
+    if (btnCancelDl) btnCancelDl.addEventListener('click', () => { modalDl.style.display = 'none'; });
+
+    const btnSaveDlItem = document.getElementById('btn-save-dl-item');
+    if (btnSaveDlItem) {
+      btnSaveDlItem.addEventListener('click', () => {
+        const id = document.getElementById('input-dl-id').value || ('unduh-' + Date.now());
+        const title = document.getElementById('input-dl-title-val').value.trim();
+        const category = document.getElementById('input-dl-cat').value;
+        const format = document.getElementById('input-dl-format').value;
+        const size = document.getElementById('input-dl-size').value.trim();
+        const date = document.getElementById('input-dl-date').value;
+        const description = document.getElementById('input-dl-desc').value.trim();
+        if (!title || !size) {
+          alert('Mohon lengkapi judul dokumen dan ukuran file!');
+          return;
+        }
+        const obj = { id, title, category, format, size, date, description, url: '#' };
+        if (editingDlIdx >= 0) {
+          downloadsState[editingDlIdx] = obj;
+        } else {
+          downloadsState.push(obj);
+        }
+        modalDl.style.display = 'none';
+        renderDownloadsList();
+      });
+    }
+
+    // Save All Informasi
+    function handleSaveInformasi() {
+      const payload = {
+        updatedAt: new Date().toISOString(),
+        articles: articlesState,
+        announcements: announcementsState,
+        albums: albumsState,
+        downloads: downloadsState
+      };
+
+      localStorage.setItem('mts_cms_informasi_data', JSON.stringify(payload));
+
+      const toast = document.getElementById('save-toast');
+      if (toast) {
+        toast.hidden = false;
+        toast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    const btnSave1 = document.getElementById('btn-save-informasi');
+    const btnSave2 = document.getElementById('btn-save-informasi-side');
+    if (btnSave1) btnSave1.addEventListener('click', handleSaveInformasi);
+    if (btnSave2) btnSave2.addEventListener('click', handleSaveInformasi);
+
+    const toastClose = document.getElementById('toast-close');
+    if (toastClose) toastClose.addEventListener('click', () => { document.getElementById('save-toast').hidden = true; });
+
+    // Export JSON
+    const btnExport = document.getElementById('btn-export-informasi-json');
+    if (btnExport) {
+      btnExport.addEventListener('click', () => {
+        const saved = localStorage.getItem('mts_cms_informasi_data');
+        const dataObj = saved ? JSON.parse(saved) : { articles: articlesState, announcements: announcementsState, albums: albumsState, downloads: downloadsState };
+        const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(dataObj, null, 2));
+        const a = document.createElement('a');
+        a.setAttribute('href', dataStr);
+        a.setAttribute('download', `informasi-cms-${new Date().toISOString().split('T')[0]}.json`);
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+    }
+
+    // Initial render
+    renderArticlesList();
+    renderAnnouncementsList();
+    renderAlbumsList();
+    renderDownloadsList();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initInformasi);
+  } else {
+    initInformasi();
+  }
+</script>

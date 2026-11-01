@@ -1,0 +1,106 @@
+{
+  "dummy": false,
+  "rules": {
+    "title": "Pedoman Tata Tertib & Etika Siswa FREEKS.id School",
+    "updated": "Juli 2026",
+    "chapters": [
+      {
+        "chapter": "BAB I: Hak Siswa FREEKS",
+        "items": [
+          "1. Mendapatkan akses penuh ke bimbingan pengajaran, modul teknologi, dan workshop pembelajaran interaktif.",
+          "2. Menggunakan sarana prasarana modern (Maker Space, 3D Studio, Smart Classroom, Lab AI, Library Hub) secara bertanggung jawab.",
+          "3. Memperoleh lingkungan belajar yang inklusif, aman, saling menghormati, dan terbebas dari segala bentuk diskriminasi atau cyberbullying.",
+          "4. Mengeksplorasi minat dan bakat melalui komunitas kesiswaan, ekstrakurikuler, dan proyek inkubasi inovasi.",
+          "5. Memperoleh bimbingan akademik, konseling psikologis, serta mentoring karir masa depan."
+        ]
+      },
+      {
+        "chapter": "BAB II: Kewajiban & Integritas Belajar",
+        "items": [
+          "1. Hadir di kampus tepat waktu paling lambat pukul 07.45 WIB sebelum morning briefing dan sharing session.",
+          "2. Mengenakan atribut identitas resmi FREEKS (Smart Casual Uniform / FREEKS Tech Hoodie / Kaos Olahraga) sesuai jadwal.",
+          "3. Menjunjung tinggi kejujuran akademik, tidak melakukan plagiarisme dalam tugas atau manipulasi kode/karya.",
+          "4. Menggunakan perangkat teknologi dan jaringan internet kampus secara bijak untuk keperluan riset dan edukasi produktif.",
+          "5. Menjaga kebersihan area Maker Space, lab, dan fasilitas komunal dengan memilah sampah daur ulang dan merapikan alat kerja.",
+          "6. Berkomunikasi dengan tutur kata santun, bersikap kooperatif, serta menghargai privasi dan karya sesama siswa."
+        ]
+      },
+      {
+        "chapter": "BAB III: Larangan",
+        "items": [
+          "1. Dilarang melakukan cyberbullying, perundungan verbal/fisik, penyebaran ujaran kebencian, atau pelecehan dalam bentuk apa pun.",
+          "2. Dilarang menyalahgunakan jaringan kampus untuk aktivitas ilegal seperti cracking, pembobolan sistem, atau distribusi konten terlarang.",
+          "3. Dilarang meninggalkan area kampus tanpa izin resmi dari Student Affairs atau Guru Pembina.",
+          "4. Dilarang keras membawa atau menggunakan rokok, vape, miras, obat-obatan terlarang, atau senjata berbahaya di lingkungan kampus.",
+          "5. Dilarang merusak perangkat keras (hardware), alat praktikum 3D, atau merusak fasilitas kampus."
+        ]
+      },
+      {
+        "chapter": "BAB IV: Pembinaan & Restorative Justice",
+        "items": [
+          "1. Sesi dialog reflektif dan pendampingan personal oleh Academic Mentor (Pelanggaran Ringan).",
+          "2. Tugas berbasis solusi etika atau kontribusi karya proyek edukasi bagi komunitas sekolah.",
+          "3. Konferensi bersama orang tua/wali murid untuk penyusunan rencana perbaikan perilaku (Pelanggaran Sedang).",
+          "4. Penangguhan sementara hak akses fasilitas laboratorium atau penugasan remote terpandu (Pelanggaran Berat).",
+          "5. Tindakan penanganan tegas sesuai regulasi yayasan dan perlindungan hukum demi keamanan seluruh siswa."
+        ]
+      }
+    ]
+  },
+  "osis": {
+    "period": "2026/2027",
+    "cabinet": "Kabinet Sinergi Inovasi",
+    "structure": [
+      { "role": "President of Student Council", "name": "M. Rizky Pratama (Grade 8)" },
+      { "role": "Vice President", "name": "Nabila Rahma (Grade 8)" },
+      { "role": "Head of Operations & Secretary", "name": "Aisyah Zahra (Grade 8)" },
+      { "role": "Vice Secretary", "name": "Fajar Al-Ghifari (Grade 7)" },
+      { "role": "Head of Finance & Treasury", "name": "Salwa Maulida (Grade 8)" },
+      { "role": "Vice Treasurer", "name": "Rayhan Kurniawan (Grade 7)" }
+    ],
+    "departments": [
+      {
+        "name": "Divisi Teknologi & Inovasi Digital",
+        "programs": "Pengelolaan portal karya siswa, hackathon mini internal, dan workshop teknologi peer-to-peer."
+      },
+      {
+        "name": "Divisi Media Kreatif & Publikasi",
+        "programs": "Produksi podcast kesiswaan, liputan event kampus, dan showcase desain grafis mingguan."
+      },
+      {
+        "name": "Divisi Olahraga, E-Sports & Wellness",
+        "programs": "Turnamen futsal, kompetisi taktik e-sports terarah, dan program kebugaran fisik berkala."
+      },
+      {
+        "name": "Divisi Aksi Sosial & Lingkungan Hidup",
+        "programs": "Kampanye daur ulang e-waste (sampah elektronik), bakti sosial kemasyarakatan, dan gerakan kampus hijau."
+      }
+    ]
+  },
+  "alumni": {
+    "totalRegistered": 1420,
+    "stories": [
+      {
+        "id": "alumni-1",
+        "name": "Rafi Pratama",
+        "year": "Alumni 2024",
+        "current": "Juara Nasional Kompetisi Robotika Remaja",
+        "testimony": "Pembelajaran hands-on di Maker Space FREEKS.id School membuat saya terbiasa bereksperimen dengan coding dan sirkuit. Mental problem solving saya terbentuk sejak di sini."
+      },
+      {
+        "id": "alumni-2",
+        "name": "Nurul Hidayati",
+        "year": "Alumni 2022",
+        "current": "Founder Startup Edukasi & Tech Fellow",
+        "testimony": "Kultur kolaborasi dan dorongan untuk berani pitching ide di hadapan umum adalah bekal paling berharga yang saya dapatkan selama belajar di FREEKS."
+      },
+      {
+        "id": "alumni-3",
+        "name": "Ahmad Dani",
+        "year": "Alumni 2023",
+        "current": "Peraih Beasiswa Sains Internasional",
+        "testimony": "Penguasaan Bahasa Inggris aktif dan bimbingan computational thinking di sekolah ini membuka gerbang kesempatan internasional bagi saya."
+      }
+    ]
+  }
+}

@@ -1,0 +1,993 @@
+---
+import Icon from './Icon.astro';
+import siteData from '../data/siteData.json';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = Astro.url.pathname } = Astro.props;
+const { school } = siteData;
+
+const navMenu = [
+  { label: 'Beranda', href: '/' },
+  {
+    label: 'Profil',
+    href: '/profil/sejarah',
+    isMega: true,
+    children: [
+      { label: 'Sejarah', href: '/profil/sejarah', desc: 'Perjalanan rintisan inovasi sejak 2019.' },
+      { label: 'Visi, Misi & Tujuan', href: '/profil/visi-misi', desc: 'Arah haluan mencetak siswa beriman, berilmu, dan berakhlak.' },
+      { label: 'Sambutan Principal', href: '/profil/sambutan', desc: 'Pesan hangat dari Head of School untuk siswa dan orang tua.' },
+      { label: 'Struktur Organisasi', href: '/profil/struktur-organisasi', desc: 'Bagan kepemimpinan, komite, dan tata kelola madrasah.' },
+      { label: 'Profil Yayasan', href: '/profil/yayasan', desc: 'Visi filosofis dan pergerakan FREEKS Foundation.' },
+      { label: 'Fasilitas', href: '/profil/fasilitas', desc: 'Sarana kelas ber-AC, laboratorium, musala, dan perpustakaan.' }
+    ]
+  },
+  {
+    label: 'Akademik',
+    href: '/akademik/kurikulum',
+    isMega: true,
+    children: [
+      { label: 'Kurikulum', href: '/akademik/kurikulum', desc: 'Integrasi Kurikulum Merdeka dan Kurikulum Kemenag RI.' },
+      { label: 'Program Unggulan', href: '/akademik/program-unggulan', desc: 'Tahfidz Juz 30, Bahasa Asing, Sains Terapan & Literasi.' },
+      { label: 'Guru & Tenaga Kependidikan', href: '/akademik/guru', desc: 'Dewan asatidz pengajar kompeten dan berdedikasi.' },
+      { label: 'Kalender Akademik', href: '/akademik/kalender', desc: 'Jadwal penilaian, agenda siswa, dan libur semester.' },
+      { label: 'Prestasi', href: '/akademik/prestasi', desc: 'Deretan torehan juara siswa di tingkat kabupaten & provinsi.' }
+    ]
+  },
+  {
+    label: 'Kesiswaan',
+    href: '/kesiswaan/ekstrakurikuler',
+    isMega: false,
+    children: [
+      { label: 'Ekstrakurikuler', href: '/kesiswaan/ekstrakurikuler' },
+      { label: 'OSIS', href: '/kesiswaan/osis' },
+      { label: 'Tata Tertib', href: '/kesiswaan/tata-tertib' },
+      { label: 'Alumni', href: '/kesiswaan/alumni' }
+    ]
+  },
+  {
+    label: 'Informasi',
+    href: '/informasi/berita',
+    isMega: false,
+    children: [
+      { label: 'Berita Terkini', href: '/informasi/berita' },
+      { label: 'Pengumuman', href: '/informasi/pengumuman' },
+      { label: 'Galeri Foto & Video', href: '/informasi/galeri' },
+      { label: 'Unduhan Berkas', href: '/informasi/unduhan' }
+    ]
+  },
+  {
+    label: 'PPDB',
+    href: '/ppdb',
+    isMega: false,
+    children: [
+      { label: 'Info & Alur Pendaftaran', href: '/ppdb' },
+      { label: 'Syarat & Rincian Biaya', href: '/ppdb/syarat-biaya' },
+      { label: 'Jadwal Gelombang', href: '/ppdb/jadwal' },
+      { label: 'Formulir Daftar Online', href: '/ppdb/daftar' },
+      { label: 'Tanya Jawab (FAQ)', href: '/ppdb/faq' }
+    ]
+  },
+  {
+    label: 'Kontak',
+    href: '/kontak',
+    isMega: false,
+    children: [
+      { label: 'Informasi Kontak & Lokasi', href: '/kontak', desc: 'Alamat lengkap, peta interaktif, WhatsApp & formulir pesan.' }
+    ]
+  }
+];
+
+function isCurrent(href: string) {
+  if (href === '/' && currentPath === '/') return true;
+  if (href !== '/' && currentPath.startsWith(href)) return true;
+  return false;
+}
+
+const isHome = currentPath === '/' || currentPath === '';
+---
+
+<header class:list={['site-header', { 'is-home-header': isHome }]} id="site-header">
+  <div class="container-wide header-container">
+    <!-- Brand / Logo Asli -->
+    <a href="/" class="header-brand" aria-label="Beranda FREEKS.id School">
+      <img
+        src="/assets/logo-ypi.webp"
+        alt="Logo Resmi FREEKS.id School"
+        width="58"
+        height="52"
+        class="header-logo school-logo-img"
+      />
+      <div class="brand-text">
+        <span class="brand-title-full">FREEKS.id School</span>
+        <span class="brand-title-mobile">FREEKS.id</span>
+        <span class="brand-sub">Modern Tech & Creative Academy</span>
+      </div>
+    </a>
+
+    <!-- Desktop Navigation (>= lg) -->
+    <nav class="desktop-nav" aria-label="Navigasi Utama">
+      <ul class="nav-list">
+        {navMenu.map((item) => (
+          <li class={`nav-item ${item.children ? 'has-dropdown' : ''} ${item.isMega ? 'has-mega' : ''}`}>
+            {item.children ? (
+              <>
+                <button
+                  type="button"
+                  class={`nav-link dropdown-toggle ${isCurrent(item.href) ? 'active' : ''}`}
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                >
+                  <span>{item.label}</span>
+                  <Icon name="chevron-down" size={16} class="dropdown-chevron" />
+                </button>
+                <div class={`dropdown-panel ${item.isMega ? 'mega-panel' : 'simple-panel'}`}>
+                  <ul class={`dropdown-list ${item.isMega ? 'mega-grid' : ''}`}>
+                    {item.children.map((child: any) => (
+                      <li class="dropdown-item">
+                        <a
+                          href={child.href}
+                          class={`dropdown-link ${currentPath === child.href ? 'active-link' : ''}`}
+                          aria-current={currentPath === child.href ? 'page' : undefined}
+                        >
+                          <span class="dropdown-link-title">{child.label}</span>
+                          {child.desc && <span class="dropdown-link-desc">{child.desc}</span>}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </>
+            ) : (
+              <a
+                href={item.href}
+                class={`nav-link ${isCurrent(item.href) ? 'active' : ''}`}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <!-- Search Button -->
+      <a href="/pencarian" class="header-search-btn" aria-label="Pencarian situs">
+        <Icon name="search" size={20} />
+      </a>
+
+      <!-- CTA PPDB Desktop (HANYA SATU CTA KUNING PER LAYAR) -->
+      <a href="/ppdb/daftar" class="btn btn-cta header-cta-btn">
+        <span>Daftar PPDB</span>
+      </a>
+
+      <!-- Hamburger button (< lg) -->
+      <button
+        type="button"
+        id="drawer-toggle"
+        class="drawer-toggle-btn"
+        aria-label="Buka menu navigasi"
+        aria-expanded="false"
+        aria-controls="mobile-drawer"
+      >
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Drawer Backdrop -->
+<div id="drawer-overlay" class="drawer-overlay" aria-hidden="true"></div>
+
+<!-- Mobile Drawer (< lg) -->
+<div id="mobile-drawer" class="mobile-drawer" role="dialog" aria-modal="true" aria-label="Menu Mobile" tabindex="-1">
+  <div class="drawer-header">
+    <div class="drawer-brand">
+      <img src="/assets/logo-ypi.webp" alt="Logo Resmi FREEKS.id" width="40" height="36" class="drawer-logo school-logo-img" style="object-fit: contain;" />
+      <span class="drawer-brand-name">FREEKS.id</span>
+    </div>
+    <button type="button" id="drawer-close" class="drawer-close-btn" aria-label="Tutup menu">
+      <Icon name="x" size={24} />
+    </button>
+  </div>
+
+  <div class="drawer-body">
+    <!-- Search Link Mobile -->
+    <a href="/pencarian" class="drawer-search-link">
+      <Icon name="search" size={18} />
+      <span>Pencarian Cepat</span>
+    </a>
+
+    <!-- Accordion Mobile Nav -->
+    <nav class="mobile-nav" aria-label="Menu Ponsel">
+      <ul class="mobile-nav-list">
+        {navMenu.map((item, idx) => (
+          <li class="mobile-nav-item">
+            {item.children ? (
+              <div class="mobile-accordion">
+                <button
+                  type="button"
+                  class="mobile-accordion-trigger"
+                  aria-expanded="false"
+                  aria-controls={`sub-${idx}`}
+                >
+                  <span>{item.label}</span>
+                  <Icon name="chevron-down" size={18} class="accordion-icon" />
+                </button>
+                <div id={`sub-${idx}`} class="mobile-accordion-content" hidden>
+                  <ul class="mobile-sub-list">
+                    {item.children.map((child: any) => (
+                      <li>
+                        <a
+                          href={child.href}
+                          class={`mobile-sub-link ${currentPath === child.href ? 'active-link' : ''}`}
+                          aria-current={currentPath === child.href ? 'page' : undefined}
+                        >
+                          {child.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ) : (
+              <a
+                href={item.href}
+                class={`mobile-direct-link ${isCurrent(item.href) ? 'active' : ''}`}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- Drawer CTA -->
+    <div class="drawer-cta-wrap">
+      <a href="/ppdb/daftar" class="btn btn-cta btn-full">
+        <span>Daftar PPDB 2027/2028</span>
+      </a>
+    </div>
+
+    <!-- Drawer Contact Bottom -->
+    <div class="drawer-footer-contact">
+      <div class="drawer-contact-title">Bantuan Panitia PPDB</div>
+      <a
+        href={`https://wa.me/${school.whatsappRaw}?text=${encodeURIComponent(school.whatsappMessage)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="drawer-wa-btn"
+      >
+        <Icon name="whatsapp" size={18} />
+        <span>Tanya via WhatsApp</span>
+      </a>
+      <div class="drawer-phone">
+        <Icon name="phone" size={14} />
+        <span>{school.phone}</span>
+      </div>
+      <div class="drawer-socials">
+        <a href={school.socials.instagramUrl} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <Icon name="instagram" size={18} />
+        </a>
+        <a href={school.socials.youtubeUrl} target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+          <Icon name="youtube" size={18} />
+        </a>
+        <a href={school.socials.facebookUrl} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <Icon name="facebook" size={18} />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Header Container */
+  .site-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+    z-index: 1000;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid var(--ink-300);
+    transition: height var(--dur) var(--ease),
+                box-shadow var(--dur) var(--ease),
+                background-color var(--dur) var(--ease),
+                transform var(--dur) var(--ease);
+    height: var(--header-height);
+  }
+
+  .site-header.is-home-header:not(.scrolled) {
+    background-color: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(27, 122, 47, 0.10);
+  }
+
+  .site-header.scrolled {
+    height: var(--header-height-scrolled);
+    box-shadow: var(--shadow-1);
+    background-color: #FFFFFF;
+    background-image: none;
+  }
+
+  .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    gap: var(--s-4);
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 640px) {
+    .header-container {
+      gap: 8px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+  }
+
+  /* Brand */
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 640px) {
+    .header-brand {
+      flex-shrink: 1;
+      min-width: 0;
+      gap: 8px;
+    }
+  }
+
+  .header-logo {
+    width: 58px;
+    height: 52px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+    transition: width var(--dur) var(--ease), height var(--dur) var(--ease);
+  }
+
+  @media (max-width: 640px) {
+    .header-logo {
+      width: 38px;
+      height: 34px;
+      flex-shrink: 0;
+    }
+  }
+
+  .site-header.scrolled .header-logo {
+    width: 48px;
+    height: 42px;
+  }
+
+  @media (max-width: 640px) {
+    .site-header.scrolled .header-logo {
+      width: 34px;
+      height: 30px;
+    }
+  }
+
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .brand-title-full {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.0625rem;
+    color: var(--green-900);
+    line-height: 1.2;
+    display: none;
+  }
+
+  .brand-title-mobile {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--green-900);
+    line-height: 1.2;
+  }
+
+  @media (max-width: 640px) {
+    .brand-title-mobile {
+      font-size: 0.95rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .brand-title-full { display: block; }
+    .brand-title-mobile { display: none; }
+  }
+
+  .brand-sub {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    line-height: 1.2;
+  }
+
+  @media (max-width: 640px) {
+    .brand-sub {
+      display: none;
+    }
+  }
+
+  /* Desktop Nav */
+  .desktop-nav {
+    display: none;
+    height: 100%;
+  }
+
+  @media (min-width: 1024px) {
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .nav-list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    gap: 4px;
+  }
+
+  @media (min-width: 1280px) {
+    .nav-list {
+      gap: 8px;
+    }
+  }
+
+  .nav-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--ink-900);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease);
+  }
+
+  .nav-link:hover, .nav-link:focus {
+    color: var(--green-700);
+    background-color: var(--green-50);
+  }
+
+  .nav-link.active {
+    color: var(--green-700);
+    font-weight: 700;
+  }
+
+  .dropdown-chevron {
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  .nav-item:hover .dropdown-chevron,
+  .nav-item:focus-within .dropdown-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Dropdown Panels */
+  .dropdown-panel {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #FFFFFF;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-2);
+    border: var(--border);
+    padding: 16px;
+    z-index: 1050;
+  }
+
+  .simple-panel {
+    width: 260px;
+  }
+
+  .mega-panel {
+    width: 560px;
+    left: -50px;
+  }
+
+  .nav-item:hover .dropdown-panel,
+  .nav-item:focus-within .dropdown-panel {
+    display: block;
+  }
+
+  .dropdown-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .mega-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .dropdown-link {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--ink-900);
+    border-left: 3px solid transparent;
+    transition: background-color var(--dur-fast) var(--ease),
+                border-color var(--dur-fast) var(--ease);
+  }
+
+  .dropdown-link:hover, .dropdown-link:focus {
+    background-color: var(--green-50);
+    border-left-color: var(--yellow-500); /* PRD 7.2: Item aktif: teks green-700 + garis kiri kuning */
+    color: var(--green-700);
+  }
+
+  .dropdown-link.active-link {
+    background-color: var(--green-50);
+    border-left-color: var(--yellow-500);
+    color: var(--green-700);
+    font-weight: 600;
+  }
+
+  .dropdown-link-title {
+    font-weight: 600;
+    font-size: var(--text-sm);
+  }
+
+  .dropdown-link-desc {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+
+  /* Header Actions */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .header-actions {
+      gap: 8px;
+      flex-shrink: 0;
+    }
+  }
+
+  .header-search-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-900);
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: background-color var(--dur-fast) var(--ease),
+                color var(--dur-fast) var(--ease);
+  }
+
+  @media (max-width: 640px) {
+    .header-search-btn {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+    }
+  }
+
+  .header-search-btn:hover {
+    background-color: var(--green-50);
+    color: var(--green-700);
+  }
+
+  .header-cta-btn {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .header-cta-btn {
+      display: inline-flex;
+    }
+  }
+
+  /* Hamburger Button (< lg) */
+  .drawer-toggle-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: 1px solid var(--ink-300);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    padding: 0;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 640px) {
+    .drawer-toggle-btn {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .drawer-toggle-btn {
+      display: none;
+    }
+  }
+
+  .hamburger-bar {
+    width: 22px;
+    height: 2px;
+    background-color: var(--ink-900);
+    border-radius: 1px;
+    transition: transform var(--dur-fast) var(--ease), opacity var(--dur-fast) var(--ease);
+  }
+
+  /* Mobile Drawer Overlay */
+  .drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(15, 77, 28, 0.55);
+    z-index: 99998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--dur) var(--ease);
+  }
+
+  .drawer-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Mobile Drawer */
+  .mobile-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(85vw, 340px);
+    background-color: #FFFFFF;
+    z-index: 99999;
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.18);
+    transform: translateX(100%);
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform var(--dur) var(--ease), visibility var(--dur) var(--ease);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-drawer.open {
+    transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--ink-300);
+  }
+
+  .drawer-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .drawer-brand-name {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--green-900);
+  }
+
+  .drawer-close-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--ink-900);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+  }
+
+  .drawer-close-btn:hover {
+    background-color: var(--green-50);
+  }
+
+  .drawer-body {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+  }
+
+  .drawer-search-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background-color: var(--bg-soft);
+    border: 1px solid var(--ink-300);
+    border-radius: var(--radius-md);
+    color: var(--ink-600);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    min-height: 48px;
+  }
+
+  .mobile-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobile-nav-item {
+    border-bottom: 1px solid #F1F5F9;
+  }
+
+  .mobile-direct-link,
+  .mobile-accordion-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 4px;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-base);
+    color: var(--ink-900);
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .mobile-direct-link.active,
+  .mobile-accordion-trigger.active {
+    color: var(--green-700);
+  }
+
+  .mobile-accordion-trigger[aria-expanded="true"] .accordion-icon {
+    transform: rotate(180deg);
+  }
+
+  .mobile-accordion-content {
+    padding-bottom: 12px;
+  }
+
+  .mobile-sub-list {
+    list-style: none;
+    padding-left: 12px;
+    margin: 0;
+    border-left: 2px solid var(--green-200);
+  }
+
+  .mobile-sub-link {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 8px 12px;
+    font-size: var(--text-sm);
+    color: var(--ink-600);
+    text-decoration: none;
+  }
+
+  .mobile-sub-link:hover,
+  .mobile-sub-link.active-link {
+    color: var(--green-700);
+    font-weight: 600;
+  }
+
+  .btn-full {
+    width: 100%;
+  }
+
+  .drawer-footer-contact {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--ink-300);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .drawer-contact-title {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--ink-600);
+    letter-spacing: 0.5px;
+  }
+
+  .drawer-wa-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 48px;
+    background-color: #25D366;
+    color: #FFFFFF;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+  }
+
+  .drawer-phone {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--text-sm);
+    color: var(--ink-900);
+  }
+
+  .drawer-socials {
+    display: flex;
+    gap: 16px;
+    margin-top: 4px;
+  }
+
+  .drawer-socials a {
+    color: var(--green-700);
+    padding: 6px;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    function setupMobileNav() {
+      const header = document.getElementById('site-header');
+      const drawerToggle = document.getElementById('drawer-toggle');
+      const drawer = document.getElementById('mobile-drawer');
+      const overlay = document.getElementById('drawer-overlay');
+      const drawerClose = document.getElementById('drawer-close');
+
+      // Sticky header shrink on scroll > 80px
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 80) {
+          header?.classList.add('scrolled');
+        } else {
+          header?.classList.remove('scrolled');
+        }
+      }, { passive: true });
+
+      // Open Drawer
+      function openDrawer(e) {
+        if (e) e.preventDefault();
+        drawer?.classList.add('open');
+        overlay?.classList.add('open');
+        drawerToggle?.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+        drawer?.focus();
+      }
+
+      // Close Drawer
+      function closeDrawer(e) {
+        if (e) e.preventDefault();
+        drawer?.classList.remove('open');
+        overlay?.classList.remove('open');
+        drawerToggle?.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+        drawerToggle?.focus();
+      }
+
+      drawerToggle?.addEventListener('click', openDrawer);
+      drawerClose?.addEventListener('click', closeDrawer);
+      overlay?.addEventListener('click', closeDrawer);
+
+      // Close drawer on Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && drawer?.classList.contains('open')) {
+          closeDrawer();
+        }
+      });
+
+      // Close drawer automatically when any link inside drawer is tapped/clicked
+      const drawerLinks = drawer?.querySelectorAll('a');
+      drawerLinks?.forEach((link) => {
+        link.addEventListener('click', () => {
+          closeDrawer();
+        });
+      });
+
+      // Mobile Accordion Logic: Only one open at a time
+      const accordionTriggers = document.querySelectorAll('.mobile-accordion-trigger');
+      accordionTriggers.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+          const controlsId = btn.getAttribute('aria-controls');
+          const content = controlsId ? document.getElementById(controlsId) : null;
+
+          // Close all other accordions first
+          accordionTriggers.forEach((otherBtn) => {
+            if (otherBtn !== btn) {
+              otherBtn.setAttribute('aria-expanded', 'false');
+              const otherId = otherBtn.getAttribute('aria-controls');
+              if (otherId) {
+                const otherContent = document.getElementById(otherId);
+                if (otherContent) otherContent.hidden = true;
+              }
+            }
+          });
+
+          if (isExpanded) {
+            btn.setAttribute('aria-expanded', 'false');
+            if (content) content.hidden = true;
+          } else {
+            btn.setAttribute('aria-expanded', 'true');
+            if (content) content.hidden = false;
+          }
+        });
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupMobileNav);
+    } else {
+      setupMobileNav();
+    }
+  })();
+</script>
+

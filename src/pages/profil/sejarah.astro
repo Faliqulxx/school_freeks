@@ -1,0 +1,165 @@
+---
+import ProfilLayout from '../../layouts/ProfilLayout.astro';
+import profilData from '../../data/profil.json';
+
+const { history } = profilData;
+---
+
+<ProfilLayout
+  title="Sejarah Perjalanan Inovasi"
+  description="Perjalanan dedikasi FREEKS.id School dalam membangun ekosistem pendidikan teknologi dan kreatif modern sejak 2019."
+  currentPage="/profil/sejarah"
+>
+  <div class="prose-content">
+    <div class="content-intro">
+      <p class="lead-text">
+        FREEKS.id School berawal dari inisiatif talenta muda dan pendidik visioner di bawah naungan Yayasan Inovasi Kreasi Digital (FREEKS Foundation) untuk menghadirkan institusi pendidikan abad ke-21 yang memadukan keunggulan komputasi, seni interaktif, dan karakter integritas.
+      </p>
+    </div>
+
+    <!-- Archive Photo -->
+    <div class="archive-photo-card card">
+      <img
+        src="/assets/gedung-mts-islamiyah.webp"
+        alt="Gedung Kampus Terpadu FREEKS.id School"
+        width="1200"
+        height="700"
+        class="archive-img"
+        data-lightbox-src="/assets/gedung-mts-islamiyah.webp"
+        data-lightbox-alt="Gedung Kampus Terpadu FREEKS.id School"
+        data-lightbox-caption="Gedung Kampus FREEKS.id School di Kawasan Inovasi Digital (Empowering Future Thinkers, Creators & Innovators)"
+        role="button"
+        tabindex="0"
+      />
+      <div class="archive-caption">
+        <span>Gedung Kampus: FREEKS.id School dengan motto Empowering Future Thinkers, Creators & Innovators (Klik untuk perbesar)</span>
+      </div>
+    </div>
+
+    <!-- Timeline Vertikal (PRD 8.2: timeline satu kolom dengan garis kiri di HP) -->
+    <div class="history-timeline">
+      {history.map((item) => (
+        <div class="timeline-item">
+          <div class="timeline-marker" aria-hidden="true"></div>
+          <div class="timeline-card card">
+            <div class="timeline-card-header">
+              <span class="timeline-year">{item.year}</span>
+            </div>
+            <h3 class="timeline-title">{item.title}</h3>
+            <p class="timeline-desc">{item.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</ProfilLayout>
+
+<style>
+  .lead-text {
+    font-size: var(--text-lg);
+    color: var(--ink-900);
+    line-height: 1.6;
+    margin-top: 8px;
+    margin-bottom: var(--s-5);
+  }
+
+  .archive-photo-card {
+    margin-bottom: var(--s-6);
+    overflow: hidden;
+  }
+
+  .archive-img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    cursor: pointer;
+  }
+
+  .archive-caption {
+    padding: 10px 16px;
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    background-color: var(--bg-soft);
+    border-top: 1px solid var(--ink-300);
+  }
+
+  /* Timeline */
+  .history-timeline {
+    position: relative;
+    padding-left: 32px;
+    margin-top: var(--s-5);
+    min-width: 0;
+  }
+
+  .history-timeline::before {
+    content: "";
+    position: absolute;
+    top: 14px;
+    bottom: 24px;
+    left: 11px;
+    width: 2px;
+    background-color: var(--green-500);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: var(--s-6);
+  }
+
+  .timeline-marker {
+    position: absolute;
+    left: -27px;
+    top: 14px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: var(--yellow-500);
+    border: 3px solid var(--green-700);
+    box-shadow: 0 0 0 2px #FFFFFF;
+    z-index: 1;
+  }
+
+  .timeline-card {
+    padding: var(--s-4) var(--s-5);
+    background-color: #FFFFFF;
+    margin-left: 0;
+    min-width: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .timeline-card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .timeline-year {
+    display: inline-block;
+    background-color: var(--green-700);
+    color: #FFFFFF;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-xs);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    width: fit-content;
+  }
+
+  .timeline-title {
+    font-size: 1.15rem;
+    color: var(--green-900);
+    margin-bottom: 6px;
+    line-height: 1.35;
+    overflow-wrap: break-word;
+  }
+
+  .timeline-desc {
+    font-size: var(--text-sm);
+    color: var(--ink-600);
+    line-height: 1.6;
+    margin: 0;
+    overflow-wrap: break-word;
+  }
+</style>
+

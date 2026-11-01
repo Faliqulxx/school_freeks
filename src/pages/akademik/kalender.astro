@@ -1,0 +1,280 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Icon from '../../components/Icon.astro';
+import kalenderData from '../../data/kalender.json';
+
+const { events } = kalenderData;
+
+const breadcrumbItems = [
+  { label: 'Akademik', href: '/akademik/kurikulum' },
+  { label: 'Kalender Akademik' }
+];
+
+const categoryLabels: Record<string, { label: string; bg: string; color: string; border: string }> = {
+  exam: { label: 'Ujian & Penilaian', bg: '#FEF3F2', color: '#B42318', border: '#FECDCA' },
+  activity: { label: 'kegiatan siswa', bg: '#EFF8FF', color: '#175CD3', border: '#B2DDFF' },
+  holiday: { label: 'Hari Libur', bg: '#FDF2FA', color: '#C11574', border: '#FCCEEE' },
+  academic: { label: 'Awal Masuk / KBM', bg: '#ECFDF3', color: '#027A48', border: '#A6F4C5' },
+  ppdb: { label: 'PPDB & Penerimaan', bg: '#FEF0C7', color: '#7A2E0E', border: '#FDE272' }
+};
+---
+
+<BaseLayout
+  title="Kalender Akademik – FREEKS.id School"
+  description="Jadwal agenda kegiatan pembelajaran, penilaian tengah semester, libur, dan PPDB tahun ajaran 2026/2027."
+>
+  <div class="page-header section-soft">
+    <div class="container-wide">
+      <Breadcrumb items={breadcrumbItems} />
+      <div class="header-meta">
+        <span class="chip chip-primary">Tahun Ajaran 2026/2027</span>
+      </div>
+      <h1 class="page-title">Kalender Akademik & Project Milestones</h1>
+      <p class="page-description">
+        Pedoman jadwal resmi pelaksanaan kegiatan belajar mengajar, evaluasi penilaian, peringatan hari besar, dan libur semester.
+      </p>
+
+      <div class="calendar-action-buttons btn-group-responsive">
+        <a href="/informasi/unduhan" class="btn btn-secondary btn-sm">
+          <Icon name="download" size={16} />
+          <span>Unduh PDF Kalender (320 KB)</span>
+        </a>
+        <a
+          href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Admission+FREEKS.id+School+2027&dates=20270104/20270228"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-primary btn-sm"
+        >
+          <Icon name="calendar-plus" size={16} />
+          <span>Tambah ke Google Calendar</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-wide section">
+    <!-- Category Legend (PRD 8.3: Kategori diberi warna DAN label teks) -->
+    <div class="legend-box card">
+      <h3 class="legend-title">Keterangan Kategori Agenda:</h3>
+      <div class="legend-items">
+        {Object.entries(categoryLabels).map(([key, item]) => (
+          <div class="legend-item">
+            <span
+              class="legend-color-dot"
+              style={`background-color: ${item.bg}; border: 1.5px solid ${item.border};`}
+            ></span>
+            <span class="legend-text" style={`color: ${item.color}; font-weight: 700;`}>
+              {item.label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Calendar View: List by default on mobile, table/grid on desktop (PRD 8.3) -->
+    <div class="calendar-layout-wrap">
+      <!-- List View (Mobile & Tablet default) -->
+      <div class="calendar-list-view">
+        <h2 class="calendar-subhead">Daftar Agenda Semester Ganjil & Genap</h2>
+        <div class="events-list">
+          {events.map((ev) => {
+            const cat = categoryLabels[ev.categoryClass] || categoryLabels.academic;
+            return (
+              <div class="event-card card">
+                <div class="event-left-bar" style={`background-color: ${cat.color};`}></div>
+                <div class="event-content">
+                  <div class="event-meta-row">
+                    <time class="event-date">
+                      <Icon name="clock" size={14} />
+                      <span>{ev.date}</span>
+                    </time>
+                    <span
+                      class="event-category-chip"
+                      style={`background-color: ${cat.bg}; color: ${cat.color}; border: 1px solid ${cat.border};`}
+                    >
+                      {cat.label}
+                    </span>
+                  </div>
+
+                  <h3 class="event-title">{ev.title}</h3>
+                  <p class="event-desc">{ev.description}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-top: var(--s-6);
+    padding-bottom: var(--s-6);
+    border-bottom: 1px solid var(--ink-300);
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--s-3);
+  }
+
+  .page-title {
+    font-size: var(--h1);
+    color: var(--green-900);
+    margin-bottom: var(--s-2);
+  }
+
+  .page-description {
+    font-size: var(--text-lg);
+    color: var(--ink-600);
+    max-width: 65ch;
+    margin-bottom: var(--s-5);
+  }
+
+  .calendar-action-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* Legend */
+  .legend-box {
+    padding: var(--s-4) var(--s-5);
+    background-color: var(--bg-soft);
+    margin-bottom: var(--s-6);
+  }
+
+  .legend-title {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--ink-600);
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+
+  .legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-4);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--text-xs);
+  }
+
+  .legend-color-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  /* Calendar List */
+  .calendar-subhead {
+    font-size: var(--h3);
+    color: var(--green-900);
+    margin-bottom: var(--s-5);
+  }
+
+  .events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  @media (min-width: 641px) and (max-width: 1023px) {
+    .events-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .events-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-4);
+    }
+  }
+
+  .event-card {
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    background-color: #FFFFFF;
+    min-width: 0;
+  }
+
+  .event-left-bar {
+    width: 6px;
+    flex-shrink: 0;
+  }
+
+  .event-content {
+    padding: var(--s-4) var(--s-5);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  @media (max-width: 640px) {
+    .event-content {
+      padding: 14px 16px;
+    }
+  }
+
+  .event-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 2px;
+  }
+
+  .event-category-chip {
+    padding: 2px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .event-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    font-weight: 600;
+  }
+
+  .event-title {
+    font-size: 1.15rem;
+    color: var(--green-900);
+    margin: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.35;
+  }
+
+  .event-desc {
+    font-size: var(--text-sm);
+    color: var(--ink-600);
+    margin: 0;
+    line-height: 1.55;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+</style>
+

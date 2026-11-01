@@ -1,0 +1,57 @@
+{
+  "dummy": false,
+  "announcements": [
+    {
+      "id": "pts-ganjil-2026",
+      "date": "2026-10-24",
+      "day": "24",
+      "month": "Okt",
+      "year": "2026",
+      "title": "Jadwal Mid-Term Project Sprint & Asesmen Terpadu Semester Ganjil",
+      "important": true,
+      "summary": "Diberitahukan kepada seluruh siswa dan orang tua bahwa pelaksanaan Project Sprint dan Asesmen Ganjil dimulai 26 Oktober 2026. Jadwal mentorship lab dan demo project dapat diunduh pada lampiran.",
+      "attachment": {
+        "name": "Jadwal_Project_Sprint_2026.pdf",
+        "size": "180 KB",
+        "url": "#"
+      }
+    },
+    {
+      "id": "workshop-ai-2026",
+      "date": "2026-10-20",
+      "day": "20",
+      "month": "Okt",
+      "year": "2026",
+      "title": "FREEKS Tech Talk: Menjelajahi Kecerdasan Buatan dan Etika Digital",
+      "important": false,
+      "summary": "Sesi seminar interaktif bersama pembicara tamu praktisi industri teknologi untuk seluruh siswa dan terbuka bagi orang tua.",
+      "attachment": null
+    },
+    {
+      "id": "apparel-gel-2",
+      "date": "2026-10-12",
+      "day": "12",
+      "month": "Okt",
+      "year": "2026",
+      "title": "Distribusi Starter Pack & Apparel Resmi FREEKS Gelombang 2",
+      "important": false,
+      "summary": "Pengambilan hoodie identitas dan polo shirt resmi FREEKS dapat dilakukan di Campus Registry Office pada jam layanan operasional.",
+      "attachment": {
+        "name": "Daftar_Apparel_Batch2.pdf",
+        "size": "95 KB",
+        "url": "#"
+      }
+    },
+    {
+      "id": "ekskul-ganjil-perpanjangan",
+      "date": "2026-10-01",
+      "day": "01",
+      "month": "Okt",
+      "year": "2026",
+      "title": "Pendaftaran Guild & Ekstrakurikuler Teknologi Semester Ganjil",
+      "important": false,
+      "summary": "Pendaftaran kuota klub Robotics, Cyber Guild, dan 3D Game Design dibuka hingga akhir pekan melalui portal siswa.",
+      "attachment": null
+    }
+  ]
+}

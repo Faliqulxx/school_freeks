@@ -1,0 +1,306 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Icon from '../../components/Icon.astro';
+import ekskulData from '../../data/ekskul.json';
+
+const { extracurriculars } = ekskulData;
+
+const breadcrumbItems = [
+  { label: 'Kesiswaan', href: '/kesiswaan/ekstrakurikuler' },
+  { label: 'Ekstrakurikuler' }
+];
+
+const categories = ['Semua', 'Seni Keagamaan', 'Kepramukaan', 'Olahraga', 'Sains', 'Bahasa'];
+---
+
+<BaseLayout
+  title="Ekstrakurikuler & Guilds – FREEKS.id School"
+  description="Wadah pengembangan minat, bakat, kepemimpinan, dan kreativitas siswa di luar jam tatap muka pelajaran."
+>
+  <div class="page-header section-soft">
+    <div class="container-wide">
+      <Breadcrumb items={breadcrumbItems} />
+      <div class="header-meta">
+        <span class="chip chip-primary">Pengembangan Bakat</span>
+      </div>
+      <h1 class="page-title">Guilds & Ekstrakurikuler Kampus</h1>
+      <p class="page-description">
+        Mendorong siswa mengekspresikan potensi diri melalui eksplorasi robotika, cyber coding, 3D design, podcast media, diplomasi, dan olahraga.
+      </p>
+
+      <!-- Category Filter Chips -->
+      <div class="ekskul-filter-bar">
+        <span class="filter-label">Kategori Peminatan:</span>
+        <div class="category-chips">
+          {categories.map((cat, idx) => (
+            <button
+              type="button"
+              class={`filter-chip ${idx === 0 ? 'active' : ''}`}
+              data-category={cat}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-wide section">
+    <div class="ekskul-grid" id="ekskul-grid">
+      {extracurriculars.map((e) => (
+        <div class="ekskul-card card" data-category={e.category}>
+          <div class="ekskul-img-wrap">
+            <img
+              src={e.image.src}
+              alt={e.image.alt}
+              width={e.image.width}
+              height={e.image.height}
+              class="ekskul-img"
+              loading="lazy"
+              data-lightbox-src={e.image.src}
+              data-lightbox-alt={e.image.alt}
+              data-lightbox-caption={`${e.name} - ${e.description}`}
+              data-lightbox-group="ekskul"
+              role="button"
+              tabindex="0"
+            />
+            <span class="ekskul-cat-tag">{e.category}</span>
+          </div>
+
+          <div class="card-body ekskul-body">
+            <h3 class="ekskul-name">{e.name}</h3>
+            <p class="ekskul-desc">{e.description}</p>
+
+            <div class="ekskul-meta">
+              <div class="meta-row">
+                <Icon name="clock" size={14} class="meta-icon" />
+                <span>Jadwal: <strong>{e.schedule}</strong></span>
+              </div>
+              <div class="meta-row">
+                <Icon name="user" size={14} class="meta-icon" />
+                <span>Pembina: {e.mentor}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-top: var(--s-6);
+    padding-bottom: var(--s-6);
+    border-bottom: 1px solid var(--ink-300);
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--s-3);
+  }
+
+  .page-title {
+    font-size: var(--h1);
+    color: var(--green-900);
+    margin-bottom: var(--s-2);
+  }
+
+  .page-description {
+    font-size: var(--text-lg);
+    color: var(--ink-600);
+    max-width: 65ch;
+    margin-bottom: var(--s-5);
+  }
+
+  .ekskul-filter-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--ink-300);
+  }
+
+  @media (min-width: 768px) {
+    .ekskul-filter-bar {
+      flex-direction: row;
+      align-items: center;
+      gap: 16px;
+    }
+  }
+
+  .filter-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--green-900);
+    text-transform: uppercase;
+  }
+
+  .category-chips {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
+  .filter-chip {
+    padding: 6px 14px;
+    border-radius: 999px;
+    background-color: #FFFFFF;
+    border: 1px solid var(--ink-300);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--ink-900);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color var(--dur-fast) var(--ease),
+                color var(--dur-fast) var(--ease),
+                border-color var(--dur-fast) var(--ease);
+  }
+
+  .filter-chip.active {
+    background-color: var(--green-700);
+    border-color: var(--green-700);
+    color: #FFFFFF;
+  }
+
+  /* Grid: 1 col on mobile, 2 cols on tablet, 3-4 cols on desktop */
+  .ekskul-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s-5);
+  }
+
+  @media (min-width: 641px) {
+    .ekskul-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--s-5);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .ekskul-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .ekskul-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .ekskul-card {
+    min-width: 0;
+  }
+
+  .ekskul-img-wrap {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background-color: var(--bg-soft);
+  }
+
+  .ekskul-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+  }
+
+  .ekskul-cat-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(11, 59, 22, 0.85);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: var(--radius-sm);
+  }
+
+  .ekskul-body {
+    padding: var(--s-5);
+    min-width: 0;
+  }
+
+  @media (max-width: 640px) {
+    .ekskul-body {
+      padding: 16px;
+    }
+  }
+
+  .ekskul-name {
+    font-size: 1.15rem;
+    color: var(--green-900);
+    margin-bottom: 6px;
+    line-height: 1.35;
+    overflow-wrap: break-word;
+  }
+
+  /* Deskripsi maksimal 3 baris */
+  .ekskul-desc {
+    font-size: var(--text-sm);
+    color: var(--ink-600);
+    line-height: 1.55;
+    margin-bottom: var(--s-4);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    margin-bottom: var(--s-4);
+  }
+
+  .ekskul-meta {
+    margin-top: auto;
+    border-top: 1px solid var(--ink-300);
+    padding-top: var(--s-3);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+  }
+
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .meta-icon {
+    color: var(--green-500);
+    flex-shrink: 0;
+  }
+</style>
+
+<script>
+  const chips = document.querySelectorAll('.filter-chip');
+  const cards = document.querySelectorAll('.ekskul-card') as NodeListOf<HTMLElement>;
+
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+
+      const selected = chip.getAttribute('data-category');
+      cards.forEach((card) => {
+        const cat = card.getAttribute('data-category');
+        if (selected === 'Semua' || cat === selected) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+

@@ -1,0 +1,160 @@
+---
+import ProfilLayout from '../../layouts/ProfilLayout.astro';
+import Icon from '../../components/Icon.astro';
+import profilData from '../../data/profil.json';
+
+const { facilities } = profilData;
+---
+
+<ProfilLayout
+  title="Fasilitas Kampus"
+  description="Sarana dan prasarana modern penunjang kegiatan riset, komputasi, dan kreativitas siswa di FREEKS.id School."
+  currentPage="/profil/fasilitas"
+>
+  <div class="prose-content">
+    <div class="content-tag">
+    </div>
+
+    <p class="section-lead">
+      FREEKS.id School senantiasa berinvestasi pada peningkatan sarana cerdas guna menciptakan lingkungan belajar futuristik yang kondusif, interaktif, dan ramah inovasi bagi seluruh siswa.
+    </p>
+
+    <!-- Grid: 2 kolom di HP, 3 kolom di desktop (PRD 8.2) -->
+    <div class="facilities-grid">
+      {facilities.map((fac) => (
+        <div
+          class="facility-card card"
+          data-lightbox-src={fac.image.src}
+          data-lightbox-alt={fac.image.alt}
+          data-lightbox-caption={`${fac.name} - ${fac.description}`}
+          data-lightbox-group="fasilitas"
+          role="button"
+          tabindex="0"
+          aria-label={`Lihat foto ${fac.name}`}
+        >
+          <div class="facility-img-wrap">
+            <img
+              src={fac.image.src}
+              alt={fac.image.alt}
+              width={fac.image.width}
+              height={fac.image.height}
+              class="facility-img"
+              loading="lazy"
+            />
+            <div class="facility-zoom-hint">
+              <Icon name="maximize-2" size={18} />
+              <span>Perbesar</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3 class="facility-title">{fac.name}</h3>
+            <p class="facility-desc">{fac.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</ProfilLayout>
+
+<style>
+  .content-tag {
+    margin-bottom: var(--s-3);
+  }
+
+  .section-lead {
+    font-size: var(--text-base);
+    color: var(--ink-600);
+    line-height: 1.6;
+    margin-bottom: var(--s-6);
+  }
+
+  /* Facilities Grid: 1 col on mobile, 2 cols on tablet, 3 cols on desktop */
+  .facilities-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s-5);
+  }
+
+  @media (min-width: 641px) {
+    .facilities-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--s-4);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .facilities-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s-5);
+    }
+  }
+
+  .facility-card {
+    cursor: pointer;
+    min-width: 0;
+  }
+
+  .facility-img-wrap {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background-color: var(--bg-soft);
+  }
+
+  .facility-img {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--dur) var(--ease);
+  }
+
+  .card-body {
+    padding: 14px 16px;
+    min-width: 0;
+  }
+
+  .facility-card:hover .facility-img {
+    transform: scale(1.05);
+  }
+
+  .facility-zoom-hint {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background-color: rgba(11, 59, 22, 0.85);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity var(--dur-fast) var(--ease);
+  }
+
+  .facility-card:hover .facility-zoom-hint,
+  .facility-card:focus .facility-zoom-hint {
+    opacity: 1;
+  }
+
+  .facility-title {
+    font-size: 1.15rem;
+    color: var(--green-900);
+    margin-bottom: 6px;
+    line-height: 1.35;
+    overflow-wrap: break-word;
+  }
+
+  .facility-desc {
+    font-size: var(--text-sm);
+    color: var(--ink-600);
+    line-height: 1.6;
+    margin: 0;
+    overflow-wrap: break-word;
+  }
+</style>
+

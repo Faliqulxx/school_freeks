@@ -1,0 +1,1096 @@
+---
+import Icon from '../components/Icon.astro';
+import siteData from '../data/siteData.json';
+import ThemeScript from '../components/ThemeScript.astro';
+
+interface Props {
+  title: string;
+  activeMenu?: string;
+}
+
+const { title, activeMenu = 'pengaturan' } = Astro.props;
+const { school } = siteData;
+
+const menuItems = [
+  { id: 'pengaturan', label: 'Pengaturan Global', href: '/admin/pengaturan', icon: 'settings', badge: 'No. 1' },
+  { id: 'beranda', label: 'Beranda & Hero', href: '/admin/beranda', icon: 'home', badge: 'No. 2' },
+  { id: 'profil', label: 'Profil Madrasah', href: '/admin/profil', icon: 'landmark', badge: 'No. 3' },
+  { id: 'akademik', label: 'Akademik & Guru', href: '/admin/akademik', icon: 'book-open', badge: 'No. 4' },
+  { id: 'kesiswaan', label: 'Kesiswaan & OSIS', href: '/admin/kesiswaan', icon: 'users', badge: 'No. 5' },
+  { id: 'informasi', label: 'Berita & Galeri', href: '/admin/informasi', icon: 'newspaper', badge: 'No. 6' },
+  { id: 'ppdb', label: 'PPDB & Pendaftar', href: '/admin/ppdb', icon: 'user-plus', badge: 'No. 7' },
+  { id: 'kontak', label: 'Kotak Masuk', href: '/admin/kontak', icon: 'mail', badge: 'No. 8' },
+];
+---
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title} — CMS Admin FREEKS.id School</title>
+  <link rel="icon" type="image/webp" href="/assets/logo-ypi.webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style is:global>
+    :root {
+      --admin-green-900: #0B3B16;
+      --admin-green-800: #0F4D1C;
+      --admin-green-700: #1B7A2F;
+      --admin-green-500: #3DA352;
+      --admin-green-100: #E6F3E6;
+      --admin-green-50:  #F4F9F2;
+      --admin-yellow-500: #F5D90A;
+      --admin-ink-900: #1F2933;
+      --admin-ink-700: #3E4C59;
+      --admin-ink-500: #616E7C;
+      --admin-ink-300: #CBD2D9;
+      --admin-ink-100: #F5F7FA;
+      --admin-bg-body: #F8FAF7;
+      --admin-sidebar-w: 260px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background-color: var(--admin-bg-body);
+      color: var(--admin-ink-900);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+    }
+
+    h1, h2, h3, h4, h5 {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-weight: 700;
+      color: var(--admin-green-900);
+    }
+
+    /* Universal Image Upload & Preview Controls */
+    .asset-preview-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 6px;
+    }
+
+    .asset-thumb-wide {
+      width: 120px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--admin-ink-300);
+      background: #f1f5f9;
+      flex-shrink: 0;
+    }
+
+    .asset-thumb-sq {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--admin-ink-300);
+      background: #f1f5f9;
+      flex-shrink: 0;
+    }
+
+    .asset-thumb-leader {
+      width: 60px;
+      height: 75px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--admin-ink-300);
+      background: #f1f5f9;
+      flex-shrink: 0;
+    }
+
+    .asset-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .asset-upload-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .btn-upload-file {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8125rem;
+      padding: 5px 12px;
+      background: #FFFFFF;
+      color: var(--admin-ink-900);
+      border: 1px solid var(--admin-ink-300);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.15s ease;
+      line-height: 1.4;
+      user-select: none;
+    }
+
+    .btn-upload-file:hover {
+      background: var(--admin-green-50);
+      border-color: var(--admin-green-500);
+      color: var(--admin-green-700);
+    }
+
+    .upload-file-status {
+      font-size: 0.75rem;
+      color: #059669;
+      font-weight: 500;
+      word-break: break-all;
+    }
+
+    /* ======================================================== */
+    /* STANDARDIZED ACTION BUTTONS (EDIT & HAPUS) FOR ALL CMS */
+    /* ======================================================== */
+    .btn-action-edit,
+    .btn-action-delete {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+      text-decoration: none;
+      line-height: 1;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .btn-action-edit {
+      background-color: var(--admin-green-50, #ECFDF5);
+      color: var(--admin-green-800, #065F46);
+      border-color: var(--admin-green-200, #A7F3D0);
+    }
+
+    .btn-action-edit svg {
+      color: var(--admin-green-700, #047857);
+      flex-shrink: 0;
+    }
+
+    .btn-action-edit:hover {
+      background-color: var(--admin-green-100, #D1FAE5);
+      border-color: var(--admin-green-400, #34D399);
+      color: var(--admin-green-900, #064E3B);
+      transform: translateY(-1px);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-action-delete {
+      background-color: #FEF2F2;
+      color: #991B1B;
+      border-color: #FECACA;
+    }
+
+    .btn-action-delete svg {
+      color: #DC2626;
+      flex-shrink: 0;
+    }
+
+    .btn-action-delete:hover {
+      background-color: #FEE2E2;
+      border-color: #FCA5A5;
+      color: #7F1D1D;
+      transform: translateY(-1px);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-icon {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 1px solid var(--admin-ink-300);
+      border-radius: 6px;
+      background: #FFFFFF;
+      color: var(--admin-ink-700);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .btn-icon:hover {
+      color: var(--admin-green-800);
+      border-color: var(--admin-green-500);
+      background-color: var(--admin-green-50);
+      transform: translateY(-1px);
+    }
+
+    /* ======================================================== */
+    /* UNIVERSAL POP-UP MODAL OVERLAY & CARD DIALOG FOR CRUD   */
+    /* ======================================================== */
+    .admin-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 99998;
+      animation: modalFadeIn 0.2s ease forwards;
+    }
+
+    /* Target all CRUD modals */
+    .form-card.card[id^="modal-"]:not(#admin-confirm-modal) {
+      position: fixed !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      z-index: 99999 !important;
+      width: min(680px, calc(100vw - 32px)) !important;
+      max-height: 88vh !important;
+      overflow-y: auto !important;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 0, 0, 0.08) !important;
+      border-radius: 16px !important;
+      background-color: #FFFFFF !important;
+      border: 1px solid var(--admin-ink-300, #CBD5E1) !important;
+      margin: 0 !important;
+      animation: adminModalScale 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes adminModalScale {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -46%) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Modal Close Header Button */
+    .modal-close-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid var(--admin-ink-300, #E2E8F0);
+      background: #FFFFFF;
+      color: var(--admin-ink-500, #64748B);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      z-index: 10;
+    }
+
+    .modal-close-btn:hover {
+      background-color: #FEE2E2;
+      border-color: #FCA5A5;
+      color: #DC2626;
+      transform: rotate(90deg);
+    }
+
+    /* ======================================================== */
+    /* UNIVERSAL CONFIRMATION MODAL POP-UP (DELETE/HAPUS)      */
+    /* ======================================================== */
+    .admin-confirm-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 100001;
+      background-color: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: modalFadeIn 0.15s ease forwards;
+    }
+
+    .admin-confirm-card {
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 26px 28px;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 0, 0, 0.06);
+      border: 1px solid var(--admin-ink-300, #CBD5E1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+      animation: adminConfirmScale 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes adminConfirmScale {
+      from {
+        opacity: 0;
+        transform: scale(0.92) translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .confirm-icon-box {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: #FEF2F2;
+      border: 4px solid #FEE2E2;
+      color: #DC2626;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .confirm-body h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--admin-ink-900, #0F172A);
+      margin-bottom: 6px;
+    }
+
+    .confirm-body p {
+      font-size: 0.875rem;
+      color: var(--admin-ink-500, #64748B);
+      line-height: 1.5;
+    }
+
+    .confirm-actions-row {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      justify-content: center;
+      margin-top: 6px;
+    }
+
+    .confirm-actions-row .btn {
+      flex: 1;
+      padding: 10px 16px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      line-height: 1.2;
+    }
+
+    .btn-danger-action {
+      background-color: #DC2626;
+      color: #FFFFFF;
+      border: 1px solid transparent;
+    }
+
+    .btn-danger-action:hover {
+      background-color: #B91C1C;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+    }
+  </style>
+  <ThemeScript />
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="sidebar-brand">
+      <img src="/assets/logo-ypi.webp" alt="Logo FREEKS.id School" width="40" height="36" class="brand-logo school-logo-img" />
+      <div class="brand-titles">
+        <span class="brand-name">CMS Admin</span>
+        <span class="brand-sub">FREEKS.id School</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section-title">NAVIGASI MODUL</div>
+
+    <nav class="sidebar-nav" aria-label="Menu CMS">
+      <ul class="nav-menu">
+        {menuItems.map((item) => {
+          const isActive = activeMenu === item.id;
+          return (
+            <li class="nav-item">
+              <a
+                href={item.href}
+                class={`nav-link ${isActive ? 'active' : ''}`}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                <Icon name={item.icon} size={18} class="nav-icon" />
+                <span class="nav-text">{item.label}</span>
+                {item.badge && <span class={`nav-badge ${item.id === 'pengaturan' ? 'badge-primary' : 'badge-gold'}`}>{item.badge}</span>}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="/" target="_blank" rel="noopener noreferrer" class="btn-visit-site">
+        <Icon name="external-link" size={16} />
+        <span>Buka Web Publik</span>
+      </a>
+      <div class="admin-version">FREEKS.id Admin v1.0</div>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="admin-main-wrap">
+    <!-- Topbar -->
+    <header class="admin-topbar">
+      <div class="topbar-left">
+        <button type="button" id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+          <Icon name="menu" size={20} />
+        </button>
+        <div class="topbar-breadcrumb">
+          <span class="crumb-parent">Dashboard CMS</span>
+          <span class="crumb-separator">/</span>
+          <span class="crumb-current">{title}</span>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <div class="admin-badge-status">
+          <span class="status-dot"></span>
+          <span>Mode Admin Aktif</span>
+        </div>
+        <div class="admin-user-profile">
+          <div class="user-avatar">AD</div>
+          <div class="user-info">
+            <span class="user-name">Administrator</span>
+            <span class="user-role">Super Admin</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Body -->
+    <main class="admin-page-content">
+      <slot />
+    </main>
+  </div>
+
+  <style>
+    /* Admin Sidebar */
+    .admin-sidebar {
+      width: var(--admin-sidebar-w);
+      background-color: #FFFFFF;
+      border-right: 1px solid var(--admin-ink-300);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 100;
+      transition: transform 0.25s ease;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 18px;
+      border-bottom: 1px solid var(--admin-ink-100);
+      background: linear-gradient(to right, var(--admin-green-50), #FFFFFF);
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 36px;
+      object-fit: contain;
+    }
+
+    .brand-titles {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--admin-green-900);
+      line-height: 1.2;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--admin-ink-500);
+      font-weight: 500;
+    }
+
+    .sidebar-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: var(--admin-ink-500);
+      padding: 16px 20px 8px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 4px 12px;
+    }
+
+    .nav-menu {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      color: var(--admin-ink-700);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+
+    .nav-link:hover {
+      background-color: var(--admin-green-50);
+      color: var(--admin-green-900);
+    }
+
+    .nav-link.active {
+      background-color: var(--admin-green-700);
+      color: #FFFFFF;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(27, 122, 47, 0.25);
+    }
+
+    .nav-icon {
+      flex-shrink: 0;
+    }
+
+    .nav-text {
+      flex: 1;
+    }
+
+    .nav-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-primary {
+      background-color: var(--admin-green-100);
+      color: var(--admin-green-800);
+    }
+
+    .nav-link.active .badge-primary {
+      background-color: rgba(255, 255, 255, 0.25);
+      color: #FFFFFF;
+    }
+
+    .badge-gold {
+      background-color: #FEF3C7;
+      color: #92400E;
+    }
+
+    .sidebar-footer {
+      padding: 16px;
+      border-top: 1px solid var(--admin-ink-100);
+      background-color: #FAFAFA;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-visit-site {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 12px;
+      background-color: #FFFFFF;
+      border: 1px solid var(--admin-ink-300);
+      border-radius: 6px;
+      color: var(--admin-green-800);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .btn-visit-site:hover {
+      background-color: var(--admin-green-50);
+      border-color: var(--admin-green-700);
+    }
+
+    .admin-version {
+      font-size: 10px;
+      color: var(--admin-ink-500);
+      text-align: center;
+    }
+
+    /* Main Area */
+    .admin-main-wrap {
+      margin-left: var(--admin-sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .admin-topbar {
+      height: 64px;
+      background-color: #FFFFFF;
+      border-bottom: 1px solid var(--admin-ink-300);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .sidebar-toggle-btn {
+      display: none;
+      background: none;
+      border: 1px solid var(--admin-ink-300);
+      border-radius: 6px;
+      padding: 6px;
+      cursor: pointer;
+      color: var(--admin-ink-700);
+    }
+
+    .topbar-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.875rem;
+    }
+
+    .crumb-parent {
+      color: var(--admin-ink-500);
+    }
+
+    .crumb-separator {
+      color: var(--admin-ink-300);
+    }
+
+    .crumb-current {
+      font-weight: 600;
+      color: var(--admin-green-900);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .admin-badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: var(--admin-green-100);
+      color: var(--admin-green-900);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: #10B981;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+    }
+
+    .admin-user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: var(--admin-green-900);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--admin-ink-900);
+      line-height: 1.2;
+    }
+
+    .user-role {
+      font-size: 11px;
+      color: var(--admin-ink-500);
+    }
+
+    .admin-page-content {
+      padding: 24px clamp(16px, 3vw, 36px);
+      flex: 1;
+    }
+
+    @media (max-width: 900px) {
+      .admin-sidebar {
+        transform: translateX(-100%);
+      }
+
+      .admin-sidebar.open {
+        transform: translateX(0);
+        box-shadow: 0 0 24px rgba(0, 0, 0, 0.15);
+      }
+
+      .admin-main-wrap {
+        margin-left: 0;
+      }
+
+      .sidebar-toggle-btn {
+        display: flex;
+      }
+    }
+  </style>
+
+  <script>
+    const toggleBtn = document.getElementById('sidebar-toggle');
+    const sidebar = document.getElementById('admin-sidebar');
+
+    toggleBtn?.addEventListener('click', () => {
+      sidebar?.classList.toggle('open');
+    });
+
+    // Close sidebar on click outside on mobile
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth <= 900 && sidebar?.classList.contains('open')) {
+        const target = e.target as HTMLElement;
+        if (!sidebar.contains(target) && !toggleBtn?.contains(target)) {
+          sidebar.classList.remove('open');
+        }
+      }
+    });
+
+    // Universal Section Tab Switching Handler
+    document.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('.tab-btn');
+      if (!btn) return;
+      const targetId = btn.getAttribute('data-tab');
+      if (!targetId) return;
+
+      const tabsBar = btn.closest('.section-tabs-bar') || document;
+      tabsBar.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+
+      const container = document.querySelector('.main-content-column') || document;
+      container.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      const targetPanel = document.getElementById(targetId);
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+      }
+    });
+
+    // Universal Image Uploader for all Admin Modules
+    function processAdminImage(
+      file: File,
+      callback: (dataUrl: string, fileName: string) => void,
+      maxWidth = 1280,
+      maxHeight = 1280,
+      quality = 0.85
+    ) {
+      if (!file || !file.type.startsWith('image/')) {
+        alert('Harap pilih file gambar yang valid (JPG, PNG, WebP, SVG).');
+        return;
+      }
+      if (file.type === 'image/svg+xml') {
+        const reader = new FileReader();
+        reader.onload = () => callback(reader.result as string, file.name);
+        reader.readAsDataURL(file);
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+          if (width > maxWidth || height > maxHeight) {
+            if (width / height > maxWidth / maxHeight) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            } else {
+              width = Math.round((width * maxHeight) / height);
+              height = maxHeight;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            const mime = file.type === 'image/png' ? 'image/png' : 'image/webp';
+            callback(canvas.toDataURL(mime, quality), file.name);
+          } else {
+            callback(e.target?.result as string, file.name);
+          }
+        };
+        img.src = e.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function initUniversalUploaders() {
+      document.querySelectorAll<HTMLInputElement>('.asset-file-uploader').forEach(input => {
+        if ((input as any)._hasUploader) return;
+        (input as any)._hasUploader = true;
+
+        input.addEventListener('change', (e) => {
+          const target = e.target as HTMLInputElement;
+          const file = target.files?.[0];
+          if (!file) return;
+
+          const targetInputId = input.getAttribute('data-target-input');
+          const targetPreviewId = input.getAttribute('data-target-preview');
+          const simPreviewId = input.getAttribute('data-sim-preview');
+
+          processAdminImage(file, (dataUrl, fileName) => {
+            if (targetInputId) {
+              const textInput = document.getElementById(targetInputId) as HTMLInputElement | null;
+              if (textInput) {
+                textInput.value = dataUrl;
+                textInput.dispatchEvent(new Event('input', { bubbles: true }));
+                textInput.dispatchEvent(new Event('change', { bubbles: true }));
+              }
+            }
+            if (targetPreviewId) {
+              const prevImg = document.getElementById(targetPreviewId) as HTMLImageElement | null;
+              if (prevImg) prevImg.src = dataUrl;
+            }
+            if (simPreviewId) {
+              const simImg = document.getElementById(simPreviewId) as HTMLImageElement | null;
+              if (simImg) simImg.src = dataUrl;
+            }
+
+            const parent = input.closest('.asset-details, .form-group, .asset-upload-bar');
+            if (parent) {
+              const statusEl = parent.querySelector('.upload-file-status');
+              if (statusEl) {
+                statusEl.textContent = '✓ ' + fileName;
+              }
+            }
+          });
+        });
+      });
+    }
+
+    (window as any).initUniversalUploaders = initUniversalUploaders;
+    (window as any).processAdminImage = processAdminImage;
+
+    // Universal Pop-up Modal System & Confirm Delete Dialog
+    function initUniversalModalSystem() {
+      const backdrop = document.getElementById('admin-modal-backdrop');
+      const confirmModal = document.getElementById('admin-confirm-modal');
+      const confirmTitle = document.getElementById('admin-confirm-title');
+      const confirmMsg = document.getElementById('admin-confirm-message');
+      const confirmBtnOk = document.getElementById('admin-confirm-btn-ok');
+      const confirmBtnCancel = document.getElementById('admin-confirm-btn-cancel');
+
+      function getAllCrudModals() {
+        return document.querySelectorAll<HTMLElement>('.form-card.card[id^="modal-"]:not(#admin-confirm-modal)');
+      }
+
+      function updateBackdrop() {
+        const modals = getAllCrudModals();
+        let isOpen = false;
+        modals.forEach(m => {
+          if (m.style.display && m.style.display !== 'none') {
+            isOpen = true;
+          }
+        });
+        if (backdrop) {
+          backdrop.style.display = isOpen ? 'block' : 'none';
+        }
+        if (!isOpen && (!confirmModal || confirmModal.style.display === 'none')) {
+          document.body.style.overflow = '';
+        } else {
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      // Add close button to every modal header if not already present
+      getAllCrudModals().forEach(modal => {
+        if (!modal.querySelector('.modal-close-btn')) {
+          const closeBtn = document.createElement('button');
+          closeBtn.type = 'button';
+          closeBtn.className = 'modal-close-btn';
+          closeBtn.title = 'Tutup Pop-up';
+          closeBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+          closeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            modal.style.display = 'none';
+            updateBackdrop();
+          });
+          modal.style.position = 'relative';
+          modal.appendChild(closeBtn);
+        }
+      });
+
+      // Observer to react whenever a modal display style changes
+      const observer = new MutationObserver(() => {
+        updateBackdrop();
+      });
+
+      getAllCrudModals().forEach(modal => {
+        observer.observe(modal, { attributes: true, attributeFilter: ['style', 'class'] });
+      });
+
+      // Close modal when backdrop clicked
+      backdrop?.addEventListener('click', () => {
+        getAllCrudModals().forEach(m => {
+          m.style.display = 'none';
+        });
+        updateBackdrop();
+      });
+
+      // Global confirmDelete dialog
+      (window as any).confirmDelete = function(message: string, onConfirm: () => void, title = 'Konfirmasi Hapus') {
+        if (!confirmModal || !confirmBtnOk || !confirmBtnCancel) {
+          if (confirm(message)) onConfirm();
+          return;
+        }
+
+        if (confirmTitle) confirmTitle.textContent = title;
+        if (confirmMsg) confirmMsg.textContent = message || 'Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.';
+
+        confirmModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+
+        const cleanup = () => {
+          confirmModal.style.display = 'none';
+          updateBackdrop();
+          confirmBtnOk.onclick = null;
+          confirmBtnCancel.onclick = null;
+        };
+
+        confirmBtnCancel.onclick = (e) => {
+          e.preventDefault();
+          cleanup();
+        };
+
+        confirmBtnOk.onclick = (e) => {
+          e.preventDefault();
+          cleanup();
+          if (typeof onConfirm === 'function') onConfirm();
+        };
+      };
+
+      (window as any).showConfirmDialog = (window as any).confirmDelete;
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        initUniversalUploaders();
+        initUniversalModalSystem();
+      });
+    } else {
+      initUniversalUploaders();
+      initUniversalModalSystem();
+    }
+  </script>
+
+  <!-- Universal Modal Backdrop for all CRUD Form Modals -->
+  <div id="admin-modal-backdrop" class="admin-modal-backdrop" style="display: none;" aria-hidden="true"></div>
+
+  <!-- Universal Confirmation Dialog Modal for Delete Actions -->
+  <div id="admin-confirm-modal" class="admin-confirm-backdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="admin-confirm-title">
+    <div class="admin-confirm-card">
+      <div class="confirm-icon-box">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+      </div>
+      <div class="confirm-body">
+        <h3 id="admin-confirm-title">Konfirmasi Hapus</h3>
+        <p id="admin-confirm-message">Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.</p>
+      </div>
+      <div class="confirm-actions-row">
+        <button type="button" id="admin-confirm-btn-cancel" class="btn btn-secondary">
+          Batal
+        </button>
+        <button type="button" id="admin-confirm-btn-ok" class="btn btn-danger-action">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            <line x1="10" y1="11" x2="10" y2="17"></line>
+            <line x1="14" y1="11" x2="14" y2="17"></line>
+          </svg>
+          <span>Ya, Lanjut Hapus</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

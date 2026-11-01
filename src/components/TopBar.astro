@@ -1,0 +1,109 @@
+---
+import Icon from './Icon.astro';
+import siteData from '../data/siteData.json';
+
+const { school } = siteData;
+---
+
+<div class="top-bar" aria-label="Informasi Kontak Cepat">
+  <div class="container-wide top-bar-container">
+    <div class="top-bar-left">
+      <div class="top-bar-item">
+        <Icon name="phone" size={14} class="top-bar-icon" />
+        <a href={`tel:${school.phone}`}>{school.phone}</a>
+      </div>
+      <div class="top-bar-item">
+        <Icon name="mail" size={14} class="top-bar-icon" />
+        <a href={`mailto:${school.email}`}>{school.email}</a>
+      </div>
+      <div class="top-bar-item">
+        <Icon name="clock" size={14} class="top-bar-icon" />
+        <span>{school.officeHours}</span>
+      </div>
+    </div>
+    
+    <div class="top-bar-right">
+      <span class="social-label">Ikuti Kami:</span>
+      <a href={school.socials.instagramUrl} target="_blank" rel="noopener noreferrer" aria-label="Instagram FREEKS.id School" class="social-link">
+        <Icon name="instagram" size={14} />
+      </a>
+      <a href={school.socials.youtubeUrl} target="_blank" rel="noopener noreferrer" aria-label="YouTube FREEKS.id School" class="social-link">
+        <Icon name="youtube" size={14} />
+      </a>
+      <a href={school.socials.facebookUrl} target="_blank" rel="noopener noreferrer" aria-label="Facebook FREEKS.id School" class="social-link">
+        <Icon name="facebook" size={14} />
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .top-bar {
+    display: none;
+    height: var(--topbar-height);
+    background-color: var(--green-900);
+    color: #FFFFFF;
+    font-size: var(--text-xs);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  @media (min-width: 1024px) {
+    .top-bar {
+      display: block;
+    }
+  }
+
+  .top-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+  }
+
+  .top-bar-left, .top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: var(--s-5);
+  }
+
+  .top-bar-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #E2E8F0;
+  }
+
+  .top-bar-item a {
+    color: #FFFFFF;
+    text-decoration: none;
+  }
+
+  .top-bar-item a:hover {
+    color: var(--yellow-500);
+  }
+
+  .top-bar-icon {
+    color: var(--green-200);
+  }
+
+  .social-label {
+    color: var(--green-200);
+    margin-right: -8px;
+  }
+
+  .social-link {
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: var(--radius-sm);
+    transition: color var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease);
+  }
+
+  .social-link:hover {
+    color: var(--yellow-500);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+</style>
+

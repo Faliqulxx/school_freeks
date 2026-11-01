@@ -1,0 +1,640 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Icon from '../components/Icon.astro';
+import siteData from '../data/siteData.json';
+
+const { school } = siteData;
+
+const breadcrumbItems = [
+  { label: 'Kontak Kampus' }
+];
+---
+
+<BaseLayout
+  title="Hubungi Kami – FREEKS.id School"
+  description="Alamat kampus, kontak admission, WhatsApp, email, jam layanan kantor, dan formulir kirim pesan online FREEKS.id School."
+>
+  <div class="page-header section-soft">
+    <div class="container-wide">
+      <Breadcrumb items={breadcrumbItems} />
+      <div class="header-meta">
+        <span class="chip chip-primary">Pusat Layanan Informasi</span>
+      </div>
+      <h1 class="page-title">Hubungi FREEKS.id School</h1>
+      <p class="page-description">
+        Kami siap menyambut silaturahmi, pertanyaan seputar akademik, pendaftaran siswa baru, dan saran dari Anda.
+      </p>
+    </div>
+  </div>
+
+  <div class="container-wide section">
+    <div class="contact-page-grid">
+      <!-- Kolom Kiri: Kartu Kontak & Akses Langsung (PRD 8.7) -->
+      <div class="contact-info-column">
+        <div class="card contact-cards-box">
+          <div class="section-header">
+            <h2>Informasi Sekretariat</h2>
+            <div class="section-divider"></div>
+          </div>
+
+          <div class="interactive-contact-list">
+            <!-- Telepon -->
+            <a href={`tel:${school.phone}`} class="contact-action-card">
+              <div class="action-icon-wrap">
+                <Icon name="phone" size={20} />
+              </div>
+              <div class="action-content">
+                <span class="action-label">Telepon Kantor (Langsung Panggil)</span>
+                <strong class="action-val">{school.phone}</strong>
+              </div>
+              <Icon name="external-link" size={16} class="action-arrow" />
+            </a>
+
+            <!-- WhatsApp -->
+            <a
+              href={`https://wa.me/${school.whatsappRaw}?text=${encodeURIComponent(school.whatsappMessage)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="contact-action-card wa-card"
+            >
+              <div class="action-icon-wrap wa-icon-wrap">
+                <Icon name="message-circle" size={20} />
+              </div>
+              <div class="action-content">
+                <span class="action-label">WhatsApp Panitia PPDB (Respon Cepat)</span>
+                <strong class="action-val">{school.whatsapp}</strong>
+              </div>
+              <Icon name="external-link" size={16} class="action-arrow" />
+            </a>
+
+            <!-- Email -->
+            <a href={`mailto:${school.email}`} class="contact-action-card">
+              <div class="action-icon-wrap">
+                <Icon name="mail" size={20} />
+              </div>
+              <div class="action-content">
+                <span class="action-label">Surat Elektronik (Email Resmi)</span>
+                <strong class="action-val email-val">{school.email}</strong>
+              </div>
+              <Icon name="external-link" size={16} class="action-arrow" />
+            </a>
+
+            <!-- Jam Layanan -->
+            <div class="contact-static-item">
+              <div class="action-icon-wrap static">
+                <Icon name="clock" size={20} />
+              </div>
+              <div class="action-content">
+                <span class="action-label">Jam Layanan Kantor</span>
+                <strong class="action-val">{school.officeHours}</strong>
+                <span class="sub-hint">Hari Ahad dan Libur Nasional Tutup</span>
+              </div>
+            </div>
+
+            <!-- Alamat & Petunjuk Arah (PRD 7.6) -->
+            <div class="contact-static-item">
+              <div class="action-icon-wrap static">
+                <Icon name="map-pin" size={20} />
+              </div>
+              <div class="action-content">
+                <span class="action-label">Alamat Sekolah</span>
+                <strong class="action-val" id="copy-address-text">{school.address}</strong>
+                <div class="address-actions-row">
+                  <button type="button" id="btn-copy-address" class="btn btn-secondary btn-sm">
+                    <Icon name="copy" size={14} />
+                    <span id="copy-address-label">Salin Alamat</span>
+                  </button>
+                  <a
+                    href={school.mapsUrl || `https://maps.google.com/?q=${school.coordinates.lat},${school.coordinates.lng}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn btn-primary btn-sm"
+                  >
+                    <Icon name="navigation" size={14} />
+                    <span>Petunjuk Arah (Maps)</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Peta Google Maps Embed (PRD 7.6) -->
+        <div class="card map-card">
+          <div class="map-card-header">
+            <Icon name="map" size={18} />
+            <span>Peta Lokasi FREEKS Campus</span>
+          </div>
+          <div class="map-iframe-container">
+            <iframe
+              src={`https://maps.google.com/maps?q=${school.coordinates.lat},${school.coordinates.lng}&hl=id&z=17&output=embed`}
+              width="100%"
+              height="100%"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Peta Lokasi FREEKS Campus"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kolom Kanan: Formulir Kirim Pesan (PRD 8.7) -->
+      <div class="contact-form-column">
+        <div class="card message-form-card">
+          <div class="section-header">
+            <h2>Kirim Pesan / Pengaduan</h2>
+            <div class="section-divider"></div>
+            <p>Estimasi waktu balasan: maksimal 1x24 jam pada hari kerja.</p>
+          </div>
+
+          <form id="contact-form" class="contact-form">
+            <div class="form-group">
+              <label for="msg-name">Nama Lengkap Anda *</label>
+              <input type="text" id="msg-name" required placeholder="Contoh: Bapak Ahmad" autocomplete="name" />
+            </div>
+
+            <div class="form-group">
+              <label for="msg-contact">Nomor WhatsApp atau Email Anda *</label>
+              <input type="text" id="msg-contact" required placeholder="08xxxxxxxxxx atau email@anda.com" />
+            </div>
+
+            <div class="form-group">
+              <label for="msg-subject">Kategori Perihal *</label>
+              <select id="msg-subject" required>
+                <option value="">-- Pilih Kategori Pesan --</option>
+                <option value="Informasi PPDB">Informasi Pendaftaran Siswa Baru (PPDB)</option>
+                <option value="Akademik & Pembelajaran">Akademik & Pembelajaran</option>
+                <option value="Administrasi & SPP">Administrasi & Biaya Sekolah</option>
+                <option value="Saran & Pengaduan">Saran & Pengaduan</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="msg-text">Isi Pesan / Pertanyaan *</label>
+              <textarea id="msg-text" rows="5" required placeholder="Tuliskan pertanyaan atau informasi yang ingin Anda ketahui secara detail..."></textarea>
+            </div>
+
+            <!-- Honeypot Anti-spam (PRD 7.5: honeypot protection) -->
+            <div style="display: none;" aria-hidden="true">
+              <label for="honeypot_field">Leave this empty</label>
+              <input type="text" id="honeypot_field" name="website_hp" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+              <span>Kirim Pesan Sekarang</span>
+              <Icon name="send" size={16} />
+            </button>
+          </form>
+
+          <div id="msg-success" class="msg-success-box card" hidden>
+            <Icon name="check-circle" size={28} class="msg-success-icon" />
+            <div>
+              <strong>Pesan Anda Berhasil Terkirim!</strong>
+              <p>Tim admission dan operasional kampus akan menghubungi Anda melalui kontak yang Anda cantumkan.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-top: var(--s-6);
+    padding-bottom: var(--s-6);
+    border-bottom: 1px solid var(--ink-300);
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--s-3);
+  }
+
+  .page-title {
+    font-size: var(--h1);
+    color: var(--green-900);
+    margin-bottom: var(--s-2);
+  }
+
+  .page-description {
+    font-size: var(--text-lg);
+    color: var(--ink-600);
+    max-width: 65ch;
+  }
+
+  .contact-page-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-6);
+    min-width: 0;
+  }
+
+  .contact-info-column,
+  .contact-form-column {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  @media (min-width: 1024px) {
+    .contact-page-grid {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+      gap: var(--s-7);
+    }
+  }
+
+  .contact-cards-box {
+    padding: var(--s-5);
+    margin-bottom: var(--s-6);
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .interactive-contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  @media (min-width: 641px) and (max-width: 1023px) {
+    .interactive-contact-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .contact-action-card {
+      padding: 12px 14px;
+      gap: 12px;
+      align-items: center;
+    }
+    .action-icon-wrap {
+      width: 40px !important;
+      height: 40px !important;
+      flex-shrink: 0;
+    }
+    .action-label {
+      font-size: 11px;
+    }
+    .action-val {
+      font-size: var(--text-sm);
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    .contact-static-item {
+      padding: 12px 14px;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .address-actions-row {
+      flex-direction: column;
+      width: 100%;
+      gap: 8px;
+    }
+    .address-actions-row button,
+    .address-actions-row a {
+      width: 100%;
+      min-height: 44px;
+      justify-content: center;
+    }
+    .map-iframe-container {
+      height: 300px;
+    }
+    .btn-full {
+      min-height: 48px;
+      justify-content: center;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .interactive-contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-4);
+    }
+  }
+
+  .contact-action-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border: var(--border);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--ink-900);
+    background-color: #FFFFFF;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    transition: transform var(--dur-fast) var(--ease),
+                border-color var(--dur-fast) var(--ease),
+                background-color var(--dur-fast) var(--ease);
+  }
+
+  .contact-action-card:hover {
+    border-color: var(--green-500);
+    background-color: var(--green-50);
+    transform: translateY(-1px);
+  }
+
+  .contact-action-card.wa-card:hover {
+    background-color: #E8FBF0;
+    border-color: #25D366;
+  }
+
+  .action-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    background-color: var(--green-50);
+    color: var(--green-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .wa-icon-wrap {
+    background-color: #25D366;
+    color: #FFFFFF;
+  }
+
+  .action-icon-wrap.static {
+    background-color: #F1F5F9;
+    color: var(--ink-600);
+  }
+
+  .action-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .action-label {
+    font-size: 11px;
+    color: var(--ink-600);
+    font-weight: 600;
+  }
+
+  .action-val {
+    font-size: var(--text-sm);
+    color: var(--green-900);
+    margin-top: 2px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .email-val {
+    overflow-wrap: anywhere;
+  }
+
+  .action-arrow {
+    color: var(--ink-300);
+  }
+
+  .contact-static-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    border: var(--border);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-soft);
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .sub-hint {
+    font-size: 11px;
+    color: var(--ink-600);
+    margin-top: 4px;
+  }
+
+  .address-actions-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+
+  /* Map Card */
+  .map-card {
+    overflow: hidden;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .map-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background-color: var(--green-50);
+    border-bottom: 1px solid var(--green-200);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--green-900);
+  }
+
+  .map-iframe-container {
+    width: 100%;
+    max-width: 100%;
+    height: 300px;
+  }
+
+  .map-iframe-container iframe {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+  }
+
+  /* Message Form */
+  .message-form-card {
+    padding: var(--s-5);
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .message-form-card {
+      padding: var(--s-6);
+    }
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-4);
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .form-group label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--green-900);
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    height: 48px;
+    font-size: 16px;
+    padding: 0 14px;
+    border: 1px solid var(--ink-300);
+    border-radius: var(--radius-sm);
+    color: var(--ink-900);
+    background-color: #FFFFFF;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .form-group textarea {
+    height: auto;
+    padding: 12px 14px;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--green-700);
+    outline: none;
+  }
+
+  .btn-full {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .msg-success-box {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: var(--s-4);
+    background-color: #ECFDF3;
+    border: 1px solid #A6F4C5;
+    color: #027A48;
+    margin-top: 16px;
+    font-size: var(--text-sm);
+  }
+
+  .msg-success-box[hidden] {
+    display: none !important;
+  }
+
+  .msg-success-box p {
+    font-size: var(--text-xs);
+    margin: 2px 0 0 0;
+  }
+
+  .msg-success-icon {
+    flex-shrink: 0;
+  }
+</style>
+
+<script>
+  // Copy address interaction
+  const copyBtn = document.getElementById('btn-copy-address');
+  const copyLabel = document.getElementById('copy-address-label');
+  const addressText = document.getElementById('copy-address-text')?.textContent || '';
+
+  copyBtn?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(addressText);
+      if (copyLabel) copyLabel.textContent = 'Alamat Tersalin!';
+      setTimeout(() => {
+        if (copyLabel) copyLabel.textContent = 'Salin Alamat';
+      }, 2500);
+    } catch (e) {
+      // Ignored
+    }
+  });
+
+  // Contact form submission connected to CMS Inbox (Modul 8)
+  const contactForm = document.getElementById('contact-form') as HTMLFormElement | null;
+  const successBox = document.getElementById('msg-success');
+
+  contactForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const hp = (document.getElementById('honeypot_field') as HTMLInputElement)?.value;
+    if (hp) return; // Spam honeypot triggered
+
+    const nameInput = document.getElementById('msg-name') as HTMLInputElement;
+    const contactInput = document.getElementById('msg-contact') as HTMLInputElement;
+    const subjectInput = document.getElementById('msg-subject') as HTMLSelectElement;
+    const textInput = document.getElementById('msg-text') as HTMLTextAreaElement;
+
+    if (!nameInput?.value || !contactInput?.value || !subjectInput?.value || !textInput?.value) return;
+
+    const now = new Date();
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const formattedDate = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+    const defaultInitial = [
+      { id: "MSG-2026-001", name: "Ibu Sulastri", contact: "081234567890", isWhatsApp: true, subject: "Informasi PPDB", date: "2026-10-27 14:32", status: "Belum Dibaca", message: "Assalamu'alaikum. Mohon tanya apakah pendaftaran gelombang 1 masih ada kuota beasiswa untuk anak yatim? Dan dokumen apa saja yang perlu kami bawa saat tes Al-Qur'an?" },
+      { id: "MSG-2026-002", name: "Bapak Hadi Pranoto", contact: "hadi.pranoto88@gmail.com", isWhatsApp: false, subject: "Administrasi & SPP", date: "2026-10-26 09:15", status: "Sudah Dibalas", message: "Selamat pagi tata usaha FREEKS.id School. Saya ingin menanyakan terkait kwitansi pelunasan apparel anak saya kelas VII-B untuk keperluan klaim kantor. Terima kasih." },
+      { id: "MSG-2026-003", name: "Ustadz Mansur", contact: "085712349988", isWhatsApp: true, subject: "Akademik & Pembelajaran", date: "2026-10-24 16:40", status: "Sudah Dibalas", message: "Assalamu'alaikum warahmatullah. Mau konfirmasi jadwal bimbingan hafalan Juz 30 apakah setiap pagi jam 06.30 ada pembiasaan tadarus bersama guru tahfidz?" },
+      { id: "MSG-2026-004", name: "Ibu Rina Setyawati", contact: "082299887766", isWhatsApp: true, subject: "Saran & Pengaduan", date: "2026-10-23 11:20", status: "Belum Dibaca", message: "Mohon izin menyampaikan saran agar area parkir antar jemput siswa di depan gerbang madrasah dapat diatur oleh petugas saat jam pulang sekolah demi kelancaran lalu lintas desa." },
+      { id: "MSG-2026-005", name: "Ahmad Choirul", contact: "ahmad.choirul@alumni.sch.id", isWhatsApp: false, subject: "Lainnya", date: "2026-10-20 19:05", status: "Sudah Dibalas", message: "Saya alumni MTs angkatan 2020 bermaksud memohon legalisir ijazah untuk pendaftaran beasiswa perguruan tinggi. Apakah bisa diproses dalam 1 hari kerja?" }
+    ];
+
+    let currentMessages = defaultInitial;
+    const stored = localStorage.getItem('mts_cms_kontak_messages');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) currentMessages = parsed;
+      } catch (err) {
+        // use defaultInitial
+      }
+    }
+
+    const contactVal = contactInput.value.trim();
+    const isWa = /^(08|\+62)/.test(contactVal);
+    const newMsg = {
+      id: `MSG-${now.getFullYear()}-${String(Math.floor(100 + Math.random() * 900))}`,
+      name: nameInput.value.trim(),
+      contact: contactVal,
+      isWhatsApp: isWa,
+      subject: subjectInput.value,
+      date: formattedDate,
+      status: "Belum Dibaca",
+      message: textInput.value.trim()
+    };
+
+    currentMessages.unshift(newMsg);
+    localStorage.setItem('mts_cms_kontak_messages', JSON.stringify(currentMessages));
+
+    contactForm.reset();
+    if (successBox) {
+      successBox.hidden = false;
+      successBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  });
+</script>
+

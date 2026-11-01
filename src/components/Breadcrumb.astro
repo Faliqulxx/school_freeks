@@ -1,0 +1,138 @@
+---
+import Icon from './Icon.astro';
+
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+
+// For mobile: one level up
+const parentItem = items.length >= 2 ? items[items.length - 2] : { label: 'Beranda', href: '/' };
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Beranda",
+      "item": "https://freeks.id/"
+    },
+    ...items.map((item, idx) => ({
+      "@type": "ListItem",
+      "position": idx + 2,
+      "name": item.label,
+      ...(item.href ? { "item": `https://freeks.id${item.href}` } : {})
+    }))
+  ]
+};
+---
+
+<!-- JSON-LD BreadcrumbList -->
+<script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+
+<nav class="breadcrumb-nav" aria-label="Breadcrumb">
+  <!-- Mobile version: Back to Parent -->
+  <a href={parentItem.href || '/'} class="breadcrumb-mobile-back">
+    <Icon name="arrow-left" size={16} />
+    <span>Kembali ke {parentItem.label}</span>
+  </a>
+
+  <!-- Desktop Full Breadcrumb -->
+  <ol class="breadcrumb-full">
+    <li class="breadcrumb-item">
+      <a href="/">Beranda</a>
+    </li>
+    {items.map((item, idx) => {
+      const isLast = idx === items.length - 1;
+      return (
+        <li class="breadcrumb-item">
+          <span class="breadcrumb-separator">/</span>
+          {isLast || !item.href ? (
+            <span class="breadcrumb-current" aria-current="page">{item.label}</span>
+          ) : (
+            <a href={item.href}>{item.label}</a>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+</nav>
+
+<style>
+  .breadcrumb-nav {
+    margin-bottom: var(--s-3);
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .breadcrumb-full {
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: var(--text-sm);
+    color: var(--ink-600);
+  }
+
+  @media (min-width: 768px) {
+    .breadcrumb-full {
+      display: flex;
+    }
+  }
+
+  .breadcrumb-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .breadcrumb-item a {
+    color: var(--green-700);
+    text-decoration: none;
+  }
+
+  .breadcrumb-item a:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumb-separator {
+    color: var(--ink-300);
+  }
+
+  .breadcrumb-current {
+    color: var(--ink-900);
+    font-weight: 600;
+  }
+
+  .breadcrumb-mobile-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--text-sm);
+    color: var(--green-700);
+    text-decoration: none;
+    font-weight: 600;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.35;
+  }
+
+  @media (min-width: 768px) {
+    .breadcrumb-mobile-back {
+      display: none;
+    }
+  }
+</style>
+

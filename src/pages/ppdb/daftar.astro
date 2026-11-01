@@ -1,0 +1,1427 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Icon from '../../components/Icon.astro';
+import siteData from '../../data/siteData.json';
+import ppdbData from '../../data/ppdb.json';
+
+const { school } = siteData;
+
+const breadcrumbItems = [
+  { label: 'PPDB', href: '/ppdb' },
+  { label: 'Formulir Pendaftaran Online' }
+];
+---
+
+<BaseLayout
+  title="Formulir Pendaftaran Online Admission 2027/2028 – FREEKS.id School"
+  description="Pengisian formulir pendaftaran siswa baru 4 tahap dengan fitur simpan draft otomatis, unggah berkas, dan bukti registrasi."
+>
+  <div class="page-header section-soft">
+    <div class="container-wide">
+      <Breadcrumb items={breadcrumbItems} />
+      <div class="header-meta">
+        <span class="chip chip-important">Tahun Ajaran {ppdbData.academicYear}</span>
+      </div>
+      <h1 class="page-title">Formulir Pendaftaran Siswa Baru</h1>
+      <p class="page-description">
+        Lengkapi 4 langkah data berikut. Draft tersimpan otomatis di perangkat Anda sehingga tidak akan hilang jika koneksi internet terputus.
+      </p>
+    </div>
+  </div>
+
+  <div class="container-wide section">
+    <div class="wizard-container" id="ppdb-wizard">
+      <!-- Wizard Progress Header (PRD 8.6.1) -->
+      <div class="wizard-header card" id="wizard-header">
+        <div class="wizard-status-row">
+          <span class="wizard-step-indicator" id="step-indicator-text">Langkah 1 dari 4: Data Calon Siswa</span>
+          <span class="wizard-saved-badge" id="autosave-status">
+            <Icon name="check" size={14} />
+            <span>Draft tersimpan otomatis</span>
+          </span>
+        </div>
+
+        <div class="progress-bar-track" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-bar-fill" id="progress-bar" style="width: 25%;"></div>
+        </div>
+
+        <!-- Step Pills -->
+        <div class="step-nav-pills">
+          <button type="button" class="step-nav-btn active" data-step="1">1. Calon Siswa</button>
+          <button type="button" class="step-nav-btn" data-step="2">2. Orang Tua</button>
+          <button type="button" class="step-nav-btn" data-step="3">3. Asal Sekolah</button>
+          <button type="button" class="step-nav-btn" data-step="4">4. Berkas & Tinjau</button>
+        </div>
+      </div>
+
+      <!-- Error Summary Box (PRD 7.5: ringkasan error di atas form saat gagal kirim) -->
+      <div class="error-summary-box card" id="error-summary" hidden>
+        <div class="error-head">
+          <Icon name="alert-circle" size={20} class="error-icon" />
+          <h4 id="error-summary-title">Mohon lengkapi isian berikut:</h4>
+        </div>
+        <ul id="error-summary-list" class="error-list"></ul>
+      </div>
+
+      <!-- Multi-step Form -->
+      <form id="ppdb-form" class="wizard-form" novalidate>
+        <!-- =================================================================
+             LANGKAH 1: DATA CALON SISWA
+             ================================================================= -->
+        <div class="wizard-step-pane active" id="pane-step-1">
+          <div class="card form-pane-card">
+            <h2 class="pane-title">1. Data Calon Siswa</h2>
+            <div class="section-divider"></div>
+
+            <div class="form-grid">
+              <div class="form-group full-col">
+                <label for="siswa-nama">Nama Lengkap Siswa *</label>
+                <input
+                  type="text"
+                  id="siswa-nama"
+                  name="siswa_nama"
+                  required
+                  placeholder="Sesuai akta kelahiran, contoh: Muhammad Fajar Kurniawan"
+                  autocomplete="name"
+                />
+                <span class="field-error" id="err-siswa-nama"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="siswa-nisn">NISN (Nomor Induk Siswa Nasional) *</label>
+                <input
+                  type="text"
+                  id="siswa-nisn"
+                  name="siswa_nisn"
+                  required
+                  inputmode="numeric"
+                  pattern="[0-9]{10}"
+                  maxlength="10"
+                  placeholder="10 digit NISN dari SD/MI"
+                />
+                <span class="field-error" id="err-siswa-nisn"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="siswa-nik">NIK Siswa (Nomor Kartu Keluarga) *</label>
+                <input
+                  type="text"
+                  id="siswa-nik"
+                  name="siswa_nik"
+                  required
+                  inputmode="numeric"
+                  maxlength="16"
+                  placeholder="16 digit NIK pada KK"
+                />
+                <span class="field-error" id="err-siswa-nik"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="siswa-gender">Jenis Kelamin *</label>
+                <select id="siswa-gender" name="siswa_gender" required>
+                  <option value="">-- Pilih Jenis Kelamin --</option>
+                  <option value="Laki-laki">Laki-laki</option>
+                  <option value="Perempuan">Perempuan</option>
+                </select>
+                <span class="field-error" id="err-siswa-gender"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="siswa-tempat-lahir">Tempat Lahir *</label>
+                <input
+                  type="text"
+                  id="siswa-tempat-lahir"
+                  name="siswa_tempat_lahir"
+                  required
+                  placeholder="Kota / Kabupaten lahir"
+                />
+                <span class="field-error" id="err-siswa-tempat-lahir"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="siswa-tanggal-lahir">Tanggal Lahir *</label>
+                <input
+                  type="date"
+                  id="siswa-tanggal-lahir"
+                  name="siswa_tanggal_lahir"
+                  required
+                  autocomplete="bday"
+                />
+                <span class="field-error" id="err-siswa-tanggal-lahir"></span>
+              </div>
+
+              <div class="form-group full-col">
+                <label for="siswa-alamat">Alamat Tempat Tinggal Lengkap *</label>
+                <textarea
+                  id="siswa-alamat"
+                  name="siswa_alamat"
+                  rows="3"
+                  required
+                  placeholder="Nama jalan, RT/RW, Dusun, Desa/Kelurahan, Kecamatan"
+                  autocomplete="street-address"
+                ></textarea>
+                <span class="field-error" id="err-siswa-alamat"></span>
+              </div>
+            </div>
+
+            <div class="wizard-nav-footer">
+              <div></div>
+              <button type="button" class="btn btn-primary next-step-btn" data-target="2">
+                <span>Lanjut ke Data Orang Tua</span>
+                <Icon name="arrow-right" size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- =================================================================
+             LANGKAH 2: DATA ORANG TUA / WALI
+             ================================================================= -->
+        <div class="wizard-step-pane" id="pane-step-2">
+          <div class="card form-pane-card">
+            <h2 class="pane-title">2. Data Orang Tua / Wali</h2>
+            <div class="section-divider"></div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="ortu-ayah">Nama Lengkap Ayah Kandung *</label>
+                <input
+                  type="text"
+                  id="ortu-ayah"
+                  name="ortu_ayah"
+                  required
+                  placeholder="Contoh: Ahmad Syafi'i"
+                />
+                <span class="field-error" id="err-ortu-ayah"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="ortu-ibu">Nama Lengkap Ibu Kandung *</label>
+                <input
+                  type="text"
+                  id="ortu-ibu"
+                  name="ortu_ibu"
+                  required
+                  placeholder="Contoh: Siti Nur Azizah"
+                />
+                <span class="field-error" id="err-ortu-ibu"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="ortu-pekerjaan">Pekerjaan Orang Tua / Wali *</label>
+                <input
+                  type="text"
+                  id="ortu-pekerjaan"
+                  name="ortu_pekerjaan"
+                  required
+                  placeholder="Contoh: Petani / Nelayan / Wiraswasta / Guru"
+                />
+                <span class="field-error" id="err-ortu-pekerjaan"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="ortu-wa">Nomor WhatsApp Aktif Wali Murid *</label>
+                <input
+                  type="tel"
+                  id="ortu-wa"
+                  name="ortu_wa"
+                  required
+                  inputmode="tel"
+                  placeholder="08xxxxxxxxxx (untuk konfirmasi pendaftaran)"
+                  autocomplete="tel"
+                />
+                <span class="field-error" id="err-ortu-wa"></span>
+              </div>
+
+              <div class="form-group full-col">
+                <label for="ortu-penghasilan">Rentang Penghasilan Orang Tua (Opsional, untuk beasiswa)</label>
+                <select id="ortu-penghasilan" name="ortu_penghasilan">
+                  <option value="">-- Pilih Rentang Penghasilan --</option>
+                  <option value="Kurang dari Rp1.000.000">Kurang dari Rp1.000.000 (Pemegang KIP/PKH)</option>
+                  <option value="Rp1.000.000 - Rp2.500.000">Rp1.000.000 - Rp2.500.000</option>
+                  <option value="Rp2.500.000 - Rp5.000.000">Rp2.500.000 - Rp5.000.000</option>
+                  <option value="Lebih dari Rp5.000.000">Lebih dari Rp5.000.000</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="wizard-nav-footer">
+              <button type="button" class="btn btn-secondary prev-step-btn" data-target="1">
+                <Icon name="arrow-left" size={16} />
+                <span>Kembali ke Data Siswa</span>
+              </button>
+              <button type="button" class="btn btn-primary next-step-btn" data-target="3">
+                <span>Lanjut ke Asal Sekolah</span>
+                <Icon name="arrow-right" size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- =================================================================
+             LANGKAH 3: ASAL SEKOLAH
+             ================================================================= -->
+        <div class="wizard-step-pane" id="pane-step-3">
+          <div class="card form-pane-card">
+            <h2 class="pane-title">3. Data Asal Sekolah (SD / MI)</h2>
+            <div class="section-divider"></div>
+
+            <div class="form-grid">
+              <div class="form-group full-col">
+                <label for="sekolah-asal">Nama SD / MI Asal *</label>
+                <input
+                  type="text"
+                  id="sekolah-asal"
+                  name="sekolah_asal"
+                  required
+                  placeholder="Contoh: SD Negeri / Swasta Asal"
+                />
+                <span class="field-error" id="err-sekolah-asal"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="sekolah-npsn">NPSN Sekolah Asal (Jika Mengetahui)</label>
+                <input
+                  type="text"
+                  id="sekolah-npsn"
+                  name="sekolah_npsn"
+                  inputmode="numeric"
+                  placeholder="8 digit NPSN SD/MI"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="sekolah-status-lulus">Status Kelulusan *</label>
+                <select id="sekolah-status-lulus" name="sekolah_status_lulus" required>
+                  <option value="Akan lulus tahun 2027">Akan lulus tahun 2027 (Kelas VI saat ini)</option>
+                  <option value="Lulus tahun 2026 atau sebelumnya">Lulus tahun 2026 atau sebelumnya</option>
+                </select>
+              </div>
+
+              <div class="form-group full-col">
+                <label for="sekolah-alamat">Alamat / Kecamatan Asal Sekolah</label>
+                <input
+                  type="text"
+                  id="sekolah-alamat"
+                  name="sekolah_alamat"
+                  placeholder="Contoh: Gresik, Surabaya, atau Kota Lain"
+                />
+              </div>
+            </div>
+
+            <div class="wizard-nav-footer">
+              <button type="button" class="btn btn-secondary prev-step-btn" data-target="2">
+                <Icon name="arrow-left" size={16} />
+                <span>Kembali ke Data Orang Tua</span>
+              </button>
+              <button type="button" class="btn btn-primary next-step-btn" data-target="4">
+                <span>Lanjut ke Berkas & Tinjau</span>
+                <Icon name="arrow-right" size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- =================================================================
+             LANGKAH 4: UNGGAH BERKAS & TINJAU (PRD 8.6.1)
+             ================================================================= -->
+        <div class="wizard-step-pane" id="pane-step-4">
+          <div class="card form-pane-card">
+            <h2 class="pane-title">4. Unggah Berkas & Tinjau Pendaftaran</h2>
+            <div class="section-divider"></div>
+
+            <!-- Upload Zone -->
+            <div class="upload-section">
+              <h3 class="upload-section-title">Unggah Foto / Dokumen Pendukung</h3>
+              <p class="upload-note">
+                Format yang diterima: JPG, PNG, atau PDF (Maks. 2 MB per berkas). Anda dapat mengambil foto langsung lewat kamera ponsel atau memilih berkas galeri.
+              </p>
+
+              <div class="upload-boxes-grid">
+                <!-- File 1: KK -->
+                <div class="file-upload-card" id="card-file-kk">
+                  <div class="file-icon-wrap">
+                    <Icon name="file" size={24} />
+                  </div>
+                  <div class="file-info-wrap">
+                    <span class="file-label-name">Foto Kartu Keluarga (KK) *</span>
+                    <input
+                      type="file"
+                      id="file-kk"
+                      accept="image/*,application/pdf"
+                      class="file-native-input"
+                    />
+                    <label for="file-kk" class="file-picker-btn">
+                      <Icon name="upload" size={14} />
+                      <span>Pilih Berkas KK</span>
+                    </label>
+                    <div class="file-preview-status" id="preview-kk" hidden>
+                      <span class="file-name-text"></span>
+                      <button type="button" class="file-remove-btn" data-remove="file-kk" aria-label="Hapus berkas KK">
+                        <Icon name="x" size={14} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- File 2: Akta -->
+                <div class="file-upload-card" id="card-file-akta">
+                  <div class="file-icon-wrap">
+                    <Icon name="file" size={24} />
+                  </div>
+                  <div class="file-info-wrap">
+                    <span class="file-label-name">Foto Akta Kelahiran *</span>
+                    <input
+                      type="file"
+                      id="file-akta"
+                      accept="image/*,application/pdf"
+                      class="file-native-input"
+                    />
+                    <label for="file-akta" class="file-picker-btn">
+                      <Icon name="upload" size={14} />
+                      <span>Pilih Berkas Akta</span>
+                    </label>
+                    <div class="file-preview-status" id="preview-akta" hidden>
+                      <span class="file-name-text"></span>
+                      <button type="button" class="file-remove-btn" data-remove="file-akta" aria-label="Hapus berkas Akta">
+                        <Icon name="x" size={14} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- File 3: Pas Foto -->
+                <div class="file-upload-card" id="card-file-foto">
+                  <div class="file-icon-wrap">
+                    <Icon name="image" size={24} />
+                  </div>
+                  <div class="file-info-wrap">
+                    <span class="file-label-name">Pas Foto Siswa (3x4)</span>
+                    <input
+                      type="file"
+                      id="file-foto"
+                      accept="image/*"
+                      class="file-native-input"
+                    />
+                    <label for="file-foto" class="file-picker-btn">
+                      <Icon name="upload" size={14} />
+                      <span>Pilih Pas Foto</span>
+                    </label>
+                    <div class="file-preview-status" id="preview-foto" hidden>
+                      <span class="file-name-text"></span>
+                      <button type="button" class="file-remove-btn" data-remove="file-foto" aria-label="Hapus pas foto">
+                        <Icon name="x" size={14} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Review Summary Table (PRD 8.6.1: Halaman tinjau menampilkan seluruh data untuk dicek) -->
+            <div class="review-box" id="review-summary-area">
+              <h3 class="review-head-title">Tinjau Ringkasan Isian Anda</h3>
+              <div class="review-grid">
+                <div class="review-group">
+                  <h4>Data Calon Siswa</h4>
+                  <p><strong>Nama:</strong> <span id="rev-nama">-</span></p>
+                  <p><strong>NISN:</strong> <span id="rev-nisn">-</span></p>
+                  <p><strong>NIK:</strong> <span id="rev-nik">-</span></p>
+                  <p><strong>Jenis Kelamin:</strong> <span id="rev-gender">-</span></p>
+                  <p><strong>TTL:</strong> <span id="rev-ttl">-</span></p>
+                  <p><strong>Alamat:</strong> <span id="rev-alamat">-</span></p>
+                </div>
+
+                <div class="review-group">
+                  <h4>Data Orang Tua</h4>
+                  <p><strong>Ayah:</strong> <span id="rev-ayah">-</span></p>
+                  <p><strong>Ibu:</strong> <span id="rev-ibu">-</span></p>
+                  <p><strong>Pekerjaan:</strong> <span id="rev-pekerjaan">-</span></p>
+                  <p><strong>WhatsApp:</strong> <span id="rev-wa">-</span></p>
+                </div>
+
+                <div class="review-group">
+                  <h4>Asal Sekolah & Berkas</h4>
+                  <p><strong>Asal SD/MI:</strong> <span id="rev-sekolah">-</span></p>
+                  <p><strong>Status:</strong> <span id="rev-status-lulus">-</span></p>
+                  <p><strong>Berkas KK:</strong> <span id="rev-file-kk">Belum diunggah</span></p>
+                  <p><strong>Berkas Akta:</strong> <span id="rev-file-akta">Belum diunggah</span></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Privacy Policy Notice (PRD 8.6.1 & 13.3) -->
+            <div class="privacy-consent-box">
+              <label class="consent-label">
+                <input type="checkbox" id="consent-check" required />
+                <span>
+                  Saya menyatakan bahwa seluruh data yang diisikan adalah benar. Saya memahami bahwa data pribadi siswa di bawah umur dilindungi oleh kebijakan privasi FREEKS.id School dan hanya digunakan untuk keperluan seleksi administrasi admission.
+                </span>
+              </label>
+              <span class="field-error" id="err-consent"></span>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="wizard-nav-footer">
+              <button type="button" class="btn btn-secondary prev-step-btn" data-target="3">
+                <Icon name="arrow-left" size={16} />
+                <span>Kembali ke Asal Sekolah</span>
+              </button>
+              <button type="submit" class="btn btn-cta" id="btn-submit-ppdb">
+                <span>Kirim Formulir Pendaftaran</span>
+                <Icon name="check" size={18} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- =================================================================
+           HALAMAN SUKSES PENDAFTARAN (PRD 8.6.1)
+           ================================================================= -->
+      <div id="ppdb-success-screen" class="success-screen card" hidden>
+        <div class="success-icon-banner">
+          <div class="success-circle">
+            <Icon name="check" size={40} />
+          </div>
+          <h2>Pendaftaran Berhasil Terkirim!</h2>
+          <p class="success-lead">
+            Selamat, formulir pendaftaran siswa baru telah diterima oleh sistem admission FREEKS.id School.
+          </p>
+        </div>
+
+        <div class="registration-slip-box" id="registration-slip">
+          <div class="slip-header">
+            <img src="/assets/logo-ypi.svg" alt="" width="48" height="48" />
+            <div>
+              <h3>BUKTI REGISTRASI PPDB 2027/2028</h3>
+              <p>FREEKS.id School - Modern Tech & Creative Academy</p>
+            </div>
+          </div>
+
+          <div class="reg-number-highlight">
+            <span class="reg-label">Nomor Registrasi Pendaftaran:</span>
+            <strong class="reg-number" id="success-reg-num">PPDB-2027-0184</strong>
+            <span class="reg-timestamp" id="success-reg-time"></span>
+          </div>
+
+          <div class="slip-data-summary">
+            <div class="slip-row">
+              <span class="slip-label">Nama Calon Siswa:</span>
+              <strong id="slip-name">-</strong>
+            </div>
+            <div class="slip-row">
+              <span class="slip-label">NISN Siswa:</span>
+              <span id="slip-nisn">-</span>
+            </div>
+            <div class="slip-row">
+              <span class="slip-label">Asal Sekolah:</span>
+              <span id="slip-school">-</span>
+            </div>
+            <div class="slip-row">
+              <span class="slip-label">No. WhatsApp Wali:</span>
+              <span id="slip-wa">-</span>
+            </div>
+            <div class="slip-row">
+              <span class="slip-label">Status Verifikasi:</span>
+              <span class="chip chip-important">Menunggu Verifikasi Administrasi</span>
+            </div>
+          </div>
+
+          <div class="slip-instructions">
+            <h4>Langkah Selanjutnya:</h4>
+            <ol>
+              <li>Simpan atau cetak nomor pendaftaran ini sebagai bukti registrasi.</li>
+              <li>Konfirmasikan pendaftaran Anda ke panitia melalui tombol WhatsApp di bawah.</li>
+              <li>Hadir pada pelaksanaan tes baca Al-Qur'an sesuai jadwal gelombang pendaftaran.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Success Actions (PRD 8.6.1) -->
+        <div class="success-action-buttons btn-group-responsive">
+          <button type="button" onclick="window.print()" class="btn btn-secondary btn-hero">
+            <Icon name="printer" size={18} />
+            <span>Cetak / Simpan PDF Bukti Pendaftaran</span>
+          </button>
+          <a
+            id="success-wa-link"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-primary btn-hero"
+          >
+            <Icon name="message-circle" size={18} />
+            <span>Konfirmasi ke Panitia via WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-top: var(--s-6);
+    padding-bottom: var(--s-6);
+    border-bottom: 1px solid var(--ink-300);
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--s-3);
+  }
+
+  .page-title {
+    font-size: var(--h1);
+    color: var(--green-900);
+    margin-bottom: var(--s-2);
+  }
+
+  .page-description {
+    font-size: var(--text-lg);
+    color: var(--ink-600);
+    max-width: 65ch;
+  }
+
+  .wizard-container {
+    max-width: 860px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Wizard Header */
+  .wizard-header {
+    padding: var(--s-5);
+    margin-bottom: var(--s-5);
+    background-color: #FFFFFF;
+  }
+
+  .wizard-status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .wizard-step-indicator {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--green-900);
+  }
+
+  .wizard-saved-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--green-700);
+    font-weight: 600;
+    background-color: var(--green-50);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+  }
+
+  .progress-bar-track {
+    height: 8px;
+    background-color: #E2E8F0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: var(--s-4);
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background-color: var(--green-700);
+    transition: width var(--dur) var(--ease);
+  }
+
+  .step-nav-pills {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
+  .step-nav-btn {
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    background: none;
+    border: 1px solid var(--ink-300);
+    color: var(--ink-600);
+    cursor: default;
+    white-space: nowrap;
+  }
+
+  .step-nav-btn.active {
+    background-color: var(--green-700);
+    border-color: var(--green-700);
+    color: #FFFFFF;
+  }
+
+  .step-nav-btn.completed {
+    background-color: var(--green-50);
+    border-color: var(--green-500);
+    color: var(--green-800);
+  }
+
+  /* Error summary */
+  .error-summary-box {
+    padding: var(--s-4) var(--s-5);
+    background-color: #FEF3F2;
+    border: 1px solid #FECDCA;
+    margin-bottom: var(--s-5);
+  }
+
+  .error-summary-box[hidden],
+  .success-screen[hidden],
+  .file-preview-status[hidden] {
+    display: none !important;
+  }
+
+  .error-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #B42318;
+    margin-bottom: 6px;
+  }
+
+  .error-list {
+    margin: 0;
+    padding-left: 24px;
+    font-size: var(--text-xs);
+    color: #B42318;
+  }
+
+  /* Form Panes */
+  .wizard-step-pane {
+    display: none;
+  }
+
+  .wizard-step-pane.active {
+    display: block;
+  }
+
+  .form-pane-card {
+    padding: var(--s-6);
+  }
+
+  .pane-title {
+    font-size: var(--h3);
+    color: var(--green-900);
+    margin: 0;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s-4);
+    margin: var(--s-5) 0 var(--s-6) 0;
+  }
+
+  @media (min-width: 640px) {
+    .form-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s-5);
+    }
+    .form-group.full-col {
+      grid-column: span 2;
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .form-group label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--green-900);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    height: 48px; /* PRD 7.5: 48px input height, 16px font to prevent iOS zoom */
+    min-height: 48px;
+    font-size: 16px;
+    padding: 0 14px;
+    border: 1px solid var(--ink-300);
+    border-radius: var(--radius-sm);
+    color: var(--ink-900);
+    background-color: #FFFFFF;
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 100%;
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+
+  .form-group textarea {
+    height: auto;
+    min-height: 80px;
+    padding: 10px 14px;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--green-700);
+  }
+
+  .field-error {
+    font-size: 12px;
+    color: var(--danger);
+    font-weight: 600;
+    display: none;
+    line-height: 1.4;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    margin-top: 4px;
+    max-width: 100%;
+  }
+
+  .field-error.visible {
+    display: block;
+  }
+
+  /* Navigation Footer */
+  .wizard-nav-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--ink-300);
+    padding-top: var(--s-5);
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 640px) {
+    .wizard-header {
+      padding: 16px;
+    }
+    .form-pane-card {
+      padding: 16px;
+      margin-bottom: calc(var(--bottom-bar-height) + 28px);
+    }
+    .wizard-nav-footer {
+      flex-direction: column-reverse;
+      gap: 12px;
+      width: 100%;
+    }
+    .wizard-nav-footer button,
+    .wizard-nav-footer a {
+      width: 100%;
+      min-height: 48px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .upload-boxes-grid {
+      grid-template-columns: 1fr !important;
+      gap: 12px !important;
+    }
+    .review-grid {
+      grid-template-columns: 1fr !important;
+      gap: 12px !important;
+    }
+  }
+
+  /* Upload Section */
+  .upload-section {
+    margin-bottom: var(--s-6);
+  }
+
+  .upload-section-title {
+    font-size: 1.15rem;
+    color: var(--green-900);
+    margin-bottom: 4px;
+  }
+
+  .upload-note {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    margin-bottom: var(--s-4);
+  }
+
+  .upload-boxes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  @media (max-width: 640px) {
+    .file-upload-card {
+      padding: 10px !important;
+    }
+    .upload-icon-circle {
+      width: 32px !important;
+      height: 32px !important;
+    }
+    .upload-label {
+      font-size: 11px !important;
+    }
+  }
+
+  @media (min-width: 640px) {
+    .upload-boxes-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s-4);
+    }
+  }
+
+  .file-upload-card {
+    padding: var(--s-4);
+    border: 1.5px dashed var(--green-500);
+    background-color: var(--green-50);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .file-icon-wrap {
+    color: var(--green-700);
+  }
+
+  .file-label-name {
+    display: block;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--green-900);
+    margin-bottom: 6px;
+  }
+
+  .file-native-input {
+    display: none;
+  }
+
+  .file-picker-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background-color: #FFFFFF;
+    border: 1px solid var(--green-700);
+    color: var(--green-700);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  .file-preview-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--green-900);
+    font-weight: 600;
+    background-color: #FFFFFF;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    margin-top: 6px;
+  }
+
+  .file-remove-btn {
+    border: none;
+    background: none;
+    color: var(--danger);
+    cursor: pointer;
+    padding: 2px;
+  }
+
+  /* Review Box */
+  .review-box {
+    background-color: var(--bg-soft);
+    border: 1px solid var(--ink-300);
+    border-radius: var(--radius-md);
+    padding: var(--s-5);
+    margin-bottom: var(--s-5);
+  }
+
+  .review-head-title {
+    font-size: 1.15rem;
+    color: var(--green-900);
+    margin-bottom: var(--s-4);
+  }
+
+  .review-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  @media (min-width: 768px) {
+    .review-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s-4);
+    }
+  }
+
+  .review-group h4 {
+    font-size: var(--text-xs);
+    color: var(--green-700);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--ink-300);
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+  }
+
+  .review-group p {
+    font-size: var(--text-xs);
+    color: var(--ink-900);
+    margin: 4px 0;
+    line-height: 1.4;
+  }
+
+  /* Consent */
+  .privacy-consent-box {
+    margin-bottom: var(--s-5);
+  }
+
+  .consent-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    line-height: 1.5;
+  }
+
+  .consent-label input {
+    margin-top: 3px;
+  }
+
+  /* Success Screen */
+  .success-screen {
+    padding: var(--s-6);
+  }
+
+  .success-icon-banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: var(--s-6);
+  }
+
+  .success-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background-color: var(--success);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--s-3);
+  }
+
+  .success-lead {
+    font-size: var(--text-base);
+    color: var(--ink-600);
+    max-width: 50ch;
+  }
+
+  .registration-slip-box {
+    background-color: #FFFFFF;
+    border: 2px solid var(--green-700);
+    border-radius: var(--radius-md);
+    padding: var(--s-5);
+    margin-bottom: var(--s-6);
+  }
+
+  .slip-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 2px dashed var(--ink-300);
+    padding-bottom: var(--s-4);
+    margin-bottom: var(--s-4);
+  }
+
+  .slip-header h3 {
+    font-size: 1.15rem;
+    color: var(--green-900);
+    margin: 0;
+  }
+
+  .slip-header p {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    margin: 0;
+  }
+
+  .reg-number-highlight {
+    background-color: var(--green-50);
+    padding: var(--s-4);
+    border-radius: var(--radius-sm);
+    text-align: center;
+    margin-bottom: var(--s-4);
+  }
+
+  .reg-label {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--green-800);
+    margin-bottom: 4px;
+  }
+
+  .reg-number {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    color: var(--green-900);
+    letter-spacing: 1px;
+    display: block;
+  }
+
+  .reg-timestamp {
+    display: block;
+    font-size: 11px;
+    color: var(--ink-600);
+    margin-top: 4px;
+  }
+
+  .slip-data-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: var(--s-4);
+    padding-bottom: var(--s-4);
+    border-bottom: 1px solid var(--ink-300);
+  }
+
+  .slip-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--text-sm);
+  }
+
+  .slip-label {
+    color: var(--ink-600);
+  }
+
+  .slip-instructions h4 {
+    font-size: var(--text-sm);
+    color: var(--green-900);
+    margin-bottom: 6px;
+  }
+
+  .slip-instructions ol {
+    margin: 0;
+    padding-left: 20px;
+    font-size: var(--text-xs);
+    color: var(--ink-900);
+    line-height: 1.6;
+  }
+
+  .success-action-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+  }
+</style>
+
+<script>
+  // PPDB Multi-Step Wizard & Autosave Controller
+  const STORAGE_KEY = 'mts_ppdb_draft_v1';
+  let currentStep = 1;
+
+  const form = document.getElementById('ppdb-form') as HTMLFormElement | null;
+  const panes = [
+    document.getElementById('pane-step-1'),
+    document.getElementById('pane-step-2'),
+    document.getElementById('pane-step-3'),
+    document.getElementById('pane-step-4')
+  ];
+  const stepIndicatorText = document.getElementById('step-indicator-text');
+  const progressBar = document.getElementById('progress-bar');
+  const stepPills = document.querySelectorAll('.step-nav-btn');
+  const errorBox = document.getElementById('error-summary');
+  const errorList = document.getElementById('error-summary-list');
+  const successScreen = document.getElementById('ppdb-success-screen');
+  const wizardHeader = document.getElementById('wizard-header');
+
+  const stepTitles = [
+    'Langkah 1 dari 4: Data Calon Siswa',
+    'Langkah 2 dari 4: Data Orang Tua / Wali',
+    'Langkah 3 dari 4: Data Asal Sekolah',
+    'Langkah 4 dari 4: Unggah Berkas & Tinjau'
+  ];
+
+  // 1. Restore Autosaved Draft
+  function loadDraft() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) return;
+      const data = JSON.parse(saved);
+      Object.keys(data).forEach((key) => {
+        const input = document.querySelector(`[name="${key}"]`) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null;
+        if (input && input.type !== 'file') {
+          input.value = data[key];
+        }
+      });
+      updateReviewSummary();
+    } catch (e) {
+      // Ignored
+    }
+  }
+
+  // 2. Save Draft to LocalStorage
+  function saveDraft() {
+    if (!form) return;
+    const formData = new FormData(form);
+    const obj: Record<string, string> = {};
+    formData.forEach((val, key) => {
+      if (typeof val === 'string') obj[key] = val;
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+    updateReviewSummary();
+  }
+
+  // 3. Validation per step
+  function validateStep(stepNum: number): boolean {
+    const pane = panes[stepNum - 1];
+    if (!pane) return true;
+
+    const requiredInputs = pane.querySelectorAll('input[required], select[required], textarea[required]') as NodeListOf<HTMLInputElement>;
+    const errors: string[] = [];
+
+    requiredInputs.forEach((input) => {
+      const fieldId = input.id;
+      const errEl = document.getElementById(`err-${fieldId}`);
+      let hasError = false;
+
+      if (!input.value.trim()) {
+        hasError = true;
+        const label = input.closest('.form-group')?.querySelector('label')?.textContent || input.name;
+        errors.push(`${label.replace('*', '').trim()} wajib diisi.`);
+      } else if (input.id === 'siswa-nisn' && !/^[0-9]{10}$/.test(input.value.trim())) {
+        hasError = true;
+        errors.push('NISN harus berupa 10 digit angka.');
+      } else if (input.id === 'siswa-nik' && !/^[0-9]{16}$/.test(input.value.trim())) {
+        hasError = true;
+        errors.push('NIK harus berupa 16 digit angka.');
+      }
+
+      if (errEl) {
+        if (hasError) {
+          errEl.textContent = 'Harap periksa isian ini.';
+          errEl.classList.add('visible');
+        } else {
+          errEl.textContent = '';
+          errEl.classList.remove('visible');
+        }
+      }
+    });
+
+    if (stepNum === 4) {
+      const consent = document.getElementById('consent-check') as HTMLInputElement | null;
+      const errConsent = document.getElementById('err-consent');
+      if (consent && !consent.checked) {
+        errors.push('Anda harus mencentang persetujuan kebenaran data & privasi.');
+        if (errConsent) {
+          errConsent.textContent = 'Wajib dicentang untuk melanjutkan.';
+          errConsent.classList.add('visible');
+        }
+      }
+    }
+
+    if (errorBox && errorList) {
+      if (errors.length > 0) {
+        errorList.innerHTML = errors.map(e => `<li>${e}</li>`).join('');
+        errorBox.hidden = false;
+        errorBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
+      } else {
+        errorBox.hidden = true;
+      }
+    }
+
+    return true;
+  }
+
+  // 4. Step Transition
+  function goToStep(stepNum: number) {
+    panes.forEach((p, idx) => {
+      if (idx === stepNum - 1) {
+        p?.classList.add('active');
+      } else {
+        p?.classList.remove('active');
+      }
+    });
+
+    stepPills.forEach((pill, idx) => {
+      if (idx + 1 === stepNum) {
+        pill.classList.add('active');
+      } else if (idx + 1 < stepNum) {
+        pill.classList.remove('active');
+        pill.classList.add('completed');
+      } else {
+        pill.classList.remove('active', 'completed');
+      }
+    });
+
+    if (stepIndicatorText) stepIndicatorText.textContent = stepTitles[stepNum - 1];
+    if (progressBar) progressBar.style.width = `${(stepNum / 4) * 100}%`;
+
+    currentStep = stepNum;
+    window.scrollTo({ top: wizardHeader?.offsetTop ? wizardHeader.offsetTop - 80 : 0, behavior: 'smooth' });
+    saveDraft();
+  }
+
+  // 5. Update Review Summary
+  function updateReviewSummary() {
+    const getValue = (id: string) => {
+      const el = document.getElementById(id) as HTMLInputElement | null;
+      return el ? el.value : '';
+    };
+
+    const setReview = (targetId: string, val: string, fallback = '-') => {
+      const el = document.getElementById(targetId);
+      if (el) el.textContent = val || fallback;
+    };
+
+    setReview('rev-nama', getValue('siswa-nama'));
+    setReview('rev-nisn', getValue('siswa-nisn'));
+    setReview('rev-nik', getValue('siswa-nik'));
+    setReview('rev-gender', getValue('siswa-gender'));
+    setReview('rev-ttl', `${getValue('siswa-tempat-lahir')}, ${getValue('siswa-tanggal-lahir')}`);
+    setReview('rev-alamat', getValue('siswa-alamat'));
+    setReview('rev-ayah', getValue('ortu-ayah'));
+    setReview('rev-ibu', getValue('ortu-ibu'));
+    setReview('rev-pekerjaan', getValue('ortu-pekerjaan'));
+    setReview('rev-wa', getValue('ortu-wa'));
+    setReview('rev-sekolah', getValue('sekolah-asal'));
+    setReview('rev-status-lulus', getValue('sekolah-status-lulus'));
+  }
+
+  // File picker handler
+  ['file-kk', 'file-akta', 'file-foto'].forEach((fileId) => {
+    const input = document.getElementById(fileId) as HTMLInputElement | null;
+    const preview = document.getElementById(`preview-${fileId.replace('file-', '')}`);
+    if (!input || !preview) return;
+
+    input.addEventListener('change', () => {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const nameSpan = preview.querySelector('.file-name-text');
+        if (nameSpan) nameSpan.textContent = `${file.name} (${Math.round(file.size / 1024)} KB)`;
+        preview.hidden = false;
+
+        const revId = `rev-${fileId}`;
+        const revEl = document.getElementById(revId);
+        if (revEl) revEl.textContent = `Tersedia: ${file.name}`;
+      }
+    });
+  });
+
+  // Remove file button
+  document.querySelectorAll('.file-remove-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const targetInputId = btn.getAttribute('data-remove');
+      if (!targetInputId) return;
+      const input = document.getElementById(targetInputId) as HTMLInputElement | null;
+      const preview = btn.closest('.file-preview-status') as HTMLElement | null;
+      if (input) input.value = '';
+      if (preview) preview.hidden = true;
+
+      const revId = `rev-${targetInputId}`;
+      const revEl = document.getElementById(revId);
+      if (revEl) revEl.textContent = 'Belum diunggah';
+    });
+  });
+
+  // Next & Prev Buttons
+  document.querySelectorAll('.next-step-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = parseInt(btn.getAttribute('data-target') || '1', 10);
+      if (validateStep(currentStep)) {
+        goToStep(target);
+      }
+    });
+  });
+
+  document.querySelectorAll('.prev-step-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = parseInt(btn.getAttribute('data-target') || '1', 10);
+      goToStep(target);
+    });
+  });
+
+  // Form input changes trigger draft autosave
+  form?.addEventListener('input', () => {
+    saveDraft();
+  });
+
+  // 6. Submit Final Form -> Show Success Screen (PRD 8.6.1)
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!validateStep(4)) return;
+
+    // Generate Registration Number (e.g. PPDB-2027-XXXX)
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    const regNumber = `PPDB-2027-${randomNum}`;
+    const studentName = (document.getElementById('siswa-nama') as HTMLInputElement)?.value || '';
+    const studentNisn = (document.getElementById('siswa-nisn') as HTMLInputElement)?.value || '';
+    const schoolFrom = (document.getElementById('sekolah-asal') as HTMLInputElement)?.value || '';
+    const ortuWa = (document.getElementById('ortu-wa') as HTMLInputElement)?.value || '';
+
+    // Populate Success Screen
+    const regNumEl = document.getElementById('success-reg-num');
+    const regTimeEl = document.getElementById('success-reg-time');
+    const slipName = document.getElementById('slip-name');
+    const slipNisn = document.getElementById('slip-nisn');
+    const slipSchool = document.getElementById('slip-school');
+    const slipWa = document.getElementById('slip-wa');
+    const waLink = document.getElementById('success-wa-link') as HTMLAnchorElement | null;
+
+    if (regNumEl) regNumEl.textContent = regNumber;
+    if (regTimeEl) regTimeEl.textContent = `Waktu submit: ${new Date().toLocaleString('id-ID')}`;
+    if (slipName) slipName.textContent = studentName;
+    if (slipNisn) slipNisn.textContent = studentNisn;
+    if (slipSchool) slipSchool.textContent = schoolFrom;
+    if (slipWa) slipWa.textContent = ortuWa;
+
+    // WA Link with Registration Number
+    if (waLink) {
+      const waMsg = `Halo Tim Admission FREEKS.id School. Saya telah mengisi formulir online atas nama ${studentName} dengan Nomor Registrasi: ${regNumber}. Mohon informasi tahapan verifikasi selanjutnya. Terima kasih.`;
+      waLink.href = `https://wa.me/6281200000000?text=${encodeURIComponent(waMsg)}`;
+    }
+
+    // Hide form, show success
+    if (form) form.hidden = true;
+    if (wizardHeader) wizardHeader.hidden = true;
+    if (errorBox) errorBox.hidden = true;
+    if (successScreen) {
+      successScreen.hidden = false;
+      successScreen.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Clear saved draft
+    localStorage.removeItem(STORAGE_KEY);
+  });
+
+  // Init load draft on start
+  loadDraft();
+</script>
+

@@ -1,0 +1,40 @@
+{
+  "dummy": false,
+  "school": {
+    "name": "FREEKS.id School",
+    "shortName": "FREEKS School",
+    "foundation": "Yayasan Inovasi Kreasi Digital (FREEKS Foundation)",
+    "slogan": "Empowering Future Thinkers, Creators & Innovators",
+    "npsn": "69988771",
+    "accreditation": "A (Unggul)",
+    "address": "FREEKS Campus - Digital Innovation Park, Jl. Lembah Inovasi Cyber No. 88, Gresik Techno-Hub, Jawa Timur 61151",
+    "mapsUrl": "https://maps.google.com",
+    "coordinates": {
+      "lat": -7.1554,
+      "lng": 112.6558
+    },
+    "phone": "0812-8888-3733",
+    "whatsapp": "0812-8888-3733",
+    "whatsappRaw": "6281288883733",
+    "whatsappMessage": "Halo Tim FREEKS.id School, saya ingin bertanya tentang program dan pendaftaran siswa baru.",
+    "email": "admissions@freeks.id",
+    "officeHours": "Senin - Jumat 08:00-16:30 WIB, Sabtu 08:00-13:00 WIB",
+    "socials": {
+      "instagram": "@freeks.id",
+      "instagramUrl": "https://instagram.com/freeks.id",
+      "youtube": "FREEKS.id School Official",
+      "youtubeUrl": "https://youtube.com/@freeks.id",
+      "facebook": "FREEKS.id School",
+      "facebookUrl": "https://facebook.com/freeks.id"
+    }
+  },
+  "theme": {
+    "preset": "emerald",
+    "primary": "#1B7A2F",
+    "primaryDark": "#0B3B16",
+    "primaryMid": "#0F4D1C",
+    "primaryLight": "#3DA352",
+    "primaryBorder": "#CDE8B5",
+    "primarySoft": "#F1F8EA"
+  }
+}

@@ -1,0 +1,1618 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import Icon from '../../components/Icon.astro';
+import siteData from '../../data/siteData.json';
+
+const { school } = siteData;
+---
+
+<AdminLayout title="Pengaturan Global Situs (Modul 1)" activeMenu="pengaturan">
+  <div class="page-header-wrap">
+    <div>
+      <div class="module-tag">MODUL 1 DARI 8</div>
+      <h1>Pengaturan Global Situs</h1>
+      <p class="page-subtitle">
+        Kelola identitas utama Sekolah, alamat resmi, kontak pelayanan WhatsApp, jam kerja, dan akun media sosial yang tampil di seluruh halaman website.
+      </p>
+    </div>
+
+    <div class="header-action-group">
+      <button type="button" id="btn-export-json" class="btn btn-secondary">
+        <Icon name="download" size={16} />
+        <span>Unduh JSON</span>
+      </button>
+      <button type="button" id="btn-save-settings" class="btn btn-primary">
+        <Icon name="check" size={18} />
+        <span>Simpan Perubahan</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="save-toast" class="toast-notification" role="alert" aria-live="polite" hidden>
+    <Icon name="check-circle" size={20} class="toast-icon" />
+    <div class="toast-body">
+      <strong>Perubahan Berhasil Disimpan!</strong>
+      <p>Data pengaturan global telah diperbarui secara lokal. Anda juga dapat mengunduh berkas siteData.json terbaru.</p>
+    </div>
+    <button type="button" id="toast-close" class="toast-close-btn" aria-label="Tutup notifikasi">
+      <Icon name="x" size={16} />
+    </button>
+  </div>
+
+  <div class="settings-layout-grid">
+    <!-- Left Column: Form Sections -->
+    <div class="form-container">
+      <form id="global-settings-form" onsubmit="return false;">
+        <!-- Card 1: Identitas Sekolah -->
+        <div class="form-card card" id="sec-identitas">
+          <div class="card-header">
+            <div class="header-icon-wrap">
+              <Icon name="landmark" size={20} />
+            </div>
+            <div>
+              <h3>1. Identitas Sekolah</h3>
+              <p class="card-desc">Informasi resmi lembaga di bawah naungan Kementerian Agama dan Yayasan.</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group col-span-2">
+              <label for="input-school-name">Nama Resmi Sekolah <span class="req">*</span></label>
+              <input
+                type="text"
+                id="input-school-name"
+                name="name"
+                value={school.name}
+                required
+                class="form-control"
+              />
+              <span class="form-help">Nama lengkap yang muncul pada judul situs dan kop resmi.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="input-short-name">Nama Singkat / Brand <span class="req">*</span></label>
+              <input
+                type="text"
+                id="input-short-name"
+                name="shortName"
+                value={school.shortName}
+                required
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="input-foundation">Yayasan Naungan <span class="req">*</span></label>
+              <input
+                type="text"
+                id="input-foundation"
+                name="foundation"
+                value={school.foundation}
+                required
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="input-npsn">NPSN (Nomor Pokok Sekolah Nasional) <span class="req">*</span></label>
+              <input
+                type="text"
+                id="input-npsn"
+                name="npsn"
+                value={school.npsn}
+                required
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="input-accreditation">Status Akreditasi <span class="req">*</span></label>
+              <select id="input-accreditation" name="accreditation" class="form-control">
+                <option value="Unggul" selected={school.accreditation === 'Unggul'}>Unggul</option>
+                <option value="A" selected={school.accreditation === 'A'}>A (Amat Baik)</option>
+                <option value="B" selected={school.accreditation === 'B'}>B (Baik)</option>
+                <option value="C" selected={school.accreditation === 'C'}>C (Cukup)</option>
+              </select>
+            </div>
+
+            <div class="form-group col-span-2">
+              <label for="input-slogan">Motto / Slogan Sekolah <span class="req">*</span></label>
+              <input
+                type="text"
+                id="input-slogan"
+                name="slogan"
+                value={school.slogan}
+                required
+                class="form-control"
+              />
+              <span class="form-help">Slogan yang tertulis di fasad gedung: "Berilmu, Beramal, Berakhlak".</span>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Kontak & Pelayanan -->
+        <div class="form-card card" id="sec-kontak">
+          <div class="card-header">
+            <div class="header-icon-wrap">
+              <Icon name="phone" size={20} />
+            </div>
+            <div>
+              <h3>2. Kontak & Jam Pelayanan</h3>
+              <p class="card-desc">Nomor telepon kantor, WhatsApp Panitia PPDB, email, dan jam operasional.</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="input-phone">Telepon Kantor / Tata Usaha <span class="req">*</span></label>
+              <input
+                type="tel"
+                id="input-phone"
+                name="phone"
+                value={school.phone}
+                required
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="input-email">Email Resmi Sekolah <span class="req">*</span></label>
+              <input
+                type="email"
+                id="input-email"
+                name="email"
+                value={school.email}
+                required
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="input-whatsapp">Nomor WhatsApp Tampilan <span class="req">*</span></label>
+              <input
+                type="text"
+                id="input-whatsapp"
+                name="whatsapp"
+                value={school.whatsapp}
+                placeholder="0823-0000-0000"
+                required
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="input-whatsapp-raw">WhatsApp Raw (Format 62xxx) <span class="req">*</span></label>
+              <input
+                type="text"
+                id="input-whatsapp-raw"
+                name="whatsappRaw"
+                value={school.whatsappRaw}
+                placeholder="6282300000000"
+                required
+                class="form-control"
+              />
+              <span class="form-help">Digunakan untuk tautan langsung https://wa.me/62...</span>
+            </div>
+
+            <div class="form-group col-span-2">
+              <label for="input-whatsapp-msg">Pesan Otomatis WhatsApp (Default Template)</label>
+              <textarea
+                id="input-whatsapp-msg"
+                name="whatsappMessage"
+                rows="2"
+                class="form-control"
+              >{school.whatsappMessage}</textarea>
+              <span class="form-help">Pesan pembuka otomatis saat calon wali murid menekan tombol WhatsApp.</span>
+            </div>
+
+            <div class="form-group col-span-2">
+              <label for="input-office-hours">Jam Layanan Kantor <span class="req">*</span></label>
+              <input
+                type="text"
+                id="input-office-hours"
+                name="officeHours"
+                value={school.officeHours}
+                required
+                class="form-control"
+              />
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Alamat & Lokasi Google Maps -->
+        <div class="form-card card" id="sec-lokasi">
+          <div class="card-header">
+            <div class="header-icon-wrap">
+              <Icon name="map-pin" size={20} />
+            </div>
+            <div>
+              <h3>3. Alamat Sekolah & Google Maps</h3>
+              <p class="card-desc">Lokasi fisik kampus Sekolah dan koordinat peta navigasi.</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group col-span-2">
+              <label for="input-address">Alamat Lengkap Sekolah <span class="req">*</span></label>
+              <textarea
+                id="input-address"
+                name="address"
+                rows="2"
+                required
+                class="form-control"
+              >{school.address}</textarea>
+            </div>
+
+            <div class="form-group col-span-2">
+              <label for="input-maps-url">Tautan Google Maps Resmi</label>
+              <div class="input-with-button">
+                <input
+                  type="url"
+                  id="input-maps-url"
+                  name="mapsUrl"
+                  value={school.mapsUrl}
+                  class="form-control"
+                />
+                <a
+                  href={school.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  id="btn-test-maps"
+                  class="btn btn-secondary btn-sm"
+                  title="Buka Peta"
+                >
+                  <Icon name="external-link" size={14} />
+                  <span>Uji Buka</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="input-lat">Koordinat Latitude (Garis Lintang)</label>
+              <input
+                type="number"
+                step="any"
+                id="input-lat"
+                name="lat"
+                value={school.coordinates.lat}
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="input-lng">Koordinat Longitude (Garis Bujur)</label>
+              <input
+                type="number"
+                step="any"
+                id="input-lng"
+                name="lng"
+                value={school.coordinates.lng}
+                class="form-control"
+              />
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Media Sosial Resmi -->
+        <div class="form-card card" id="sec-sosial">
+          <div class="card-header">
+            <div class="header-icon-wrap">
+              <Icon name="share-2" size={20} />
+            </div>
+            <div>
+              <h3>4. Akun Media Sosial Resmi</h3>
+              <p class="card-desc">Tautan kanal komunikasi dan publikasi Sekolah kepada masyarakat.</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group col-span-2">
+              <label for="input-ig-url">Instagram URL</label>
+              <div class="input-with-button">
+                <input
+                  type="url"
+                  id="input-ig-url"
+                  name="instagramUrl"
+                  value={school.socials.instagramUrl}
+                  class="form-control"
+                />
+                <a
+                  href={school.socials.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  id="btn-test-ig"
+                  class="btn btn-secondary btn-sm"
+                >
+                  <Icon name="instagram" size={14} />
+                  <span>Kunjungi</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="form-group col-span-2">
+              <label for="input-yt-url">YouTube Channel URL</label>
+              <div class="input-with-button">
+                <input
+                  type="url"
+                  id="input-yt-url"
+                  name="youtubeUrl"
+                  value={school.socials.youtubeUrl}
+                  class="form-control"
+                />
+                <a
+                  href={school.socials.youtubeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  id="btn-test-yt"
+                  class="btn btn-secondary btn-sm"
+                >
+                  <Icon name="youtube" size={14} />
+                  <span>Kunjungi</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="form-group col-span-2">
+              <label for="input-fb-url">Facebook Page URL</label>
+              <div class="input-with-button">
+                <input
+                  type="url"
+                  id="input-fb-url"
+                  name="facebookUrl"
+                  value={school.socials.facebookUrl}
+                  class="form-control"
+                />
+                <a
+                  href={school.socials.facebookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  id="btn-test-fb"
+                  class="btn btn-secondary btn-sm"
+                >
+                  <Icon name="facebook" size={14} />
+                  <span>Kunjungi</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5: Tema & Warna Tampilan Website -->
+        <div class="form-card card" id="sec-theme-color">
+          <div class="card-header">
+            <div class="header-icon-wrap" style="background: var(--green-700); color: #fff;">
+              <Icon name="palette" size={20} />
+            </div>
+            <div>
+              <h3>5. Tema & Warna Tampilan Website</h3>
+              <p class="card-desc">Ubah warna aksen utama website (hijau, biru, ungu, oranye, dll). Perubahan langsung diterapkan ke seluruh halaman publik dan admin.</p>
+            </div>
+          </div>
+
+          <div class="theme-customizer-body">
+            <!-- Preset Swatches -->
+            <div class="theme-presets-section">
+              <label class="theme-sublabel">Pilihan Preset Warna Siap Pakai:</label>
+              <div class="preset-chips-grid">
+                <button type="button" class="preset-chip active" data-preset="emerald" data-color="#1B7A2F">
+                  <span class="preset-color-dot" style="background: #1B7A2F;"></span>
+                  <span class="preset-name">Emerald Tech (Hijau)</span>
+                </button>
+                <button type="button" class="preset-chip" data-preset="blue" data-color="#2563EB">
+                  <span class="preset-color-dot" style="background: #2563EB;"></span>
+                  <span class="preset-name">Cyber Electric Blue</span>
+                </button>
+                <button type="button" class="preset-chip" data-preset="purple" data-color="#7C3AED">
+                  <span class="preset-color-dot" style="background: #7C3AED;"></span>
+                  <span class="preset-name">Futuristic Purple</span>
+                </button>
+                <button type="button" class="preset-chip" data-preset="amber" data-color="#EA580C">
+                  <span class="preset-color-dot" style="background: #EA580C;"></span>
+                  <span class="preset-name">Cyberpunk Orange</span>
+                </button>
+                <button type="button" class="preset-chip" data-preset="teal" data-color="#0D9488">
+                  <span class="preset-color-dot" style="background: #0D9488;"></span>
+                  <span class="preset-name">Teal Matrix Cyan</span>
+                </button>
+                <button type="button" class="preset-chip" data-preset="slate" data-color="#334155">
+                  <span class="preset-color-dot" style="background: #334155;"></span>
+                  <span class="preset-name">Midnight Dark Slate</span>
+                </button>
+                <button type="button" class="preset-chip" data-preset="crimson" data-color="#DC2626">
+                  <span class="preset-color-dot" style="background: #DC2626;"></span>
+                  <span class="preset-name">Crimson Red</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Custom Color Picker -->
+            <div class="custom-color-section">
+              <label class="theme-sublabel">Atau Pilih Warna Kustom Sendiri:</label>
+              <div class="custom-color-controls">
+                <div class="color-picker-wrap">
+                  <input type="color" id="input-theme-color" value="#1B7A2F" class="color-picker-input" />
+                  <span class="color-picker-label">Palet Warna</span>
+                </div>
+                <div class="hex-input-wrap">
+                  <span class="hex-prefix">#</span>
+                  <input type="text" id="input-theme-hex" value="1B7A2F" maxlength="7" class="hex-input" />
+                </div>
+                <button type="button" id="btn-reset-color" class="btn btn-secondary btn-sm">
+                  <Icon name="refresh-cw" size={14} />
+                  <span>Reset Default</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Live Color Elements Preview -->
+            <div class="theme-preview-box">
+              <span class="theme-preview-title">Pratinjau Komponen dengan Warna Terpilih:</span>
+              <div class="theme-preview-elements">
+                <div class="preview-sample-btn" id="sample-btn" style="background: var(--green-700); color: #fff;">
+                  Contoh Tombol Utama
+                </div>
+                <div class="preview-sample-chip" id="sample-chip" style="background: var(--green-50); color: var(--green-700); border: 1px solid var(--green-200);">
+                  Contoh Chip / Badge
+                </div>
+                <div class="preview-sample-nav" id="sample-nav" style="background: var(--green-900); color: #fff;">
+                  Header / Navbar
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Right Column: Live Preview & Logo Card -->
+    <aside class="preview-sidebar">
+      <!-- Logo Asset Box -->
+      <div class="card logo-card">
+        <div class="card-header-sm">
+          <Icon name="image" size={18} />
+          <h4>Logo Resmi Sekolah</h4>
+        </div>
+        <div class="logo-preview-stage">
+          <img src="/assets/logo-ypi.webp" alt="Logo FREEKS.id School" width="90" height="82" class="preview-logo-img" id="admin-logo-preview" />
+          <div class="logo-meta">
+            <span class="file-badge" id="logo-badge-status">Logo Standar Aktif</span>
+            <span class="file-path" id="logo-path-text">/assets/logo-ypi.webp</span>
+          </div>
+        </div>
+        <div class="logo-upload-controls">
+          <label for="logo-file-input" class="btn btn-primary btn-sm btn-upload-logo">
+            <Icon name="upload" size={15} />
+            <span>Unggah Logo Baru</span>
+          </label>
+          <input type="file" id="logo-file-input" accept="image/png, image/jpeg, image/webp, image/svg+xml" style="display: none;" />
+          <button type="button" id="btn-reset-logo" class="btn btn-secondary btn-sm" title="Kembalikan logo default">
+            <Icon name="rotate-ccw" size={14} />
+            <span>Reset Default</span>
+          </button>
+        </div>
+        <p class="logo-help-text">
+          Dukungan format: <strong>PNG (transparan), WebP, SVG, JPG</strong>. Rekomendasi rasio 1:1. Logo baru akan langsung tampil seragam di seluruh website.
+        </p>
+      </div>
+
+      <!-- Live Preview Simulator -->
+      <div class="card preview-card">
+        <div class="card-header-sm">
+          <Icon name="eye" size={18} />
+          <h4>Pratinjau Langsung (Live Preview)</h4>
+        </div>
+        <p class="preview-hint">Perubahan data akan langsung ter-render di pratinjau berikut:</p>
+
+        <!-- Simulated Header Component -->
+        <div class="sim-box">
+          <div class="sim-label">Simulasi Header & Brand</div>
+          <div class="sim-header">
+            <img src="/assets/logo-ypi.webp" width="36" height="32" alt="Logo" style="object-fit: contain;" />
+            <div>
+              <div id="sim-brand-title" class="sim-title">{school.name}</div>
+              <div id="sim-brand-sub" class="sim-sub">{school.foundation}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Simulated Footer Component -->
+        <div class="sim-box">
+          <div class="sim-label">Simulasi Footer Kontak</div>
+          <div class="sim-footer">
+            <div class="sim-contact-row">
+              <Icon name="map-pin" size={14} />
+              <span id="sim-footer-addr">{school.address}</span>
+            </div>
+            <div class="sim-contact-row">
+              <Icon name="phone" size={14} />
+              <span id="sim-footer-phone">{school.phone}</span>
+            </div>
+            <div class="sim-contact-row">
+              <Icon name="whatsapp" size={14} />
+              <span id="sim-footer-wa">{school.whatsapp}</span>
+            </div>
+            <div class="sim-contact-row">
+              <Icon name="mail" size={14} />
+              <span id="sim-footer-email">{school.email}</span>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+
+        <div class="action-footer">
+          <button type="button" id="btn-save-settings-2" class="btn btn-primary btn-block">
+            <Icon name="check" size={18} />
+            <span>Simpan Pengaturan</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+  </div>
+</AdminLayout>
+
+<style>
+  .page-header-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--admin-ink-300);
+  }
+
+  @media (min-width: 768px) {
+    .page-header-wrap {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+
+  .module-tag {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--admin-green-700);
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+
+  .page-header-wrap h1 {
+    font-size: clamp(1.4rem, 2vw, 1.85rem);
+    margin-bottom: 6px;
+  }
+
+  .page-subtitle {
+    font-size: 0.9rem;
+    color: var(--admin-ink-500);
+    max-width: 75ch;
+  }
+
+  .header-action-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-primary {
+    background-color: var(--admin-green-700);
+    color: #FFFFFF;
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--admin-green-800);
+    box-shadow: 0 4px 12px rgba(27, 122, 47, 0.25);
+  }
+
+  .btn-secondary {
+    background-color: #FFFFFF;
+    color: var(--admin-ink-900);
+    border: 1px solid var(--admin-ink-300);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--admin-ink-100);
+  }
+
+  .btn-sm {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+
+  .btn-block {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Cards */
+  .card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .settings-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  @media (min-width: 1100px) {
+    .settings-layout-grid {
+      grid-template-columns: 7fr 5fr;
+      gap: 32px;
+    }
+  }
+
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .form-card {
+    margin-bottom: 24px;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--admin-ink-100);
+  }
+
+  .card-header-sm {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    color: var(--admin-green-900);
+  }
+
+  .card-header-sm h4 {
+    font-size: 0.95rem;
+  }
+
+  .header-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: var(--admin-green-50);
+    color: var(--admin-green-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-header h3 {
+    font-size: 1.1rem;
+    margin-bottom: 2px;
+  }
+
+  .card-desc {
+    font-size: 0.8125rem;
+    color: var(--admin-ink-500);
+  }
+
+  /* Form Elements */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  @media (min-width: 640px) {
+    .form-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .col-span-2 {
+      grid-column: span 2;
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--admin-ink-700);
+  }
+
+  .req {
+    color: #DC2626;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--admin-ink-300);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.875rem;
+    color: var(--admin-ink-900);
+    background-color: #FFFFFF;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: var(--admin-green-700);
+    box-shadow: 0 0 0 3px rgba(27, 122, 47, 0.15);
+  }
+
+  .form-help {
+    font-size: 11px;
+    color: var(--admin-ink-500);
+  }
+
+  .input-with-button {
+    display: flex;
+    gap: 8px;
+  }
+
+  .input-with-button .form-control {
+    flex: 1;
+  }
+
+  /* Preview Sidebar */
+  .preview-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: sticky;
+    top: 84px;
+  }
+
+  .logo-preview-stage {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background-color: var(--admin-green-50);
+    border: 1px dashed var(--admin-green-500);
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+
+  .preview-logo-img {
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.06));
+  }
+
+  .logo-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .logo-upload-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 12px 0 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn-upload-logo {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .file-badge {
+    font-size: 10px;
+    font-weight: 700;
+    background-color: var(--admin-green-700);
+    color: #FFFFFF;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  .file-path {
+    font-size: 11px;
+    font-family: monospace;
+    color: var(--admin-ink-700);
+  }
+
+  .logo-help-text {
+    font-size: 11px;
+    color: var(--admin-ink-500);
+    line-height: 1.4;
+  }
+
+  .preview-hint {
+    font-size: 11px;
+    color: var(--admin-ink-500);
+    margin-bottom: 14px;
+  }
+
+  .sim-box {
+    margin-bottom: 16px;
+    border: 1px solid var(--admin-ink-100);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .sim-label {
+    background-color: #F1F5F9;
+    padding: 4px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--admin-ink-500);
+    letter-spacing: 0.5px;
+  }
+
+  .sim-header {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #FFFFFF;
+  }
+
+  .sim-title {
+    font-weight: 800;
+    font-size: 12px;
+    color: var(--admin-green-900);
+    line-height: 1.2;
+  }
+
+  .sim-sub {
+    font-size: 10px;
+    color: var(--admin-ink-500);
+  }
+
+  .sim-footer {
+    padding: 12px;
+    background-color: #0B3B16;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 11px;
+  }
+
+  .sim-contact-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: #E2F1DC;
+  }
+
+  .action-footer {
+    margin-top: 10px;
+  }
+
+  /* Toast Notification */
+  .toast-notification {
+    background-color: #ECFDF5;
+    border: 1px solid #10B981;
+    border-radius: 8px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 24px;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .toast-icon {
+    color: #059669;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .toast-body strong {
+    display: block;
+    font-size: 13px;
+    color: #065F46;
+    margin-bottom: 2px;
+  }
+
+  .toast-body p {
+    font-size: 12px;
+    color: #047857;
+    margin: 0;
+  }
+
+  .toast-close-btn {
+    background: none;
+    border: none;
+    color: #059669;
+    cursor: pointer;
+    padding: 2px;
+    margin-left: auto;
+  }
+
+  /* Theme Customizer Styles */
+  .theme-customizer-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 8px;
+  }
+
+  .theme-sublabel {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--admin-ink-700);
+    margin-bottom: 10px;
+  }
+
+  .preset-chips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 10px;
+  }
+
+  .preset-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #FFFFFF;
+    border: 2px solid var(--admin-ink-300);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--admin-ink-800);
+    transition: all 0.2s ease;
+    text-align: left;
+  }
+
+  .preset-chip:hover {
+    border-color: var(--admin-green-700);
+    background: #F8FAFC;
+    transform: translateY(-1px);
+  }
+
+  .preset-chip.active {
+    border-color: var(--admin-green-700);
+    background: #F0FDF4;
+    box-shadow: 0 0 0 3px rgba(27, 122, 47, 0.15);
+  }
+
+  .preset-color-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    border: 2px solid #FFFFFF;
+  }
+
+  .custom-color-controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    background: #F8FAFC;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid var(--admin-ink-300);
+  }
+
+  .color-picker-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .color-picker-input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: 2px solid #FFFFFF;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    padding: 0;
+  }
+
+  .color-picker-input::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+
+  .color-picker-input::-webkit-color-swatch {
+    border: none;
+    border-radius: 6px;
+  }
+
+  .hex-input-wrap {
+    display: flex;
+    align-items: center;
+    background: #FFFFFF;
+    border: 1.5px solid var(--admin-ink-300);
+    border-radius: 6px;
+    padding: 0 10px;
+    width: 130px;
+  }
+
+  .hex-prefix {
+    font-weight: 700;
+    color: var(--admin-ink-500);
+    font-size: 0.95rem;
+  }
+
+  .hex-input {
+    border: none !important;
+    padding: 8px 6px !important;
+    font-family: monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--admin-ink-900);
+    width: 100%;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .theme-preview-box {
+    background: #FFFFFF;
+    border: 1.5px dashed var(--admin-ink-300);
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .theme-preview-title {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--admin-ink-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+
+  .theme-preview-elements {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .preview-sample-btn {
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    transition: background-color 0.2s ease;
+  }
+
+  .preview-sample-chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+  }
+
+  .preview-sample-nav {
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    transition: background-color 0.2s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<script>
+  // DOM Elements
+  const form = document.getElementById('global-settings-form') as HTMLFormElement;
+  const saveBtn = document.getElementById('btn-save-settings');
+  const saveBtn2 = document.getElementById('btn-save-settings-2');
+  const exportBtn = document.getElementById('btn-export-json');
+  const toast = document.getElementById('save-toast');
+  const toastClose = document.getElementById('toast-close');
+
+  // Input fields
+  const schoolNameInput = document.getElementById('input-school-name') as HTMLInputElement;
+  const foundationInput = document.getElementById('input-foundation') as HTMLInputElement;
+  const addressInput = document.getElementById('input-address') as HTMLTextAreaElement;
+  const phoneInput = document.getElementById('input-phone') as HTMLInputElement;
+  const waInput = document.getElementById('input-whatsapp') as HTMLInputElement;
+  const emailInput = document.getElementById('input-email') as HTMLInputElement;
+  const mapsUrlInput = document.getElementById('input-maps-url') as HTMLInputElement;
+  const igUrlInput = document.getElementById('input-ig-url') as HTMLInputElement;
+  const ytUrlInput = document.getElementById('input-yt-url') as HTMLInputElement;
+  const fbUrlInput = document.getElementById('input-fb-url') as HTMLInputElement;
+
+  // Test Link Buttons
+  const testMapsBtn = document.getElementById('btn-test-maps') as HTMLAnchorElement;
+  const testIgBtn = document.getElementById('btn-test-ig') as HTMLAnchorElement;
+  const testYtBtn = document.getElementById('btn-test-yt') as HTMLAnchorElement;
+  const testFbBtn = document.getElementById('btn-test-fb') as HTMLAnchorElement;
+
+  // Live preview targets
+  const simBrandTitle = document.getElementById('sim-brand-title');
+  const simBrandSub = document.getElementById('sim-brand-sub');
+  const simFooterAddr = document.getElementById('sim-footer-addr');
+  const simFooterPhone = document.getElementById('sim-footer-phone');
+  const simFooterWa = document.getElementById('sim-footer-wa');
+  const simFooterEmail = document.getElementById('sim-footer-email');
+
+  // Live Preview Listeners
+  schoolNameInput?.addEventListener('input', () => {
+    if (simBrandTitle) simBrandTitle.textContent = schoolNameInput.value || 'FREEKS.id School';
+  });
+
+  foundationInput?.addEventListener('input', () => {
+    if (simBrandSub) simBrandSub.textContent = foundationInput.value || 'Yayasan Inovasi Kreasi Digital';
+  });
+
+  addressInput?.addEventListener('input', () => {
+    if (simFooterAddr) simFooterAddr.textContent = addressInput.value || '-';
+  });
+
+  phoneInput?.addEventListener('input', () => {
+    if (simFooterPhone) simFooterPhone.textContent = phoneInput.value || '-';
+  });
+
+  waInput?.addEventListener('input', () => {
+    if (simFooterWa) simFooterWa.textContent = waInput.value || '-';
+  });
+
+  emailInput?.addEventListener('input', () => {
+    if (simFooterEmail) simFooterEmail.textContent = emailInput.value || '-';
+  });
+
+  mapsUrlInput?.addEventListener('input', () => {
+    if (testMapsBtn) testMapsBtn.href = mapsUrlInput.value || '#';
+  });
+
+  igUrlInput?.addEventListener('input', () => {
+    if (testIgBtn) testIgBtn.href = igUrlInput.value || '#';
+  });
+
+  ytUrlInput?.addEventListener('input', () => {
+    if (testYtBtn) testYtBtn.href = ytUrlInput.value || '#';
+  });
+
+  fbUrlInput?.addEventListener('input', () => {
+    if (testFbBtn) testFbBtn.href = fbUrlInput.value || '#';
+  });
+
+  // ==========================================
+  // THEME COLOR CUSTOMIZER SCRIPT
+  // ==========================================
+  const THEME_PRESETS: Record<string, any> = {
+    emerald: {
+      preset: 'emerald',
+      primary: '#1B7A2F',
+      primaryDark: '#0B3B16',
+      primaryMid: '#0F4D1C',
+      primaryLight: '#3DA352',
+      primaryBorder: '#CDE8B5',
+      primarySoft: '#F1F8EA'
+    },
+    blue: {
+      preset: 'blue',
+      primary: '#2563EB',
+      primaryDark: '#0F172A',
+      primaryMid: '#1E40AF',
+      primaryLight: '#60A5FA',
+      primaryBorder: '#BFDBFE',
+      primarySoft: '#EFF6FF'
+    },
+    purple: {
+      preset: 'purple',
+      primary: '#7C3AED',
+      primaryDark: '#1E1B4B',
+      primaryMid: '#5B21B6',
+      primaryLight: '#A78BFA',
+      primaryBorder: '#DDD6FE',
+      primarySoft: '#F5F3FF'
+    },
+    amber: {
+      preset: 'amber',
+      primary: '#EA580C',
+      primaryDark: '#431407',
+      primaryMid: '#9A3412',
+      primaryLight: '#FB923C',
+      primaryBorder: '#FED7AA',
+      primarySoft: '#FFF7ED'
+    },
+    teal: {
+      preset: 'teal',
+      primary: '#0D9488',
+      primaryDark: '#042F2E',
+      primaryMid: '#115E59',
+      primaryLight: '#2DD4BF',
+      primaryBorder: '#99F6E4',
+      primarySoft: '#F0FDFA'
+    },
+    slate: {
+      preset: 'slate',
+      primary: '#334155',
+      primaryDark: '#0F172A',
+      primaryMid: '#1E293B',
+      primaryLight: '#64748B',
+      primaryBorder: '#CBD5E1',
+      primarySoft: '#F8FAFC'
+    },
+    crimson: {
+      preset: 'crimson',
+      primary: '#DC2626',
+      primaryDark: '#450A0A',
+      primaryMid: '#991B1B',
+      primaryLight: '#F87171',
+      primaryBorder: '#FECACA',
+      primarySoft: '#FEF2F2'
+    }
+  };
+
+  function hexToHsl(hex: string): [number, number, number] {
+    hex = hex.replace(/^#/, '');
+    if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+    const num = parseInt(hex, 16);
+    const r = (num >> 16) / 255;
+    const g = ((num >> 8) & 255) / 255;
+    const b = (num & 255) / 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h = 0, s = 0;
+    const l = (max + min) / 2;
+    if (max !== min) {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+    }
+    return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
+  }
+
+  function hslToHex(h: number, s: number, l: number): string {
+    s /= 100;
+    l /= 100;
+    const k = (n: number) => (n + h / 30) % 12;
+    const a = s * Math.min(l, 1 - l);
+    const f = (n: number) => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+    const toHex = (x: number) => {
+      const hex = Math.round(x * 255).toString(16);
+      return hex.length === 1 ? '0' + hex : hex;
+    };
+    return `#${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`;
+  }
+
+  function buildPaletteFromHex(baseHex: string, presetName: string = 'custom') {
+    const [h, s, l] = hexToHsl(baseHex);
+    return {
+      preset: presetName,
+      primary: baseHex,
+      primaryDark: hslToHex(h, Math.min(s + 15, 100), Math.max(10, l - 30)),
+      primaryMid: hslToHex(h, s, Math.max(18, l - 15)),
+      primaryLight: hslToHex(h, s, Math.min(68, l + 16)),
+      primaryBorder: hslToHex(h, Math.min(s, 55), 85),
+      primarySoft: hslToHex(h, Math.min(s, 45), 96)
+    };
+  }
+
+  let currentTheme = THEME_PRESETS.emerald;
+
+  const colorPicker = document.getElementById('input-theme-color') as HTMLInputElement | null;
+  const hexInput = document.getElementById('input-theme-hex') as HTMLInputElement | null;
+  const resetBtn = document.getElementById('btn-reset-color');
+  const presetChips = document.querySelectorAll('.preset-chip');
+  const sampleBtn = document.getElementById('sample-btn');
+  const sampleChip = document.getElementById('sample-chip');
+  const sampleNav = document.getElementById('sample-nav');
+
+  function applyThemeToPage(theme: any) {
+    if (!theme || !theme.primary) return;
+    const root = document.documentElement;
+    root.style.setProperty('--green-700', theme.primary);
+    root.style.setProperty('--green-900', theme.primaryDark || theme.primary);
+    root.style.setProperty('--green-800', theme.primaryMid || theme.primary);
+    root.style.setProperty('--green-500', theme.primaryLight || theme.primary);
+    root.style.setProperty('--green-200', theme.primaryBorder || '#CBD2D9');
+    root.style.setProperty('--green-50', theme.primarySoft || '#F8FAFC');
+
+    root.style.setProperty('--admin-green-700', theme.primary);
+    root.style.setProperty('--admin-green-900', theme.primaryDark || theme.primary);
+    root.style.setProperty('--admin-green-800', theme.primaryMid || theme.primary);
+    root.style.setProperty('--admin-green-500', theme.primaryLight || theme.primary);
+
+    if (sampleBtn) {
+      sampleBtn.style.backgroundColor = theme.primary;
+    }
+    if (sampleChip) {
+      sampleChip.style.backgroundColor = theme.primarySoft;
+      sampleChip.style.color = theme.primary;
+      sampleChip.style.borderColor = theme.primaryBorder;
+    }
+    if (sampleNav) {
+      sampleNav.style.backgroundColor = theme.primaryDark;
+    }
+  }
+
+  function syncThemeControls(theme: any) {
+    currentTheme = theme;
+    applyThemeToPage(theme);
+
+    if (colorPicker) colorPicker.value = theme.primary;
+    if (hexInput) hexInput.value = theme.primary.replace(/^#/, '').toUpperCase();
+
+    presetChips.forEach(chip => {
+      const chipPreset = chip.getAttribute('data-preset');
+      if (chipPreset === theme.preset) {
+        chip.classList.add('active');
+      } else {
+        chip.classList.remove('active');
+      }
+    });
+  }
+
+  // Load initial theme from localStorage if exists
+  try {
+    const savedTheme = localStorage.getItem('freeks_theme');
+    if (savedTheme) {
+      syncThemeControls(JSON.parse(savedTheme));
+    }
+  } catch (e) {}
+
+  // Preset chips event
+  presetChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const presetKey = chip.getAttribute('data-preset');
+      if (presetKey && THEME_PRESETS[presetKey]) {
+        syncThemeControls(THEME_PRESETS[presetKey]);
+      }
+    });
+  });
+
+  // Color picker event
+  colorPicker?.addEventListener('input', (e) => {
+    const val = (e.target as HTMLInputElement).value;
+    const palette = buildPaletteFromHex(val, 'custom');
+    syncThemeControls(palette);
+  });
+
+  // Hex input event
+  hexInput?.addEventListener('input', (e) => {
+    let val = (e.target as HTMLInputElement).value.trim();
+    if (!val.startsWith('#')) val = '#' + val;
+    if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+      const palette = buildPaletteFromHex(val, 'custom');
+      syncThemeControls(palette);
+    }
+  });
+
+  // Reset button event
+  resetBtn?.addEventListener('click', () => {
+    syncThemeControls(THEME_PRESETS.emerald);
+  });
+
+  // --- LOGO UPLOAD & MANAGEMENT ---
+  const logoFileInput = document.getElementById('logo-file-input') as HTMLInputElement | null;
+  const adminLogoPreview = document.getElementById('admin-logo-preview') as HTMLImageElement | null;
+  const logoBadgeStatus = document.getElementById('logo-badge-status');
+  const logoPathText = document.getElementById('logo-path-text');
+  const btnResetLogo = document.getElementById('btn-reset-logo');
+
+  function updatePageLogos(src: string, isCustom: boolean, fileName?: string) {
+    if (adminLogoPreview) adminLogoPreview.src = src;
+
+    const pageLogos = document.querySelectorAll('.school-logo-img, .sim-header img, .brand-logo, .preview-logo-img') as NodeListOf<HTMLImageElement>;
+    pageLogos.forEach(img => {
+      if (img) img.src = src;
+    });
+
+    const favicons = document.querySelectorAll("link[rel*='icon']") as NodeListOf<HTMLLinkElement>;
+    favicons.forEach(fav => {
+      if (fav) fav.href = src;
+    });
+
+    if (logoBadgeStatus) {
+      if (isCustom) {
+        logoBadgeStatus.textContent = 'Logo Kustom Aktif';
+        logoBadgeStatus.style.background = '#059669';
+        logoBadgeStatus.style.color = '#ffffff';
+      } else {
+        logoBadgeStatus.textContent = 'Logo Standar Aktif';
+        logoBadgeStatus.style.background = '';
+        logoBadgeStatus.style.color = '';
+      }
+    }
+
+    if (logoPathText) {
+      if (isCustom) {
+        logoPathText.textContent = fileName || 'Tersimpan di Browser (DataURL)';
+      } else {
+        logoPathText.textContent = '/assets/logo-ypi.webp';
+      }
+    }
+  }
+
+  // Load initial custom logo from localStorage if exists
+  try {
+    const savedLogo = localStorage.getItem('freeks_custom_logo');
+    if (savedLogo) {
+      const savedLogoName = localStorage.getItem('freeks_custom_logo_name') || 'Logo Kustom Sekolah';
+      updatePageLogos(savedLogo, true, savedLogoName);
+    }
+  } catch (e) {}
+
+  // File upload handler
+  logoFileInput?.addEventListener('change', (e) => {
+    const target = e.target as HTMLInputElement;
+    const file = target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 3 * 1024 * 1024) {
+      alert('Ukuran file logo terlalu besar. Harap gunakan file gambar maksimal 3MB.');
+      target.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      if (dataUrl) {
+        try {
+          localStorage.setItem('freeks_custom_logo', dataUrl);
+          localStorage.setItem('freeks_custom_logo_name', file.name);
+          updatePageLogos(dataUrl, true, file.name);
+
+          if (toast) {
+            toast.hidden = false;
+            const toastP = toast.querySelector('p');
+            if (toastP) toastP.textContent = 'Logo resmi sekolah berhasil diunggah dan langsung aktif di seluruh website!';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        } catch (err) {
+          alert('Penyimpanan browser penuh. Harap kompres gambar atau gunakan resolusi lebih kecil.');
+        }
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Reset logo handler
+  btnResetLogo?.addEventListener('click', () => {
+    const msg = 'Apakah Anda yakin ingin mengembalikan logo sekolah ke logo standar (default)?';
+    const doReset = () => {
+      try {
+        localStorage.removeItem('freeks_custom_logo');
+        localStorage.removeItem('freeks_custom_logo_name');
+        if (logoFileInput) logoFileInput.value = '';
+        updatePageLogos('/assets/logo-ypi.webp', false);
+
+        if (toast) {
+          toast.hidden = false;
+          const toastP = toast.querySelector('p');
+          if (toastP) toastP.textContent = 'Logo sekolah telah dikembalikan ke logo standar.';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      } catch (e) {}
+    };
+
+    if (typeof window.confirmDelete === 'function') {
+      window.confirmDelete(msg, doReset, 'Konfirmasi Reset Logo');
+    } else if (confirm(msg)) {
+      doReset();
+    }
+  });
+
+  // Construct current data object from inputs
+  function getFormData() {
+    const formData = new FormData(form);
+    return {
+      dummy: false,
+      school: {
+        name: (formData.get('name') as string) || '',
+        shortName: (formData.get('shortName') as string) || '',
+        foundation: (formData.get('foundation') as string) || '',
+        slogan: (formData.get('slogan') as string) || '',
+        npsn: (formData.get('npsn') as string) || '',
+        accreditation: (formData.get('accreditation') as string) || 'B',
+        address: (formData.get('address') as string) || '',
+        mapsUrl: (formData.get('mapsUrl') as string) || '',
+        coordinates: {
+          lat: parseFloat(formData.get('lat') as string) || -6.913685,
+          lng: parseFloat(formData.get('lng') as string) || 112.5527886
+        },
+        phone: (formData.get('phone') as string) || '',
+        whatsapp: (formData.get('whatsapp') as string) || '',
+        whatsappRaw: (formData.get('whatsappRaw') as string) || '',
+        whatsappMessage: (formData.get('whatsappMessage') as string) || '',
+        email: (formData.get('email') as string) || '',
+        officeHours: (formData.get('officeHours') as string) || '',
+        socials: {
+          instagram: '@freeks.id',
+          instagramUrl: (formData.get('instagramUrl') as string) || '',
+          youtube: 'FREEKS.id School',
+          youtubeUrl: (formData.get('youtubeUrl') as string) || '',
+          facebook: 'FREEKS.id School',
+          facebookUrl: (formData.get('facebookUrl') as string) || ''
+        }
+      },
+      theme: currentTheme
+    };
+  }
+
+  // Handle Save
+  function handleSave() {
+    const data = getFormData();
+    try {
+      localStorage.setItem('freeks_theme', JSON.stringify(currentTheme));
+      localStorage.setItem('mts_siteData', JSON.stringify(data));
+      if (toast) {
+        toast.hidden = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } catch (e) {
+      alert('Pengaturan disimpan ke memori!');
+    }
+  }
+
+  saveBtn?.addEventListener('click', handleSave);
+  saveBtn2?.addEventListener('click', handleSave);
+
+  toastClose?.addEventListener('click', () => {
+    if (toast) toast.hidden = true;
+  });
+
+  // Export updated siteData.json file
+  exportBtn?.addEventListener('click', () => {
+    const data = getFormData();
+    const jsonStr = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'siteData.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+</script>
+

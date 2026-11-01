@@ -1,0 +1,131 @@
+{
+  "dummy": false,
+  "academicYear": "2027/2028",
+  "status": "Dibuka s.d. 28 Februari 2027",
+  "statusType": "open",
+  "quota": {
+    "total": 120,
+    "classes": 4,
+    "perClass": 30,
+    "perWave": 60
+  },
+  "waves": [
+    {
+      "name": "Early Bird Wave",
+      "registration": "4 Jan – 28 Feb 2027",
+      "selection": "6 Mar 2027",
+      "announcement": "12 Mar 2027",
+      "reRegistration": "15 – 27 Mar 2027",
+      "isCurrent": true
+    },
+    {
+      "name": "Regular Wave",
+      "registration": "1 Mar – 30 Apr 2027",
+      "selection": "8 Mei 2027",
+      "announcement": "14 Mei 2027",
+      "reRegistration": "17 – 29 Mei 2027",
+      "isCurrent": false
+    }
+  ],
+  "requirements": [
+    "Lulus atau akan lulus SD/MI sederajat pada tahun 2027",
+    "Berusia maksimal 15 tahun pada 1 Juli 2027",
+    "Fotokopi / Scan Akta Kelahiran dan Kartu Keluarga (KK)",
+    "Salinan Rapor kelas IV–VI atau Surat Keterangan dari Kepala Sekolah asal",
+    "Pas foto digital terbaru ukuran 3×4",
+    "Mengikuti asesmen pemetaan minat, bakat kreatif, dan logika computational dasar"
+  ],
+  "costs": {
+    "items": [
+      {
+        "component": "Biaya Registrasi & Asesmen Minat",
+        "amount": "Rp200.000",
+        "numeric": 200000,
+        "note": "Sekali bayar saat pendaftaran online"
+      },
+      {
+        "component": "Inovasi Sarpras & Lab Teknologi (Uang Pangkal)",
+        "amount": "Rp2.500.000",
+        "numeric": 2500000,
+        "note": "Akses fasilitas Maker Space, Cloud Lab, 3D Printer; dapat diangsur"
+      },
+      {
+        "component": "Starter Pack & Apparel Resmi FREEKS",
+        "amount": "Rp1.100.000",
+        "numeric": 1100000,
+        "note": "Termasuk 2 stel smart polo/uniform, hoodie identitas FREEKS, kaos olahraga, dan ID lanyard smart card"
+      },
+      {
+        "component": "Modul Digital, E-Book & Software License",
+        "amount": "Rp600.000",
+        "numeric": 600000,
+        "note": "Lisensi platform pembelajaran komputasi, modul proyek, dan repositori riset"
+      },
+      {
+        "component": "Iuran Edukasi Bulanan (SPP)",
+        "amount": "Rp350.000",
+        "numeric": 350000,
+        "note": "Biaya operasional pembelajaran per bulan (mulai Juli 2027)"
+      }
+    ],
+    "totalInitial": "Rp4.400.000",
+    "totalInitialNote": "Total biaya awal masuk FREEKS.id School (di luar SPP bulanan).",
+    "concession": "Tersedia program Beasiswa Inovasi Digital (potongan hingga 100%) untuk talenta berprestasi di bidang sains, olimpiade, coding/robotika, serta kuota beasiswa afirmasi."
+  },
+  "steps": [
+    {
+      "step": 1,
+      "title": "Registrasi Akun & Unggah Berkas",
+      "summary": "Calon siswa atau wali murid mengisi biodata online dan mengunggah berkas identitas secara digital melalui portal pendaftaran.",
+      "documents": ["Kartu Keluarga (KK)", "Akta Kelahiran", "Pas Foto 3x4"]
+    },
+    {
+      "step": 2,
+      "title": "Verifikasi & Jadwal Asesmen",
+      "summary": "Tim panitia memverifikasi kelengkapan berkas digital. Kartu peserta dan jadwal asesmen minat-bakat langsung diterbitkan.",
+      "documents": ["Kartu Peserta Pendaftaran Digital"]
+    },
+    {
+      "step": 3,
+      "title": "Eksplorasi Minat & Wawancara Kolaboratif",
+      "summary": "Siswa mengikuti sesi interaktif pemetaan logika computational dasar dan wawancara apresiasi minat bersama tim akademik.",
+      "documents": ["Portofolio karya kreatif (opsional bila ada)"]
+    },
+    {
+      "step": 4,
+      "title": "Pengumuman & Welcome Onboarding",
+      "summary": "Hasil seleksi diumumkan via portal web dan WhatsApp resmi. Siswa yang diterima melakukan daftar ulang dan pemilihan ukuran apparel.",
+      "documents": ["Bukti konfirmasi daftar ulang", "Formulir ukuran apparel"]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Apakah pendaftaran bisa dilakukan sepenuhnya online?",
+      "a": "Ya, seluruh proses pengisian data dan unggah berkas dapat dilakukan 100% secara daring. Calon siswa hanya dijadwalkan hadir ke kampus saat sesi asesmen eksplorasi atau *campus tour*."
+    },
+    {
+      "q": "Apakah siswa harus sudah bisa coding sebelum mendaftar?",
+      "a": "Tidak harus! FREEKS.id School mendesain kurikulum mulai dari fondasi paling dasar. Yang kami cari adalah rasa ingin tahu (*curiosity*), semangat belajar, dan kemauan bereksplorasi."
+    },
+    {
+      "q": "Berapa kapasitas kuota penerimaan siswa baru?",
+      "a": "Kapasitas terbatas 120 siswa (4 kelas berukuran optimal maksimal 30 siswa per kelas) untuk menjaga rasio bimbingan mentor yang intensif."
+    },
+    {
+      "q": "Apakah biaya uang pangkal dapat diangsur?",
+      "a": "Bisa. Biaya sarana prasarana dan teknologi dapat dicicil hingga 3 kali pembayaran selama semester pertama tahun ajaran berjalan."
+    },
+    {
+      "q": "Apakah menerima siswa dari luar kota/daerah?",
+      "a": "Sangat terbuka. Kami menyambut siswa berbakat dari seluruh Indonesia yang siap berkembang bersama ekosistem teknologi FREEKS."
+    },
+    {
+      "q": "Bagaimana jika ada dokumen yang belum lengkap?",
+      "a": "Pendaftaran online tetap dapat disimpan dan berkas pelengkap dapat disusulkan sebelum tenggat waktu gelombang berakhir."
+    },
+    {
+      "q": "Ke mana saya bisa berkonsultasi seputar pendaftaran?",
+      "a": "Silakan menghubungi Admission Hotline FREEKS via WhatsApp di 0812-8888-3733 pada jam operasional kampus."
+    }
+  ]
+}

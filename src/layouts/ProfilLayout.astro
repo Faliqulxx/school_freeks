@@ -1,0 +1,275 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Icon from '../components/Icon.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  currentPage: string;
+}
+
+const { title, description, currentPage } = Astro.props;
+
+const profileLinks = [
+  { label: 'Sejarah', href: '/profil/sejarah', icon: 'history' },
+  { label: 'Visi, Misi & Tujuan', href: '/profil/visi-misi', icon: 'target' },
+  { label: 'Sambutan Principal', href: '/profil/sambutan', icon: 'message-square' },
+  { label: 'Struktur Organisasi', href: '/profil/struktur-organisasi', icon: 'sitemap' },
+  { label: 'Profil Yayasan', href: '/profil/yayasan', icon: 'award' },
+  { label: 'Fasilitas Kampus', href: '/profil/fasilitas', icon: 'building' }
+];
+
+const breadcrumbItems = [
+  { label: 'Profil', href: '/profil/sejarah' },
+  { label: title }
+];
+---
+
+<BaseLayout title={`${title} – Profil FREEKS.id School`} description={description}>
+  <div class="page-header section-soft">
+    <div class="container-wide">
+      <Breadcrumb items={breadcrumbItems} />
+      <h1 class="page-title">{title}</h1>
+      <p class="page-description">{description}</p>
+    </div>
+  </div>
+
+  <div class="container-wide section">
+    <!-- Horizontal Pills Submenu (< lg) -->
+    <nav class="profile-pills-nav" aria-label="Navigasi Menu Profil">
+      <ul class="pills-list">
+        {profileLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class={`pill-link ${currentPage === link.href ? 'active' : ''}`}
+              aria-current={currentPage === link.href ? 'page' : undefined}
+            >
+              <Icon name={link.icon} size={16} />
+              <span>{link.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- Main Grid: 8 Columns Content + 4 Columns Sticky Sidebar (>= lg) -->
+    <div class="profile-layout-grid">
+      <article class="profile-content">
+        <slot />
+      </article>
+
+      <aside class="profile-sidebar" aria-label="Menu Halaman Profil">
+        <div class="sidebar-sticky-box card">
+          <div class="sidebar-header">
+            <h3 class="sidebar-title">Menu Profil</h3>
+            <div class="section-divider"></div>
+          </div>
+          <ul class="sidebar-menu-list">
+            {profileLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class={`sidebar-menu-link ${currentPage === link.href ? 'active' : ''}`}
+                  aria-current={currentPage === link.href ? 'page' : undefined}
+                >
+                  <Icon name={link.icon} size={18} class="sidebar-icon" />
+                  <span>{link.label}</span>
+                  <Icon name="chevron-right" size={16} class="sidebar-arrow" />
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <div class="sidebar-ppdb-banner">
+            <span class="chip chip-important">PPDB 2027/2028</span>
+            <h4>Penerimaan Siswa Baru</h4>
+            <p>Jadwal dan persyaratan pendaftaran telah dibuka.</p>
+            <a href="/ppdb" class="btn btn-primary btn-sm">Lihat Info PPDB</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-top: var(--s-6);
+    padding-bottom: var(--s-6);
+    border-bottom: 1px solid var(--ink-300);
+  }
+
+  .page-title {
+    font-size: clamp(1.4rem, 4.5vw, 2.25rem);
+    color: var(--green-900);
+    margin-bottom: var(--s-2);
+    line-height: 1.25;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .page-description {
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    color: var(--ink-600);
+    max-width: 65ch;
+    margin: 0;
+    line-height: 1.55;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  /* Horizontal Scrollable Pills (< lg) */
+  .profile-pills-nav {
+    display: block;
+    margin-bottom: var(--s-6);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+  }
+
+  @media (min-width: 1024px) {
+    .profile-pills-nav {
+      display: none;
+    }
+  }
+
+  .pills-list {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: max-content;
+  }
+
+  .pill-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    background-color: var(--bg-soft);
+    border: 1px solid var(--ink-300);
+    color: var(--ink-900);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    white-space: nowrap;
+    min-height: 44px;
+  }
+
+  .pill-link.active {
+    background-color: var(--green-700);
+    border-color: var(--green-700);
+    color: #FFFFFF;
+  }
+
+  /* Grid 8:4 */
+  .profile-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s-6);
+  }
+
+  @media (min-width: 1024px) {
+    .profile-layout-grid {
+      grid-template-columns: 8fr 4fr;
+      gap: var(--s-7);
+    }
+  }
+
+  .profile-content {
+    min-width: 0; /* Prevents overflow */
+  }
+
+  /* Sidebar */
+  .profile-sidebar {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .profile-sidebar {
+      display: block;
+    }
+  }
+
+  .sidebar-sticky-box {
+    position: sticky;
+    top: calc(var(--header-height-scrolled) + 24px);
+    padding: var(--s-5);
+  }
+
+  .sidebar-header {
+    margin-bottom: var(--s-3);
+  }
+
+  .sidebar-title {
+    font-size: 1.15rem;
+    color: var(--green-900);
+    margin: 0;
+  }
+
+  .sidebar-menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--s-5) 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .sidebar-menu-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    color: var(--ink-900);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: var(--text-sm);
+    transition: background-color var(--dur-fast) var(--ease),
+                color var(--dur-fast) var(--ease);
+  }
+
+  .sidebar-menu-link:hover {
+    background-color: var(--green-50);
+    color: var(--green-700);
+  }
+
+  .sidebar-menu-link.active {
+    background-color: var(--green-50);
+    color: var(--green-700);
+    border-left: 3px solid var(--yellow-500);
+  }
+
+  .sidebar-arrow {
+    margin-left: auto;
+    color: var(--ink-300);
+  }
+
+  .sidebar-menu-link.active .sidebar-arrow {
+    color: var(--green-700);
+  }
+
+  .sidebar-ppdb-banner {
+    background-color: var(--green-50);
+    border: 1px dashed var(--green-500);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+  }
+
+  .sidebar-ppdb-banner h4 {
+    font-size: 1rem;
+    margin: 10px 0 6px 0;
+  }
+
+  .sidebar-ppdb-banner p {
+    font-size: var(--text-xs);
+    color: var(--ink-600);
+    margin-bottom: 12px;
+  }
+</style>
+
