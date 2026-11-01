@@ -1295,6 +1295,61 @@ const { school } = siteData;
     if (testFbBtn) testFbBtn.href = fbUrlInput.value || '#';
   });
 
+  // Load saved siteData from localStorage if exists
+  try {
+    const savedSiteData = localStorage.getItem('mts_siteData');
+    if (savedSiteData) {
+      const parsed = JSON.parse(savedSiteData);
+      const sc = parsed.school || {};
+
+      const setVal = (name, val) => {
+        if (val === undefined || val === null) return;
+        const el = form.querySelector(`[name="${name}"]`);
+        if (el) el.value = String(val);
+      };
+
+      setVal('name', sc.name);
+      setVal('shortName', sc.shortName);
+      setVal('foundation', sc.foundation);
+      setVal('slogan', sc.slogan);
+      setVal('npsn', sc.npsn);
+      setVal('accreditation', sc.accreditation);
+      setVal('address', sc.address);
+      setVal('mapsUrl', sc.mapsUrl);
+      if (sc.coordinates) {
+        setVal('lat', sc.coordinates.lat);
+        setVal('lng', sc.coordinates.lng);
+      }
+      setVal('phone', sc.phone);
+      setVal('whatsapp', sc.whatsapp);
+      setVal('whatsappRaw', sc.whatsappRaw);
+      setVal('whatsappMessage', sc.whatsappMessage);
+      setVal('email', sc.email);
+      setVal('officeHours', sc.officeHours);
+
+      if (sc.socials) {
+        setVal('instagramUrl', sc.socials.instagramUrl);
+        setVal('youtubeUrl', sc.socials.youtubeUrl);
+        setVal('facebookUrl', sc.socials.facebookUrl);
+        if (testIgBtn && sc.socials.instagramUrl) testIgBtn.href = sc.socials.instagramUrl;
+        if (testYtBtn && sc.socials.youtubeUrl) testYtBtn.href = sc.socials.youtubeUrl;
+        if (testFbBtn && sc.socials.facebookUrl) testFbBtn.href = sc.socials.facebookUrl;
+      }
+
+      if (testMapsBtn && sc.mapsUrl) testMapsBtn.href = sc.mapsUrl;
+
+      // Update live preview elements
+      if (simBrandTitle && sc.name) simBrandTitle.textContent = sc.name;
+      if (simBrandSub && sc.foundation) simBrandSub.textContent = sc.foundation;
+      if (simFooterAddr && sc.address) simFooterAddr.textContent = sc.address;
+      if (simFooterPhone && sc.phone) simFooterPhone.textContent = sc.phone;
+      if (simFooterWa && sc.whatsapp) simFooterWa.textContent = sc.whatsapp;
+      if (simFooterEmail && sc.email) simFooterEmail.textContent = sc.email;
+    }
+  } catch (e) {
+    console.debug('Failed to load saved siteData:', e);
+  }
+
   // ==========================================
   // THEME COLOR CUSTOMIZER SCRIPT
   // ==========================================

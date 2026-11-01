@@ -247,3 +247,40 @@ const breadcrumbItems = [
   });
 </script>
 
+
+<script is:inline>
+  try {
+    const raw = localStorage.getItem('mts_cms_kesiswaan_data');
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (data.rulesTitle) {
+        const titleEl = document.querySelector('.page-title');
+        if (titleEl) titleEl.textContent = data.rulesTitle;
+      }
+      if (data.rulesUpdated) {
+        const chip = document.querySelector('.header-meta .chip');
+        if (chip) chip.textContent = 'Edisi ' + data.rulesUpdated;
+      }
+      if (data.rulesChapters && Array.isArray(data.rulesChapters) && data.rulesChapters.length > 0) {
+        const doc = document.getElementById('rules-doc');
+        if (doc) {
+          doc.innerHTML = data.rulesChapters.map((ch, idx) => `
+            <section class="chapter-block card">
+              <div class="chapter-header">
+                <h2 class="chapter-title">${ch.chapter}</h2>
+              </div>
+              <div class="chapter-items">
+                ${(ch.items || []).map((it, itIdx) => `
+                  <div class="rule-item-row">
+                    <span class="rule-num">${itIdx + 1}</span>
+                    <p class="rule-text">${it}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </section>
+          `).join('');
+        }
+      }
+    }
+  } catch (e) {}
+</script>

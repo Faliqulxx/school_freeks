@@ -1656,11 +1656,33 @@ const { school } = siteData;
           if (document.getElementById('input-sambutan-role')) document.getElementById('input-sambutan-role').value = parsed.sambutan.role || '';
           if (document.getElementById('input-sambutan-arabic')) document.getElementById('input-sambutan-arabic').value = parsed.sambutan.arabicGreeting || '';
           if (document.getElementById('input-sambutan-quote')) document.getElementById('input-sambutan-quote').value = parsed.sambutan.shortQuote || '';
+          if (parsed.sambutan.photo && parsed.sambutan.photo.src && document.getElementById('input-sambutan-photo')) {
+            document.getElementById('input-sambutan-photo').value = parsed.sambutan.photo.src;
+          }
         }
         if (parsed.ppdb) {
           if (document.getElementById('input-ppdb-status')) document.getElementById('input-ppdb-status').value = parsed.ppdb.status || '';
           if (document.getElementById('input-ppdb-wave-dates')) document.getElementById('input-ppdb-wave-dates').value = parsed.ppdb.waveDates || '';
           if (document.getElementById('input-ppdb-quota')) document.getElementById('input-ppdb-quota').value = parsed.ppdb.quota || '';
+          if (document.getElementById('input-ppdb-reqs')) document.getElementById('input-ppdb-reqs').value = parsed.ppdb.reqs || '';
+          if (parsed.ppdb.banner) {
+            if (document.getElementById('input-banner-chip')) document.getElementById('input-banner-chip').value = parsed.ppdb.banner.chip || '';
+            if (document.getElementById('input-banner-title')) document.getElementById('input-banner-title').value = parsed.ppdb.banner.title || '';
+            if (document.getElementById('input-banner-desc')) document.getElementById('input-banner-desc').value = parsed.ppdb.banner.desc || '';
+          }
+        }
+        if (parsed.stats && Array.isArray(parsed.stats) && parsed.stats.length > 0) {
+          const statItems = document.querySelectorAll('.stat-edit-item');
+          statItems.forEach((el, idx) => {
+            if (parsed.stats[idx]) {
+              const valInp = el.querySelector('.stat-input-value');
+              const lblInp = el.querySelector('.stat-input-label');
+              const noteInp = el.querySelector('.stat-input-note');
+              if (valInp && parsed.stats[idx].value) valInp.value = parsed.stats[idx].value;
+              if (lblInp && parsed.stats[idx].label) lblInp.value = parsed.stats[idx].label;
+              if (noteInp && parsed.stats[idx].note) noteInp.value = parsed.stats[idx].note;
+            }
+          });
         }
       } catch (e) {
         console.error('Failed to parse saved beranda data:', e);

@@ -272,3 +272,23 @@ const { foundation } = profilData;
   }
 </style>
 
+
+<script is:inline>
+  try {
+    const raw = localStorage.getItem('mts_cms_profil_data');
+    if (raw) {
+      const data = JSON.parse(raw);
+      const f = data.foundation;
+      if (f) {
+        if (f.name) {
+          const nameEl = document.querySelector('.foundation-name');
+          if (nameEl) nameEl.textContent = f.name;
+        }
+        if (f.description) {
+          const leadEl = document.querySelector('.foundation-lead');
+          if (leadEl) leadEl.textContent = f.description;
+        }
+      }
+    }
+  } catch (e) {}
+</script>

@@ -186,3 +186,41 @@ const { sambutan } = heroSambutanData;
   }
 </style>
 
+
+<script is:inline>
+  try {
+    const raw = localStorage.getItem('mts_cms_profil_data') || localStorage.getItem('mts_cms_beranda_data');
+    if (raw) {
+      const data = JSON.parse(raw);
+      const s = data.sambutan;
+      if (s) {
+        if (s.name) {
+          document.querySelectorAll('.headmaster-detail-name, .sig-name').forEach(el => el.textContent = s.name);
+        }
+        if (s.role) {
+          const r = document.querySelector('.headmaster-detail-role');
+          if (r) r.textContent = s.role + ' Sekolah Contoh Indonesia';
+        }
+        if (s.arabicGreeting) {
+          const a = document.querySelector('.greeting-arabic');
+          if (a) a.textContent = s.arabicGreeting;
+        }
+        if (s.fullText && Array.isArray(s.fullText) && s.fullText.length > 0) {
+          const body = document.querySelector('.prose-body');
+          if (body) {
+            const oldPs = body.querySelectorAll('.sambutan-p');
+            oldPs.forEach(p => p.remove());
+            const sig = body.querySelector('.signature-block');
+            s.fullText.forEach(text => {
+              const p = document.createElement('p');
+              p.className = 'sambutan-p';
+              p.textContent = text;
+              if (sig) body.insertBefore(p, sig);
+              else body.appendChild(p);
+            });
+          }
+        }
+      }
+    }
+  } catch (e) {}
+</script>

@@ -65,6 +65,33 @@ const defaultTheme = siteData.theme || {
     }
 
     try {
+      var savedSite = localStorage.getItem('mts_siteData');
+      if (savedSite) {
+        var parsedSite = JSON.parse(savedSite);
+        if (parsedSite && parsedSite.school) {
+          var sc = parsedSite.school;
+          function applySiteData() {
+            if (sc.name) {
+              document.querySelectorAll('.brand-title-full, .footer-title').forEach(function(el) {
+                el.textContent = sc.name;
+              });
+            }
+            if (sc.shortName) {
+              document.querySelectorAll('.brand-title-mobile, .drawer-brand-name').forEach(function(el) {
+                el.textContent = sc.shortName;
+              });
+            }
+          }
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', applySiteData);
+          } else {
+            applySiteData();
+          }
+        }
+      }
+    } catch (e) {}
+
+    try {
       localStorage.removeItem('mts_custom_logo');
       var customLogo = localStorage.getItem('freeks_custom_logo');
       if (customLogo) {

@@ -1932,6 +1932,14 @@ const { events } = kalenderData;
         if (parsed.description && document.getElementById('input-kurikulum-desc')) {
           document.getElementById('input-kurikulum-desc').value = parsed.description;
         }
+        if (parsed.p5pra) {
+          if (parsed.p5pra.title && document.getElementById('input-p5pra-title')) {
+            document.getElementById('input-p5pra-title').value = parsed.p5pra.title;
+          }
+          if (parsed.p5pra.description && document.getElementById('input-p5pra-desc')) {
+            document.getElementById('input-p5pra-desc').value = parsed.p5pra.description;
+          }
+        }
       } catch (e) {
         console.error('Failed to parse saved akademik data:', e);
       }

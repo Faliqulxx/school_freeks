@@ -1465,6 +1465,70 @@ const { extracurriculars } = ekskulData;
           if (parsed.cabinet && document.getElementById('input-osis-cabinet')) document.getElementById('input-osis-cabinet').value = parsed.cabinet;
           if (parsed.rulesTitle && document.getElementById('input-rules-title')) document.getElementById('input-rules-title').value = parsed.rulesTitle;
           if (parsed.rulesUpdated && document.getElementById('input-rules-updated')) document.getElementById('input-rules-updated').value = parsed.rulesUpdated;
+          if (parsed.alumniTotal && document.getElementById('input-alumni-count')) {
+            document.getElementById('input-alumni-count').value = parsed.alumniTotal;
+          }
+          if (parsed.rulesChapters && Array.isArray(parsed.rulesChapters) && parsed.rulesChapters.length > 0) {
+            const rulesCont = document.getElementById('rules-chapters-container');
+            if (rulesCont) {
+              rulesCont.innerHTML = '';
+              parsed.rulesChapters.forEach((ch, chIdx) => {
+                const card = document.createElement('div');
+                card.className = 'form-card card rule-chapter-card';
+                card.setAttribute('data-ch-idx', chIdx);
+                card.innerHTML = `
+                  <div class="card-header justify-between">
+                    <div class="header-icon-title">
+                      <div class="header-icon-wrap">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+                      </div>
+                      <div>
+                        <input type="text" class="form-control chapter-title-input" value="${(ch.chapter || '').replace(/"/g, '&quot;')}" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="chapter-items-list" data-ch-idx="${chIdx}">
+                    ${(ch.items || []).map((item, itIdx) => `
+                      <div class="rule-item-row" data-it-idx="${itIdx}">
+                        <textarea rows="2" class="form-control rule-item-input">${item}</textarea>
+                        <button type="button" class="btn-action-delete btn-delete-rule-item" title="Hapus Butir">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                          <span>Hapus</span>
+                        </button>
+                      </div>
+                    `).join('')}
+                  </div>
+                  <button type="button" class="btn btn-secondary btn-sm btn-add-rule-item mt-2" data-ch-idx="${chIdx}">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <span>Tambah Butir Aturan</span>
+                  </button>
+                `;
+
+                card.querySelectorAll('.btn-delete-rule-item').forEach(b => {
+                  b.addEventListener('click', () => b.closest('.rule-item-row')?.remove());
+                });
+
+                card.querySelector('.btn-add-rule-item')?.addEventListener('click', () => {
+                  const list = card.querySelector('.chapter-items-list');
+                  if (list) {
+                    const row = document.createElement('div');
+                    row.className = 'rule-item-row';
+                    row.innerHTML = `
+                      <textarea rows="2" class="form-control rule-item-input" placeholder="Tuliskan butir aturan baru..."></textarea>
+                      <button type="button" class="btn-action-delete btn-delete-rule-item" title="Hapus Butir">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        <span>Hapus</span>
+                      </button>
+                    `;
+                    row.querySelector('.btn-delete-rule-item').addEventListener('click', () => row.remove());
+                    list.appendChild(row);
+                  }
+                });
+
+                rulesCont.appendChild(card);
+              });
+            }
+          }
         }
       } catch (e) {
         console.error('Failed to parse saved kesiswaan:', e);

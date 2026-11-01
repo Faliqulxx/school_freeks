@@ -1487,6 +1487,44 @@ const initialApplicants = [
           if (parsed.totalQuota && document.getElementById('input-quota-total')) {
             document.getElementById('input-quota-total').value = parsed.totalQuota;
           }
+          if (parsed.academicYear && document.getElementById('input-ppdb-year')) {
+            document.getElementById('input-ppdb-year').value = parsed.academicYear;
+          }
+          if (parsed.statusType && document.getElementById('input-ppdb-status-type')) {
+            document.getElementById('input-ppdb-status-type').value = parsed.statusType;
+          }
+          if (parsed.classesCount && document.getElementById('input-quota-classes')) {
+            document.getElementById('input-quota-classes').value = parsed.classesCount;
+          }
+          if (parsed.concession && document.getElementById('input-costs-concession')) {
+            document.getElementById('input-costs-concession').value = parsed.concession;
+          }
+
+          // Merge online submissions from public registration form
+          try {
+            const rawPublicRegs = localStorage.getItem('mts_ppdb_registrations');
+            if (rawPublicRegs) {
+              const publicRegs = JSON.parse(rawPublicRegs);
+              if (Array.isArray(publicRegs) && publicRegs.length > 0) {
+                publicRegs.forEach(reg => {
+                  const regId = reg.id || `REG-${Date.now()}`;
+                  const exists = applicantsState.some(a => a.id === regId);
+                  if (!exists) {
+                    applicantsState.unshift({
+                      id: regId,
+                      name: reg.fullName || reg.name || 'Calon Siswa Baru',
+                      originSchool: reg.originSchool || reg.school_origin || '-',
+                      parentName: reg.parentName || reg.parent_name || '-',
+                      phone: reg.phone || reg.contact || '-',
+                      wave: reg.wave || 'Pendaftaran Online',
+                      status: reg.status || 'Menunggu Verifikasi',
+                      assessmentScore: reg.assessmentScore || 'Pendaftaran Website Baru'
+                    });
+                  }
+                });
+              }
+            }
+          } catch (e) {}
         }
       } catch (e) {
         console.error('Failed to parse saved PPDB data:', e);
