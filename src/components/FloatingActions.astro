@@ -77,8 +77,8 @@ const isPpdbOpen = ppdbData.statusType === 'open';
   const backToTopBtn = document.getElementById('btn-back-to-top');
 
   window.addEventListener('scroll', () => {
-    // Show after scrolling > 1.5 viewports
-    if (window.scrollY > window.innerHeight * 1.5) {
+    // Show after scrolling > 300px (FASE 1 requirement)
+    if (window.scrollY > 300) {
       backToTopBtn?.classList.add('visible');
     } else {
       backToTopBtn?.classList.remove('visible');
