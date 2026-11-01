@@ -25,3 +25,4 @@ Jika memungkinkan, sertakan tangkapan layar untuk membantu analisis.
 - Sistem Operasi: [Contoh: Windows 11 / iOS 17 / Android 14]
 - Peramban (Browser): [Contoh: Chrome 122, Safari, Firefox]
 - Resolusi Layar: [Contoh: 390px mobile, 1920x1080 desktop]
+

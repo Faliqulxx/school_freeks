@@ -70,3 +70,4 @@ jobs:
 
 5. Lakukan commit dan push file tersebut ke branch `main`.
 6. GitHub Actions akan otomatis melakukan build dan website sekolah Anda akan tayang di `https://USERNAME.github.io/REPO/`.
+

@@ -75,3 +75,4 @@ Sesuai Syarat Layanan Vercel, paket **Vercel Hobby (Gratis)** diperuntukkan bagi
 - **Cloudflare Pages** (gratis tanpa batasan komersial) — lihat [Panduan Cloudflare Pages](deploy-cloudflare-pages.md).
 - **Netlify** — lihat [Panduan Netlify](deploy-netlify.md).
 - Meng-upgrade ke paket **Vercel Pro**.
+

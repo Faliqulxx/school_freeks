@@ -23,7 +23,7 @@ Dirancang khusus untuk sekolah, madrasah, pesantren, maupun akademi kreatif di I
 - **Live Demo**: `https://YOUR-DEMO-URL.vercel.app` *(Ganti dengan URL demo publik Anda)*
 - **Demo Panel Admin**: `/admin` (Username: `admin`, Password: `123admin` — data tersimpan di peramban lokal pengunjung)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/USERNAME/REPO)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Faliqulxx/school_freeks)
 
 > [!NOTE]
 > **Catatan Ketentuan Lisensi Hosting Vercel Hobby:**
@@ -66,8 +66,8 @@ Pastikan Anda telah menginstal **Node.js** (versi 18 atau 20+).
 
 ```bash
 # 1. Kloning repositori ini
-git clone https://github.com/USERNAME/REPO.git
-cd REPO
+git clone https://github.com/Faliqulxx/school_freeks.git
+cd school_freeks
 
 # 2. Pasang dependensi
 npm install
@@ -174,3 +174,4 @@ Kode sumber template ini didistribusikan di bawah lisensi terbuka **[MIT License
 > [!IMPORTANT]
 > **Pengecualian Merek dan Konten:**
 > Lisensi MIT ini mencakup seluruh arsitektur kode sumber, modul komponen, dan utilitas perangkat lunak. **Nama merek, logo, lambang resmi, dan materi identitas intelektual asli dari FREEKS.id maupun MTS Islamiyah TIDAK termasuk dalam lisensi ini** dan tetap menjadi hak milik eksklusif pemilik masing-masing. Silakan ganti seluruh identitas dan aset gambar dengan logo dan konten sekolah Anda sendiri sebelum mempublikasikannya secara resmi.
+

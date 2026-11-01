@@ -27,3 +27,4 @@ Netlify menyediakan hosting statis berkinerja tinggi dengan CDN global yang sang
 6. Klik **"Deploy freeks-school-template"**.
 
 Website akan aktif secara instan dengan subdomain gratis `*.netlify.app` dan sertifikat SSL otomatis.
+

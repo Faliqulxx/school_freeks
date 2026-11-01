@@ -40,3 +40,4 @@ CREATE TABLE IF NOT EXISTS `contact_messages` (
   INDEX `idx_msg_status` (`status`),
   INDEX `idx_msg_created` (`created_at` DESC)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+

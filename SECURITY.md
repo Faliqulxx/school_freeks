@@ -25,3 +25,4 @@ Jika Anda menemukan celah atau kerentanan keamanan pada template ini (misalnya c
    - Dampak potensial terhadap data sekolah atau siswa.
 
 Tim pemelihara akan meninjau laporan Anda dalam kurun waktu 1–3 hari kerja dan merilis perbaikan sesegera mungkin.
+

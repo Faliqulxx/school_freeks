@@ -43,3 +43,4 @@ export interface BackendProvider {
   submitRegistration(payload: RegistrationPayload): Promise<BackendResult>;
   submitContactMessage(payload: ContactMessagePayload): Promise<BackendResult>;
 }
+

@@ -31,3 +31,4 @@ Sekolah disarankan menyertakan tautan atau teks klausul persetujuan pada bagian 
    - Hak baca (`SELECT`), ekspor, dan hapus data hanya diberikan kepada akun staf tata usaha / panitia PPDB yang terotentikasi.
 3. **Penyimpanan di Google Sheets (Mode Webhook)**:
    - Pastikan tautan Google Spreadsheet tidak disetel ke "Siapa saja yang memiliki tautan dapat melihat". Batasi akses hanya untuk akun Google resmi panitia PPDB sekolah.
+

@@ -28,3 +28,4 @@ Cloudflare Pages adalah pilihan gratis terbaik untuk sekolah yang membutuhkan ba
 6. Klik **Save and Deploy**.
 
 Cloudflare akan mengkompilasi website dan menyajikannya lewat edge server di seluruh dunia dengan domain gratis `*.pages.dev`.
+

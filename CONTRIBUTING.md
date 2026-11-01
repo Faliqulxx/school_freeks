@@ -9,8 +9,8 @@ Terima kasih atas minat Anda untuk berkontribusi pada pengembangan template webs
 ### 1. Melakukan Fork & Kloning
 ```bash
 # Fork repositori ini melalui antarmuka GitHub, lalu kloning ke komputer lokal Anda
-git clone https://github.com/USERNAME/freeks-school-template.git
-cd freeks-school-template
+git clone https://github.com/Faliqulxx/school_freeks.git
+cd school_freeks
 ```
 
 ### 2. Memasang Dependensi & Menjalankan Lokal
@@ -47,3 +47,4 @@ npm run build
 - Dorong branch Anda ke fork GitHub Anda: `git push origin branch-anda`.
 - Buat Pull Request ke branch `main` repositori upstream.
 - Jelaskan perubahan yang Anda buat, mengapa perubahan itu diperlukan, dan sertakan tangkapan layar jika menyangkut tampilan UI.
+

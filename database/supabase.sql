@@ -91,3 +91,4 @@ ON public.contact_messages
 FOR UPDATE
 TO authenticated
 USING (true);
+

@@ -85,3 +85,4 @@ Bagi sekolah yang memiliki server database MySQL/MariaDB sendiri atau menggunaka
    PUBLIC_BACKEND_PROVIDER=mysql
    PUBLIC_MYSQL_API_ENDPOINT=https://api.sekolahanda.sch.id/submit
    ```
+
