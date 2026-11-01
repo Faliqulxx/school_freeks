@@ -16,6 +16,7 @@ Dokumen ini mencatat seluruh aset media, gambar, dan ikon yang digunakan di dala
 ## 2. Aset Banner, Hero & Gedung
 | Aset | Format | Dimensi | Lisensi | Keterangan & Sumber |
 | :--- | :--- | :--- | :--- | :--- |
+| `preview-mockup.webp` | WebP | 1024×484 | MIT / CC0 | Mockup perbandingan antarmuka responsif Mobile (iPhone) & Desktop (MacBook). |
 | `gedung-freeks.webp` | WebP | 1200×900 | Unsplash / CC0 | Foto gedung sekolah modern sebagai latar hero dan linimasa sejarah. |
 | `hero-pattern-tile.webp` | WebP | 60×60 | CC0 | Tekstur pola geometris pengulangan halus untuk section dekoratif. |
 | `hero-siswa-belajar.webp` | WebP | 800×600 | Unsplash License | Foto ilustrasi siswa berdiskusi menggunakan perangkat laptop. |

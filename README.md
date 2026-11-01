@@ -12,9 +12,7 @@ Dirancang khusus untuk sekolah, madrasah, pesantren, maupun akademi kreatif di I
 
 ## 📸 Preview Tampilan
 
-*(Tempat screenshot antarmuka)*
-<!-- Masukkan tangkapan layar Beranda dan Mobile di sini -->
-![Preview Desktop & Mobile Beranda](public/assets/banners/hero-academic.webp)
+![Preview Responsif Mobile & Desktop Sekolah Contoh Indonesia](public/assets/preview-mockup.webp)
 
 ---
 
