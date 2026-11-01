@@ -17,10 +17,10 @@
       {
         "chapter": "BAB II: Kewajiban & Integritas Belajar",
         "items": [
-          "1. Hadir di kampus tepat waktu paling lambat pukul 07.45 WIB sebelum morning briefing dan sharing session.",
+          "1. Hadir di sekolah tepat waktu paling lambat pukul 07.45 WIB sebelum morning briefing dan sharing session.",
           "2. Mengenakan atribut identitas resmi FREEKS (Smart Casual Uniform / FREEKS Tech Hoodie / Kaos Olahraga) sesuai jadwal.",
           "3. Menjunjung tinggi kejujuran akademik, tidak melakukan plagiarisme dalam tugas atau manipulasi kode/karya.",
-          "4. Menggunakan perangkat teknologi dan jaringan internet kampus secara bijak untuk keperluan riset dan edukasi produktif.",
+          "4. Menggunakan perangkat teknologi dan jaringan internet sekolah secara bijak untuk keperluan riset dan edukasi produktif.",
           "5. Menjaga kebersihan area Maker Space, lab, dan fasilitas komunal dengan memilah sampah daur ulang dan merapikan alat kerja.",
           "6. Berkomunikasi dengan tutur kata santun, bersikap kooperatif, serta menghargai privasi dan karya sesama siswa."
         ]
@@ -29,10 +29,10 @@
         "chapter": "BAB III: Larangan",
         "items": [
           "1. Dilarang melakukan cyberbullying, perundungan verbal/fisik, penyebaran ujaran kebencian, atau pelecehan dalam bentuk apa pun.",
-          "2. Dilarang menyalahgunakan jaringan kampus untuk aktivitas ilegal seperti cracking, pembobolan sistem, atau distribusi konten terlarang.",
-          "3. Dilarang meninggalkan area kampus tanpa izin resmi dari Student Affairs atau Guru Pembina.",
-          "4. Dilarang keras membawa atau menggunakan rokok, vape, miras, obat-obatan terlarang, atau senjata berbahaya di lingkungan kampus.",
-          "5. Dilarang merusak perangkat keras (hardware), alat praktikum 3D, atau merusak fasilitas kampus."
+          "2. Dilarang menyalahgunakan jaringan sekolah untuk aktivitas ilegal seperti cracking, pembobolan sistem, atau distribusi konten terlarang.",
+          "3. Dilarang meninggalkan area sekolah tanpa izin resmi dari Student Affairs atau Guru Pembina.",
+          "4. Dilarang keras membawa atau menggunakan rokok, vape, miras, obat-obatan terlarang, atau senjata berbahaya di lingkungan sekolah.",
+          "5. Dilarang merusak perangkat keras (hardware), alat praktikum 3D, atau merusak fasilitas sekolah."
         ]
       },
       {
@@ -65,7 +65,7 @@
       },
       {
         "name": "Divisi Media Kreatif & Publikasi",
-        "programs": "Produksi podcast kesiswaan, liputan event kampus, dan showcase desain grafis mingguan."
+        "programs": "Produksi podcast kesiswaan, liputan event sekolah, dan showcase desain grafis mingguan."
       },
       {
         "name": "Divisi Olahraga, E-Sports & Wellness",
@@ -73,7 +73,7 @@
       },
       {
         "name": "Divisi Aksi Sosial & Lingkungan Hidup",
-        "programs": "Kampanye daur ulang e-waste (sampah elektronik), bakti sosial kemasyarakatan, dan gerakan kampus hijau."
+        "programs": "Kampanye daur ulang e-waste (sampah elektronik), bakti sosial kemasyarakatan, dan gerakan sekolah hijau."
       }
     ]
   },

@@ -13,8 +13,8 @@
     },
     {
       "year": "2023",
-      "title": "Pembangunan Kampus Cerdas & Tech Hub",
-      "description": "Peresmian gedung kampus modern ramah lingkungan (FREEKS Campus) lengkap dengan fasilitas Smart Classroom, Maker Space, VR/AR Studio, serta arena kompetisi robotika."
+      "title": "Pembangunan Sekolah Cerdas & Tech Hub",
+      "description": "Peresmian gedung sekolah modern ramah lingkungan (FREEKS Campus) lengkap dengan fasilitas Smart Classroom, Maker Space, VR/AR Studio, serta arena kompetisi robotika."
     },
     {
       "year": "2024",
@@ -33,7 +33,7 @@
     "Membekali setiap siswa dengan pemahaman computational thinking, rekayasa perangkat lunak, kecerdasan buatan, dan desain media interaktif sejak dini.",
     "Membentuk karakter kepemimpinan yang berintegritas, beretika digital tinggi, kritis, dan berempati terhadap permasalahan sosial kemasyarakatan.",
     "Memfasilitasi siswa untuk berkompetisi dan berprestasi dalam olimpiade sains, kompetisi robotika, hackathon, serta festival seni dan teknologi tingkat nasional maupun global.",
-    "Mewujudkan lingkungan kampus yang ramah inovasi, inklusif, berkelanjutan (green campus), dan mendorong kolaborasi riset kreatif."
+    "Mewujudkan lingkungan sekolah yang ramah inovasi, inklusif, berkelanjutan (green campus), dan mendorong kolaborasi riset kreatif."
   ],
   "goals": [
     "Mencapai kelulusan 100% dengan portofolio proyek teknologi, karya kreatif digital, atau riset terapan yang siap pakai.",
@@ -115,7 +115,7 @@
       "name": "Digital Media & 3D Creative Studio",
       "description": "Studio multimedia berkemampuan rendering tinggi untuk produksi karya animasi, pemodelan 3D, motion graphic, game development, dan podcast siswa.",
       "image": {
-        "src": "/assets/kegiatan-madrasah-2.webp",
+        "src": "/assets/kegiatan-sekolah-2.webp",
         "alt": "Studio Media Kreatif dan Lab 3D FREEKS.id School",
         "width": 1200,
         "height": 800

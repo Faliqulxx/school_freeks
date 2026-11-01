@@ -65,9 +65,15 @@ const defaultTheme = siteData.theme || {
     }
 
     try {
+      localStorage.removeItem('mts_custom_logo');
       var customLogo = localStorage.getItem('freeks_custom_logo');
       if (customLogo) {
-        applyLogo(customLogo);
+        if (customLogo.indexOf('logo-ypi') !== -1 || customLogo.indexOf('islamiyah') !== -1) {
+          localStorage.removeItem('freeks_custom_logo');
+          localStorage.removeItem('freeks_custom_logo_name');
+        } else {
+          applyLogo(customLogo);
+        }
       }
     } catch (e) {}
   })();

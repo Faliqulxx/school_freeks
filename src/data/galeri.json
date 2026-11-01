@@ -7,7 +7,7 @@
       "date": "2026-10-22",
       "photoCount": 24,
       "cover": {
-        "src": "/assets/kegiatan-madrasah-1.webp",
+        "src": "/assets/kegiatan-sekolah-1.webp",
         "alt": "Pameran prototipe karya teknologi siswa FREEKS.id School",
         "width": 1200,
         "height": 800,
@@ -16,7 +16,7 @@
       "photos": [
         {
           "id": "hs-1",
-          "src": "/assets/kegiatan-madrasah-1.webp",
+          "src": "/assets/kegiatan-sekolah-1.webp",
           "alt": "Siswa mendemonstrasikan prototipe IoT kepada pengunjung",
           "caption": "Demonstrasi prototipe teknologi dan presentasi karya capstone siswa di hadapan audiens.",
           "width": 1200,
@@ -25,7 +25,7 @@
         },
         {
           "id": "hs-2",
-          "src": "/assets/kegiatan-madrasah-2.webp",
+          "src": "/assets/kegiatan-sekolah-2.webp",
           "alt": "Eksplorasi desain interaktif dan coding terapan",
           "caption": "Siswa-siswi berkolaborasi dalam proyek pemodelan 3D dan pemrograman game edukasi.",
           "width": 1200,
@@ -40,7 +40,7 @@
       "date": "2026-10-15",
       "photoCount": 12,
       "cover": {
-        "src": "/assets/kegiatan-madrasah-2.webp",
+        "src": "/assets/kegiatan-sekolah-2.webp",
         "alt": "Tim Robotika & Sains FREEKS.id School",
         "width": 1200,
         "height": 800,
@@ -49,7 +49,7 @@
       "photos": [
         {
           "id": "os-1",
-          "src": "/assets/kegiatan-madrasah-2.webp",
+          "src": "/assets/kegiatan-sekolah-2.webp",
           "alt": "Pengujian sensorik dan perakitan robot di Maker Space",
           "caption": "Eksperimen robotika terapan dan uji coba algoritma navigasi otonom oleh siswa.",
           "width": 1200,
@@ -58,7 +58,7 @@
         },
         {
           "id": "os-2",
-          "src": "/assets/kegiatan-madrasah-1.webp",
+          "src": "/assets/kegiatan-sekolah-1.webp",
           "alt": "Pemberian penghargaan prestasi teknologi siswa",
           "caption": "Apresiasi atas keberhasilan tim siswa dalam kejuaraan inovasi teknologi tingkat nasional.",
           "width": 1200,
@@ -73,7 +73,7 @@
       "date": "2026-09-17",
       "photoCount": 18,
       "cover": {
-        "src": "/assets/kegiatan-madrasah-1.webp",
+        "src": "/assets/kegiatan-sekolah-1.webp",
         "alt": "Inaugurasi pengurus Student Council",
         "width": 1200,
         "height": 800,
@@ -82,7 +82,7 @@
       "photos": [
         {
           "id": "po-1",
-          "src": "/assets/kegiatan-madrasah-1.webp",
+          "src": "/assets/kegiatan-sekolah-1.webp",
           "alt": "Ikrar komitmen kepemimpinan dewan siswa FREEKS",
           "caption": "Pengurus Student Council terpilih mengucapkan komitmen integritas dan kolaborasi kesiswaan.",
           "width": 1200,
@@ -91,7 +91,7 @@
         },
         {
           "id": "po-2",
-          "src": "/assets/kegiatan-madrasah-2.webp",
+          "src": "/assets/kegiatan-sekolah-2.webp",
           "alt": "Sesi diskusi kerja dan ideasi program inovasi siswa",
           "caption": "Diskusi interaktif perencanaan hackathon mini dan workshop teknologi antarsiswa.",
           "width": 1200,
@@ -106,7 +106,7 @@
       "date": "2026-09-29",
       "photoCount": 9,
       "cover": {
-        "src": "/assets/kegiatan-madrasah-2.webp",
+        "src": "/assets/kegiatan-sekolah-2.webp",
         "alt": "Siswa FREEKS berbagi pelatihan literasi digital",
         "width": 1200,
         "height": 800,
@@ -115,7 +115,7 @@
       "photos": [
         {
           "id": "jb-1",
-          "src": "/assets/kegiatan-madrasah-2.webp",
+          "src": "/assets/kegiatan-sekolah-2.webp",
           "alt": "Sesi mentoring logika komputasi untuk anak-anak sekitar",
           "caption": "Aktivitas pelatihan literasi digital dan penanaman etika berinternet sehat bagi komunitas sekitar.",
           "width": 1200,
@@ -124,7 +124,7 @@
         },
         {
           "id": "jb-2",
-          "src": "/assets/kegiatan-madrasah-1.webp",
+          "src": "/assets/kegiatan-sekolah-1.webp",
           "alt": "Foto bersama peserta workshop edukasi",
           "caption": "Kolaborasi hangat siswa dan mentor FREEKS dalam aksi sosial berbagi ilmu pengetahuan.",
           "width": 1200,
@@ -141,7 +141,7 @@
       "date": "2026-08-15",
       "duration": "03:45",
       "youtubeId": "dQw4w9WgXcQ",
-      "thumbnail": "/assets/kegiatan-madrasah-1.webp"
+      "thumbnail": "/assets/kegiatan-sekolah-1.webp"
     },
     {
       "id": "vid-2",
@@ -149,7 +149,7 @@
       "date": "2026-10-22",
       "duration": "05:12",
       "youtubeId": "dQw4w9WgXcQ",
-      "thumbnail": "/assets/kegiatan-madrasah-2.webp"
+      "thumbnail": "/assets/kegiatan-sekolah-2.webp"
     }
   ]
 }

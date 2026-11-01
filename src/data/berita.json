@@ -8,7 +8,7 @@
       "title": "Annual Showcase Day 2026: Siswa FREEKS.id Pamerkan 24 Prototipe IoT & Game Edukasi",
       "excerpt": "Seluruh siswa menampilkan karya capstone inovatif di hadapan mentor industri dan para wali murid.",
       "image": {
-        "src": "/assets/kegiatan-madrasah-1.webp",
+        "src": "/assets/kegiatan-sekolah-1.webp",
         "alt": "Suasana Annual Showcase Day karya teknologi siswa FREEKS.id School",
         "width": 1200,
         "height": 800
@@ -17,7 +17,7 @@
       "content": [
         {
           "type": "paragraph",
-          "text": "Pagi ini kampus FREEKS.id School dipenuhi antusiasme tinggi dalam perhelatan Annual Showcase Day 2026. Sebanyak 24 proyek inovasi hasil kolaborasi antarsiswa dipamerkan, mulai dari sistem sensor daur ulang sampah cerdas berbasis IoT hingga prototipe game edukasi 3D."
+          "text": "Pagi ini sekolah FREEKS.id School dipenuhi antusiasme tinggi dalam perhelatan Annual Showcase Day 2026. Sebanyak 24 proyek inovasi hasil kolaborasi antarsiswa dipamerkan, mulai dari sistem sensor daur ulang sampah cerdas berbasis IoT hingga prototipe game edukasi 3D."
         },
         {
           "type": "quote",
@@ -95,7 +95,7 @@
       "title": "Mid-Term Project Sprint & Asesmen Terpadu Dimulai Pekan Depan",
       "excerpt": "Panduan pelaksanaan project sprint, kolaborasi tim, dan jadwal konsultasi mentor akademik.",
       "image": {
-        "src": "/assets/kegiatan-madrasah-2.webp",
+        "src": "/assets/kegiatan-sekolah-2.webp",
         "alt": "Siswa berdiskusi dalam kelompok kerja project sprint",
         "width": 1200,
         "height": 800
@@ -113,7 +113,7 @@
       "date": "2026-09-29",
       "category": "Kegiatan",
       "title": "FREEKS Code for Impact: Pelatihan Literasi Komputer Gratis untuk Anak Sekitar",
-      "excerpt": "Siswa dan mentor FREEKS mengadakan workshop coding dasar dan etika internet bagi anak-anak warga sekitar kampus.",
+      "excerpt": "Siswa dan mentor FREEKS mengadakan workshop coding dasar dan etika internet bagi anak-anak warga sekitar sekolah.",
       "image": {
         "src": "/assets/berita-kegiatan-osis.webp",
         "alt": "Siswa mengajar kelas literasi digital interaktif untuk anak-anak sekitar",
@@ -124,7 +124,7 @@
       "content": [
         {
           "type": "paragraph",
-          "text": "Sebagai wujud empati sosial nyata, OSIS FREEKS menyelenggarakan program Code for Impact. Siswa melatih adik-adik sekitar kampus membuat animasi interaktif sederhana menggunakan Scratch dan Blockly."
+          "text": "Sebagai wujud empati sosial nyata, OSIS FREEKS menyelenggarakan program Code for Impact. Siswa melatih adik-adik sekitar sekolah membuat animasi interaktif sederhana menggunakan Scratch dan Blockly."
         }
       ]
     },
@@ -144,7 +144,7 @@
       "content": [
         {
           "type": "paragraph",
-          "text": "Pemilihan Student Council FREEKS berlangsung dengan pemungutan suara digital terdesentralisasi. Pengurus baru bertekad memperbanyak ruang kreasi dan ajang ekspresi teknologi bagi seluruh civitas kampus."
+          "text": "Pemilihan Student Council FREEKS berlangsung dengan pemungutan suara digital terdesentralisasi. Pengurus baru bertekad memperbanyak ruang kreasi dan ajang ekspresi teknologi bagi seluruh civitas sekolah."
         }
       ]
     },
@@ -152,10 +152,10 @@
       "slug": "kunjungan-studi-ekosistem-teknologi",
       "date": "2026-09-03",
       "category": "Pengumuman",
-      "title": "Studi Ekosistem Industri Digital & Kolaborasi Maker Space Bersama Kampus Mitra",
+      "title": "Studi Ekosistem Industri Digital & Kolaborasi Maker Space Bersama Sekolah Mitra",
       "excerpt": "FREEKS.id School menerima delegasi pemerhati pendidikan teknologi untuk bertukar pengalaman kurikulum terapan.",
       "image": {
-        "src": "/assets/kegiatan-madrasah-2.webp",
+        "src": "/assets/kegiatan-sekolah-2.webp",
         "alt": "Diskusi kolaborasi ekosistem pembelajaran modern",
         "width": 1200,
         "height": 800
