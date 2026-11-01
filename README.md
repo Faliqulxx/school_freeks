@@ -4,9 +4,9 @@
 [![Astro](https://img.shields.io/badge/Built%20with-Astro%20v5-FF5D01.svg)](https://astro.build)
 [![Status](https://img.shields.io/badge/Status-Production%20Ready-green.svg)](#)
 
-Template website sekolah modern, cepat, berbobot sangat ringan, dan *mobile-first* yang dibangun menggunakan **Astro v5 (Static Site Generation / SSG)**. 
+Template website sekolah modern, cepat, berbobot ringan, dan *mobile-first* yang dibangun menggunakan **Astro v5 (Static Site Generation / SSG)**. 
 
-Dirancang khusus untuk sekolah, madrasah, pesantren, maupun akademi kreatif di Indonesia yang membutuhkan website resmi representatif, lengkap dengan fitur **Formulir PPDB Online 4 Langkah (Autosave)**, **Panel Admin Konten Mandiri**, dan **Arsitektur Backend Fleksibel (Adapter Pattern)** yang dapat digunakan langsung tanpa perlu setup server database (Zero-Config).
+Dirancang khusus untuk sekolah, madrasah, pesantren, maupun akademi di Indonesia yang membutuhkan website resmi representatif, lengkap dengan fitur **Formulir PPDB Online 4 Langkah (Autosave Draft)**, **Panel Visual Pengelola Konten (Client-Side dengan Ekspor JSON)**, dan **Adapter Backend Fleksibel** yang langsung berfungsi tanpa wajib setup database (Zero-Config).
 
 ---
 
